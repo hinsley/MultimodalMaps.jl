@@ -1,4 +1,4 @@
-# Gurevich entropy for the Hofbauer-Keller map.
+# Gurevich entropy for the Hofbauer-Keller kneading map.
 # This allows us to approximate topological entropies of 1D unimodal maps from
 # their Hofbauer-Keller kneading maps.
 
