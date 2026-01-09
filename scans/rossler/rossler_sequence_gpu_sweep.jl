@@ -28,6 +28,7 @@ Pkg.activate(".")
 Pkg.instantiate()
 
 using CairoMakie
+using Colors: RGB
 using DiffEqGPU
 using Metal
 using OrdinaryDiffEq
@@ -295,7 +296,7 @@ indices = Vector{Int}(undef, trajectories)
 counts = Vector{Int}(undef, trajectories)
 color_seed = parse(Int, get(ENV, "COLOR_SEED", "1"))
 color_rng = MersenneTwister(color_seed)
-colormap = RGBf0[]
+colormap = RGB{Float32}[]
 sequence_to_index = Dict{NTuple{N_CHUNKS + 1,Int},Int}()
 
 for i in 1:trajectories
@@ -310,7 +311,7 @@ for i in 1:trajectories
     idx = get(sequence_to_index, key, 0)
     if idx == 0
         idx = length(colormap) + 1
-        push!(colormap, RGBf0(rand(color_rng), rand(color_rng), rand(color_rng)))
+        push!(colormap, RGB{Float32}(rand(color_rng), rand(color_rng), rand(color_rng)))
         sequence_to_index[key] = idx
     end
     indices[i] = idx
