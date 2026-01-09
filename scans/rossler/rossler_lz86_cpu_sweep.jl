@@ -1,4 +1,4 @@
-# Rössler GPU parameter sweep: power-series value (x=1) of the binary sequence
+# Rössler CPU parameter sweep: power-series value (x=1) of the binary sequence
 #
 # Parameter axes:
 #   - x axis: c ∈ [2, 7]
@@ -18,7 +18,7 @@
 #   Heatmap of power-series values (x=1) of the binary sequence, mapped to random colors.
 #
 # Run from repo root:
-#   julia scans/rossler/rossler_lz86_gpu_sweep.jl
+#   julia scans/rossler/rossler_lz86_cpu_sweep.jl
 #
 # Optional environment overrides:
 #   N_C, N_A, T_END, T_TRANSIENT, DT, Z_THRESH, B, MAX_SYMBOLS, SEED, ADAPTIVE, MAX_STATE, COLOR_SEED
@@ -28,8 +28,6 @@ Pkg.activate(".")
 Pkg.instantiate()
 
 using CairoMakie
-using DiffEqGPU
-using Metal
 using OrdinaryDiffEq
 using Random
 using SciMLBase
@@ -39,8 +37,8 @@ using Statistics
 # ============================================================
 # Sweep configuration
 # ============================================================
-const N_C = parse(Int, get(ENV, "N_C", "1000"))
-const N_A = parse(Int, get(ENV, "N_A", "1000"))
+const N_C = parse(Int, get(ENV, "N_C", "400"))
+const N_A = parse(Int, get(ENV, "N_A", "400"))
 
 const C_MIN = 2.0f0
 const C_MAX = 7.0f0
@@ -353,7 +351,7 @@ params_flat = vec(params)
 u0s_flat = vec(reshape(u0s, size(params)))
 trajectories = length(params_flat)
 
-println("Running Rössler power-series sweep:")
+println("Running Rössler power-series CPU sweep:")
 println("  c range: [$C_MIN, $C_MAX] with $N_C points")
 println("  a range: [$A_MIN, $A_MAX] with $N_A points")
 println("  b (fixed): $B")
@@ -361,21 +359,22 @@ println("  Total trajectories: $trajectories")
 println("  Time span: (0, $T_END), transient: $T_TRANSIENT")
 println("  z threshold: $Z_THRESH")
 println("  max symbols: $MAX_SYMBOLS (packed into $N_CHUNKS chunks)")
+println("  seed: $seed")
+println("  threads: $(Threads.nthreads())")
 println("  adaptive: $ADAPTIVE")
 println("  max state: $MAX_STATE")
-println("  seed: $seed")
 println()
 
 prob = ODEProblem{false}(rossler_augmented, u0s_flat[1], (0.0f0, T_END), params_flat[1])
 prob_func = (prob, i, repeat) -> remake(prob, u0=u0s_flat[i], p=params_flat[i])
 ensemble_prob = EnsembleProblem(prob; prob_func=prob_func, safetycopy=false)
-backend = Metal.MetalBackend()
 
-println("Compiling and running GPU sweep...")
-Metal.@sync sol = solve(
+println("Running CPU sweep with threads...")
+saveat = Float32[T_END]
+sol = solve(
     ensemble_prob,
-    GPUTsit5(),
-    EnsembleGPUKernel(backend);
+    Tsit5(),
+    EnsembleThreads();
     trajectories=trajectories,
     adaptive=ADAPTIVE,
     dt=DT,
@@ -383,6 +382,7 @@ Metal.@sync sol = solve(
     reltol=1f-6,
     callback=cb,
     merge_callbacks=true,
+    saveat=saveat,
     save_everystep=false,
     save_start=false
 )
@@ -391,12 +391,14 @@ println("Computing power-series values on CPU...")
 series_values = Vector{Int}(undef, trajectories)
 ones_counts = Vector{Int}(undef, trajectories)
 counts = Vector{Int}(undef, trajectories)
+transitions = Vector{Int}(undef, trajectories)
 Threads.@threads for i in 1:trajectories
     u_final = sol.u[i].u[end]
     n = Int(round(u_final[IDX_COUNT]))
     n = min(n, MAX_SYMBOLS)
 
     chunks = ntuple(j -> Int(round(u_final[IDX_CHUNK0 + j - 1])), N_CHUNKS)
+    series_values[i] = 0
     counts[i] = n
     ones = 0
     for j in 1:N_CHUNKS
@@ -404,6 +406,47 @@ Threads.@threads for i in 1:trajectories
     end
     ones_counts[i] = ones
     series_values[i] = ones
+    if n <= 1
+        transitions[i] = 0
+    else
+        prev = _bit_at(chunks, n, 1)
+        tcount = 0
+        for pos in 2:n
+            b = _bit_at(chunks, n, pos)
+            if b != prev
+                tcount += 1
+                prev = b
+            end
+        end
+        transitions[i] = tcount
+    end
+end
+
+println("Symbol counts: min=$(minimum(counts)) max=$(maximum(counts)) mean=$(mean(counts))")
+println("Ones counts: min=$(minimum(ones_counts)) max=$(maximum(ones_counts)) mean=$(mean(ones_counts))")
+println("Transitions: min=$(minimum(transitions)) max=$(maximum(transitions)) mean=$(mean(transitions))")
+
+debug_samples = parse(Int, get(ENV, "DEBUG_SAMPLES", "0"))
+if debug_samples > 0
+    println("Sample sequences:")
+    for i in 1:min(debug_samples, trajectories)
+        u_final = sol.u[i].u[end]
+        n = min(Int(round(u_final[IDX_COUNT])), MAX_SYMBOLS)
+        chunks = ntuple(j -> Int(round(u_final[IDX_CHUNK0 + j - 1])), N_CHUNKS)
+        println("  [$i] n=$n ones=$(ones_counts[i]) bits=$(sequence_bits(chunks, n))")
+    end
+end
+
+if trajectories > 0
+    idx_max = argmax(transitions)
+    idx_min = argmin(transitions)
+    for (label, idx) in [("max transitions", idx_max), ("min transitions", idx_min)]
+        u_final = sol.u[idx].u[end]
+        n = min(Int(round(u_final[IDX_COUNT])), MAX_SYMBOLS)
+        chunks = ntuple(j -> Int(round(u_final[IDX_CHUNK0 + j - 1])), N_CHUNKS)
+        println("Sequence with $label:")
+        println("  idx=$idx n=$n ones=$(ones_counts[idx]) transitions=$(transitions[idx]) bits=$(sequence_bits(chunks, n))")
+    end
 end
 
 unique_vals = sort(unique(series_values))
@@ -413,7 +456,6 @@ colormap = [RGBf0(rand(rng), rand(rng), rand(rng)) for _ in 1:length(unique_vals
 val_to_index = Dict(val => idx for (idx, val) in enumerate(unique_vals))
 index_grid = reshape([val_to_index[v] for v in series_values], N_C, N_A)
 
-println("Symbol counts: min=$(minimum(counts)) max=$(maximum(counts)) mean=$(mean(counts))")
 println("Power-series values: min=$(minimum(series_values)) max=$(maximum(series_values)) unique=$(length(unique_vals))")
 println("Color seed: $color_seed")
 
@@ -423,7 +465,7 @@ ax = Axis(
     fig[1, 1];
     xlabel="c",
     ylabel="a",
-    title="Rössler (origin equilibrium): power-series value (x=1)"
+    title="Rössler (origin equilibrium): power-series value (x=1) (CPU sweep)"
 )
 
 hm = heatmap!(
@@ -436,6 +478,6 @@ hm = heatmap!(
 )
 Colorbar(fig[1, 2], hm, label="Power-series value (sum of bits)")
 
-output_path = joinpath(@__DIR__, "rossler_power_series_heatmap.png")
+output_path = joinpath(@__DIR__, "rossler_power_series_heatmap_cpu.png")
 save(output_path, fig)
 println("Saved heatmap to: $output_path")
