@@ -21,7 +21,8 @@
 #   julia scans/rossler/rossler_sequence_gpu_sweep.jl
 #
 # Optional environment overrides:
-#   N_C, N_A, T_END, T_TRANSIENT, DT, Z_THRESH, B, MAX_SYMBOLS, SEED, ADAPTIVE, MAX_STATE, COLOR_SEED
+#   N_C, N_A, T_END, T_TRANSIENT, DT, Z_THRESH, B, MAX_SYMBOLS, SEED, ADAPTIVE, MAX_STATE, COLOR_SEED,
+#   USE_RANDOM_U0, U0_X, U0_Y, U0_Z
 
 using Pkg
 Pkg.activate(".")
@@ -59,6 +60,10 @@ const Z_THRESH = parse(Float32, get(ENV, "Z_THRESH", "1.0"))
 const MAX_SYMBOLS = parse(Int, get(ENV, "MAX_SYMBOLS", "64"))
 const ADAPTIVE = parse(Bool, get(ENV, "ADAPTIVE", "false"))
 const MAX_STATE = parse(Float32, get(ENV, "MAX_STATE", "1000"))
+const USE_RANDOM_U0 = parse(Bool, get(ENV, "USE_RANDOM_U0", "false"))
+const U0_X = parse(Float32, get(ENV, "U0_X", "5.0"))
+const U0_Y = parse(Float32, get(ENV, "U0_Y", "5.0"))
+const U0_Z = parse(Float32, get(ENV, "U0_Z", "5.0"))
 
 const CHUNK_BITS = 20
 const N_CHUNKS = cld(MAX_SYMBOLS, CHUNK_BITS)
@@ -114,6 +119,10 @@ function random_initial_condition(rng::AbstractRNG)
     y0 = 2.0f0 * rand(rng, Float32) - 1.0f0
     z0 = 2.0f0 * rand(rng, Float32) - 1.0f0
     return pack_state(x0, y0, z0, 0.0f0, 0.0f0, 0.0f0, 0.0f0, 0.0f0, 0.0f0, 0.0f0)
+end
+
+function fixed_initial_condition()
+    return pack_state(U0_X, U0_Y, U0_Z, 0.0f0, 0.0f0, 0.0f0, 0.0f0, 0.0f0, 0.0f0, 0.0f0)
 end
 
 # ============================================================
@@ -251,7 +260,12 @@ params = [
     @SVector [Float32(a), Float32(B), Float32(c)]
     for c in cs, a in as
 ]
-u0s = [random_initial_condition(rng) for _ in 1:length(params)]
+u0s = if USE_RANDOM_U0
+    [random_initial_condition(rng) for _ in 1:length(params)]
+else
+    fixed_u0 = fixed_initial_condition()
+    fill(fixed_u0, length(params))
+end
 
 params_flat = vec(params)
 u0s_flat = vec(reshape(u0s, size(params)))
@@ -268,6 +282,11 @@ println("  max symbols: $MAX_SYMBOLS (packed into $N_CHUNKS chunks)")
 println("  adaptive: $ADAPTIVE")
 println("  max state: $MAX_STATE")
 println("  seed: $seed")
+if USE_RANDOM_U0
+    println("  initial condition: random")
+else
+    println("  initial condition: fixed (x=$U0_X, y=$U0_Y, z=$U0_Z)")
+end
 println()
 
 prob = ODEProblem{false}(rossler_augmented, u0s_flat[1], (0.0f0, T_END), params_flat[1])
