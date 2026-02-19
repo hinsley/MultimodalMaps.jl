@@ -1,0 +1,1589 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>CLV Section Discovery + Return Map (Shooting from Section): Rössler / Lorenz / Thomas / Shimizu-Morioka</title>
+  <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; margin: 0; color: #111; }
+    #controls {
+      padding: 12px;
+      background: #f6f6f8;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 16px;
+      align-items: end;
+    }
+    .ctrl { display: flex; flex-direction: column; font-size: 12px; }
+    .ctrl label { color: #333; margin-bottom: 4px; }
+    .ctrl input[type="number"] { width: 120px; padding: 4px 6px; }
+    .ctrl select { width: 150px; padding: 4px 6px; }
+    .ctrl input[type="range"] { width: 260px; }
+    .ctrl .small { font-size: 11px; color: #444; margin-top: 3px; }
+    .ctrl .row { display:flex; gap: 10px; align-items:center; }
+    .checks { display:flex; flex-direction: column; gap: 6px; font-size: 12px; padding: 6px 10px; border: 1px solid #ddd; background: #fff; border-radius: 4px; }
+    .checks label { display:flex; gap: 8px; align-items:center; }
+    button { padding: 8px 10px; border: 1px solid #bbb; background: white; cursor: pointer; border-radius: 4px; }
+    button:hover { background: #fafafa; }
+    #status { padding: 8px 12px; font-size: 12px; border-bottom: 1px solid #eee; }
+    #status.ok { color: #124; }
+    #status.err { color: #8a0000; }
+    #plots {
+      display: grid;
+      grid-template-columns: 2.2fr 1fr;
+      grid-template-rows: 460px 260px 260px;
+      gap: 10px;
+      padding: 10px;
+    }
+    #traj3d { grid-column: 1 / 2; grid-row: 1 / 4; border: 1px solid #eee; }
+    #returnMap { grid-column: 2 / 3; grid-row: 1 / 2; border: 1px solid #eee; }
+    #alignPlot { grid-column: 2 / 3; grid-row: 2 / 3; border: 1px solid #eee; }
+    #distPlot { grid-column: 2 / 3; grid-row: 3 / 4; border: 1px solid #eee; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <div class="ctrl">
+      <label>system</label>
+      <select id="system">
+        <option value="rossler" selected>Rössler</option>
+        <option value="lorenz">Lorenz</option>
+        <option value="thomas">Thomas</option>
+        <option value="shimizu_morioka">Shimizu-Morioka</option>
+      </select>
+    </div>
+
+    <div class="ctrl paramRossler"><label>a</label><input id="ross_a" type="number" step="0.01" value="0.2"></div>
+    <div class="ctrl paramRossler"><label>b</label><input id="ross_b" type="number" step="0.01" value="0.2"></div>
+    <div class="ctrl paramRossler"><label>c</label><input id="ross_c" type="number" step="0.1" value="5.7"></div>
+
+    <div class="ctrl paramLorenz" style="display:none;"><label>σ</label><input id="lor_sigma" type="number" step="0.1" value="10"></div>
+    <div class="ctrl paramLorenz" style="display:none;"><label>ρ</label><input id="lor_rho" type="number" step="0.1" value="28"></div>
+    <div class="ctrl paramLorenz" style="display:none;"><label>β</label><input id="lor_beta" type="number" step="0.001" value="2.6666666667"></div>
+
+    <div class="ctrl paramThomas" style="display:none;"><label>b (Thomas)</label><input id="tho_b" type="number" step="0.000001" value="0.208186"></div>
+    <div class="ctrl paramThomas" style="display:none; min-width: 260px;">
+      <label>Thomas system</label>
+      <div class="small mono">x' = sin(y) - b x, y' = sin(z) - b y, z' = sin(x) - b z</div>
+    </div>
+    <div class="ctrl paramShimizuMorioka" style="display:none;"><label>B</label><input id="sm_B" type="number" step="0.0001" value="0"></div>
+    <div class="ctrl paramShimizuMorioka" style="display:none;"><label>alpha</label><input id="sm_alpha" type="number" step="0.0001" value="0.1548"></div>
+    <div class="ctrl paramShimizuMorioka" style="display:none;"><label>lambda</label><input id="sm_lambda" type="number" step="0.0001" value="0.5843"></div>
+    <div class="ctrl paramShimizuMorioka" style="display:none; min-width: 320px;">
+      <label>Shimizu-Morioka system</label>
+      <div class="small mono">x' = y, y' = x - lambda y - x z - B x^3, z' = -alpha (z - x^2)</div>
+    </div>
+<div class="ctrl"><label>dt</label><input id="dt" type="number" step="0.001" value="0.01"></div>
+    <div class="ctrl"><label>discard (transient)</label><input id="discard" type="number" step="500" value="2000"></div>
+    <div class="ctrl"><label>CLV/section points (A)</label><input id="Nclv" type="number" step="500" value="8000"></div>
+
+    <div class="ctrl">
+      <label>start index (A, click 3D traj/section to set)</label>
+      <div class="row">
+        <input id="startIdx" type="range" min="0" max="7999" value="4000">
+        <input id="startIdxNum" type="number" step="1" min="0" max="7999" value="4000" style="width:90px;">
+      </div>
+      <div class="small mono">i0=<span id="startIdxLabel">4000</span></div>
+    </div>
+
+    <div class="ctrl"><label>max plotted points / trace</label><input id="maxPlotPts" type="number" step="500" value="7000"></div>
+
+    <div class="ctrl"><label>min time sep (crawl, indices)</label><input id="minSep" type="number" step="1" value="50"></div>
+    <div class="ctrl"><label>max perp dist (crawl)</label><input id="maxPerp" type="number" step="0.01" value="0.30"></div>
+    <div class="ctrl"><label>max step dist (crawl)</label><input id="maxStepDist" type="number" step="0.01" value="0.60"></div>
+    <div class="ctrl"><label>max angle to dir (deg)</label><input id="thetaMax" type="number" step="1" value="35"></div>
+    <div class="ctrl"><label>max CLV dir change (deg)</label><input id="dirChange" type="number" step="1" value="90"></div>
+    <div class="ctrl"><label>CLV2-flow align thresh</label><input id="alignThresh" type="number" step="0.01" value="0.95"></div>
+    <div class="ctrl"><label>section endpoint extension (CLV1)</label><input id="sectionExtend" type="number" step="0.01" min="0" value="0"></div>
+
+    <div class="ctrl"><label># samples on section (B)</label><input id="Nsamp" type="number" step="10" value="200"></div>
+    <div class="ctrl"><label>max steps / shot (B)</label><input id="maxReturnSteps" type="number" step="200" value="6000"></div>
+    <div class="ctrl"><label>min steps before return check</label><input id="minReturnSteps" type="number" step="1" value="25"></div>
+    <div class="ctrl"><label>event epsilon (to section)</label><input id="epsEvent" type="number" step="0.01" value="0.20"></div>
+    <div class="ctrl"><label>event exit multiplier</label><input id="epsExitMult" type="number" step="0.1" value="1.5"></div>
+    <div class="ctrl"><label>plot B shot traj count</label><input id="plotBcount" type="number" step="1" value="12"></div>
+    <div class="ctrl"><label>bisection refinements</label><input id="refineCount" type="number" step="1" min="1" value="1"></div>
+
+    <div class="ctrl"><label>recompute</label><button id="recompute">Trajectory A + CLVs</button></div>
+    <div class="ctrl"><label>rebuild</label><button id="rebuild">Section + return map (shooting)</button></div>
+    <div class="ctrl"><label>refine</label><button id="refineMap">Refine return map (bisect max L1 gap)</button></div>
+    <div class="ctrl"><label>refine (horizontal)</label><button id="refineMapHorizontal">Refine return map (bisect max horizontal gap)</button></div>
+
+    <div class="checks" style="min-width: 230px;">
+      <div class="mono" style="font-size:11px; color:#333;">3D visibility</div>
+      <label><input type="checkbox" id="showA" checked>Trajectory A (CLV/section)</label>
+      <label><input type="checkbox" id="showSection" checked>Section polyline (A)</label>
+      <label><input type="checkbox" id="showB" checked>Shot trajectories (B)</label>
+      <label><input type="checkbox" id="showEvents" checked>Return points (B)</label>
+      <label><input type="checkbox" id="showVectors" checked>Vectors at i0</label>
+    </div>
+  </div>
+
+  <div id="status" class="ok">Ready.</div>
+
+  <div id="plots">
+    <div id="traj3d"></div>
+    <div id="returnMap"></div>
+    <div id="alignPlot"></div>
+    <div id="distPlot"></div>
+  </div>
+
+<script>
+(() => {
+  // ------------------------
+  // Numeric helpers (3D, 3x3)
+  // ------------------------
+  const dot = (a,b) => a[0]*b[0] + a[1]*b[1] + a[2]*b[2];
+  const norm = (a) => Math.hypot(a[0], a[1], a[2]);
+  const add = (a,b) => [a[0]+b[0], a[1]+b[1], a[2]+b[2]];
+  const sub = (a,b) => [a[0]-b[0], a[1]-b[1], a[2]-b[2]];
+  const scale = (a,s) => [a[0]*s, a[1]*s, a[2]*s];
+  const normalize = (a) => {
+    const n = norm(a);
+    return (n > 0 && Number.isFinite(n)) ? scale(a, 1/n) : [0,0,0];
+  };
+  const cloneMat = (A) => [
+    [A[0][0], A[0][1], A[0][2]],
+    [A[1][0], A[1][1], A[1][2]],
+    [A[2][0], A[2][1], A[2][2]]
+  ];
+  const eye3 = () => [[1,0,0],[0,1,0],[0,0,1]];
+  const getCol = (A,j) => [A[0][j], A[1][j], A[2][j]];
+  const matMul = (A,B) => {
+    const C = [[0,0,0],[0,0,0],[0,0,0]];
+    for (let i=0;i<3;i++){
+      for (let j=0;j<3;j++){
+        C[i][j] = A[i][0]*B[0][j] + A[i][1]*B[1][j] + A[i][2]*B[2][j];
+      }
+    }
+    return C;
+  };
+  const matAdd = (A,B) => {
+    const C = [[0,0,0],[0,0,0],[0,0,0]];
+    for (let i=0;i<3;i++) for (let j=0;j<3;j++) C[i][j]=A[i][j]+B[i][j];
+    return C;
+  };
+  const matScale = (A,s) => {
+    const C = [[0,0,0],[0,0,0],[0,0,0]];
+    for (let i=0;i<3;i++) for (let j=0;j<3;j++) C[i][j]=A[i][j]*s;
+    return C;
+  };
+
+  // Modified Gram-Schmidt QR (columns)
+  function qrDecompose(A){
+    const a1 = getCol(A,0);
+    const a2 = getCol(A,1);
+    const a3 = getCol(A,2);
+
+    const r11 = norm(a1) || 1e-12;
+    const q1 = scale(a1, 1/r11);
+
+    let r12 = dot(q1,a2);
+    let u2 = sub(a2, scale(q1, r12));
+    let r22 = norm(u2) || 1e-12;
+    const q2 = scale(u2, 1/r22);
+
+    let r13 = dot(q1,a3);
+    let u3 = sub(a3, scale(q1, r13));
+    let r23 = dot(q2,u3);
+    u3 = sub(u3, scale(q2, r23));
+    let r33 = norm(u3) || 1e-12;
+    const q3 = scale(u3, 1/r33);
+
+    const Q = [
+      [q1[0], q2[0], q3[0]],
+      [q1[1], q2[1], q3[1]],
+      [q1[2], q2[2], q3[2]]
+    ];
+    const R = [
+      [r11, r12, r13],
+      [0,   r22, r23],
+      [0,   0,   r33]
+    ];
+    return {Q,R};
+  }
+
+  // Solve R X = B for X, with R upper triangular (3x3), B 3x3.
+  function solveUpperTriangular(R, B){
+    const X = [[0,0,0],[0,0,0],[0,0,0]];
+    for (let j=0;j<3;j++){
+      const b1=B[0][j], b2=B[1][j], b3=B[2][j];
+      const r11=R[0][0], r12=R[0][1], r13=R[0][2], r22=R[1][1], r23=R[1][2], r33=R[2][2];
+      const x3 = b3 / r33;
+      const x2 = (b2 - r23*x3) / r22;
+      const x1 = (b1 - r12*x2 - r13*x3) / r11;
+      X[0][j]=x1; X[1][j]=x2; X[2][j]=x3;
+    }
+    return X;
+  }
+
+  function normalizeColumns(A){
+    const B = [[A[0][0],A[0][1],A[0][2]],[A[1][0],A[1][1],A[1][2]],[A[2][0],A[2][1],A[2][2]]];
+    for (let j=0;j<3;j++){
+      const col = getCol(B,j);
+      const n = norm(col) || 1e-12;
+      B[0][j]/=n; B[1][j]/=n; B[2][j]/=n;
+    }
+    return B;
+  }
+
+  // ------------------------
+  // Systems (Rössler / Lorenz / Thomas / Shimizu-Morioka)
+  // ------------------------
+  function F(x, pars){
+    const [X,Y,Z] = x;
+    switch (pars.system){
+      case "rossler": {
+        const {a,b,c} = pars;
+        return [-Y - Z, X + a*Y, b + Z*(X - c)];
+      }
+      case "lorenz": {
+        const {sigma, rho, beta} = pars;
+        return [sigma*(Y - X), X*(rho - Z) - Y, X*Y - beta*Z];
+      }
+      case "thomas": {
+        const {b} = pars;
+        return [Math.sin(Y) - b*X, Math.sin(Z) - b*Y, Math.sin(X) - b*Z];
+      }
+      case "shimizu_morioka": {
+        const {B, alpha, lambda} = pars;
+        return [Y, X - lambda*Y - X*Z - B*X*X*X, -alpha*(Z - X*X)];
+      }
+      default:
+        throw new Error("Unknown system: " + pars.system);
+    }
+  }
+
+  function J(x, pars){
+    const [X,Y,Z] = x;
+    switch (pars.system){
+      case "rossler": {
+        const {a,c} = pars;
+        return [
+          [0, -1, -1],
+          [1,  a,  0],
+          [Z,  0,  X - c]
+        ];
+      }
+      case "lorenz": {
+        const {sigma, rho, beta} = pars;
+        return [
+          [-sigma,  sigma, 0],
+          [rho - Z, -1,   -X],
+          [Y,       X,    -beta]
+        ];
+      }
+      case "thomas": {
+        const {b} = pars;
+        return [
+          [-b, Math.cos(Y), 0],
+          [0, -b, Math.cos(Z)],
+          [Math.cos(X), 0, -b]
+        ];
+      }
+      case "shimizu_morioka": {
+        const {B, alpha, lambda} = pars;
+        return [
+          [0, 1, 0],
+          [1 - Z - 3*B*X*X, -lambda, -X],
+          [2*alpha*X, 0, -alpha]
+        ];
+      }
+      default:
+        throw new Error("Unknown system: " + pars.system);
+    }
+  }
+
+
+  // One RK4 step for state only
+  function rk4StepState(x, dt, pars){
+    const f1 = F(x, pars);
+    const x2 = add(x, scale(f1, dt/2));
+    const f2 = F(x2, pars);
+    const x3 = add(x, scale(f2, dt/2));
+    const f3 = F(x3, pars);
+    const x4 = add(x, scale(f3, dt));
+    const f4 = F(x4, pars);
+
+    return add(x, scale(add(add(f1, scale(add(f2,f3), 2)), f4), dt/6));
+  }
+
+  // One RK4 step for state + variational matrix M (3x3), using dM/dt = J(x) M
+  function rk4StepStateVar(x, M, dt, pars){
+    const f1 = F(x, pars);
+    const J1 = J(x, pars);
+    const K1 = matMul(J1, M);
+
+    const x2 = add(x, scale(f1, dt/2));
+    const M2 = matAdd(M, matScale(K1, dt/2));
+    const f2 = F(x2, pars);
+    const J2 = J(x2, pars);
+    const K2 = matMul(J2, M2);
+
+    const x3 = add(x, scale(f2, dt/2));
+    const M3 = matAdd(M, matScale(K2, dt/2));
+    const f3 = F(x3, pars);
+    const J3 = J(x3, pars);
+    const K3 = matMul(J3, M3);
+
+    const x4 = add(x, scale(f3, dt));
+    const M4 = matAdd(M, matScale(K3, dt));
+    const f4 = F(x4, pars);
+    const J4 = J(x4, pars);
+    const K4 = matMul(J4, M4);
+
+    const xNext = add(x, scale(add(add(f1, scale(add(f2,f3), 2)), f4), dt/6));
+    const Ksum = matAdd(matAdd(K1, matScale(matAdd(K2, K3), 2)), K4);
+    const MNext = matAdd(M, matScale(Ksum, dt/6));
+
+    return {xNext, MNext};
+  }
+
+  // Generate trajectory A (state+QR+CLVs) with the same fast method as before.
+  function generateTrajectoryAndCLVs(opts){
+    const sys = opts.system || "rossler";
+    let pars, systemName, x0;
+
+    if (sys === "rossler"){
+      systemName = "Rössler";
+      pars = {system: "rossler", a: opts.ross_a, b: opts.ross_b, c: opts.ross_c};
+      x0 = [1,1,1];
+    } else if (sys === "lorenz"){
+      systemName = "Lorenz";
+      pars = {system: "lorenz", sigma: opts.lor_sigma, rho: opts.lor_rho, beta: opts.lor_beta};
+      x0 = [1,1,1];
+    } else if (sys === "thomas"){
+      systemName = "Thomas";
+      pars = {system: "thomas", b: opts.tho_b};
+      x0 = [0.1,0.2,0.3];
+    } else if (sys === "shimizu_morioka"){
+      systemName = "Shimizu-Morioka";
+      pars = {system: "shimizu_morioka", B: opts.sm_B, alpha: opts.sm_alpha, lambda: opts.sm_lambda};
+      x0 = [0.1,0,0];
+    } else {
+      throw new Error("Unknown system: " + sys);
+    }
+
+    const dt = opts.dt;
+    const Nclv = opts.Nclv;
+    const discard = opts.discard;
+
+    if (!(Nclv > 200)) throw new Error("CLV/section points (A) must be > 200.");
+
+    let x = x0.slice();
+    let M = eye3();
+
+    // Transient
+    for (let k=0;k<discard;k++){
+      const step = rk4StepStateVar(x, M, dt, pars);
+      x = step.xNext;
+      const {Q} = qrDecompose(step.MNext);
+      M = Q;
+    }
+
+    const statesA = new Array(Nclv);
+    const flowsA  = new Array(Nclv);
+    const QsA     = new Array(Nclv);
+    const RsA     = new Array(Nclv-1);
+
+    // initial stored point
+    statesA[0] = x;
+    flowsA[0] = F(x, pars);
+    // Orthonormal tangent basis at the start of the kept interval
+    QsA[0] = cloneMat(M);
+
+    // Integrate forward and do QR each step
+    for (let k=0;k<Nclv-1;k++){
+      const step = rk4StepStateVar(x, M, dt, pars);
+      x = step.xNext;
+      const {Q,R} = qrDecompose(step.MNext);
+      M = Q;
+
+      statesA[k+1] = x;
+      flowsA[k+1] = F(x, pars);
+      QsA[k+1] = Q;
+      RsA[k] = R; // maps time k -> k+1 in the stored interval
+    }
+
+    // Backward iteration for C coefficients
+    const clv1 = new Array(Nclv);
+    const clv2 = new Array(Nclv);
+    const projDir = new Array(Nclv);
+    const align2 = new Array(Nclv);
+
+    let C = eye3();
+    const Ccoeff = new Array(Nclv);
+    Ccoeff[Nclv-1] = C;
+
+    for (let k=Nclv-2;k>=0;k--){
+      C = solveUpperTriangular(RsA[k], C);
+      C = normalizeColumns(C);
+      Ccoeff[k] = C;
+    }
+
+    for (let k=0;k<Nclv;k++){
+      const V = matMul(QsA[k], Ccoeff[k]);
+      const v1 = normalize(getCol(V,0));
+      const v2 = normalize(getCol(V,1));
+
+      clv1[k] = v1;
+      clv2[k] = v2;
+
+      const fhat = normalize(flowsA[k]);
+      align2[k] = Math.abs(dot(v2, fhat));
+
+      // CLV1 orthogonalized to flow
+      const p = sub(v1, scale(fhat, dot(v1, fhat)));
+      const pn = norm(p);
+      projDir[k] = (pn > 1e-10) ? scale(p, 1/pn) : [0,0,0];
+    }
+
+    return {
+      systemKey: sys,
+      systemName,
+      pars, dt, discard, Nclv,
+      A: {states: statesA, flows: flowsA, clv1, clv2, projDir, align2}
+    };
+  }
+
+  // ------------------------
+  // CLV-based "crawling" section discovery on trajectory A
+  // ------------------------
+  function crawlSection(A, params, i0){
+    const N = A.states.length;
+    if (i0 < 0 || i0 >= N) throw new Error("start index out of range");
+
+    const cosThetaMax = Math.cos(params.thetaMaxDeg * Math.PI/180);
+    const cosDirChange = Math.cos(params.dirChangeDeg * Math.PI/180);
+
+    function findNext(currentIdx, currentDir, used){
+      const x0 = A.states[currentIdx];
+      const cands = [];
+
+      for (let j=0;j<N;j++){
+        if (used.has(j)) continue;
+        if (Math.abs(j - currentIdx) < params.minSep) continue;
+
+        if (A.align2[j] < params.alignThresh) continue;
+
+        const diff = sub(A.states[j], x0);
+        const dist = norm(diff);
+        if (!(dist > 0)) continue;
+
+        const maxStepDist = (Number.isFinite(params.maxStepDist) && params.maxStepDist > 0) ? params.maxStepDist : Infinity;
+        if (dist > maxStepDist) continue;
+
+        const proj = dot(diff, currentDir);
+        if (proj <= 0) continue;
+
+        const cosAng = proj / dist;
+        if (cosAng < cosThetaMax) continue;
+
+        const perp2 = Math.max(0, dist*dist - proj*proj);
+        const perp = Math.sqrt(perp2);
+        if (perp > params.maxPerp) continue;
+
+        // score: prioritize staying close to the ray, then short overall distance
+        const score = perp + 0.05*dist;
+        cands.push({j, score});
+      }
+
+      if (cands.length === 0) return null;
+      cands.sort((u,v) => u.score - v.score);
+
+      for (const cand of cands){
+        const j = cand.j;
+        let nd = A.projDir[j];
+        if (norm(nd) < 1e-10) continue;
+
+        // resolve sign to keep continuity
+        if (dot(nd, currentDir) < 0) nd = scale(nd, -1);
+
+        // enforce max change in projected CLV1 direction
+        if (dot(nd, currentDir) < cosDirChange) continue;
+
+        return {nextIdx: j, nextDir: nd};
+      }
+
+      return null;
+    }
+
+    function crawlOneSide(sign){
+      if (A.align2[i0] < params.alignThresh){
+        throw new Error(`CLV2-flow alignment at i0 is ${A.align2[i0].toFixed(3)} < threshold ${params.alignThresh}`);
+      }
+
+      let dir0 = A.projDir[i0];
+      if (norm(dir0) < 1e-10) throw new Error("Projected CLV1 is near-zero at start index.");
+      dir0 = (sign >= 0) ? dir0 : scale(dir0, -1);
+
+      const used = new Set();
+      used.add(i0);
+
+      const inds = [i0];
+      let currentIdx = i0;
+      let currentDir = dir0;
+
+      for (let iter=0; iter<params.maxIters; iter++){
+        const res = findNext(currentIdx, currentDir, used);
+        if (!res) break;
+        used.add(res.nextIdx);
+        inds.push(res.nextIdx);
+        currentIdx = res.nextIdx;
+        currentDir = res.nextDir;
+      }
+
+      return inds;
+    }
+
+    const forward = crawlOneSide(+1);
+    const backward = crawlOneSide(-1);
+
+    const section = backward.slice().reverse();
+    section.pop();
+    section.push(...forward);
+
+    const M = section.length;
+    if (M < 3) throw new Error("Section crawl found too few points; loosen constraints or increase Nclv.");
+
+    const extendDist = Math.max(0, Number(params.extendDist) || 0);
+    let secPts = section.map(i => A.states[i]);
+    let secPointIdx = section.slice();
+
+    if (extendDist > 0 && secPts.length >= 2){
+      const p0 = secPts[0];
+      const p1 = secPts[1];
+      const pEnd = secPts[secPts.length-1];
+      const pPrev = secPts[secPts.length-2];
+
+      const iStart = section[0];
+      const iEnd = section[section.length-1];
+
+      const inStart = sub(p1, p0);
+      const inEnd = sub(pPrev, pEnd);
+
+      let dStart = A.projDir[iStart];
+      if (norm(dStart) < 1e-10) dStart = normalize(inStart);
+      if (dot(dStart, inStart) < 0) dStart = scale(dStart, -1);
+
+      let dEnd = A.projDir[iEnd];
+      if (norm(dEnd) < 1e-10) dEnd = normalize(inEnd);
+      if (dot(dEnd, inEnd) < 0) dEnd = scale(dEnd, -1);
+
+      const pStartExt = add(p0, scale(dStart, -extendDist));
+      const pEndExt = add(pEnd, scale(dEnd, -extendDist));
+
+      secPts = [pStartExt, ...secPts, pEndExt];
+      secPointIdx = ["ext-start", ...secPointIdx, "ext-end"];
+    }
+
+    const s = new Array(secPts.length);
+    s[0] = 0;
+    for (let k=1;k<secPts.length;k++){
+      const d = norm(sub(secPts[k], secPts[k-1]));
+      s[k] = s[k-1] + d;
+    }
+    const totalLen = s[s.length-1] || 1;
+    const sNorm = s.map(v => v / totalLen);
+
+    return {sectionIdx: section, secPts, secPointIdx, sCum: s, sNorm, totalLen, extendDist};
+  }
+
+  // ------------------------
+  // Section polyline helpers: nearest point + uniform sampling
+  // ------------------------
+  function nearestOnSectionPolylineFull(x, secPts, sCum){
+    // Returns {dist, segIndex, t, sCoord, closestPoint}
+    let best = {dist: Infinity, segIndex: -1, t: 0, sCoord: 0, closestPoint: null, segLen: 0};
+
+    for (let i=0;i<secPts.length-1;i++){
+      const p0 = secPts[i];
+      const p1 = secPts[i+1];
+      const d = sub(p1, p0);
+      const L2 = dot(d,d);
+      if (L2 < 1e-14) continue;
+
+      // "Triangulated" LERP parameter (law-of-cosines identity)
+      const d0sq = dot(sub(x, p0), sub(x, p0));
+      const d1sq = dot(sub(x, p1), sub(x, p1));
+      let tTri = (d0sq + L2 - d1sq) / (2*L2);
+      if (tTri < 0) tTri = 0;
+      else if (tTri > 1) tTri = 1;
+
+      const L = Math.sqrt(L2);
+      const c = add(p0, scale(d, tTri));
+      const dist = norm(sub(x, c));
+
+      if (dist < best.dist){
+        best = {
+          dist,
+          segIndex: i,
+          t: tTri,
+          sCoord: sCum[i] + tTri * L,
+          closestPoint: c,
+          segLen: L
+        };
+      }
+    }
+    return best;
+  }
+
+  // Simple uniform grid hash for segments, to avoid O(#segments) scan when far.
+  function buildSegmentGrid(secPts, pad, cellSize){
+    const n = secPts.length;
+    let minX=Infinity, minY=Infinity, minZ=Infinity;
+    let maxX=-Infinity, maxY=-Infinity, maxZ=-Infinity;
+    for (let i=0;i<n;i++){
+      const p = secPts[i];
+      if (p[0]<minX) minX=p[0]; if (p[0]>maxX) maxX=p[0];
+      if (p[1]<minY) minY=p[1]; if (p[1]>maxY) maxY=p[1];
+      if (p[2]<minZ) minZ=p[2]; if (p[2]>maxZ) maxZ=p[2];
+    }
+    const origin = [minX - pad, minY - pad, minZ - pad];
+    const cs = Math.max(1e-9, cellSize);
+    const map = new Map();
+
+    function key(ix,iy,iz){ return ix + "," + iy + "," + iz; }
+    function idxOfCoord(v, o){ return Math.floor((v - o)/cs); }
+
+    for (let i=0;i<n-1;i++){
+      const p0 = secPts[i], p1 = secPts[i+1];
+      const sx0 = Math.min(p0[0], p1[0]) - pad;
+      const sx1 = Math.max(p0[0], p1[0]) + pad;
+      const sy0 = Math.min(p0[1], p1[1]) - pad;
+      const sy1 = Math.max(p0[1], p1[1]) + pad;
+      const sz0 = Math.min(p0[2], p1[2]) - pad;
+      const sz1 = Math.max(p0[2], p1[2]) + pad;
+
+      const ix0 = idxOfCoord(sx0, origin[0]);
+      const ix1 = idxOfCoord(sx1, origin[0]);
+      const iy0 = idxOfCoord(sy0, origin[1]);
+      const iy1 = idxOfCoord(sy1, origin[1]);
+      const iz0 = idxOfCoord(sz0, origin[2]);
+      const iz1 = idxOfCoord(sz1, origin[2]);
+
+      for (let ix=ix0; ix<=ix1; ix++){
+        for (let iy=iy0; iy<=iy1; iy++){
+          for (let iz=iz0; iz<=iz1; iz++){
+            const k = key(ix,iy,iz);
+            let arr = map.get(k);
+            if (!arr){ arr=[]; map.set(k, arr); }
+            arr.push(i);
+          }
+        }
+      }
+    }
+    return {origin, cs, map};
+  }
+
+  function candidateSegmentsFromGrid(grid, x){
+    const {origin, cs, map} = grid;
+    const ix = Math.floor((x[0] - origin[0]) / cs);
+    const iy = Math.floor((x[1] - origin[1]) / cs);
+    const iz = Math.floor((x[2] - origin[2]) / cs);
+
+    const segs = new Set();
+    // include neighbors for numerical safety
+    for (let dx=-1; dx<=1; dx++){
+      for (let dy=-1; dy<=1; dy++){
+        for (let dz=-1; dz<=1; dz++){
+          const k = (ix+dx) + "," + (iy+dy) + "," + (iz+dz);
+          const arr = map.get(k);
+          if (!arr) continue;
+          for (const s of arr) segs.add(s);
+        }
+      }
+    }
+    return segs;
+  }
+
+  function nearestOnSectionPolylineGrid(x, secPts, sCum, grid){
+    const segs = candidateSegmentsFromGrid(grid, x);
+    if (segs.size === 0){
+      return {dist: Infinity, segIndex: -1, t: 0, sCoord: 0, closestPoint: null, segLen: 0};
+    }
+
+    let best = {dist: Infinity, segIndex: -1, t: 0, sCoord: 0, closestPoint: null, segLen: 0};
+    for (const i of segs){
+      const p0 = secPts[i];
+      const p1 = secPts[i+1];
+      const d = sub(p1, p0);
+      const L2 = dot(d,d);
+      if (L2 < 1e-14) continue;
+
+      const d0sq = dot(sub(x, p0), sub(x, p0));
+      const d1sq = dot(sub(x, p1), sub(x, p1));
+      let tTri = (d0sq + L2 - d1sq) / (2*L2);
+      if (tTri < 0) tTri = 0;
+      else if (tTri > 1) tTri = 1;
+
+      const L = Math.sqrt(L2);
+      const c = add(p0, scale(d, tTri));
+      const dist = norm(sub(x, c));
+
+      if (dist < best.dist){
+        best = {
+          dist,
+          segIndex: i,
+          t: tTri,
+          sCoord: sCum[i] + tTri * L,
+          closestPoint: c,
+          segLen: L
+        };
+      }
+    }
+    return best;
+  }
+
+  function sampleUniformAlongSection(secPts, sCum, totalLen, Nsamp){
+    const samples = [];
+    if (Nsamp <= 1){
+      samples.push(pointOnSectionAtS0(secPts, sCum, totalLen, 0.5));
+      return samples;
+    }
+
+    for (let k=0;k<Nsamp;k++){
+      const s0 = k / (Nsamp - 1);
+      samples.push(pointOnSectionAtS0(secPts, sCum, totalLen, s0));
+    }
+    return samples;
+  }
+
+  function pointOnSectionAtS0(secPts, sCum, totalLen, s0){
+    const sClamped = Math.max(0, Math.min(1, s0));
+    const target = sClamped * totalLen;
+    let seg = 0;
+    while (seg < sCum.length-2 && sCum[seg+1] < target) seg++;
+
+    const Lseg = (sCum[seg+1] - sCum[seg]) || 1e-12;
+    let t = (target - sCum[seg]) / Lseg;
+    if (t < 0) t = 0;
+    else if (t > 1) t = 1;
+
+    const p0 = secPts[seg], p1 = secPts[seg+1];
+    const point = add(p0, scale(sub(p1,p0), t));
+    return {s0: sClamped, point, segIndex: seg, t};
+  }
+
+  function evenlySpacedIndices(totalCount, desiredCount){
+    const total = Math.max(0, totalCount|0);
+    const desired = Math.max(0, desiredCount|0);
+    if (total === 0 || desired === 0) return [];
+
+    const n = Math.min(total, desired);
+    if (n === 1) return [0];
+
+    const idx = [];
+    for (let i=0; i<n; i++){
+      idx.push(Math.round((i * (total - 1)) / (n - 1)));
+    }
+
+    // Guard against rounding collisions in edge cases.
+    const uniq = [];
+    const seen = new Set();
+    for (const k of idx){
+      if (!seen.has(k)){
+        seen.add(k);
+        uniq.push(k);
+      }
+    }
+    if (uniq.length < n){
+      for (let k=0; k<total && uniq.length<n; k++){
+        if (!seen.has(k)){
+          seen.add(k);
+          uniq.push(k);
+        }
+      }
+      uniq.sort((a,b) => a-b);
+    }
+    return uniq;
+  }
+
+  function buildShootingContext(data, sectionRes, ui){
+    const Adata = data.A;
+    const secPts = Array.isArray(sectionRes.secPts)
+      ? sectionRes.secPts
+      : sectionRes.sectionIdx.map(i => Adata.states[i]);
+    const sCum = sectionRes.sCum;
+    const totalLen = sectionRes.totalLen || 1;
+
+    const eps = ui.epsEvent;
+    const epsExit = eps * ui.epsExitMult;
+    const maxSteps = Math.max(10, ui.maxReturnSteps|0);
+    const minSteps = Math.max(0, ui.minReturnSteps|0);
+
+    // Build a spatial grid around the section, padded by epsExit.
+    const cellSize = Math.max(epsExit, 1e-6);
+    const grid = buildSegmentGrid(secPts, epsExit, cellSize);
+
+    return {pars: data.pars, dt: data.dt, secPts, sCum, totalLen, eps, epsExit, maxSteps, minSteps, grid};
+  }
+
+  function shootReturnFromPoint(startPoint, ctx, storePath=false){
+    let x = startPoint;
+    const path = storePath ? [x] : null;
+
+    let left = false;
+    let found = false;
+    let foundS1 = null;
+    let foundPt = null;
+    let foundStep = null;
+
+    for (let step=0; step<ctx.maxSteps; step++){
+      x = rk4StepState(x, ctx.dt, ctx.pars);
+      if (storePath) path.push(x);
+
+      const near = nearestOnSectionPolylineGrid(x, ctx.secPts, ctx.sCum, ctx.grid);
+      if (!left){
+        if (near.dist >= ctx.epsExit && step >= ctx.minSteps){
+          left = true;
+        }
+      } else if (near.dist <= ctx.eps && step >= ctx.minSteps){
+        found = true;
+        foundS1 = near.sCoord / ctx.totalLen;
+        foundPt = x;
+        foundStep = step + 1;
+        break;
+      }
+    }
+
+    return {
+      found,
+      s1: foundS1,
+      retStep: foundStep,
+      retTime: (foundStep == null) ? null : foundStep * ctx.dt,
+      retPt: foundPt,
+      path
+    };
+  }
+
+  function summarizeSampleData(sampleData){
+    const rmX = [];
+    const rmY = [];
+    const retTimes = [];
+    const retSteps = [];
+    const retPts = [];
+    const failS0 = [];
+
+    for (const s of sampleData){
+      if (s.found){
+        rmX.push(s.s0);
+        rmY.push(s.s1);
+        retSteps.push(s.retStep);
+        retTimes.push(s.retTime);
+        retPts.push(s.retPt);
+      } else {
+        failS0.push(s.s0);
+      }
+    }
+
+    return {rmX, rmY, retSteps, retTimes, retPts, failS0};
+  }
+
+  function buildShotTrajectoriesForPlot(sampleData, plotBcount, ctx){
+    const shotTrajs = [];
+    const selected = evenlySpacedIndices(sampleData.length, plotBcount);
+    for (const k of selected){
+      const shot = shootReturnFromPoint(sampleData[k].point, ctx, true);
+      shotTrajs.push(shot.path || [sampleData[k].point]);
+    }
+    return shotTrajs;
+  }
+
+  function hasNearbyS0(sampleData, s0, tol=1e-12){
+    for (const s of sampleData){
+      if (Math.abs(s.s0 - s0) <= tol) return true;
+    }
+    return false;
+  }
+
+  // ------------------------
+  // Return map by "shooting" from section samples
+  // ------------------------
+  function computeReturnMapByShooting(data, sectionRes, ui){
+    const Nsamp = Math.max(1, ui.Nsamp|0);
+    const plotBcount = Math.max(0, ui.plotBcount|0);
+    const ctx = buildShootingContext(data, sectionRes, ui);
+    const samples = sampleUniformAlongSection(ctx.secPts, ctx.sCum, ctx.totalLen, Nsamp);
+
+    const sampleData = new Array(samples.length);
+    for (let k=0; k<samples.length; k++){
+      const base = samples[k];
+      const shot = shootReturnFromPoint(base.point, ctx, false);
+      sampleData[k] = {
+        s0: base.s0,
+        point: base.point,
+        segIndex: base.segIndex,
+        t: base.t,
+        found: shot.found,
+        s1: shot.s1,
+        retStep: shot.retStep,
+        retTime: shot.retTime,
+        retPt: shot.retPt
+      };
+    }
+
+    const summary = summarizeSampleData(sampleData);
+    const shotTrajs = buildShotTrajectoriesForPlot(sampleData, plotBcount, ctx);
+    return {...summary, samples: sampleData, sampleData, shotTrajs};
+  }
+
+  function refineReturnMapByBisection(data, sectionRes, shootRes, ui, refinements, metric="l1"){
+    const refineCount = Math.max(0, refinements|0);
+    const plotBcount = Math.max(0, ui.plotBcount|0);
+
+    const source = Array.isArray(shootRes.sampleData) ? shootRes.sampleData : shootRes.samples;
+    if (!Array.isArray(source) || source.length === 0){
+      throw new Error("No return-map samples available. Rebuild section + return map first.");
+    }
+
+    const ctx = buildShootingContext(data, sectionRes, ui);
+    const sampleData = source.slice().sort((a,b) => a.s0 - b.s0);
+
+    let refinedAdded = 0;
+    for (let iter=0; iter<refineCount; iter++){
+      const success = sampleData.filter(s => s.found);
+      if (success.length < 2) break;
+
+      let bestPair = null;
+      let bestScore = -Infinity;
+      for (let i=0; i<success.length-1; i++){
+        const a = success[i];
+        const b = success[i+1];
+        const midS0 = 0.5 * (a.s0 + b.s0);
+        if (hasNearbyS0(sampleData, midS0)) continue;
+
+        const dx = Math.abs(b.s0 - a.s0);
+        const dy = Math.abs(b.s1 - a.s1);
+        const score = (metric === "horizontal") ? dx : (dx + dy);
+        if (score > bestScore){
+          bestScore = score;
+          bestPair = {midS0};
+        }
+      }
+
+      if (!bestPair) break;
+
+      const base = pointOnSectionAtS0(ctx.secPts, ctx.sCum, ctx.totalLen, bestPair.midS0);
+      const shot = shootReturnFromPoint(base.point, ctx, false);
+      const entry = {
+        s0: base.s0,
+        point: base.point,
+        segIndex: base.segIndex,
+        t: base.t,
+        found: shot.found,
+        s1: shot.s1,
+        retStep: shot.retStep,
+        retTime: shot.retTime,
+        retPt: shot.retPt
+      };
+
+      let ins = sampleData.findIndex(s => s.s0 > entry.s0);
+      if (ins < 0) ins = sampleData.length;
+      sampleData.splice(ins, 0, entry);
+      refinedAdded++;
+    }
+
+    const summary = summarizeSampleData(sampleData);
+    const shotTrajs = buildShotTrajectoriesForPlot(sampleData, plotBcount, ctx);
+    return {...summary, samples: sampleData, sampleData, shotTrajs, refinedAdded, refineMetric: metric};
+  }
+
+  // ------------------------
+  // Plotting
+  // ------------------------
+  function decimateXYZ(states, maxPlotPts){
+    const N = states.length;
+    const stride = Math.max(1, Math.floor(N / Math.max(10, maxPlotPts)));
+    const x = [], y = [], z = [], idx = [];
+    for (let i=0;i<N;i+=stride){
+      x.push(states[i][0]);
+      y.push(states[i][1]);
+      z.push(states[i][2]);
+      idx.push(i);
+    }
+    return {x,y,z,idx,stride};
+  }
+
+  function decimatePath(path, maxPlotPts){
+    const N = path.length;
+    const stride = Math.max(1, Math.floor(N / Math.max(10, maxPlotPts)));
+    const out = [];
+    for (let i=0;i<N;i+=stride) out.push(path[i]);
+    if (out.length === 0 && path.length) out.push(path[0]);
+    return out;
+  }
+
+  function plotAll(data, sectionRes, shootRes, ui){
+    const A = data.A;
+
+    const i0 = ui.startIdx;
+    const p0 = A.states[i0];
+
+    const maxPlotPts = ui.maxPlotPts;
+    const decA = decimateXYZ(A.states, maxPlotPts);
+
+    // Section polyline points (no decimation)
+    const secPts = Array.isArray(sectionRes.secPts)
+      ? sectionRes.secPts
+      : sectionRes.sectionIdx.map(i => A.states[i]);
+    const secPointIdx = Array.isArray(sectionRes.secPointIdx)
+      ? sectionRes.secPointIdx
+      : sectionRes.sectionIdx;
+    const sx = secPts.map(p => p[0]);
+    const sy = secPts.map(p => p[1]);
+    const sz = secPts.map(p => p[2]);
+    const scol = sectionRes.sNorm;
+
+    // Shot trajectories combined into a single line trace with null separators
+    const bx = [], by = [], bz = [];
+    for (const path of shootRes.shotTrajs){
+      const pdec = decimatePath(path, maxPlotPts);
+      for (const p of pdec){
+        bx.push(p[0]); by.push(p[1]); bz.push(p[2]);
+      }
+      bx.push(null); by.push(null); bz.push(null);
+    }
+
+    // Return points
+    const rpts = shootRes.retPts;
+    const rx = rpts.map(p => p[0]);
+    const ry = rpts.map(p => p[1]);
+    const rz = rpts.map(p => p[2]);
+
+    // Vectors at i0
+    const fhat = normalize(A.flows[i0]);
+    const dhat = A.projDir[i0];
+    const vScale = 1.2;
+
+    const trajA = {
+      type: "scatter3d",
+      mode: "lines",
+      x: decA.x, y: decA.y, z: decA.z,
+      customdata: decA.idx,
+      line: {width: 2, color: "#1f77b4"},
+      name: `traj A (stride ${decA.stride})`,
+      hovertemplate: "traj A index i=%{customdata}<extra></extra>",
+      visible: ui.showA ? true : "legendonly"
+    };
+
+    const sectionTrace = {
+      type: "scatter3d",
+      mode: "markers+lines",
+      x: sx, y: sy, z: sz,
+      customdata: secPointIdx,
+      marker: {size: 4, color: scol, colorscale: "Viridis", showscale: true, colorbar: {title: "arc s"}},
+      line: {width: 3, color: "rgba(0,0,0,0.25)"},
+      name: "section polyline",
+      hovertemplate: "section point i=%{customdata}<extra></extra>",
+      visible: ui.showSection ? true : "legendonly"
+    };
+
+    const startTrace = {
+      type: "scatter3d",
+      mode: "markers",
+      x: [p0[0]], y: [p0[1]], z: [p0[2]],
+      marker: {size: 6, color: "#ffcc00", line: {color: "#333", width: 1}},
+      name: "start i0",
+      visible: true
+    };
+
+    const clvSeg = {
+      type: "scatter3d",
+      mode: "lines",
+      x: [p0[0], p0[0] + vScale*dhat[0]],
+      y: [p0[1], p0[1] + vScale*dhat[1]],
+      z: [p0[2], p0[2] + vScale*dhat[2]],
+      line: {color: "red", width: 8},
+      name: "CLV1 ⟂ flow (at i0)",
+      visible: ui.showVectors ? true : "legendonly"
+    };
+
+    const flowSeg = {
+      type: "scatter3d",
+      mode: "lines",
+      x: [p0[0], p0[0] + vScale*fhat[0]],
+      y: [p0[1], p0[1] + vScale*fhat[1]],
+      z: [p0[2], p0[2] + vScale*fhat[2]],
+      line: {color: "green", width: 8},
+      name: "flow (at i0)",
+      visible: ui.showVectors ? true : "legendonly"
+    };
+
+    const shotsB = {
+      type: "scatter3d",
+      mode: "lines",
+      x: bx, y: by, z: bz,
+      line: {width: 2, color: "#ff7f0e"},
+      name: (shootRes.shotTrajs.length < shootRes.samples.length)
+        ? `shot trajectories B (${shootRes.shotTrajs.length} of ${shootRes.samples.length}, evenly spaced)`
+        : `shot trajectories B (${shootRes.shotTrajs.length})`,
+      hoverinfo: "none",
+      visible: ui.showB ? true : "legendonly"
+    };
+
+    const returnsTrace = {
+      type: "scatter3d",
+      mode: "markers",
+      x: rx, y: ry, z: rz,
+      marker: {size: 4.5, color: "#ff7f0e", line: {color: "#222", width: 0.7}},
+      name: "return points (B)",
+      visible: ui.showEvents ? true : "legendonly"
+    };
+
+    const layout3d = {
+      margin: {l:0, r:0, b:0, t:30},
+      title: {text: `${data.systemName}: trajectory A (CLVs/section) + return map by shooting from section`, font: {size: 14}},
+      scene: {
+        xaxis: {title: "x"},
+        yaxis: {title: "y"},
+        zaxis: {title: "z"},
+        aspectmode: "data"
+      },
+      legend: {orientation: "h"}
+    };
+
+    const traces3d = [trajA, sectionTrace, shotsB, returnsTrace, startTrace, clvSeg, flowSeg];
+    Plotly.react("traj3d", traces3d, layout3d, {displaylogo: false});
+    wireTrajectoryClickSelection();
+
+    // Return map: (s0 -> s1)
+    const rmTrace = {
+      type: "scatter",
+      mode: "markers",
+      x: shootRes.rmX,
+      y: shootRes.rmY,
+      marker: {size: 6, color: "rgba(40,70,200,0.75)"},
+      name: "s1 vs s0",
+      visible: ui.showEvents ? true : "legendonly"
+    };
+    const idLine = {
+      type: "scatter",
+      mode: "lines",
+      x: [0,1],
+      y: [0,1],
+      line: {color: "rgba(100,100,100,0.55)", dash: "dot", width: 2},
+      name: "identity"
+    };
+    const layoutRM = {
+      margin: {l:50, r:10, b:45, t:35},
+      title: {text: "First return map from section shooting", font: {size: 14}},
+      xaxis: {title: "arc s_n (initial on section)", range: [0,1]},
+      yaxis: {title: "arc s_{n+1} (first return)", range: [0,1]},
+      showlegend: false
+    };
+    Plotly.react("returnMap", [rmTrace, idLine], layoutRM, {displaylogo: false});
+
+    // Alignment plot (A)
+    const idxA = [...Array(A.align2.length).keys()];
+    const alignTrace = {
+      type: "scatter",
+      mode: "lines",
+      x: idxA,
+      y: A.align2,
+      line: {width: 1.5, color: "#333"},
+      name: "|<CLV2,flow>|"
+    };
+    const thr = {
+      type: "scatter",
+      mode: "lines",
+      x: [0, A.align2.length-1],
+      y: [ui.alignThresh, ui.alignThresh],
+      line: {color: "rgba(180,0,0,0.6)", dash: "dot", width: 2},
+      name: "threshold"
+    };
+    const layoutAlign = {
+      margin: {l:55, r:10, b:45, t:35},
+      title: {text: "CLV2 alignment with flow (A)", font: {size: 14}},
+      xaxis: {title: "index"},
+      yaxis: {title: "abs cos(angle)", range: [0,1]},
+      showlegend: false
+    };
+    Plotly.react("alignPlot", [alignTrace, thr], layoutAlign, {displaylogo: false});
+
+    // Return time vs s0
+    const tTrace = {
+      type: "scatter",
+      mode: "markers",
+      x: shootRes.rmX,
+      y: shootRes.retTimes,
+      marker: {size: 6, color: "rgba(0,0,0,0.65)"},
+      name: "return time"
+    };
+    const tFail = {
+      type: "scatter",
+      mode: "markers",
+      x: shootRes.failS0,
+      y: shootRes.failS0.map(_ => ui.maxReturnSteps * ui.dt),
+      marker: {size: 7, color: "rgba(180,0,0,0.8)", symbol: "x"},
+      name: "no return (max)"
+    };
+    const layoutDist = {
+      margin: {l:55, r:10, b:45, t:35},
+      title: {text: "Return time vs s0 (B shooting)", font: {size: 14}},
+      xaxis: {title: "arc s0"},
+      yaxis: {title: "time to return", rangemode: "tozero"},
+      showlegend: false
+    };
+    Plotly.react("distPlot", [tTrace, tFail], layoutDist, {displaylogo: false});
+
+    return {
+      traceIndex3d: {A:0, section:1, B:2, returns:3, vectors:[5,6]},
+      traceIndexRM: {points:0},
+    };
+  }
+
+  // ------------------------
+  // UI wiring
+  // ------------------------
+  const el = (id) => document.getElementById(id);
+  const statusEl = el("status");
+  function setStatus(msg, isErr=false){
+    statusEl.textContent = msg;
+    statusEl.className = isErr ? "err" : "ok";
+  }
+
+
+
+  function systemNameFromKey(sys){
+    if (sys === "rossler") return "Rössler";
+    if (sys === "lorenz") return "Lorenz";
+    if (sys === "thomas") return "Thomas";
+    if (sys === "shimizu_morioka") return "Shimizu-Morioka";
+    return String(sys);
+  }
+
+  function updateSystemParamVisibility(){
+    const sys = el("system").value;
+    document.querySelectorAll(".paramRossler").forEach(d => d.style.display = (sys === "rossler") ? "" : "none");
+    document.querySelectorAll(".paramLorenz").forEach(d => d.style.display = (sys === "lorenz") ? "" : "none");
+    document.querySelectorAll(".paramThomas").forEach(d => d.style.display = (sys === "thomas") ? "" : "none");
+    document.querySelectorAll(".paramShimizuMorioka").forEach(d => d.style.display = (sys === "shimizu_morioka") ? "" : "none");
+  }
+
+  function signatureFromUI(ui){
+    const sys = ui.system;
+    const dt = ui.dt;
+    const discard = ui.discard;
+    const Nclv = ui.Nclv;
+    if (sys === "rossler"){
+      return `rossler|a=${ui.ross_a}|b=${ui.ross_b}|c=${ui.ross_c}|dt=${dt}|discard=${discard}|Nclv=${Nclv}`;
+    }
+    if (sys === "lorenz"){
+      return `lorenz|sigma=${ui.lor_sigma}|rho=${ui.lor_rho}|beta=${ui.lor_beta}|dt=${dt}|discard=${discard}|Nclv=${Nclv}`;
+    }
+    if (sys === "thomas"){
+      return `thomas|b=${ui.tho_b}|dt=${dt}|discard=${discard}|Nclv=${Nclv}`;
+    }
+    if (sys === "shimizu_morioka"){
+      return `shimizu_morioka|B=${ui.sm_B}|alpha=${ui.sm_alpha}|lambda=${ui.sm_lambda}|dt=${dt}|discard=${discard}|Nclv=${Nclv}`;
+    }
+    throw new Error("Unknown system: " + sys);
+  }
+  function readUI(){
+    return {
+      system: el("system").value,
+
+      // Rössler
+      ross_a: parseFloat(el("ross_a").value),
+      ross_b: parseFloat(el("ross_b").value),
+      ross_c: parseFloat(el("ross_c").value),
+
+      // Lorenz
+      lor_sigma: parseFloat(el("lor_sigma").value),
+      lor_rho: parseFloat(el("lor_rho").value),
+      lor_beta: parseFloat(el("lor_beta").value),
+
+      // Thomas
+      tho_b: parseFloat(el("tho_b").value),
+      // Shimizu-Morioka
+      sm_B: parseFloat(el("sm_B").value),
+      sm_alpha: parseFloat(el("sm_alpha").value),
+      sm_lambda: parseFloat(el("sm_lambda").value),
+
+      dt: parseFloat(el("dt").value),
+      discard: parseInt(el("discard").value, 10),
+      Nclv: parseInt(el("Nclv").value, 10),
+      startIdx: parseInt(el("startIdxNum").value, 10),
+      maxPlotPts: parseInt(el("maxPlotPts").value, 10),
+      minSep: parseInt(el("minSep").value, 10),
+      maxPerp: parseFloat(el("maxPerp").value),
+      maxStepDist: parseFloat(el("maxStepDist").value),
+      thetaMaxDeg: parseFloat(el("thetaMax").value),
+      dirChangeDeg: parseFloat(el("dirChange").value),
+      alignThresh: parseFloat(el("alignThresh").value),
+      sectionExtend: parseFloat(el("sectionExtend").value),
+
+      Nsamp: parseInt(el("Nsamp").value, 10),
+      maxReturnSteps: parseInt(el("maxReturnSteps").value, 10),
+      minReturnSteps: parseInt(el("minReturnSteps").value, 10),
+      epsEvent: parseFloat(el("epsEvent").value),
+      epsExitMult: parseFloat(el("epsExitMult").value),
+      plotBcount: parseInt(el("plotBcount").value, 10),
+      refineCount: parseInt(el("refineCount").value, 10),
+
+      showA: el("showA").checked,
+      showSection: el("showSection").checked,
+      showB: el("showB").checked,
+      showEvents: el("showEvents").checked,
+      showVectors: el("showVectors").checked
+    };
+  }
+
+  function setStartIdxValue(value){
+    const slider = el("startIdx");
+    const num = el("startIdxNum");
+    const min = parseInt(slider.min, 10) || 0;
+    const max = parseInt(slider.max, 10) || 0;
+
+    let i = Math.round(Number(value));
+    if (!Number.isFinite(i)) i = min;
+    if (i < min) i = min;
+    if (i > max) i = max;
+
+    slider.value = String(i);
+    num.value = String(i);
+    el("startIdxLabel").textContent = String(i);
+    return i;
+  }
+
+  function syncStartSliderMax(Nclv){
+    const slider = el("startIdx");
+    const num = el("startIdxNum");
+    const max = Math.max(0, Nclv-1);
+    slider.max = max;
+    num.max = max;
+
+    let current = parseInt(num.value, 10);
+    if (!Number.isFinite(current)) current = parseInt(slider.value, 10);
+    if (!Number.isFinite(current)) current = Math.floor(max/2);
+    if (current > max) current = Math.floor(max/2);
+    setStartIdxValue(current);
+  }
+
+  let global = {
+    data: null,
+    sectionRes: null,
+    shootRes: null,
+    plotHandles: null,
+    signature: null
+  };
+
+  function wireTrajectoryClickSelection(){
+    const trajEl = el("traj3d");
+    if (!trajEl || trajEl._startIdxClickWired) return;
+
+    trajEl.on("plotly_click", (ev) => {
+      try{
+        if (!global.data || !global.plotHandles) return;
+        const p = ev && ev.points && ev.points[0];
+        if (!p) return;
+
+        const idx3d = global.plotHandles.traceIndex3d;
+        if (p.curveNumber !== idx3d.A && p.curveNumber !== idx3d.section) return;
+
+        const i0 = Math.round(Number(p.customdata));
+        if (!Number.isFinite(i0)) return;
+        if (i0 < 0 || i0 >= global.data.A.states.length) return;
+
+        setStartIdxValue(i0);
+        setStatus(`Selected i0=${i0} from 3D plot. Click "Section + return map (shooting)" to rebuild.`);
+      } catch (e){
+        setStatus(e.message || String(e), true);
+        console.error(e);
+      }
+    });
+
+    trajEl._startIdxClickWired = true;
+  }
+
+  function recompute(){
+    try{
+      const ui = readUI();
+      if (!(ui.dt > 0)) throw new Error("dt must be > 0.");
+      if (!(ui.discard >= 0)) throw new Error("discard must be >= 0.");
+      if (!(ui.Nclv > 200)) throw new Error("Nclv must be > 200.");
+
+      syncStartSliderMax(ui.Nclv);
+
+      global.signature = signatureFromUI(ui);
+
+      setStatus(`Computing ${systemNameFromKey(ui.system)} trajectory A and CLVs (Ginelli-style forward QR + backward recursion)...`);
+      const t0 = performance.now();
+      global.data = generateTrajectoryAndCLVs(ui);
+      const t1 = performance.now();
+
+      setStatus(`Computed ${global.data.systemName} A: ${ui.Nclv} pts (discard=${ui.discard}, dt=${ui.dt}). (${((t1-t0)/1000).toFixed(2)} s)`);
+      rebuild();
+    } catch (e){
+      setStatus(e.message || String(e), true);
+      console.error(e);
+    }
+  }
+
+  function rebuild(){
+    try{
+      if (!global.data) throw new Error("Compute trajectory A + CLVs first.");
+      const ui = readUI();
+
+      if (global.signature !== signatureFromUI(ui)){
+        throw new Error("System/parameters/dt/discard/Nclv changed since last recompute. Click \"Trajectory A + CLVs\".");
+      }
+
+      syncStartSliderMax(global.data.A.states.length);
+      ui.startIdx = setStartIdxValue(ui.startIdx);
+
+      const A = global.data.A;
+      if (A.align2[ui.startIdx] < ui.alignThresh){
+        throw new Error(`Start index fails convergence check: |<CLV2,flow>|=${A.align2[ui.startIdx].toFixed(3)} < ${ui.alignThresh}`);
+      }
+
+      const crawlParams = {
+        minSep: Math.max(1, ui.minSep|0),
+        maxPerp: ui.maxPerp,
+        maxStepDist: ui.maxStepDist,
+        thetaMaxDeg: ui.thetaMaxDeg,
+        dirChangeDeg: ui.dirChangeDeg,
+        alignThresh: ui.alignThresh,
+        extendDist: Math.max(0, ui.sectionExtend),
+        maxIters: 8000
+      };
+
+      setStatus(`Building section polyline (A) + computing return map by shooting (B) for ${global.data.systemName}...`);
+      const t0 = performance.now();
+
+      global.sectionRes = crawlSection(A, crawlParams, ui.startIdx);
+      global.sectionRes.startIdx = ui.startIdx;
+      global.shootRes = computeReturnMapByShooting(global.data, global.sectionRes, ui);
+
+      global.plotHandles = plotAll(global.data, global.sectionRes, global.shootRes, ui);
+
+      const t1 = performance.now();
+
+      const nOk = global.shootRes.rmX.length;
+      const nFail = global.shootRes.failS0.length;
+      const avgT = nOk ? (global.shootRes.retTimes.reduce((s,v)=>s+v,0)/nOk) : 0;
+
+      setStatus(
+        `${global.data.systemName}: Section points: ${global.sectionRes.secPts.length}. Shots: ${ui.Nsamp}. Returns: ${nOk}. Failed: ${nFail}. avg return time=${avgT.toFixed(3)}. (${((t1-t0)/1000).toFixed(2)} s)`
+      );
+
+      wireVisibilityToggles();
+    } catch (e){
+      setStatus(e.message || String(e), true);
+      console.error(e);
+    }
+  }
+
+  function runRefinement(metric){
+    try{
+      if (!global.data || !global.sectionRes || !global.shootRes){
+        throw new Error("Build section + return map (shooting) first.");
+      }
+
+      const ui = readUI();
+      if (global.signature !== signatureFromUI(ui)){
+        throw new Error("System/parameters/dt/discard/Nclv changed since last recompute. Click \"Trajectory A + CLVs\".");
+      }
+      if (global.sectionRes.startIdx !== ui.startIdx){
+        throw new Error("Start index changed since last build. Click \"Section + return map (shooting)\" first.");
+      }
+      if (Math.abs((global.sectionRes.extendDist || 0) - Math.max(0, ui.sectionExtend || 0)) > 1e-12){
+        throw new Error("Section endpoint extension changed since last build. Click \"Section + return map (shooting)\" first.");
+      }
+
+      const refineCount = Math.max(0, ui.refineCount|0);
+      if (refineCount < 1){
+        throw new Error("Bisection refinements must be >= 1.");
+      }
+
+      const metricLabel = (metric === "horizontal") ? "horizontal-gap" : "L1-gap";
+      setStatus(`Refining return map with ${refineCount} sequential ${metricLabel} bisection step(s)...`);
+      const t0 = performance.now();
+
+      global.shootRes = refineReturnMapByBisection(global.data, global.sectionRes, global.shootRes, ui, refineCount, metric);
+      global.plotHandles = plotAll(global.data, global.sectionRes, global.shootRes, ui);
+
+      const t1 = performance.now();
+      const nOk = global.shootRes.rmX.length;
+      const nFail = global.shootRes.failS0.length;
+      const avgT = nOk ? (global.shootRes.retTimes.reduce((s,v)=>s+v,0)/nOk) : 0;
+      const nAdded = global.shootRes.refinedAdded || 0;
+      const totalSamples = global.shootRes.samples.length;
+
+      setStatus(
+        `${global.data.systemName}: Added ${nAdded} ${metricLabel} refinement sample(s). Total shots: ${totalSamples}. Returns: ${nOk}. Failed: ${nFail}. avg return time=${avgT.toFixed(3)}. (${((t1-t0)/1000).toFixed(2)} s)`
+      );
+
+      wireVisibilityToggles();
+    } catch (e){
+      setStatus(e.message || String(e), true);
+      console.error(e);
+    }
+  }
+
+  function refineMapByBisection(){
+    runRefinement("l1");
+  }
+
+  function refineMapByHorizontalGap(){
+    runRefinement("horizontal");
+  }
+
+  function wireVisibilityToggles(){
+    if (!global.plotHandles) return;
+    const idx = global.plotHandles.traceIndex3d;
+    const rmIdx = global.plotHandles.traceIndexRM;
+
+    const ui = readUI();
+
+    const visA = ui.showA ? true : "legendonly";
+    const visSec = ui.showSection ? true : "legendonly";
+    const visB = ui.showB ? true : "legendonly";
+    const visRet = ui.showEvents ? true : "legendonly";
+    const visVec = ui.showVectors ? true : "legendonly";
+
+    Plotly.restyle("traj3d", {visible: visA}, [idx.A]);
+    Plotly.restyle("traj3d", {visible: visSec}, [idx.section]);
+    Plotly.restyle("traj3d", {visible: visB}, [idx.B]);
+    Plotly.restyle("traj3d", {visible: visRet}, [idx.returns]);
+    Plotly.restyle("traj3d", {visible: visVec}, idx.vectors);
+
+    Plotly.restyle("returnMap", {visible: visRet}, [rmIdx.points]);
+  }
+
+  // Events
+  el("system").addEventListener("change", () => {
+    updateSystemParamVisibility();
+    setStatus("System changed. Click \"Trajectory A + CLVs\" to recompute.", false);
+  });
+
+  el("recompute").addEventListener("click", recompute);
+
+  el("rebuild").addEventListener("click", rebuild);
+  el("refineMap").addEventListener("click", refineMapByBisection);
+  el("refineMapHorizontal").addEventListener("click", refineMapByHorizontalGap);
+  el("startIdx").addEventListener("input", () => {
+    setStartIdxValue(el("startIdx").value);
+  });
+  el("startIdxNum").addEventListener("input", () => {
+    setStartIdxValue(el("startIdxNum").value);
+  });
+
+  // Visibility toggles
+  for (const id of ["showA","showSection","showB","showEvents","showVectors"]) {
+    el(id).addEventListener("change", () => {
+      if (global.plotHandles) wireVisibilityToggles();
+    });
+  }
+
+  // Initial compute
+  updateSystemParamVisibility();
+  recompute();
+})();
+</script>
+</body>
+</html>
