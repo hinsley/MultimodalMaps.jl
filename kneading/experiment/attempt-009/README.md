@@ -30,4 +30,6 @@ julia --project=. kneading/experiment/attempt-009/main.jl
 ```
 
 The script writes a reduced summary to
-`kneading/experiment/attempt-009/smoke_results.tsv`.
+`kneading/experiment/attempt-009/smoke_results.tsv`
+and a summary figure to
+`kneading/experiment/attempt-009/smoke_summary.png`.

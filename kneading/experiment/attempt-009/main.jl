@@ -10,6 +10,7 @@ using LinearAlgebra
 using Printf
 using Roots
 using StaticArrays
+using CairoMakie
 
 include(joinpath(ATTEMPT_ROOT, "vendor", "Plant.jl"))
 include(joinpath(ATTEMPT_ROOT, "vendor", "equilibria_subset.jl"))
@@ -427,6 +428,34 @@ function write_results(path::String, results::Vector{SweepResult}, failures::Vec
     end
 end
 
+function save_summary_plot(path::String, results::Vector{SweepResult})
+    delta_cas = [result.delta_ca for result in results]
+    lz_values = [result.lz_complexity for result in results]
+    htop_values = [result.htop for result in results]
+
+    fig = Figure(size=(1000, 700))
+    ax_htop = Axis(
+        fig[1, 1],
+        xlabel="ΔCa",
+        ylabel="h_top",
+        title="Exact Plant Smoke Test: Reduced Topological Entropy Sweep",
+    )
+    lines!(ax_htop, delta_cas, htop_values, color=:firebrick, linewidth=3)
+    scatter!(ax_htop, delta_cas, htop_values, color=:firebrick, markersize=12)
+
+    ax_lz = Axis(
+        fig[2, 1],
+        xlabel="ΔCa",
+        ylabel="Normalized LZ76",
+        title="Exact Plant Smoke Test: Reduced LZ Complexity Sweep",
+    )
+    lines!(ax_lz, delta_cas, lz_values, color=:steelblue, linewidth=3)
+    scatter!(ax_lz, delta_cas, lz_values, color=:steelblue, markersize=12)
+
+    linkxaxes!(ax_htop, ax_lz)
+    save(path, fig)
+end
+
 function main()
     println("Running reduced continuous critical itinerary smoke test with the exact Plant model.")
     println("Sweep size: $(length(DELTA_CAS))")
@@ -460,6 +489,10 @@ function main()
     output_path = joinpath(ATTEMPT_ROOT, "smoke_results.tsv")
     write_results(output_path, results, failures)
     println("Saved smoke results to $(output_path)")
+
+    plot_path = joinpath(ATTEMPT_ROOT, "smoke_summary.png")
+    save_summary_plot(plot_path, results)
+    println("Saved smoke summary plot to $(plot_path)")
 end
 
 if abspath(PROGRAM_FILE) == @__FILE__
