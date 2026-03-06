@@ -20,13 +20,13 @@ Each parameter point computes:
 3. the SSCS of each trajectory
 4. a deterministic exact integer encoding of the pair `(T_scs, Γ_SD^-_scs)`
 
-The heatmap uses randomized categorical colors, so nearby encoding values do not
-produce nearby colors.
+The heatmap uses Makie's categorical `:glasbey_bw_n256` colormap without text
+labels over the cells.
 
 Run from the repo root:
 
 ```bash
-julia --project=. kneading/experiment/attempt-010/main.jl
+JULIA_NUM_THREADS=10 julia --project=. kneading/experiment/attempt-010/main.jl
 ```
 
 Outputs:
@@ -34,11 +34,20 @@ Outputs:
 - `lowres_encoding_results.tsv`
 - `lowres_encoding_legend.tsv`
 - `lowres_encoding_heatmap.png`
+- `lowres_benchmark_summary.txt`
+
+The script benchmarks the full coarse grid in serial and threaded modes before
+writing the outputs, and it also records per-stage timings for:
+
+- `Γ_SD^-`
+- `T0`
+- `T_scs`
+- `Γ_SD^-_scs`
 
 If you want a denser preliminary run later, increase the grid with:
 
 ```bash
-ATTEMPT010_NX=6 ATTEMPT010_NY=7 julia --project=. kneading/experiment/attempt-010/main.jl
+ATTEMPT010_NX=6 ATTEMPT010_NY=7 JULIA_NUM_THREADS=10 julia --project=. kneading/experiment/attempt-010/main.jl
 ```
 
 Do not use that denser run as the full production scan without checking the low-resolution
