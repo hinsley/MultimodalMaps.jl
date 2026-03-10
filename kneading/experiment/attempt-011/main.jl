@@ -31,6 +31,9 @@ const EXECUTION_MODE = get(ENV, "ATTEMPT010_EXECUTION", "threaded")
 const RUN_BENCHMARK = get(ENV, "ATTEMPT010_BENCHMARK", "1") != "0"
 const OUTPUT_TAG = get(ENV, "ATTEMPT010_OUTPUT_TAG", "lowres")
 const ATTEMPT10_MAX_SEQ_LENGTH = parse(Int, get(ENV, "ATTEMPT010_MAX_SEQ_LENGTH", string(MAX_SEQ_LENGTH)))
+const T0_LOCAL_REFINE_STEPS = parse(Int, get(ENV, "ATTEMPT011_T0_LOCAL_REFINE_STEPS", "5"))
+const T0_LOCAL_CA_WINDOW = env_float("ATTEMPT011_T0_CA_WINDOW", 3.0e-3)
+const T0_LOCAL_CA_TOL = env_float("ATTEMPT011_T0_CA_TOL", 1.0e-5)
 const SOLVER_010 = Tsit5()
 
 struct SSCSScanResult
@@ -68,6 +71,11 @@ mutable struct SSCSStateMachine010
     last_symbol::EventSymbol
     last2_symbol::EventSymbol
     V_sd::Float64
+end
+
+struct T0ContinuationSeed
+    V::Float64
+    Ca::Float64
 end
 
 function make_state_machine(V_sd::Float64)
@@ -126,19 +134,61 @@ function make_ca_min_callback(x_eq_SF::Float64)
     return ContinuousCallback(condition, affect!, affect_neg! = nothing)
 end
 
-function return_voltage_at_ca_min(p, Ca0::Float64, x0::Float64, x_eq_SF::Float64)::Float64
+function initialize_T_Ca0_from_seed(
+    p,
+    x_eq_SF::Float64,
+    gamma_sd_minus0::SVector{6, Float64},
+    seed::T0ContinuationSeed,
+)::Tuple{SVector{6, Float64}, Int}
+    x_guess = Plant.xinf(p, seed.V) - 1.0e-4
+    a = seed.Ca - T0_LOCAL_CA_WINDOW
+    b = seed.Ca + T0_LOCAL_CA_WINDOW
     callback = make_ca_min_callback(x_eq_SF)
+
+    golden_ratio = (sqrt(5) - 1) / 2
+    c = b - golden_ratio * (b - a)
+    d = a + golden_ratio * (b - a)
+    fc = return_voltage_at_ca_min(p, c, x_guess, callback)
+    fd = return_voltage_at_ca_min(p, d, x_guess, callback)
+
+    iterations = 0
+    while iterations < T0_LOCAL_REFINE_STEPS && abs(b - a) > T0_LOCAL_CA_TOL
+        if fc > fd
+            b = d
+            d = c
+            fd = fc
+            c = b - golden_ratio * (b - a)
+            fc = return_voltage_at_ca_min(p, c, x_guess, callback)
+        else
+            a = c
+            c = d
+            fc = fd
+            d = a + golden_ratio * (b - a)
+            fd = return_voltage_at_ca_min(p, d, x_guess, callback)
+        end
+        iterations += 1
+    end
+
+    T_Ca0 = fc >= fd ? c : d
+    u0 = EquilibriaSubset.dune(p, x_guess, T_Ca0)
+    return SVector{6, Float64}(Tuple(Float64.(u0))), iterations
+end
+
+function return_voltage_at_ca_min(p, Ca0::Float64, x0::Float64, callback)::Float64
     u0 = EquilibriaSubset.dune(p, x0, Ca0)
     prob = ODEProblem(Plant.melibeNew!, u0, TSPAN, p)
     sol = solve(prob, SOLVER_010; callback=callback, abstol=1e-8, reltol=1e-8, save_everystep=false)
     return Float64(sol.u[end][6])
 end
 
+return_voltage_at_ca_min(p, Ca0::Float64, x0::Float64, x_eq_SF::Float64) =
+    return_voltage_at_ca_min(p, Ca0, x0, make_ca_min_callback(x_eq_SF))
+
 function initialize_T_Ca0(p, x_eq_SF::Float64, gamma_sd_minus0::SVector{6, Float64})::SVector{6, Float64}
     callback = make_ca_min_callback(x_eq_SF)
 
     prob = ODEProblem(Plant.melibeNew, gamma_sd_minus0, TSPAN, p)
-    sol = solve(prob, SOLVER_010; callback=callback, abstol=1e-8, reltol=1e-8, save_everystep=true)
+    sol = solve(prob, SOLVER_010; callback=callback, abstol=1e-8, reltol=1e-8, save_everystep=false)
     gamma_sd_minus_endpoint = sol.u[end]
     gamma_sd_minus_ca_min = Float64(gamma_sd_minus_endpoint[5])
     gamma_sd_minus_ca_min_V = Float64(find_zero(
@@ -189,16 +239,22 @@ function initialize_T_Ca0(p, x_eq_SF::Float64, gamma_sd_minus0::SVector{6, Float
     c = b - golden_ratio * (b - a)
     d = a + golden_ratio * (b - a)
 
+    fc = return_voltage_at_ca_min(p, c, reference_u0[1], callback)
+    fd = return_voltage_at_ca_min(p, d, reference_u0[1], callback)
     while abs(b - a) > 1.0e-8
-        fc = return_voltage_at_ca_min(p, c, reference_u0[1], x_eq_SF)
-        fd = return_voltage_at_ca_min(p, d, reference_u0[1], x_eq_SF)
         if fc > fd
             b = d
+            d = c
+            fd = fc
+            c = b - golden_ratio * (b - a)
+            fc = return_voltage_at_ca_min(p, c, reference_u0[1], callback)
         else
             a = c
+            c = d
+            fc = fd
+            d = a + golden_ratio * (b - a)
+            fd = return_voltage_at_ca_min(p, d, reference_u0[1], callback)
         end
-        c = b - golden_ratio * (b - a)
-        d = a + golden_ratio * (b - a)
     end
 
     T_Ca0 = (a + b) / 2
