@@ -14,8 +14,8 @@ include("../scans/contours.jl")
 include("../maps/chebyshev_cubic.jl")
 
 # Define parameter ranges.
-u_vals = range(-1.0, stop=1.0, length=1000)
-v_vals = range(-1.0, stop=1.0, length=1000)
+u_vals = range(-2.0, stop=2.0, length=1000)
+v_vals = range(-2.0, stop=2.0, length=1000)
 
 # Allocate a matrix to store encoding values for each (u, v) pair.
 Z = zeros(length(u_vals), length(v_vals))
