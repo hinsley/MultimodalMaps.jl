@@ -13,26 +13,17 @@ include("../kneading/determinant.jl")
 include("../scans/contours.jl")
 include("../maps/chebyshev_cubic.jl")
 
-# Define parameter ranges.
 u_vals = range(-2.0, stop=2.0, length=1000)
 v_vals = range(-2.0, stop=2.0, length=1000)
 
-# Allocate a matrix to store encoding values for each (u, v) pair.
-Z = zeros(length(u_vals), length(v_vals))
+numeric_values = zeros(Float64, length(v_vals), length(u_vals))
+exact_labels = zeros(UInt32, length(v_vals), length(u_vals))
 
-# Choose the scan type: :matrix or :determinant.
-scan_type = :matrix
-
-# Choose the number of iterates.
+scan_type = :exact_matrix
 iterates = 20
-
-# Choose the color exponent for separation of iterates.
 color_exp = 2
-
-# Choose whether to save the figure without a frame.
 frameless = false
 
-# Calculate kneading diagram.
 fig = plot(
   aspect_ratio=:equal,
   colorbar=false,
@@ -55,31 +46,34 @@ fig = plot(
   ticks=frameless ? nothing : :auto
 )
 for iterate in iterates:-1:2
+  label_lookup = Dict{NTuple{6, UInt64}, UInt32}()
+  next_label = Ref(UInt32(1))
+
   @time for i in 1:length(u_vals)
     for j in 1:length(v_vals)
       u = u_vals[i]
       v = v_vals[j]
       p = [u, v]
 
-      # Compute kneading matrix.
       crit_points = critical_points(p)
       matrix = allocate_kneading_matrix(crit_points, iterate)
       kneading_matrix!(matrix, map, crit_points, p)
 
       if scan_type == :matrix
-        encoding = matrix_encoding(matrix)
+        numeric_values[j, i] = matrix_encoding(matrix)
+      elseif scan_type == :exact_matrix
+        exact_labels[j, i] = exact_matrix_label!(label_lookup, next_label, matrix)
       elseif scan_type == :determinant
-        matrix = convert(Array{Integer, 3}, matrix)
-        det = determinant(matrix[:, 2:end, :], false)
-        encoding = determinant_encoding(det)
+        matrix_int = convert(Array{Integer, 3}, matrix)
+        det = determinant(matrix_int[:, 2:end, :], false)
+        numeric_values[j, i] = determinant_encoding(det)
       end
-      Z[j, i] = encoding
     end
   end
 
-  # Create a contour plot.
+  contour_source = scan_type == :exact_matrix ? exact_labels : numeric_values
   contour_xs, contour_ys = march_squares_simple(
-    Z,
+    contour_source,
     u_vals,
     v_vals
   )
@@ -97,21 +91,17 @@ for iterate in iterates:-1:2
   )
 end
 
-# Add a title to the plot.
+scan_title = scan_type == :exact_matrix ? "Exact matrix labels" : "$(uppercasefirst(string(scan_type))) encoding"
 if !frameless
-  title!(
-    fig,
-    "Chebyshev cubic kneading diagram: $(uppercasefirst(string(scan_type))) encoding"
-  )
+  title!(fig, "Chebyshev cubic kneading diagram: $(scan_title)")
 end
 
-# Display the plot when a GUI backend is available.
 if get(ENV, "GKSwstype", "") != "100"
   display(fig)
 end
 
-# Save the plot to a file.
-output_stem = "chebyshev_cubic_kneading_diagram_$(uppercasefirst(string(scan_type)))_$(iterates)"
+output_tag = scan_type == :exact_matrix ? "ExactMatrix" : uppercasefirst(string(scan_type))
+output_stem = "chebyshev_cubic_kneading_diagram_$(output_tag)_$(iterates)"
 if frameless
   savefig(fig, "$(output_stem)_frameless.png")
 else
