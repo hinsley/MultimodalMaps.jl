@@ -57,7 +57,7 @@ for iterate in iterates:-1:2
 
       crit_points = critical_points(p)
       matrix = allocate_kneading_matrix(crit_points, iterate)
-      kneading_matrix!(matrix, map, crit_points, p)
+      chebyshev_cubic_kneading_matrix!(matrix, crit_points, p)
 
       if scan_type == :matrix
         numeric_values[j, i] = matrix_encoding(matrix)
