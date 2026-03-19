@@ -23,6 +23,8 @@ scan_type = :exact_matrix
 iterates = 20
 color_exp = 2
 frameless = false
+compute_seconds = 0.0
+axis_ticks = frameless ? nothing : collect(-2.0:0.5:2.0)
 
 fig = plot(
   aspect_ratio=:equal,
@@ -33,40 +35,42 @@ fig = plot(
   ylabel=frameless ? "" : raw"$v$",
   legend=false,
   size=(1000, 1000),
-  xguidefontsize=14,
-  yguidefontsize=14,
-  xtickfontsize=12,
-  ytickfontsize=12,
+  xguidefontsize=20,
+  yguidefontsize=20,
+  xtickfontsize=16,
+  ytickfontsize=16,
   left_margin=frameless ? -5Plots.mm : 3Plots.mm,
   bottom_margin=frameless ? -2.5Plots.mm : 3Plots.mm,
   right_margin=frameless ? -2Plots.mm : 3Plots.mm,
   top_margin=frameless ? -5Plots.mm : 3Plots.mm,
   framestyle=frameless ? :none : :auto,
   grid=frameless ? false : :auto,
-  ticks=frameless ? nothing : :auto
+  ticks=axis_ticks
 )
 for iterate in iterates:-1:2
   label_lookup = Dict{NTuple{6, UInt64}, UInt32}()
   next_label = Ref(UInt32(1))
 
-  @time for i in 1:length(u_vals)
-    for j in 1:length(v_vals)
-      u = u_vals[i]
-      v = v_vals[j]
-      p = [u, v]
+  global compute_seconds += @elapsed begin
+    for i in 1:length(u_vals)
+      for j in 1:length(v_vals)
+        u = u_vals[i]
+        v = v_vals[j]
+        p = [u, v]
 
-      crit_points = critical_points(p)
-      matrix = allocate_kneading_matrix(crit_points, iterate)
-      chebyshev_cubic_kneading_matrix!(matrix, crit_points, p)
+        crit_points = critical_points(p)
+        matrix = allocate_kneading_matrix(crit_points, iterate)
+        chebyshev_cubic_kneading_matrix!(matrix, crit_points, p)
 
-      if scan_type == :matrix
-        numeric_values[j, i] = matrix_encoding(matrix)
-      elseif scan_type == :exact_matrix
-        exact_labels[j, i] = exact_matrix_label!(label_lookup, next_label, matrix)
-      elseif scan_type == :determinant
-        matrix_int = convert(Array{Integer, 3}, matrix)
-        det = determinant(matrix_int[:, 2:end, :], false)
-        numeric_values[j, i] = determinant_encoding(det)
+        if scan_type == :matrix
+          numeric_values[j, i] = matrix_encoding(matrix)
+        elseif scan_type == :exact_matrix
+          exact_labels[j, i] = exact_matrix_label!(label_lookup, next_label, matrix)
+        elseif scan_type == :determinant
+          matrix_int = convert(Array{Integer, 3}, matrix)
+          det = determinant(matrix_int[:, 2:end, :], false)
+          numeric_values[j, i] = determinant_encoding(det)
+        end
       end
     end
   end
@@ -91,10 +95,6 @@ for iterate in iterates:-1:2
   )
 end
 
-if !frameless
-  title!(fig, "Chebyshev cubic kneading diagram")
-end
-
 if get(ENV, "GKSwstype", "") != "100"
   display(fig)
 end
@@ -106,3 +106,5 @@ if frameless
 else
   savefig(fig, "$(output_stem).png")
 end
+
+println("compute_seconds=$(compute_seconds)")
