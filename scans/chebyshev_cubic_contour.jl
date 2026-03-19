@@ -29,8 +29,8 @@ fig = plot(
   colorbar=false,
   xlims=(minimum(u_vals), maximum(u_vals)),
   ylims=(minimum(v_vals), maximum(v_vals)),
-  xlabel=frameless ? "" : "u",
-  ylabel=frameless ? "" : "v",
+  xlabel=frameless ? "" : raw"$u$",
+  ylabel=frameless ? "" : raw"$v$",
   legend=false,
   size=(1000, 1000),
   xguidefontsize=14,
@@ -91,9 +91,8 @@ for iterate in iterates:-1:2
   )
 end
 
-scan_title = scan_type == :exact_matrix ? "Exact matrix labels" : "$(uppercasefirst(string(scan_type))) encoding"
 if !frameless
-  title!(fig, "Chebyshev cubic kneading diagram: $(scan_title)")
+  title!(fig, "Chebyshev cubic kneading diagram")
 end
 
 if get(ENV, "GKSwstype", "") != "100"
