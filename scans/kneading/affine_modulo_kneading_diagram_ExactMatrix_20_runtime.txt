@@ -2,6 +2,7 @@ alpha_range	[0.0, 0.5]
 beta_range	[1.0, 1.5]
 grid_size	1000
 iterates	20
-compute_seconds	2.351298
-render_seconds	14.184421
+compute_seconds	9.500081
+contour_seconds	0.404429
+render_seconds	14.034964
 regime	single-discontinuity expanding strip
