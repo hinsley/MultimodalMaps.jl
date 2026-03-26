@@ -12,17 +12,19 @@ using Roots
 using StaticArrays
 using CairoMakie
 
-include(joinpath(ATTEMPT_ROOT, "vendor", "Plant.jl"))
+include(joinpath(REPO_ROOT, "models", "SiN.jl"))
 include(joinpath(ATTEMPT_ROOT, "vendor", "equilibria_subset.jl"))
 include(joinpath(ATTEMPT_ROOT, "vendor", "symbolics_subset.jl"))
 include(joinpath(REPO_ROOT, "kneading", "power_series.jl"))
 include(joinpath(REPO_ROOT, "kneading", "smallest_root.jl"))
 
-using .Plant
+using .SiN
 using .EquilibriaSubset
 using .SymbolicsSubset
 
-const BASE_PARAMS = Float64.(Plant.default_params[1:15])
+const Plant = SiN
+
+const BASE_PARAMS = collect(Float64, Plant.default_params)
 const DELTA_X = -1.0
 const DELTA_CAS = collect(range(-36.0, -30.0, length=12))
 const TSPAN = (0.0, 2.0e4)
@@ -52,8 +54,11 @@ struct SweepResult
     gamma_kneading::Vector{Int}
 end
 
-function build_params(delta_x::Float64, delta_ca::Float64)::SVector{17, Float64}
-    return SVector{17, Float64}([BASE_PARAMS..., delta_x, delta_ca])
+function build_params(delta_x::Float64, delta_ca::Float64)::SVector{18, Float64}
+    p = copy(BASE_PARAMS)
+    p[17] = delta_x
+    p[18] = delta_ca
+    return SVector{18, Float64}(p)
 end
 
 function find_equilibria(p)
@@ -72,7 +77,7 @@ function compute_gamma_sd_minus0(p)
     V_eq_SD = V_eqs[3]
     Ca_eq_SD = EquilibriaSubset.Ca_null_Ca(p, V_eq_SD)
     x_eq_SD = Plant.xinf(p, V_eq_SD)
-    SD_eq = @SVector [x_eq_SD, 0.0, Plant.ninf(V_eq_SD), Plant.hinf(V_eq_SD), Ca_eq_SD, V_eq_SD]
+    SD_eq = @SVector [x_eq_SD, Plant.yinf(V_eq_SD), Plant.ninf(V_eq_SD), Plant.hinf(V_eq_SD), Ca_eq_SD, V_eq_SD]
 
     jac = ForwardDiff.jacobian(u -> Plant.melibeNew(u, p, 0), SD_eq)
     vals, vecs = eigen(jac)
@@ -132,7 +137,7 @@ function initialize_T_Ca0(p, x_eq_SF, gamma_sd_minus0)
     u0s = [
         SVector{6, Float64}([
             Plant.xinf(p, V) - 1.0e-4,
-            0.0,
+            Plant.yinf(V),
             Plant.ninf(V),
             Plant.hinf(V),
             EquilibriaSubset.Ca_null_Ca(p, V),
