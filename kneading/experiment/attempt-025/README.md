@@ -1,19 +1,27 @@
 # attempt-025
 
-`attempt-025` is reserved for the next plotting algorithm.
+`attempt-025` contains the skip-adjusted `|x|`-max contour pipeline.
 
-This attempt is intended to recompute the needed `|x|`-max dataset from
-scratch, using the same event-generation mechanics that were correct in
-`attempt-024`, but with the missing `|x|`-max return times stored explicitly so
-the new square-local skip-adjusted contour algorithm can use them.
+It recomputes the `|x|`-max dataset from scratch using the same event-generation
+mechanics as `attempt-024`, but stores the `|x|`-max hit times explicitly.
+During plotting, those stored cumulative hit times are converted into interval
+times before the square-local skip test is applied.
 
-The primary implementation spec is:
+Primary documentation:
 
 - [absx_skip_contour_algorithm.md](/home/guest_coder/github/repos/hinsley/MultimodalMaps.jl/kneading/experiment/attempt-025/absx_skip_contour_algorithm.md)
 
-The executable entrypoint is:
+Current executable entrypoints:
 
+- [main.jl](/home/guest_coder/github/repos/hinsley/MultimodalMaps.jl/kneading/experiment/attempt-025/main.jl)
+  Recompute stage: orbit scan, `|x|`-max event detection, tangent processing,
+  and TSV writing.
 - [contours.jl](/home/guest_coder/github/repos/hinsley/MultimodalMaps.jl/kneading/experiment/attempt-025/contours.jl)
+  PNG contour renderer from saved sweep data, including skip-adjusted plotting
+  and increment-overlay debug artifacts.
+- [nominal_iterate_gif.jl](/home/guest_coder/github/repos/hinsley/MultimodalMaps.jl/kneading/experiment/attempt-025/nominal_iterate_gif.jl)
+  Per-nominal-iterate GIF renderer from saved sweep data, including optional
+  excluded-contour overlays.
 
-The Markdown spec remains the source of truth for what `attempt-025` should
-compute and how it should plot.
+The Markdown spec is intended to match the current implementation, including the
+post-hoc delta-time conversion used by the plot stage.

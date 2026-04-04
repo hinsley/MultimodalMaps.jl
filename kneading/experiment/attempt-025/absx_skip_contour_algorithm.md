@@ -2,10 +2,10 @@
 
 ## Summary
 
-`attempt-025` should **recompute the dataset from scratch** and then plot from
-that newly computed dataset. It should not rely on the existing `attempt-024`
-column files as the final data source, because those files do not store the
-`|x|`-max return times required by the new contouring rule.
+`attempt-025` **recomputes the dataset from scratch** and then plots from that
+newly computed dataset. It does not rely on the older `attempt-024` column
+files as the final data source, because those files do not store the `|x|`-max
+hit times required by the new contouring rule.
 
 The recomputation stage should reuse the exact event-generation mechanics that
 were correct in `attempt-024`:
@@ -17,9 +17,16 @@ were correct in `attempt-024`:
 - same `|x|`-max detection logic
 - same interpolation/refinement logic at event hits
 
-The only required data-model extension is that `attempt-025` must also record
-the `|x|`-max return times explicitly, in addition to the tangent dot products
-and event states.
+The key data-model extension is that `attempt-025` also records the `|x|`-max
+hit times explicitly, in addition to the tangent dot products and event states.
+
+Current implementation note:
+
+- the recomputation stage stores **cumulative hit times** `T_k`
+- the plotting stage converts those to **interval times**
+  `Δt_1 = T_1`, `Δt_k = T_k - T_{k-1}` before running the skip logic
+- the square-local one-miss test uses those interval times, not the raw stored
+  cumulative times
 
 After recomputation, the contour plot should be built from a new
 square-local, per-corner skipped-iterate algorithm that suppresses fake
@@ -36,7 +43,7 @@ contours caused by locally missing one `|x|`-maximum as parameters vary.
 5. Keep the contour geometry based on ordinary linear marching-squares
    interpolation after the local skip adjustment is applied.
 
-## Why recomputation is required
+## Why recomputation was required
 
 The current `attempt-024` `|x|`-max outputs contain:
 
@@ -48,14 +55,15 @@ They do **not** contain:
 - `absxmax_return_times`
 
 The new plotting algorithm requires, for each effective iterate used at a
-corner:
+corner, access to timing data from the `|x|`-max event sequence:
 
 - current dot value
 - current return time
 - next return time
 
-Therefore the `attempt-025` pipeline must recompute the `|x|`-max event
-sequence from scratch and store the return times explicitly.
+Therefore the `attempt-025` pipeline recomputes the `|x|`-max event sequence
+from scratch and stores the hit times explicitly. The current plotter then
+derives interval return times from those stored cumulative times.
 
 ## Exact recomputation stage
 
@@ -206,8 +214,12 @@ When an `|x|`-max event is detected:
 
 For each detected `|x|`-max event, store:
 
-1. **Return time**
-   - `t_hit`
+1. **Stored hit time**
+   - `T_k = t_hit`
+   - this is cumulative elapsed time from the finite unstable-manifold seed to
+     the `k`th detected `|x|`-maximum
+   - the plotter later derives interval times from these stored cumulative hit
+     times
 2. **Contour scalar**
    - signed `x`-component of the flow-orthogonal tangent:
 
@@ -223,7 +235,7 @@ For each detected `|x|`-max event, store:
    - `(x_hit, y_hit, z_hit)`
 
 This preserves the exact tangent-derived quantity from `attempt-024` while
-adding the missing return times.
+adding the missing timing data needed for the skip-adjusted plotter.
 
 ### Stop condition and statuses
 
@@ -261,7 +273,7 @@ Field meanings:
 - `absxmax_dot_values`
   - comma-separated list of up to 16 floats
 - `absxmax_return_times`
-  - comma-separated list of up to 16 floats
+  - comma-separated list of up to 16 cumulative hit times `T_k`
 - `absxmax_states`
   - semicolon-separated triples `x,y,z`
 - `status`
@@ -280,6 +292,24 @@ storing full states because:
 - they allow later extraction of explicit `x` and `z` iterate values without
   recomputation
 
+### Interpretation of `absxmax_return_times` during plotting
+
+Although the TSV stores cumulative hit times `T_k`, the skip test is defined on
+interval times. The current renderer therefore derives:
+
+\[
+\Delta t_1 = T_1
+\]
+
+\[
+\Delta t_k = T_k - T_{k-1}, \quad k \ge 2
+\]
+
+and uses the resulting `Δt_k` grids as the plotting-stage `time[k]` inputs.
+
+This was an important post-implementation correction: the one-miss test should
+compare interval sums, not sums of cumulative hit times.
+
 ## Plotting-stage parameters
 
 Define two separate iterate bounds:
@@ -297,6 +327,14 @@ The plotter should only process nominal iterates:
 
 This is how the same recomputed dataset can be rendered as if only the first 8
 iterates existed.
+
+Current renderer entrypoints:
+
+- [contours.jl](/home/guest_coder/github/repos/hinsley/MultimodalMaps.jl/kneading/experiment/attempt-025/contours.jl)
+  renders the accumulated PNG contour plot and optional increment overlays
+- [nominal_iterate_gif.jl](/home/guest_coder/github/repos/hinsley/MultimodalMaps.jl/kneading/experiment/attempt-025/nominal_iterate_gif.jl)
+  renders per-nominal-iterate GIF frames, optionally including excluded
+  pre-increment contours in red
 
 ## Square-local skipped-iterate algorithm
 
@@ -355,8 +393,8 @@ For a fixed nominal iterate `n` and a fixed square:
    - `k_bl = n + skip_bl`
 3. At each corner, fetch:
    - current dot `dot[k]`
-   - current return time `time[k]`
-   - next return time `time[k+1]`
+   - current **interval** time `Δt[k]`
+   - next **interval** time `Δt[k+1]`
 4. If any required lookup fails at any corner:
    - abandon this square for nominal iterate `n`
    - draw nothing
@@ -479,12 +517,14 @@ procedure RUN_ATTEMPT025():
     write column TSVs
     write merged TSV
 
+    interval_dataset = CONVERT_CUMULATIVE_HIT_TIMES_TO_INTERVAL_TIMES(dataset)
+
     plot_cap = clamp(user_plot_cap, 1, 16)
     square_state = INITIALIZE_ZERO_SKIP_STATE_FOR_ALL_SQUARES()
     emitted_segments = empty list keyed by nominal iterate
 
     for nominal_iterate in 1:plot_cap:
-        PROCESS_NOMINAL_ITERATE(nominal_iterate, dataset, square_state, emitted_segments)
+        PROCESS_NOMINAL_ITERATE(nominal_iterate, interval_dataset, square_state, emitted_segments)
 
     render emitted_segments using nominal-iterate colors
     write debug artifacts if enabled
@@ -592,6 +632,12 @@ procedure PROCESS_NOMINAL_ITERATE(n, dataset, square_state, emitted_segments):
         append segments to emitted_segments[n]
 ```
 
+The current implementation also supports optional debug side channels:
+
+- increment-count accumulation per square
+- capture of excluded pre-increment contour segments
+- per-nominal-iterate frame rendering for GIF output
+
 ### Process one square at one nominal iterate
 
 ```text
@@ -646,15 +692,15 @@ procedure EVALUATE_SQUARE(Q, n, dataset, skip_state):
         k[corner] = n + skip_state[corner]
 
         require dot[corner][k[corner]]
-        require time[corner][k[corner]]
-        require time[corner][k[corner] + 1]
+        require interval_time[corner][k[corner]]
+        require interval_time[corner][k[corner] + 1]
 
         if any required value is missing:
             return missing_data
 
         current_dot[corner] = dot[corner][k[corner]]
-        current_time[corner] = time[corner][k[corner]]
-        next_time[corner] = time[corner][k[corner] + 1]
+        current_time[corner] = interval_time[corner][k[corner]]
+        next_time[corner] = interval_time[corner][k[corner] + 1]
         sign[corner] = sign(current_dot[corner])
 
     if all signs are identical:
@@ -733,9 +779,11 @@ This section must be treated as part of the implementation spec.
 1. **Plot cap**
    - `MAX_PLOTTED_ITERATES` lets the same 16-iterate dataset render as if only
      the first `M` iterates existed
-2. **Sparse skip-state storage**
-   - only materialize square skip states once a square first needs nonzero
-     counters
+2. **Dense UInt8 skip planes**
+   - the current implementation uses four dense `UInt8` matrices, one for each
+     local corner slot
+   - this keeps the implementation simple and cache-friendly on the fixed grid
+     used here
 3. **Early missing-data exit**
    - abandon a square immediately if any required lookup is missing
 4. **Early constant-sign exit**
@@ -747,8 +795,10 @@ This section must be treated as part of the implementation spec.
      per sign side
 7. **No neighbor synchronization**
    - duplicated per-square corners avoid expensive cross-square updates
-8. **Final-only segment emission**
-   - never keep transient pre-increment contour segments
+8. **Final-only segment emission for the main PNG**
+   - the main contour PNG emits only the final post-increment accepted segments
+   - optional GIF/debug renderers may also collect the excluded pre-increment
+     segments for visualization
 9. **Reuse of `attempt-024` marching-squares cases**
    - do not invent a new edge-topology rule
 
@@ -784,6 +834,8 @@ Recommended optional artifacts:
    - constant-sign squares
    - incremented squares
    - finally contoured squares
+6. optional nominal-iterate GIF frames from saved sweep data
+7. optional GIF/PNG overlays of excluded pre-increment contours
 
 ## Acceptance checks
 
