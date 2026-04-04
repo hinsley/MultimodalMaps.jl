@@ -7,6 +7,12 @@ Pkg.activate(REPO_ROOT_025_GIF)
 include(joinpath(ATTEMPT25_GIF_ROOT, "contours.jl"))
 
 const GIF_OUTPUT_TAG_025 = get(ENV, "ATTEMPT025_GIF_OUTPUT_TAG", "grid1200_branch16_absxskip16_plot8_deltatfix_nominal_iterates_shimizu_morioka_cpu")
+const GIF_FRAME_START_025 = parse(Int, get(ENV, "ATTEMPT025_GIF_FRAME_START", "1"))
+const GIF_FRAME_END_025 = min(
+    ATTEMPT025_PLOT_ITERATE_CAP,
+    parse(Int, get(ENV, "ATTEMPT025_GIF_FRAME_END", string(ATTEMPT025_PLOT_ITERATE_CAP))),
+)
+const GIF_BLACK_CONTOURS_025 = lowercase(get(ENV, "ATTEMPT025_GIF_BLACK_CONTOURS", "false")) in ("1", "true", "yes")
 const FRAME_DIR_025 = joinpath(ATTEMPT25_ROOT, "$(GIF_OUTPUT_TAG_025)_frames")
 
 gif_path_025() = joinpath(ATTEMPT25_ROOT, "$(GIF_OUTPUT_TAG_025).gif")
@@ -39,10 +45,12 @@ end
 function main()
     println("Rendering attempt-025 nominal-iterate GIF from existing sweep data.")
     println("Sweep dir: $(SWEEP_DIR_025)")
-    println("Plotted nominal iterates: $(ATTEMPT025_PLOT_ITERATE_CAP)")
+    println("Processed nominal iterates: 1:$(ATTEMPT025_PLOT_ITERATE_CAP)")
+    println("Rendered GIF frames: $(GIF_FRAME_START_025):$(GIF_FRAME_END_025)")
     flush(stdout)
 
     RUN_COLUMNS_025 && error("nominal_iterate_gif.jl is plotting-only; set ATTEMPT025_RUN_COLUMNS=false")
+    (1 <= GIF_FRAME_START_025 <= GIF_FRAME_END_025 <= ATTEMPT025_PLOT_ITERATE_CAP) || error("Invalid GIF frame iterate range.")
 
     dot_grids = build_iterate_grids_025(result -> result.absxmax_count, result -> result.absxmax_dot_values)
     cumulative_time_grids = build_iterate_grids_025(result -> result.absxmax_count, result -> result.absxmax_return_times)
@@ -54,8 +62,11 @@ function main()
     skip_state = initialize_skip_state_025()
     for nominal_iterate in PLOT_ITERATES_025
         segments, stats = process_nominal_iterate_025(nominal_iterate, dot_grids, time_grids, skip_state)
-        fig = build_single_iterate_frame_025(segments, colors[nominal_iterate], nominal_iterate)
-        save(frame_path_025(nominal_iterate), fig; px_per_unit=ATTEMPT025_PX_PER_UNIT)
+        if GIF_FRAME_START_025 <= nominal_iterate <= GIF_FRAME_END_025
+            frame_color = GIF_BLACK_CONTOURS_025 ? RGBAf(0.0, 0.0, 0.0, 0.95) : colors[nominal_iterate]
+            fig = build_single_iterate_frame_025(segments, frame_color, nominal_iterate)
+            save(frame_path_025(nominal_iterate), fig; px_per_unit=ATTEMPT025_PX_PER_UNIT)
+        end
         @printf(
             "Frame %d: missing=%d constant=%d incremented=%d contoured=%d emitted_segments=%d\n",
             nominal_iterate,
