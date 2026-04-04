@@ -234,6 +234,26 @@ function build_iterate_grids_025(count_fn, values_fn)
     return grids
 end
 
+function cumulative_to_interval_grids_025(cumulative_grids::Vector{Matrix{Float64}})
+    interval_grids = [fill(NaN, size(cumulative_grids[1])) for _ in eachindex(cumulative_grids)]
+    interval_grids[1] .= cumulative_grids[1]
+
+    for iterate in 2:length(cumulative_grids)
+        current_grid = cumulative_grids[iterate]
+        previous_grid = cumulative_grids[iterate - 1]
+        interval_grid = interval_grids[iterate]
+        @inbounds for idx in eachindex(current_grid)
+            current_time = current_grid[idx]
+            previous_time = previous_grid[idx]
+            if isfinite(current_time) && isfinite(previous_time)
+                interval_grid[idx] = current_time - previous_time
+            end
+        end
+    end
+
+    return interval_grids
+end
+
 function initialize_skip_state_025()
     n_lambda_cells = length(LAMBDAS_025) - 1
     n_alpha_cells = length(ALPHAS_025) - 1
@@ -674,7 +694,9 @@ function main()
     end
 
     dot_grids = build_iterate_grids_025(result -> result.absxmax_count, result -> result.absxmax_dot_values)
-    time_grids = build_iterate_grids_025(result -> result.absxmax_count, result -> result.absxmax_return_times)
+    cumulative_time_grids = build_iterate_grids_025(result -> result.absxmax_count, result -> result.absxmax_return_times)
+    # The skip rule compares one-event and two-event interval sums, so derive Δt_k from stored cumulative hit times T_k.
+    time_grids = cumulative_to_interval_grids_025(cumulative_time_grids)
 
     if WRITE_MERGED_RESULTS_025
         write_final_results_025(results_path_025())
