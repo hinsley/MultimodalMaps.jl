@@ -611,42 +611,48 @@ function build_contour_figure_025(
     colors::Vector{RGBAf},
     increment_counts::Union{Nothing, Matrix{UInt8}}=nothing,
 )
-    fig_width = increment_counts === nothing ? ATTEMPT025_FIG_WIDTH : ATTEMPT025_FIG_WIDTH + 160
-    fig = Figure(size=(fig_width, ATTEMPT025_FIG_HEIGHT))
+    fig = Figure(size=(ATTEMPT025_FIG_WIDTH, ATTEMPT025_FIG_HEIGHT))
     ax = Axis(
         fig[1, 1];
         xlabel="alpha",
         ylabel="lambda",
         title=increment_counts === nothing ?
             "Shimizu-Morioka |x|-max skip-adjusted tangent zero contours" :
-            "Shimizu-Morioka |x|-max contours with skip-increment overlay",
+            "Shimizu-Morioka |x|-max contours with skip-increment markers",
     )
-
-    if increment_counts !== nothing
-        overlay = Float64.(increment_counts)
-        overlay[overlay .== 0.0] .= NaN
-        alpha_centers = 0.5 .* (Float64.(ALPHAS_025[1:end-1]) .+ Float64.(ALPHAS_025[2:end]))
-        lambda_centers = 0.5 .* (Float64.(LAMBDAS_025[1:end-1]) .+ Float64.(LAMBDAS_025[2:end]))
-        overlay_max = max(1.0, Float64(maximum(increment_counts)))
-        hm = heatmap!(
-            ax,
-            alpha_centers,
-            lambda_centers,
-            overlay;
-            colormap=[
-                RGBAf(1.0, 0.96, 0.96, 0.0),
-                RGBAf(0.85, 0.12, 0.12, 0.48),
-            ],
-            colorrange=(0.0, overlay_max),
-            nan_color=RGBAf(0.0, 0.0, 0.0, 0.0),
-            interpolate=false,
-        )
-        Colorbar(fig[1, 2], hm; label="incremented nominal iterates per square")
-    end
 
     for iterate in PLOT_ITERATES_025
         xs, ys = segments_to_polyline_025(segments_by_iterate[iterate])
         lines!(ax, xs, ys; color=colors[iterate], linewidth=ATTEMPT025_LINEWIDTH)
+    end
+
+    if increment_counts !== nothing
+        marker_xs = Float64[]
+        marker_ys = Float64[]
+        marker_sizes = Float64[]
+        for j in axes(increment_counts, 1)
+            lambda_center = 0.5 * (Float64(LAMBDAS_025[j]) + Float64(LAMBDAS_025[j + 1]))
+            for i in axes(increment_counts, 2)
+                count = Int(increment_counts[j, i])
+                count == 0 && continue
+                alpha_center = 0.5 * (Float64(ALPHAS_025[i]) + Float64(ALPHAS_025[i + 1]))
+                push!(marker_xs, alpha_center)
+                push!(marker_ys, lambda_center)
+                push!(marker_sizes, 12.0 + 3.0 * (count - 1))
+            end
+        end
+        if !isempty(marker_xs)
+            scatter!(
+                ax,
+                marker_xs,
+                marker_ys;
+                marker=:rect,
+                markersize=marker_sizes,
+                color=RGBAf(0.90, 0.08, 0.08, 0.92),
+                strokecolor=RGBAf(1.0, 1.0, 1.0, 0.95),
+                strokewidth=0.8,
+            )
+        end
     end
 
     xlims!(ax, ATTEMPT025_ALPHA_MIN, ATTEMPT025_ALPHA_MAX)
