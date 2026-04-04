@@ -11,5 +11,9 @@ The primary implementation spec is:
 
 - [absx_skip_contour_algorithm.md](/home/guest_coder/github/repos/hinsley/MultimodalMaps.jl/kneading/experiment/attempt-025/absx_skip_contour_algorithm.md)
 
-The scaffold code in this directory is still minimal. The Markdown spec is the
-source of truth for what `attempt-025` should compute and how it should plot.
+The executable entrypoint is:
+
+- [contours.jl](/home/guest_coder/github/repos/hinsley/MultimodalMaps.jl/kneading/experiment/attempt-025/contours.jl)
+
+The Markdown spec remains the source of truth for what `attempt-025` should
+compute and how it should plot.
