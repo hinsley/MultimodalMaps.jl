@@ -339,31 +339,33 @@ function choose_representatives_025(evaluation::SquareEvaluation25)
     return Int8(1), pos_rep, neg_rep
 end
 
-function maybe_increment_skip_state_025!(
-    j::Int,
-    i::Int,
-    evaluation::SquareEvaluation25,
-    skip_state::SkipState25,
-)
+function skip_increment_decision_025(evaluation::SquareEvaluation25)
     shorter_sign, short_rep, long_rep = choose_representatives_025(evaluation)
     err_skip = abs(evaluation.current_time[short_rep] + evaluation.next_time[short_rep] - evaluation.current_time[long_rep])
     err_noskip = abs(evaluation.current_time[short_rep] - evaluation.current_time[long_rep])
-    if err_skip < err_noskip
-        if evaluation.sign[1] == shorter_sign
-            skip_state.tl[j, i] += UInt8(1)
-        end
-        if evaluation.sign[2] == shorter_sign
-            skip_state.tr[j, i] += UInt8(1)
-        end
-        if evaluation.sign[3] == shorter_sign
-            skip_state.br[j, i] += UInt8(1)
-        end
-        if evaluation.sign[4] == shorter_sign
-            skip_state.bl[j, i] += UInt8(1)
-        end
-        return true
+    return err_skip < err_noskip, shorter_sign
+end
+
+function increment_skip_state_for_sign_025!(
+    j::Int,
+    i::Int,
+    signs::NTuple{4, Int8},
+    shorter_sign::Int8,
+    skip_state::SkipState25,
+)
+    if signs[1] == shorter_sign
+        skip_state.tl[j, i] += UInt8(1)
     end
-    return false
+    if signs[2] == shorter_sign
+        skip_state.tr[j, i] += UInt8(1)
+    end
+    if signs[3] == shorter_sign
+        skip_state.br[j, i] += UInt8(1)
+    end
+    if signs[4] == shorter_sign
+        skip_state.bl[j, i] += UInt8(1)
+    end
+    return nothing
 end
 
 function edge_point_025(
@@ -491,6 +493,7 @@ function process_nominal_iterate_025(
     time_grids::Vector{Matrix{Float64}},
     skip_state::SkipState25,
     increment_counts::Union{Nothing, Matrix{UInt8}}=nothing,
+    excluded_segments::Union{Nothing, Vector{NTuple{4, Float64}}}=nothing,
 )
     segments = NTuple{4, Float64}[]
     stats = zero_iterate_stats_025()
@@ -510,7 +513,25 @@ function process_nominal_iterate_025(
                 continue
             end
 
-            if maybe_increment_skip_state_025!(j, i, evaluation, skip_state)
+            should_increment, shorter_sign = skip_increment_decision_025(evaluation)
+            if should_increment
+                if excluded_segments !== nothing
+                    x_tl_ex = Float64(ALPHAS_025[i])
+                    x_tr_ex = Float64(ALPHAS_025[i + 1])
+                    append_march_square_zero_segments_025!(
+                        excluded_segments,
+                        evaluation.current_dot,
+                        x_tl_ex,
+                        y_tl,
+                        x_tr_ex,
+                        y_tl,
+                        x_tr_ex,
+                        y_bl,
+                        x_tl_ex,
+                        y_bl,
+                    )
+                end
+                increment_skip_state_for_sign_025!(j, i, evaluation.sign, shorter_sign, skip_state)
                 stats.incremented += 1
                 increment_counts !== nothing && (increment_counts[j, i] += UInt8(1))
                 evaluation = evaluate_square_025(j, i, nominal_iterate, dot_grids, time_grids, skip_state)

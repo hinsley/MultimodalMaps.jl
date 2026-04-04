@@ -24,6 +24,7 @@ export ATTEMPT025_GIF_OUTPUT_TAG="${OUTPUT_TAG}"
 export ATTEMPT025_GIF_FRAME_START="${FRAME_START}"
 export ATTEMPT025_GIF_FRAME_END="${FRAME_END}"
 export ATTEMPT025_GIF_BLACK_CONTOURS="${ATTEMPT025_GIF_BLACK_CONTOURS:-false}"
+export ATTEMPT025_GIF_SHOW_EXCLUDED="${ATTEMPT025_GIF_SHOW_EXCLUDED:-false}"
 
 echo "Rendering attempt-025 nominal-iterate GIF from existing sweep data."
 echo "Sweep source tag: ${SWEEP_TAG}"
