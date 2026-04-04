@@ -368,8 +368,11 @@ For a fixed nominal iterate `n` and a fixed square:
    - determine which sign side is the shorter-return-time side
    - run the one-miss test
 7. If the one-miss test passes:
-   - increment by `1` the skip counter of every corner in the square whose
-     current sign belongs to the shorter-time side
+   - interpret the longer-time sign side as the side that has likely already
+     skipped one `|x|`-maximum
+   - therefore increment by `1` the skip counter of every corner in the square
+     whose **current pre-increment sign** belongs to the shorter-time side, so
+     that side catches up by one iterate locally
    - then re-evaluate the square exactly once using the updated counters
 8. Do not repeat the skip test again for that square during that nominal
    iterate.
@@ -423,15 +426,19 @@ If:
 \text{err\_skip} < \text{err\_noskip}
 \]
 
-then interpret that as evidence that the shorter-time side is one iterate
-behind because it has not missed the event that the longer-time side has
-already skipped.
+then interpret that as evidence that the **longer-time side** has likely
+already skipped one `|x|`-maximum, while the **shorter-time side** still has
+the earlier event. The counter increment is applied to the shorter-time side so
+that its effective iterate index catches up locally to the longer-time side.
 
 In that case:
 
-- increment the skip counters of all corners on the shorter-time sign side
+- increment the skip counters of all corners whose **current pre-increment
+  sign** is the shorter-time sign
 - then recompute the square once and contour from the **updated** effective dot
   values, not the old ones
+- do **not** run the one-miss test a second time on that recomputed square,
+  even if the same inequality would still hold
 
 ## Marching-squares rule
 
@@ -626,7 +633,9 @@ procedure PROCESS_SQUARE_AT_ITERATE(Q, n, dataset, skip_state):
         if evaluation.status == constant_sign:
             return no segments
 
-    return EMIT_MARCHED_SEGMENTS(Q, evaluation.final_dot_values)
+        // stop here: do not rerun the skip test on the recomputed square
+
+    return EMIT_MARCHED_SEGMENTS(Q, evaluation.current_dot)
 ```
 
 ### Evaluate a square
@@ -649,9 +658,23 @@ procedure EVALUATE_SQUARE(Q, n, dataset, skip_state):
         sign[corner] = sign(current_dot[corner])
 
     if all signs are identical:
-        return constant_sign payload
+        return payload(
+            status = constant_sign,
+            current_dot = current_dot,
+            current_time = current_time,
+            next_time = next_time,
+            sign = sign,
+            effective_iterate = k
+        )
 
-    return mixed_sign payload
+    return payload(
+        status = mixed_sign,
+        current_dot = current_dot,
+        current_time = current_time,
+        next_time = next_time,
+        sign = sign,
+        effective_iterate = k
+    )
 ```
 
 ### Determine shorter-time sign side
@@ -666,6 +689,15 @@ procedure DETERMINE_SHORTER_TIME_SIGN(evaluation):
     else:
         return positive
 ```
+
+The returned sign should then be interpreted square-wide:
+
+- if `negative` is returned, all negative-sign corners in the current square are
+  treated as the shorter-time side and all positive-sign corners as the
+  longer-time side
+- if `positive` is returned, the roles are reversed
+
+This is the exact implementation form of the assumed sign/time partition rule.
 
 ### Emit final contour segments
 
