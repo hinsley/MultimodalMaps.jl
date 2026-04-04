@@ -14,8 +14,11 @@ const SWEEP_SOURCE_TAG_025 = get(ENV, "ATTEMPT025_SWEEP_TAG", CONTOUR_OUTPUT_TAG
 const SWEEP_DIR_025 = joinpath(ATTEMPT25_ROOT, "$(SWEEP_SOURCE_TAG_025)_columns")
 const LOG_LOCK_025 = ReentrantLock()
 const PLOT_ITERATES_025 = collect(1:ATTEMPT025_PLOT_ITERATE_CAP)
+const RUN_COLUMNS_025 = lowercase(get(ENV, "ATTEMPT025_RUN_COLUMNS", "true")) in ("1", "true", "yes")
 const WRITE_MERGED_RESULTS_025 = lowercase(get(ENV, "ATTEMPT025_WRITE_MERGED_RESULTS", "true")) in ("1", "true", "yes")
 const WRITE_ITERATE_STATS_025 = lowercase(get(ENV, "ATTEMPT025_WRITE_ITERATE_STATS", "true")) in ("1", "true", "yes")
+const DRAW_INCREMENT_OVERLAY_025 = lowercase(get(ENV, "ATTEMPT025_DRAW_INCREMENT_OVERLAY", "false")) in ("1", "true", "yes")
+const WRITE_INCREMENT_COUNTS_025 = lowercase(get(ENV, "ATTEMPT025_WRITE_INCREMENT_COUNTS", "false")) in ("1", "true", "yes")
 const EVAL_MISSING_025 = UInt8(0)
 const EVAL_CONSTANT_025 = UInt8(1)
 const EVAL_MIXED_025 = UInt8(2)
@@ -28,6 +31,7 @@ results_path_025() = joinpath(ATTEMPT25_ROOT, "$(CONTOUR_OUTPUT_TAG_025)_results
 legend_path_025() = joinpath(ATTEMPT25_ROOT, "$(CONTOUR_OUTPUT_TAG_025)_iterate_colors.tsv")
 plot_path_025() = joinpath(ATTEMPT25_ROOT, "$(CONTOUR_OUTPUT_TAG_025)_contours.png")
 iterate_stats_path_025() = joinpath(ATTEMPT25_ROOT, "$(CONTOUR_OUTPUT_TAG_025)_iterate_stats.tsv")
+increment_counts_path_025() = joinpath(ATTEMPT25_ROOT, "$(CONTOUR_OUTPUT_TAG_025)_increment_counts.tsv")
 
 struct SquareEvaluation25
     status::UInt8
@@ -466,6 +470,7 @@ function process_nominal_iterate_025(
     dot_grids::Vector{Matrix{Float64}},
     time_grids::Vector{Matrix{Float64}},
     skip_state::SkipState25,
+    increment_counts::Union{Nothing, Matrix{UInt8}}=nothing,
 )
     segments = NTuple{4, Float64}[]
     stats = zero_iterate_stats_025()
@@ -487,6 +492,7 @@ function process_nominal_iterate_025(
 
             if maybe_increment_skip_state_025!(j, i, evaluation, skip_state)
                 stats.incremented += 1
+                increment_counts !== nothing && (increment_counts[j, i] += UInt8(1))
                 evaluation = evaluate_square_025(j, i, nominal_iterate, dot_grids, time_grids, skip_state)
                 if evaluation.status == EVAL_MISSING_025
                     stats.missing_data += 1
@@ -572,17 +578,71 @@ function write_iterate_stats_025(path::String, stats::Vector{IterateStats25})
     end
 end
 
+function write_increment_counts_025(path::String, increment_counts::Matrix{UInt8})
+    open(path, "w") do io
+        println(io, "lambda_cell\talpha_cell\tlambda_min\tlambda_max\talpha_min\talpha_max\tincrement_count")
+        for j in axes(increment_counts, 1)
+            lambda_min = Float64(LAMBDAS_025[j])
+            lambda_max = Float64(LAMBDAS_025[j + 1])
+            for i in axes(increment_counts, 2)
+                count = Int(increment_counts[j, i])
+                count == 0 && continue
+                alpha_min = Float64(ALPHAS_025[i])
+                alpha_max = Float64(ALPHAS_025[i + 1])
+                println(
+                    io,
+                    join([
+                        string(j),
+                        string(i),
+                        @sprintf("%.6f", lambda_min),
+                        @sprintf("%.6f", lambda_max),
+                        @sprintf("%.6f", alpha_min),
+                        @sprintf("%.6f", alpha_max),
+                        string(count),
+                    ], '\t'),
+                )
+            end
+        end
+    end
+end
+
 function build_contour_figure_025(
     segments_by_iterate::Vector{Vector{NTuple{4, Float64}}},
     colors::Vector{RGBAf},
+    increment_counts::Union{Nothing, Matrix{UInt8}}=nothing,
 )
-    fig = Figure(size=(ATTEMPT025_FIG_WIDTH, ATTEMPT025_FIG_HEIGHT))
+    fig_width = increment_counts === nothing ? ATTEMPT025_FIG_WIDTH : ATTEMPT025_FIG_WIDTH + 160
+    fig = Figure(size=(fig_width, ATTEMPT025_FIG_HEIGHT))
     ax = Axis(
         fig[1, 1];
         xlabel="alpha",
         ylabel="lambda",
-        title="Shimizu-Morioka |x|-max skip-adjusted tangent zero contours",
+        title=increment_counts === nothing ?
+            "Shimizu-Morioka |x|-max skip-adjusted tangent zero contours" :
+            "Shimizu-Morioka |x|-max contours with skip-increment overlay",
     )
+
+    if increment_counts !== nothing
+        overlay = Float64.(increment_counts)
+        overlay[overlay .== 0.0] .= NaN
+        alpha_centers = 0.5 .* (Float64.(ALPHAS_025[1:end-1]) .+ Float64.(ALPHAS_025[2:end]))
+        lambda_centers = 0.5 .* (Float64.(LAMBDAS_025[1:end-1]) .+ Float64.(LAMBDAS_025[2:end]))
+        overlay_max = max(1.0, Float64(maximum(increment_counts)))
+        hm = heatmap!(
+            ax,
+            alpha_centers,
+            lambda_centers,
+            overlay;
+            colormap=[
+                RGBAf(1.0, 0.96, 0.96, 0.0),
+                RGBAf(0.85, 0.12, 0.12, 0.48),
+            ],
+            colorrange=(0.0, overlay_max),
+            nan_color=RGBAf(0.0, 0.0, 0.0, 0.0),
+            interpolate=false,
+        )
+        Colorbar(fig[1, 2], hm; label="incremented nominal iterates per square")
+    end
 
     for iterate in PLOT_ITERATES_025
         xs, ys = segments_to_polyline_025(segments_by_iterate[iterate])
@@ -601,7 +661,11 @@ function main()
     println("Sweep dir: $(SWEEP_DIR_025)")
     flush(stdout)
 
-    run_or_resume_columns_025()
+    if RUN_COLUMNS_025
+        run_or_resume_columns_025()
+    else
+        println("Reusing existing sweep columns only (ATTEMPT025_RUN_COLUMNS=false).")
+    end
 
     dot_grids = build_iterate_grids_025(result -> result.absxmax_count, result -> result.absxmax_dot_values)
     time_grids = build_iterate_grids_025(result -> result.absxmax_count, result -> result.absxmax_return_times)
@@ -616,9 +680,12 @@ function main()
     skip_state = initialize_skip_state_025()
     segments_by_iterate = [NTuple{4, Float64}[] for _ in PLOT_ITERATES_025]
     iterate_stats = [zero_iterate_stats_025() for _ in PLOT_ITERATES_025]
+    increment_counts = (DRAW_INCREMENT_OVERLAY_025 || WRITE_INCREMENT_COUNTS_025) ?
+        zeros(UInt8, length(LAMBDAS_025) - 1, length(ALPHAS_025) - 1) :
+        nothing
 
     for nominal_iterate in PLOT_ITERATES_025
-        segments, stats = process_nominal_iterate_025(nominal_iterate, dot_grids, time_grids, skip_state)
+        segments, stats = process_nominal_iterate_025(nominal_iterate, dot_grids, time_grids, skip_state, increment_counts)
         segments_by_iterate[nominal_iterate] = segments
         iterate_stats[nominal_iterate] = stats
         @printf(
@@ -634,8 +701,9 @@ function main()
     end
 
     WRITE_ITERATE_STATS_025 && write_iterate_stats_025(iterate_stats_path_025(), iterate_stats)
+    WRITE_INCREMENT_COUNTS_025 && increment_counts !== nothing && write_increment_counts_025(increment_counts_path_025(), increment_counts)
 
-    fig = build_contour_figure_025(segments_by_iterate, colors)
+    fig = build_contour_figure_025(segments_by_iterate, colors, increment_counts)
     save(plot_path_025(), fig; px_per_unit=ATTEMPT025_PX_PER_UNIT)
 
     usable = 0
@@ -648,6 +716,7 @@ function main()
     WRITE_MERGED_RESULTS_025 ? println("Saved merged results to $(results_path_025())") : println("Skipped merged TSV writes (ATTEMPT025_WRITE_MERGED_RESULTS=false)")
     println("Saved iterate-color legend to $(legend_path_025())")
     WRITE_ITERATE_STATS_025 && println("Saved iterate stats to $(iterate_stats_path_025())")
+    WRITE_INCREMENT_COUNTS_025 && println("Saved increment-count overlay data to $(increment_counts_path_025())")
     println("Saved contour plot to $(plot_path_025())")
 end
 
