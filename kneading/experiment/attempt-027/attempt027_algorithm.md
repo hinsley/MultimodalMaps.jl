@@ -1,4 +1,4 @@
-# attempt-027: High-Resolution Recompute With Retired Squares
+# attempt-027: Recompute With Retired Squares
 
 ## Summary
 
@@ -8,7 +8,9 @@
 - the retired-square rule from `attempt-026`
 - the black background / white accepted / red pruned overlay style from the
   latest `attempt-026` plot
-- a larger sweep and image configuration
+- a larger sweep and image configuration than `attempt-025`/`attempt-026`, but
+  reduced from the originally attempted `10000 x 10000` run to `2000 x 2000`
+  for tractable wall-clock time
 
 The intended final plot overlays nominal iterates `2:8`. It uses:
 
@@ -42,17 +44,17 @@ automatically.
 
 ## Sweep Configuration
 
-The default run uses:
+The current default run uses:
 
-- `N_alpha = 10000`
-- `N_lambda = 10000`
+- `N_alpha = 2000`
+- `N_lambda = 2000`
 - `alpha ∈ [0.0, 0.7]`
 - `lambda ∈ [0.2, 1.6]`
 - stored `|x|`-max iterates: `16`
 - plotted nominal iterates: `8`
 - plotted overlay range: `2:8`
 - line width: `0.35`
-- figure size: `10000 x 10000`
+- figure size: `2000 x 2000`
 - `px_per_unit = 4.0`
 
 ## Event Generation
@@ -125,4 +127,4 @@ The run script:
 
 That flow is implemented by:
 
-- [run_grid10000_branch16_absxskip16_plot8_retired_overlay_upload.sh](/home/guest_coder/github/repos/hinsley/MultimodalMaps.jl/kneading/experiment/attempt-027/run_grid10000_branch16_absxskip16_plot8_retired_overlay_upload.sh)
+- [run_grid2000_branch16_absxskip16_plot8_retired_overlay_upload.sh](/home/guest_coder/github/repos/hinsley/MultimodalMaps.jl/kneading/experiment/attempt-027/run_grid2000_branch16_absxskip16_plot8_retired_overlay_upload.sh)

@@ -12,7 +12,7 @@ using Random
 const CONTOUR_OUTPUT_TAG_025 = get(
     ENV,
     "ATTEMPT025_OUTPUT_TAG",
-    "grid10000_branch16_absxskip16_plot8_deltatfix_nominal_iterates2_8_black_red_retired_shimizu_morioka_cpu",
+    "grid2000_branch16_absxskip16_plot8_deltatfix_nominal_iterates2_8_black_red_retired_shimizu_morioka_cpu",
 )
 const SWEEP_SOURCE_TAG_025 = get(ENV, "ATTEMPT025_SWEEP_TAG", CONTOUR_OUTPUT_TAG_025)
 const SWEEP_DIR_025 = joinpath(ATTEMPT25_ROOT, "$(SWEEP_SOURCE_TAG_025)_columns")
