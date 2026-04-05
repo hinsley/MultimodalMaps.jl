@@ -789,7 +789,7 @@ function main()
 
     WRITE_ITERATE_STATS_025 && write_iterate_stats_025(iterate_stats_path_025(), iterate_stats)
 
-    fig = build_retired_overlay_027(accepted_segments, excluded_segments)
+    fig = build_retired_overlay_figure_027(accepted_segments, excluded_segments)
     save(plot_path_025(), fig; px_per_unit=ATTEMPT025_PX_PER_UNIT)
 
     usable = 0
