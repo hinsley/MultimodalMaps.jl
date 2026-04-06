@@ -25,6 +25,7 @@ const OVERLAY_ITERATE_END_025 = min(
 )
 const RETIRE_ON_SKIP_027 = lowercase(get(ENV, "ATTEMPT027_RETIRE_ON_SKIP", "true")) in ("1", "true", "yes")
 const STRICT_RETIRED_OVERLAY_027 = lowercase(get(ENV, "ATTEMPT027_STRICT_RETIRED_OVERLAY", "false")) in ("1", "true", "yes")
+const FREEZE_AFTER_ANY_PLOT_027 = lowercase(get(ENV, "ATTEMPT027_FREEZE_AFTER_ANY_PLOT", "false")) in ("1", "true", "yes")
 const RUN_COLUMNS_025 = lowercase(get(ENV, "ATTEMPT025_RUN_COLUMNS", "true")) in ("1", "true", "yes")
 const WRITE_MERGED_RESULTS_025 = lowercase(get(ENV, "ATTEMPT025_WRITE_MERGED_RESULTS", "true")) in ("1", "true", "yes")
 const WRITE_ITERATE_STATS_025 = lowercase(get(ENV, "ATTEMPT025_WRITE_ITERATE_STATS", "true")) in ("1", "true", "yes")
@@ -504,6 +505,7 @@ function process_nominal_iterate_025(
     dot_grids::Vector{Matrix{Float64}},
     time_grids::Vector{Matrix{Float64}},
     skip_state::SkipState25,
+    frozen_cells::Union{Nothing, BitMatrix}=nothing,
     increment_counts::Union{Nothing, Matrix{UInt8}}=nothing,
     excluded_segments::Union{Nothing, Vector{NTuple{4, Float64}}}=nothing,
 )
@@ -516,6 +518,7 @@ function process_nominal_iterate_025(
         y_tl = Float64(LAMBDAS_025[j])
         y_bl = Float64(LAMBDAS_025[j + 1])
         for i in 1:n_alpha_cells
+            frozen_cells !== nothing && frozen_cells[j, i] && continue
             evaluation = evaluate_square_025(j, i, nominal_iterate, dot_grids, time_grids, skip_state)
             if evaluation.status == EVAL_MISSING_025
                 stats.missing_data += 1
@@ -526,11 +529,12 @@ function process_nominal_iterate_025(
             end
 
             should_increment, shorter_sign = skip_increment_decision_025(evaluation)
+            plotted_here = false
             if should_increment
                 if excluded_segments !== nothing
                     x_tl_ex = Float64(ALPHAS_025[i])
                     x_tr_ex = Float64(ALPHAS_025[i + 1])
-                    append_march_square_zero_segments_025!(
+                    red_added = append_march_square_zero_segments_025!(
                         excluded_segments,
                         evaluation.current_dot,
                         x_tl_ex,
@@ -542,6 +546,7 @@ function process_nominal_iterate_025(
                         x_tl_ex,
                         y_bl,
                     )
+                    plotted_here = red_added > 0
                 end
                 increment_skip_state_for_sign_025!(j, i, evaluation.sign, shorter_sign, skip_state)
                 stats.incremented += 1
@@ -571,8 +576,12 @@ function process_nominal_iterate_025(
                 y_bl,
             )
             if added > 0
+                plotted_here = true
                 stats.contoured_squares += 1
                 stats.emitted_segments += added
+            end
+            if frozen_cells !== nothing && plotted_here
+                frozen_cells[j, i] = true
             end
         end
     end
@@ -621,6 +630,8 @@ function build_retired_overlay_figure_027(
     excluded_segments::Vector{NTuple{4, Float64}},
 )
     title_suffix =
+        FREEZE_AFTER_ANY_PLOT_027 ?
+        "freeze square after first plotted contour of any color" :
         !RETIRE_ON_SKIP_027 ?
         "no square retirement; slips red, shifted contours continue in white" :
         STRICT_RETIRED_OVERLAY_027 ?
@@ -794,6 +805,7 @@ function main()
 
     skip_state = initialize_skip_state_025()
     retired_cells = falses(length(LAMBDAS_025) - 1, length(ALPHAS_025) - 1)
+    frozen_cells = FREEZE_AFTER_ANY_PLOT_027 ? falses(length(LAMBDAS_025) - 1, length(ALPHAS_025) - 1) : nothing
     accepted_segments = NTuple{4, Float64}[]
     accepted_segment_cell_ids = Int[]
     excluded_segments = NTuple{4, Float64}[]
@@ -824,6 +836,7 @@ function main()
                 dot_grids,
                 time_grids,
                 skip_state,
+                frozen_cells,
                 nothing,
                 local_excluded,
             )
