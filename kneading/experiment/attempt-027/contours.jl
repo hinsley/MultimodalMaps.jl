@@ -26,6 +26,7 @@ const OVERLAY_ITERATE_END_025 = min(
 const RETIRE_ON_SKIP_027 = lowercase(get(ENV, "ATTEMPT027_RETIRE_ON_SKIP", "true")) in ("1", "true", "yes")
 const STRICT_RETIRED_OVERLAY_027 = lowercase(get(ENV, "ATTEMPT027_STRICT_RETIRED_OVERLAY", "false")) in ("1", "true", "yes")
 const FREEZE_AFTER_ANY_PLOT_027 = lowercase(get(ENV, "ATTEMPT027_FREEZE_AFTER_ANY_PLOT", "false")) in ("1", "true", "yes")
+const COLOR_RETURNTIME_MAXIMA_027 = lowercase(get(ENV, "ATTEMPT027_COLOR_RETURNTIME_MAXIMA", "false")) in ("1", "true", "yes")
 const RUN_COLUMNS_025 = lowercase(get(ENV, "ATTEMPT025_RUN_COLUMNS", "true")) in ("1", "true", "yes")
 const WRITE_MERGED_RESULTS_025 = lowercase(get(ENV, "ATTEMPT025_WRITE_MERGED_RESULTS", "true")) in ("1", "true", "yes")
 const WRITE_ITERATE_STATS_025 = lowercase(get(ENV, "ATTEMPT025_WRITE_ITERATE_STATS", "true")) in ("1", "true", "yes")
@@ -508,8 +509,10 @@ function process_nominal_iterate_025(
     frozen_cells::Union{Nothing, BitMatrix}=nothing,
     increment_counts::Union{Nothing, Matrix{UInt8}}=nothing,
     excluded_segments::Union{Nothing, Vector{NTuple{4, Float64}}}=nothing,
+    return_time_local_max_masks::Union{Nothing, Vector{BitMatrix}}=nothing,
 )
     segments = NTuple{4, Float64}[]
+    cyan_segments = NTuple{4, Float64}[]
     stats = zero_iterate_stats_025()
     n_lambda_cells = length(LAMBDAS_025) - 1
     n_alpha_cells = length(ALPHAS_025) - 1
@@ -563,8 +566,13 @@ function process_nominal_iterate_025(
 
             x_tl = Float64(ALPHAS_025[i])
             x_tr = Float64(ALPHAS_025[i + 1])
+            target_segments =
+                return_time_local_max_masks !== nothing &&
+                square_has_detectable_return_time_max_027(evaluation, j, i, return_time_local_max_masks) ?
+                cyan_segments :
+                segments
             added = append_march_square_zero_segments_025!(
-                segments,
+                target_segments,
                 evaluation.current_dot,
                 x_tl,
                 y_tl,
@@ -586,7 +594,7 @@ function process_nominal_iterate_025(
         end
     end
 
-    return segments, stats
+    return segments, cyan_segments, stats
 end
 
 function segments_to_polyline_025(segments::Vector{NTuple{4, Float64}})
@@ -627,6 +635,7 @@ end
 
 function build_retired_overlay_figure_027(
     accepted_segments::Vector{NTuple{4, Float64}},
+    cyan_segments::Vector{NTuple{4, Float64}},
     excluded_segments::Vector{NTuple{4, Float64}},
 )
     title_suffix =
@@ -659,14 +668,19 @@ function build_retired_overlay_figure_027(
         yticklabelcolor=:white,
     )
 
-    if !isempty(excluded_segments)
-        xs_ex, ys_ex = segments_to_polyline_025(excluded_segments)
-        lines!(ax, xs_ex, ys_ex; color=RGBAf(0.92, 0.10, 0.10, 0.95), linewidth=ATTEMPT025_LINEWIDTH)
-    end
-
     if !isempty(accepted_segments)
         xs, ys = segments_to_polyline_025(accepted_segments)
         lines!(ax, xs, ys; color=RGBAf(1.0, 1.0, 1.0, 0.98), linewidth=ATTEMPT025_LINEWIDTH)
+    end
+
+    if !isempty(cyan_segments)
+        xs_cy, ys_cy = segments_to_polyline_025(cyan_segments)
+        lines!(ax, xs_cy, ys_cy; color=RGBAf(0.35, 0.95, 1.0, 0.98), linewidth=ATTEMPT025_LINEWIDTH)
+    end
+
+    if !isempty(excluded_segments)
+        xs_ex, ys_ex = segments_to_polyline_025(excluded_segments)
+        lines!(ax, xs_ex, ys_ex; color=RGBAf(0.92, 0.10, 0.10, 0.95), linewidth=ATTEMPT025_LINEWIDTH)
     end
 
     xlims!(ax, ATTEMPT025_ALPHA_MIN, ATTEMPT025_ALPHA_MAX)
@@ -692,6 +706,57 @@ function filter_strict_retired_segments_027(
     end
 
     return kept_segments
+end
+
+function build_return_time_local_max_masks_027(time_grids::Vector{Matrix{Float64}})
+    masks = [falses(size(grid)) for grid in time_grids]
+    n_lambda = size(time_grids[1], 1)
+    n_alpha = size(time_grids[1], 2)
+
+    for iterate in eachindex(time_grids)
+        grid = time_grids[iterate]
+        mask = masks[iterate]
+        for j in 2:(n_lambda - 1)
+            for i in 2:(n_alpha - 1)
+                center = grid[j, i]
+                isfinite(center) || continue
+                is_peak = true
+                strictly_greater = false
+                for dj in -1:1
+                    for di in -1:1
+                        (dj == 0 && di == 0) && continue
+                        neighbor = grid[j + dj, i + di]
+                        isfinite(neighbor) || (is_peak = false; break)
+                        if center < neighbor
+                            is_peak = false
+                            break
+                        end
+                        strictly_greater = strictly_greater || (center > neighbor)
+                    end
+                    is_peak || break
+                end
+                mask[j, i] = is_peak && strictly_greater
+            end
+        end
+    end
+
+    return masks
+end
+
+function square_has_detectable_return_time_max_027(
+    evaluation::SquareEvaluation25,
+    j::Int,
+    i::Int,
+    local_max_masks::Vector{BitMatrix},
+)
+    corner_js = (j, j, j + 1, j + 1)
+    corner_is = (i, i + 1, i + 1, i)
+    for corner in 1:4
+        iterate = evaluation.effective_iterate[corner]
+        1 <= iterate <= length(local_max_masks) || continue
+        local_max_masks[iterate][corner_js[corner], corner_is[corner]] && return true
+    end
+    return false
 end
 
 function process_nominal_iterate_027(
@@ -798,6 +863,8 @@ function main()
     dot_grids = build_iterate_grids_025(result -> result.absxmax_count, result -> result.absxmax_dot_values)
     cumulative_time_grids = build_iterate_grids_025(result -> result.absxmax_count, result -> result.absxmax_return_times)
     time_grids = cumulative_to_interval_grids_025(cumulative_time_grids)
+    return_time_local_max_masks =
+        COLOR_RETURNTIME_MAXIMA_027 ? build_return_time_local_max_masks_027(time_grids) : nothing
 
     if WRITE_MERGED_RESULTS_025
         write_final_results_025(results_path_025())
@@ -807,6 +874,7 @@ function main()
     retired_cells = falses(length(LAMBDAS_025) - 1, length(ALPHAS_025) - 1)
     frozen_cells = FREEZE_AFTER_ANY_PLOT_027 ? falses(length(LAMBDAS_025) - 1, length(ALPHAS_025) - 1) : nothing
     accepted_segments = NTuple{4, Float64}[]
+    cyan_segments = NTuple{4, Float64}[]
     accepted_segment_cell_ids = Int[]
     excluded_segments = NTuple{4, Float64}[]
     iterate_stats = [zero_iterate_stats_025() for _ in PLOT_ITERATES_025]
@@ -831,7 +899,7 @@ function main()
                 local_excluded,
             )
         else
-            new_segments, stats = process_nominal_iterate_025(
+            new_segments, new_cyan_segments, stats = process_nominal_iterate_025(
                 nominal_iterate,
                 dot_grids,
                 time_grids,
@@ -839,8 +907,10 @@ function main()
                 frozen_cells,
                 nothing,
                 local_excluded,
+                return_time_local_max_masks,
             )
             local_accepted !== nothing && append!(accepted_segments, new_segments)
+            local_accepted !== nothing && append!(cyan_segments, new_cyan_segments)
         end
         iterate_stats[nominal_iterate] = stats
 
@@ -867,7 +937,7 @@ function main()
         RETIRE_ON_SKIP_027 && STRICT_RETIRED_OVERLAY_027 ?
         filter_strict_retired_segments_027(accepted_segments, accepted_segment_cell_ids, retired_cells) :
         accepted_segments
-    fig = build_retired_overlay_figure_027(final_accepted_segments, excluded_segments)
+    fig = build_retired_overlay_figure_027(final_accepted_segments, cyan_segments, excluded_segments)
     save(plot_path_025(), fig; px_per_unit=ATTEMPT025_PX_PER_UNIT)
 
     usable = 0
