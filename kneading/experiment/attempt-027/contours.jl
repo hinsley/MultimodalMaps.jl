@@ -27,6 +27,7 @@ const RETIRE_ON_SKIP_027 = lowercase(get(ENV, "ATTEMPT027_RETIRE_ON_SKIP", "true
 const STRICT_RETIRED_OVERLAY_027 = lowercase(get(ENV, "ATTEMPT027_STRICT_RETIRED_OVERLAY", "false")) in ("1", "true", "yes")
 const FREEZE_AFTER_ANY_PLOT_027 = lowercase(get(ENV, "ATTEMPT027_FREEZE_AFTER_ANY_PLOT", "false")) in ("1", "true", "yes")
 const COLOR_RETURNTIME_MAXIMA_027 = lowercase(get(ENV, "ATTEMPT027_COLOR_RETURNTIME_MAXIMA", "false")) in ("1", "true", "yes")
+const FLOOD_COMPONENT_COLORS_027 = lowercase(get(ENV, "ATTEMPT027_FLOOD_COMPONENT_COLORS", "false")) in ("1", "true", "yes")
 const RUN_COLUMNS_025 = lowercase(get(ENV, "ATTEMPT025_RUN_COLUMNS", "true")) in ("1", "true", "yes")
 const WRITE_MERGED_RESULTS_025 = lowercase(get(ENV, "ATTEMPT025_WRITE_MERGED_RESULTS", "true")) in ("1", "true", "yes")
 const WRITE_ITERATE_STATS_025 = lowercase(get(ENV, "ATTEMPT025_WRITE_ITERATE_STATS", "true")) in ("1", "true", "yes")
@@ -613,6 +614,81 @@ function segments_to_polyline_025(segments::Vector{NTuple{4, Float64}})
     return xs, ys
 end
 
+@inline function segment_endpoint_key_027(x::Float64, y::Float64)
+    return (round(Int, x * 1.0e12), round(Int, y * 1.0e12))
+end
+
+function flood_component_colors_027(
+    white_segments::Vector{NTuple{4, Float64}},
+    cyan_segments::Vector{NTuple{4, Float64}},
+    red_segments::Vector{NTuple{4, Float64}},
+)
+    total_segments = length(white_segments) + length(cyan_segments) + length(red_segments)
+    total_segments == 0 && return white_segments, cyan_segments, red_segments
+
+    all_segments = Vector{NTuple{4, Float64}}(undef, total_segments)
+    segment_colors = Vector{UInt8}(undef, total_segments) # 1 white, 2 cyan, 3 red
+    endpoint_to_segments = Dict{Tuple{Int, Int}, Vector{Int}}()
+
+    idx = 0
+    for (segments, color) in ((white_segments, UInt8(1)), (cyan_segments, UInt8(2)), (red_segments, UInt8(3)))
+        for segment in segments
+            idx += 1
+            all_segments[idx] = segment
+            segment_colors[idx] = color
+            x1, y1, x2, y2 = segment
+            key1 = segment_endpoint_key_027(x1, y1)
+            key2 = segment_endpoint_key_027(x2, y2)
+            push!(get!(endpoint_to_segments, key1, Int[]), idx)
+            push!(get!(endpoint_to_segments, key2, Int[]), idx)
+        end
+    end
+
+    visited = falses(total_segments)
+    final_white = NTuple{4, Float64}[]
+    final_cyan = NTuple{4, Float64}[]
+    final_red = NTuple{4, Float64}[]
+
+    stack = Int[]
+    component = Int[]
+    for start_idx in 1:total_segments
+        visited[start_idx] && continue
+        empty!(stack)
+        empty!(component)
+        push!(stack, start_idx)
+        has_cyan = false
+        while !isempty(stack)
+            seg_idx = pop!(stack)
+            visited[seg_idx] && continue
+            visited[seg_idx] = true
+            push!(component, seg_idx)
+            color = segment_colors[seg_idx]
+            has_cyan = has_cyan || (color == UInt8(2))
+
+            x1, y1, x2, y2 = all_segments[seg_idx]
+            for key in (segment_endpoint_key_027(x1, y1), segment_endpoint_key_027(x2, y2))
+                for neighbor in get(endpoint_to_segments, key, Int[])
+                    visited[neighbor] || push!(stack, neighbor)
+                end
+            end
+        end
+
+        for seg_idx in component
+            color = segment_colors[seg_idx]
+            segment = all_segments[seg_idx]
+            if has_cyan
+                push!(final_cyan, segment)
+            elseif color == UInt8(3)
+                push!(final_red, segment)
+            else
+                push!(final_white, segment)
+            end
+        end
+    end
+
+    return final_white, final_cyan, final_red
+end
+
 function write_iterate_stats_025(path::String, stats::Vector{IterateStats25})
     open(path, "w") do io
         println(io, "nominal_iterate\tmissing_data_squares\tconstant_sign_squares\tincremented_squares\tcontoured_squares\temitted_segments")
@@ -639,6 +715,8 @@ function build_retired_overlay_figure_027(
     excluded_segments::Vector{NTuple{4, Float64}},
 )
     title_suffix =
+        FLOOD_COMPONENT_COLORS_027 ?
+        "component flood: cyan absorbs connected white and red only" :
         FREEZE_AFTER_ANY_PLOT_027 ?
         "freeze square after first plotted contour of any color" :
         !RETIRE_ON_SKIP_027 ?
@@ -909,6 +987,14 @@ function main()
                 local_excluded,
                 return_time_local_max_masks,
             )
+            if local_accepted !== nothing && FLOOD_COMPONENT_COLORS_027
+                new_segments, new_cyan_segments, local_excluded =
+                    flood_component_colors_027(
+                        new_segments,
+                        new_cyan_segments,
+                        local_excluded === nothing ? NTuple{4, Float64}[] : local_excluded,
+                    )
+            end
             local_accepted !== nothing && append!(accepted_segments, new_segments)
             local_accepted !== nothing && append!(cyan_segments, new_cyan_segments)
         end
