@@ -23,6 +23,7 @@ const OVERLAY_ITERATE_END_025 = min(
     ATTEMPT025_PLOT_ITERATE_CAP,
     parse(Int, get(ENV, "ATTEMPT027_OVERLAY_ITERATE_END", string(ATTEMPT025_PLOT_ITERATE_CAP))),
 )
+const STRICT_RETIRED_OVERLAY_027 = lowercase(get(ENV, "ATTEMPT027_STRICT_RETIRED_OVERLAY", "false")) in ("1", "true", "yes")
 const RUN_COLUMNS_025 = lowercase(get(ENV, "ATTEMPT025_RUN_COLUMNS", "true")) in ("1", "true", "yes")
 const WRITE_MERGED_RESULTS_025 = lowercase(get(ENV, "ATTEMPT025_WRITE_MERGED_RESULTS", "true")) in ("1", "true", "yes")
 const WRITE_ITERATE_STATS_025 = lowercase(get(ENV, "ATTEMPT025_WRITE_ITERATE_STATS", "true")) in ("1", "true", "yes")
@@ -41,6 +42,7 @@ legend_path_025() = joinpath(ATTEMPT25_ROOT, "$(CONTOUR_OUTPUT_TAG_025)_iterate_
 plot_path_025() = joinpath(ATTEMPT25_ROOT, "$(CONTOUR_OUTPUT_TAG_025)_contours.png")
 iterate_stats_path_025() = joinpath(ATTEMPT25_ROOT, "$(CONTOUR_OUTPUT_TAG_025)_iterate_stats.tsv")
 increment_counts_path_025() = joinpath(ATTEMPT25_ROOT, "$(CONTOUR_OUTPUT_TAG_025)_increment_counts.tsv")
+cell_linear_index_027(j::Int, i::Int, n_alpha_cells::Int) = (j - 1) * n_alpha_cells + i
 
 struct SquareEvaluation25
     status::UInt8
@@ -617,12 +619,16 @@ function build_retired_overlay_figure_027(
     accepted_segments::Vector{NTuple{4, Float64}},
     excluded_segments::Vector{NTuple{4, Float64}},
 )
+    title_suffix =
+        STRICT_RETIRED_OVERLAY_027 ?
+        "only red at first detected slip per square; no white before or after" :
+        "retired after first skip"
     fig = Figure(size=(ATTEMPT025_FIG_WIDTH, ATTEMPT025_FIG_HEIGHT), backgroundcolor=:black)
     ax = Axis(
         fig[1, 1];
         xlabel="alpha",
         ylabel="lambda",
-        title="Shimizu-Morioka |x|-max contours, nominal iterates $(OVERLAY_ITERATE_START_025):$(OVERLAY_ITERATE_END_025), retired after first skip",
+        title="Shimizu-Morioka |x|-max contours, nominal iterates $(OVERLAY_ITERATE_START_025):$(OVERLAY_ITERATE_END_025), $(title_suffix)",
         backgroundcolor=:black,
         xlabelcolor=:white,
         ylabelcolor=:white,
@@ -654,15 +660,36 @@ function build_retired_overlay_figure_027(
     return fig
 end
 
+function filter_strict_retired_segments_027(
+    accepted_segments::Vector{NTuple{4, Float64}},
+    accepted_segment_cell_ids::Vector{Int},
+    retired_cells::BitMatrix,
+)
+    n_alpha_cells = size(retired_cells, 2)
+    kept_segments = NTuple{4, Float64}[]
+    sizehint!(kept_segments, length(accepted_segments))
+
+    @inbounds for idx in eachindex(accepted_segments)
+        cell_id = accepted_segment_cell_ids[idx]
+        j = fld(cell_id - 1, n_alpha_cells) + 1
+        i = mod(cell_id - 1, n_alpha_cells) + 1
+        retired_cells[j, i] && continue
+        push!(kept_segments, accepted_segments[idx])
+    end
+
+    return kept_segments
+end
+
 function process_nominal_iterate_027(
     nominal_iterate::Int,
     dot_grids::Vector{Matrix{Float64}},
     time_grids::Vector{Matrix{Float64}},
     skip_state::SkipState25,
     retired_cells::BitMatrix,
+    accepted_segments::Union{Nothing, Vector{NTuple{4, Float64}}}=nothing,
+    accepted_segment_cell_ids::Union{Nothing, Vector{Int}}=nothing,
     excluded_segments::Union{Nothing, Vector{NTuple{4, Float64}}}=nothing,
 )
-    segments = NTuple{4, Float64}[]
     stats = zero_iterate_stats_025()
     n_lambda_cells = length(LAMBDAS_025) - 1
     n_alpha_cells = length(ALPHAS_025) - 1
@@ -706,10 +733,13 @@ function process_nominal_iterate_027(
                 continue
             end
 
+            accepted_segments === nothing && continue
             x_tl = Float64(ALPHAS_025[i])
             x_tr = Float64(ALPHAS_025[i + 1])
+            cell_id = cell_linear_index_027(j, i, n_alpha_cells)
+            segment_start = length(accepted_segments) + 1
             added = append_march_square_zero_segments_025!(
-                segments,
+                accepted_segments,
                 evaluation.current_dot,
                 x_tl,
                 y_tl,
@@ -721,13 +751,21 @@ function process_nominal_iterate_027(
                 y_bl,
             )
             if added > 0
+                if accepted_segment_cell_ids !== nothing
+                    sizehint!(accepted_segment_cell_ids, length(accepted_segment_cell_ids) + added)
+                    for _ in 1:added
+                        push!(accepted_segment_cell_ids, cell_id)
+                    end
+                end
                 stats.contoured_squares += 1
                 stats.emitted_segments += added
+            elseif accepted_segments !== nothing
+                resize!(accepted_segments, segment_start - 1)
             end
         end
     end
 
-    return segments, stats
+    return stats
 end
 
 function main()
@@ -754,23 +792,28 @@ function main()
     skip_state = initialize_skip_state_025()
     retired_cells = falses(length(LAMBDAS_025) - 1, length(ALPHAS_025) - 1)
     accepted_segments = NTuple{4, Float64}[]
+    accepted_segment_cell_ids = Int[]
     excluded_segments = NTuple{4, Float64}[]
     iterate_stats = [zero_iterate_stats_025() for _ in PLOT_ITERATES_025]
 
     for nominal_iterate in PLOT_ITERATES_025
+        local_accepted = nominal_iterate >= OVERLAY_ITERATE_START_025 && nominal_iterate <= OVERLAY_ITERATE_END_025 ? accepted_segments : nothing
+        local_accepted_ids =
+            local_accepted === nothing || !STRICT_RETIRED_OVERLAY_027 ? nothing : accepted_segment_cell_ids
         local_excluded = nominal_iterate >= OVERLAY_ITERATE_START_025 ? NTuple{4, Float64}[] : nothing
-        segments, stats = process_nominal_iterate_027(
+        stats = process_nominal_iterate_027(
             nominal_iterate,
             dot_grids,
             time_grids,
             skip_state,
             retired_cells,
+            local_accepted,
+            local_accepted_ids,
             local_excluded,
         )
         iterate_stats[nominal_iterate] = stats
 
-        if nominal_iterate >= OVERLAY_ITERATE_START_025 && nominal_iterate <= OVERLAY_ITERATE_END_025
-            append!(accepted_segments, segments)
+        if nominal_iterate >= OVERLAY_ITERATE_START_025
             local_excluded !== nothing && append!(excluded_segments, local_excluded)
         end
 
@@ -789,7 +832,11 @@ function main()
 
     WRITE_ITERATE_STATS_025 && write_iterate_stats_025(iterate_stats_path_025(), iterate_stats)
 
-    fig = build_retired_overlay_figure_027(accepted_segments, excluded_segments)
+    final_accepted_segments =
+        STRICT_RETIRED_OVERLAY_027 ?
+        filter_strict_retired_segments_027(accepted_segments, accepted_segment_cell_ids, retired_cells) :
+        accepted_segments
+    fig = build_retired_overlay_figure_027(final_accepted_segments, excluded_segments)
     save(plot_path_025(), fig; px_per_unit=ATTEMPT025_PX_PER_UNIT)
 
     usable = 0
