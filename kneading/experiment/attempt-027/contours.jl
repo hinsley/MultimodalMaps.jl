@@ -23,6 +23,7 @@ const OVERLAY_ITERATE_END_025 = min(
     ATTEMPT025_PLOT_ITERATE_CAP,
     parse(Int, get(ENV, "ATTEMPT027_OVERLAY_ITERATE_END", string(ATTEMPT025_PLOT_ITERATE_CAP))),
 )
+const RETIRE_ON_SKIP_027 = lowercase(get(ENV, "ATTEMPT027_RETIRE_ON_SKIP", "true")) in ("1", "true", "yes")
 const STRICT_RETIRED_OVERLAY_027 = lowercase(get(ENV, "ATTEMPT027_STRICT_RETIRED_OVERLAY", "false")) in ("1", "true", "yes")
 const RUN_COLUMNS_025 = lowercase(get(ENV, "ATTEMPT025_RUN_COLUMNS", "true")) in ("1", "true", "yes")
 const WRITE_MERGED_RESULTS_025 = lowercase(get(ENV, "ATTEMPT025_WRITE_MERGED_RESULTS", "true")) in ("1", "true", "yes")
@@ -620,6 +621,8 @@ function build_retired_overlay_figure_027(
     excluded_segments::Vector{NTuple{4, Float64}},
 )
     title_suffix =
+        !RETIRE_ON_SKIP_027 ?
+        "no square retirement; slips red, shifted contours continue in white" :
         STRICT_RETIRED_OVERLAY_027 ?
         "only red at first detected slip per square; no white before or after" :
         "retired after first skip"
@@ -797,20 +800,35 @@ function main()
     iterate_stats = [zero_iterate_stats_025() for _ in PLOT_ITERATES_025]
 
     for nominal_iterate in PLOT_ITERATES_025
-        local_accepted = nominal_iterate >= OVERLAY_ITERATE_START_025 && nominal_iterate <= OVERLAY_ITERATE_END_025 ? accepted_segments : nothing
+        local_accepted =
+            nominal_iterate >= OVERLAY_ITERATE_START_025 && nominal_iterate <= OVERLAY_ITERATE_END_025 ?
+            accepted_segments :
+            nothing
         local_accepted_ids =
             local_accepted === nothing || !STRICT_RETIRED_OVERLAY_027 ? nothing : accepted_segment_cell_ids
         local_excluded = nominal_iterate >= OVERLAY_ITERATE_START_025 ? NTuple{4, Float64}[] : nothing
-        stats = process_nominal_iterate_027(
-            nominal_iterate,
-            dot_grids,
-            time_grids,
-            skip_state,
-            retired_cells,
-            local_accepted,
-            local_accepted_ids,
-            local_excluded,
-        )
+        if RETIRE_ON_SKIP_027
+            stats = process_nominal_iterate_027(
+                nominal_iterate,
+                dot_grids,
+                time_grids,
+                skip_state,
+                retired_cells,
+                local_accepted,
+                local_accepted_ids,
+                local_excluded,
+            )
+        else
+            new_segments, stats = process_nominal_iterate_025(
+                nominal_iterate,
+                dot_grids,
+                time_grids,
+                skip_state,
+                nothing,
+                local_excluded,
+            )
+            local_accepted !== nothing && append!(accepted_segments, new_segments)
+        end
         iterate_stats[nominal_iterate] = stats
 
         if nominal_iterate >= OVERLAY_ITERATE_START_025
@@ -833,7 +851,7 @@ function main()
     WRITE_ITERATE_STATS_025 && write_iterate_stats_025(iterate_stats_path_025(), iterate_stats)
 
     final_accepted_segments =
-        STRICT_RETIRED_OVERLAY_027 ?
+        RETIRE_ON_SKIP_027 && STRICT_RETIRED_OVERLAY_027 ?
         filter_strict_retired_segments_027(accepted_segments, accepted_segment_cell_ids, retired_cells) :
         accepted_segments
     fig = build_retired_overlay_figure_027(final_accepted_segments, excluded_segments)
