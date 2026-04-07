@@ -13,7 +13,7 @@ The goal is not a sweep. It is to verify that a local critical point on the hook
 3. differentiated correctly with return-time shift included, and
 4. cross-checked against `SciMLSensitivity.jl` first-order forward sensitivities.
 
-This prototype uses the positive-`x` `|x|`-maxima section, then filters to the `next_x < 0` hook subbranch before building the Newton solve. The section curve used by Newton is an exact natural cubic spline through that sampled subbranch.
+This prototype uses the positive-`x` `|x|`-maxima section, then filters to the `next_x < 0` hook subbranch before building the Newton solve. The section curve used by Newton is an exact natural cubic spline through that sampled subbranch. The current default target is the first discrete local minimum of `F(s) = x_{n+1}^2` along that filtered branch, with the extremum type controlled by `ATTEMPT028_TARGET_EXTREMUM`.
 
 Files written by `main.jl`:
 

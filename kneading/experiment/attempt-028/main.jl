@@ -33,6 +33,7 @@ const ATTEMPT028_EPS0 = parse(Float64, get(ENV, "ATTEMPT028_EPS0", "1e-7"))
 const ATTEMPT028_MAX_STATE = parse(Float64, get(ENV, "ATTEMPT028_MAX_STATE", "200.0"))
 const ATTEMPT028_MIN_SECTION_X = parse(Float64, get(ENV, "ATTEMPT028_MIN_SECTION_X", "1e-5"))
 const ATTEMPT028_TARGET_NEXT_SIGN = parse(Int, get(ENV, "ATTEMPT028_TARGET_NEXT_SIGN", "-1"))
+const ATTEMPT028_TARGET_EXTREMUM_RAW = lowercase(get(ENV, "ATTEMPT028_TARGET_EXTREMUM", "minimum"))
 
 const ATTEMPT028_FIT_WINDOW = parse(Int, get(ENV, "ATTEMPT028_FIT_WINDOW", "15"))
 const ATTEMPT028_FIT_DEGREE = parse(Int, get(ENV, "ATTEMPT028_FIT_DEGREE", "4"))
@@ -58,6 +59,18 @@ const ATTEMPT028_SUMMARY_PATH = joinpath(
     ATTEMPT028_ROOT,
     "alpha0p4_lambda0p7_B0_hook_newton_summary.md",
 )
+
+@inline function target_is_minimum_028()
+    if ATTEMPT028_TARGET_EXTREMUM_RAW in ("minimum", "min")
+        return true
+    elseif ATTEMPT028_TARGET_EXTREMUM_RAW in ("maximum", "max")
+        return false
+    end
+    error("ATTEMPT028_TARGET_EXTREMUM must be one of: minimum, min, maximum, max")
+end
+
+@inline target_extremum_label_028() = target_is_minimum_028() ? "minimum" : "maximum"
+@inline target_curvature_sign_028() = target_is_minimum_028() ? 1.0 : -1.0
 
 struct BranchPoint028
     source_index::Int
@@ -397,17 +410,28 @@ function initial_guess_from_branch_028(branch::Vector{BranchPoint028})
     branch_r = [point.next_r for point in branch]
     candidates = Int[]
     for i in 2:(length(branch) - 1)
-        if branch_r[i] >= branch_r[i - 1] && branch_r[i] >= branch_r[i + 1]
+        if target_is_minimum_028()
+            if branch_r[i] <= branch_r[i - 1] && branch_r[i] <= branch_r[i + 1]
+                push!(candidates, i)
+            end
+        elseif branch_r[i] >= branch_r[i - 1] && branch_r[i] >= branch_r[i + 1]
             push!(candidates, i)
         end
     end
-    center_index = isempty(candidates) ? argmax(branch_r) : candidates[argmax(branch_r[candidates])]
+    if isempty(candidates)
+        center_index = target_is_minimum_028() ? argmin(branch_r) : argmax(branch_r)
+    elseif target_is_minimum_028()
+        center_index = first(candidates)
+    else
+        center_index = first(candidates)
+    end
     s0 = branch_s[center_index]
     lo = max(1, center_index - 1)
     hi = min(length(branch), center_index + 1)
     if hi - lo + 1 >= 3
         quad_fit = fit_shifted_polynomial_028(branch_s[lo:hi], branch_r[lo:hi], s0)
-        if length(quad_fit.coeffs) >= 3 && quad_fit.coeffs[3] < 0.0
+        curvature_ok = target_is_minimum_028() ? quad_fit.coeffs[3] > 0.0 : quad_fit.coeffs[3] < 0.0
+        if length(quad_fit.coeffs) >= 3 && curvature_ok
             vertex = s0 - quad_fit.coeffs[2] / (2.0 * quad_fit.coeffs[3])
             if quad_fit.xmin <= vertex <= quad_fit.xmax
                 s0 = vertex
@@ -700,6 +724,7 @@ function run_damped_newton_028(alpha::Float64, lambda::Float64, s0::Float64, spl
         hessian = evaluation.second_derivative
 
         if abs(gradient) <= ATTEMPT028_NEWTON_GRAD_TOL
+            target_curvature_sign_028() * hessian > 0.0 || error("Newton landed on the wrong extremum type at s=$(current_s)")
             push!(
                 trace,
                 NewtonTrace028(
@@ -734,7 +759,7 @@ function run_damped_newton_028(alpha::Float64, lambda::Float64, s0::Float64, spl
             try
                 candidate_eval = evaluate_return_map_028(alpha, lambda, candidate_s, spline, target_next_sign)
                 if abs(candidate_eval.first_derivative) < abs(gradient) &&
-                   candidate_eval.second_derivative < 0.0 &&
+                   target_curvature_sign_028() * candidate_eval.second_derivative > 0.0 &&
                    candidate_s >= candidate_eval.fit_xmin &&
                    candidate_s <= candidate_eval.fit_xmax
                     accepted = true
@@ -841,7 +866,7 @@ function write_summary_md_028(
         println(io)
         println(io, "- Collected a long `|x|`-maxima orbit from one unstable-manifold branch of the origin.")
         println(io, "- Kept positive-branch maxima and filtered to the `next_x < 0` hook subbranch before building the sampled map `s_n = x_n^2`, `F(s_n) = x_{n+1}^2`.")
-        println(io, "- Chose an initial hook guess from the sampled branch near a discrete local maximum of `F`.")
+        @printf(io, "- Chose an initial hook guess from the sampled branch near the first discrete local %s of `F` along the filtered subbranch.\n", target_extremum_label_028())
         println(io, "- Parameterized the local `y = 0` section curve as `(x, y, z) = (sqrt(s), 0, z(s))` via an exact natural cubic spline through the sampled subbranch.")
         println(io, "- Used event-defined derivatives with return-time shift for the next `|x|`-maximum.")
         println(io, "- Cross-checked the first derivative against `SciMLSensitivity.ODEForwardSensitivityProblem`.")
@@ -855,6 +880,7 @@ function write_summary_md_028(
         println(io)
         println(io, "Newton result:")
         println(io)
+        @printf(io, "- Target extremum type: `%s`\n", target_extremum_label_028())
         @printf(io, "- Initial guess `s0 = %.12f`\n", initial_guess)
         @printf(io, "- Final `s* = %.12f`\n", final_eval.s)
         @printf(io, "- Final `F(s*) = %.12f`\n", final_eval.value)
@@ -884,6 +910,7 @@ function main()
     println("  alpha  = $(ATTEMPT028_ALPHA)")
     println("  lambda = $(ATTEMPT028_LAMBDA)")
     println("  B      = $(ATTEMPT028_B)")
+    println("  target extremum = $(target_extremum_label_028())")
     println("  sample events target = $(ATTEMPT028_MAX_SAMPLE_EVENTS)")
     println()
 
