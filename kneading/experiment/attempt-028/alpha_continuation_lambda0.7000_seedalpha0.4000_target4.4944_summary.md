@@ -1,6 +1,6 @@
 # Attempt 028 Alpha Continuation of `|x|`-Map Local Minimum
 
-- Generated: `2026-04-07 00:52:39`
+- Generated: `2026-04-07 01:03:31`
 - Fixed `lambda = 0.700000`
 - Fixed `B = 0.0`
 - Alpha grid matches attempt-027: `range(0.0, 0.7, length=2000)`
@@ -16,12 +16,13 @@
 
 ## Continuation Outcome
 
-- Decreasing-alpha converged points: `50`
-- Increasing-alpha converged points: `27`
+- Decreasing-alpha converged points: `84`
+- Increasing-alpha converged points: `28`
+- Predictor-only fallback points: `1`
 - Break rows detected: `2`
-- First break: direction `decreasing`, alpha `0.382391195598`, status `Damped Newton failed to find an acceptable step from s=4.487281813993368`
-- Largest predictor correction: `7.324460e-03` at alpha `0.400000000000` (seed)
-- Largest adjacent state jump: `1.466802e-03` at alpha `0.385542771386` (decreasing)
+- First break: direction `decreasing`, alpha `0.370135067534`, status `corrector_failed: State blew up during event solve | predictor_failed: State blew up during event solve`
+- Largest predictor correction: `7.505185e-02` at alpha `0.409704852426` (increasing)
+- Largest adjacent state jump: `1.355393e+00` at alpha `0.409704852426` (increasing)
 
 Outputs:
 

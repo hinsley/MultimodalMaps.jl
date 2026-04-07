@@ -443,7 +443,6 @@ end
 
 function section_curve_data_028(s::Float64, spline::NaturalSpline028)
     s > 0.0 || error("Section parameter s must stay positive")
-    spline.xs[1] <= s <= spline.xs[end] || error("Section parameter outside sampled branch domain")
     x = sqrt(s)
     x > ATTEMPT028_MIN_SECTION_X || error("Section parameter too close to x = 0")
     current_state = @SVector [x, 0.0, spline_eval_028(spline, s)]
@@ -715,8 +714,6 @@ end
 function run_damped_newton_028(alpha::Float64, lambda::Float64, s0::Float64, spline::NaturalSpline028, target_next_sign::Int)
     trace = NewtonTrace028[]
     current_s = s0
-    domain_min = spline.xs[1]
-    domain_max = spline.xs[end]
 
     for iter in 1:ATTEMPT028_NEWTON_MAX_ITERS
         evaluation = evaluate_return_map_028(alpha, lambda, current_s, spline, target_next_sign)
@@ -751,17 +748,11 @@ function run_damped_newton_028(alpha::Float64, lambda::Float64, s0::Float64, spl
 
         while damping >= ATTEMPT028_NEWTON_MIN_DAMPING
             candidate_s = current_s + damping * raw_step
-            if !(domain_min < candidate_s < domain_max)
-                damping *= 0.5
-                continue
-            end
 
             try
                 candidate_eval = evaluate_return_map_028(alpha, lambda, candidate_s, spline, target_next_sign)
                 if abs(candidate_eval.first_derivative) < abs(gradient) &&
-                   target_curvature_sign_028() * candidate_eval.second_derivative > 0.0 &&
-                   candidate_s >= candidate_eval.fit_xmin &&
-                   candidate_s <= candidate_eval.fit_xmax
+                   target_curvature_sign_028() * candidate_eval.second_derivative > 0.0
                     accepted = true
                     break
                 end

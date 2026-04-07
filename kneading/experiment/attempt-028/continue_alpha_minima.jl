@@ -43,6 +43,7 @@ struct ContinuationRow028
     branch_s_max::Float64
     used_s0::Float64
     converged::Bool
+    predictor_only::Bool
     broke::Bool
     status::String
     accepted_steps::Int
@@ -93,6 +94,7 @@ function failure_row_028(direction::String, step_index::Int, alpha::Float64, pre
         NaN,
         NaN,
         false,
+        false,
         true,
         status,
         0,
@@ -114,6 +116,54 @@ function failure_row_028(direction::String, step_index::Int, alpha::Float64, pre
         NaN,
         NaN,
         NaN,
+    )
+end
+
+function predictor_row_028(
+    direction::String,
+    step_index::Int,
+    alpha::Float64,
+    predicted_s::Float64,
+    used_s0::Float64,
+    branch::Vector{BranchPoint028},
+    evaluation::ReturnMapEval028,
+    prev_state::Union{Nothing, SVector{3, Float64}},
+    status::String,
+    broke::Bool,
+)
+    state_jump = isnothing(prev_state) ? 0.0 : norm(evaluation.current_state - prev_state)
+    return ContinuationRow028(
+        direction,
+        step_index,
+        alpha,
+        predicted_s,
+        length(branch),
+        first(branch).s,
+        last(branch).s,
+        used_s0,
+        false,
+        true,
+        broke,
+        status,
+        0,
+        0,
+        evaluation.s,
+        evaluation.value,
+        evaluation.first_derivative,
+        evaluation.second_derivative,
+        0.0,
+        state_jump,
+        evaluation.event_time,
+        evaluation.current_state[1],
+        evaluation.current_state[2],
+        evaluation.current_state[3],
+        evaluation.event_state[1],
+        evaluation.event_state[2],
+        evaluation.event_state[3],
+        evaluation.event_time_d1,
+        evaluation.event_time_d2,
+        evaluation.sciml_first_derivative,
+        evaluation.first_derivative_mismatch,
     )
 end
 
@@ -173,6 +223,7 @@ function build_row_028(
         last(branch).s,
         used_s0,
         true,
+        false,
         broke,
         status,
         accepted_steps,
@@ -218,9 +269,7 @@ function continuation_direction_028(
         println("[$direction] alpha=$alpha_str predictor_s=$predictor_str")
         try
             branch, spline = branch_for_alpha_028(alpha, lambda)
-            s_lo = first(branch).s
-            s_hi = last(branch).s
-            used_s0 = clamp(predicted_s, s_lo + 1e-12, s_hi - 1e-12)
+            used_s0 = predicted_s
             trace, eval = run_damped_newton_028(alpha, lambda, used_s0, spline, ATTEMPT028_TARGET_NEXT_SIGN)
 
             for row in trace
@@ -260,10 +309,28 @@ function continuation_direction_028(
             predicted_s = eval.s
             prev_state = eval.current_state
         catch err
-            status = sprint(showerror, err)
-            push!(rows, failure_row_028(direction, step_index, alpha, predicted_s, status))
-            println("[$direction]   failed: $status")
-            break
+            corrector_status = sprint(showerror, err)
+            try
+                branch, spline = branch_for_alpha_028(alpha, lambda)
+                predictor_eval = evaluate_return_map_028(alpha, lambda, predicted_s, spline, ATTEMPT028_TARGET_NEXT_SIGN)
+                state_jump = norm(predictor_eval.current_state - prev_state)
+                broke = state_jump > ATTEMPT028_CONT_BREAK_STATE_JUMP
+                status = "predictor_only_after_corrector_failure: $corrector_status"
+                row = predictor_row_028(direction, step_index, alpha, predicted_s, predicted_s, branch, predictor_eval, prev_state, status, broke)
+                push!(rows, row)
+                jump_state_str = @sprintf("%.3e", state_jump)
+                println("[$direction]   predictor-only s=$predictor_str jump_state=$jump_state_str broke=$(broke ? "true" : "false")")
+                if broke
+                    println("[$direction]   stopping on jump break")
+                    break
+                end
+                prev_state = predictor_eval.current_state
+            catch predictor_err
+                status = "corrector_failed: $corrector_status | predictor_failed: $(sprint(showerror, predictor_err))"
+                push!(rows, failure_row_028(direction, step_index, alpha, predicted_s, status))
+                println("[$direction]   failed: $status")
+                break
+            end
         end
     end
 
@@ -273,11 +340,11 @@ end
 function write_results_tsv_028(path::String, seed_row::ContinuationRow028, rows::Vector{ContinuationRow028})
     ordered = [seed_row; sort(rows, by=row -> (row.alpha, row.direction == "seed" ? 0 : (row.direction == "decreasing" ? 1 : 2)))]
     open(path, "w") do io
-        println(io, "direction\tstep_index\talpha\tpredicted_s\tbranch_points\tbranch_s_min\tbranch_s_max\tused_s0\tconverged\tbroke\tstatus\taccepted_steps\ttotal_trace_rows\tfinal_s\tmap_value\tfirst_derivative\tsecond_derivative\tcorrection_abs\tstate_jump\tevent_time\tcurrent_x\tcurrent_y\tcurrent_z\tevent_x\tevent_y\tevent_z\tevent_time_d1\tevent_time_d2\tsciml_first_derivative\tfirst_derivative_mismatch")
+        println(io, "direction\tstep_index\talpha\tpredicted_s\tbranch_points\tbranch_s_min\tbranch_s_max\tused_s0\tconverged\tpredictor_only\tbroke\tstatus\taccepted_steps\ttotal_trace_rows\tfinal_s\tmap_value\tfirst_derivative\tsecond_derivative\tcorrection_abs\tstate_jump\tevent_time\tcurrent_x\tcurrent_y\tcurrent_z\tevent_x\tevent_y\tevent_z\tevent_time_d1\tevent_time_d2\tsciml_first_derivative\tfirst_derivative_mismatch")
         for row in ordered
             @printf(
                 io,
-                "%s\t%d\t%.12f\t%.12f\t%d\t%.12f\t%.12f\t%.12f\t%s\t%s\t%s\t%d\t%d\t%.12f\t%.12f\t%.12e\t%.12e\t%.12e\t%.12e\t%.12f\t%.12f\t%.12f\t%.12f\t%.12f\t%.12f\t%.12f\t%.12e\t%.12e\t%.12e\t%.12e\n",
+                "%s\t%d\t%.12f\t%.12f\t%d\t%.12f\t%.12f\t%.12f\t%s\t%s\t%s\t%s\t%d\t%d\t%.12f\t%.12f\t%.12e\t%.12e\t%.12e\t%.12e\t%.12f\t%.12f\t%.12f\t%.12f\t%.12f\t%.12f\t%.12f\t%.12e\t%.12e\t%.12e\t%.12e\n",
                 row.direction,
                 row.step_index,
                 row.alpha,
@@ -287,6 +354,7 @@ function write_results_tsv_028(path::String, seed_row::ContinuationRow028, rows:
                 row.branch_s_max,
                 row.used_s0,
                 row.converged ? "true" : "false",
+                row.predictor_only ? "true" : "false",
                 row.broke ? "true" : "false",
                 replace(row.status, '\t' => ' '),
                 row.accepted_steps,
@@ -358,6 +426,7 @@ end
 function write_summary_md_028(path::String, seed_row::ContinuationRow028, dec_rows::Vector{ContinuationRow028}, inc_rows::Vector{ContinuationRow028}, seed_index::Int)
     all_rows = [seed_row; dec_rows; inc_rows]
     ok_rows = [row for row in all_rows if row.converged]
+    predictor_only_rows = [row for row in all_rows if row.predictor_only]
     break_rows = [row for row in all_rows if row.broke && row.direction != "seed"]
     max_corr = isempty(ok_rows) ? nothing : ok_rows[argmax(row.correction_abs for row in ok_rows)]
     max_jump = isempty(ok_rows) ? nothing : ok_rows[argmax(row.state_jump for row in ok_rows)]
@@ -383,6 +452,7 @@ function write_summary_md_028(path::String, seed_row::ContinuationRow028, dec_ro
         println(io)
         @printf(io, "- Decreasing-alpha converged points: `%d`\n", count(row -> row.converged, dec_rows))
         @printf(io, "- Increasing-alpha converged points: `%d`\n", count(row -> row.converged, inc_rows))
+        @printf(io, "- Predictor-only fallback points: `%d`\n", length(predictor_only_rows))
         @printf(io, "- Break rows detected: `%d`\n", length(break_rows))
         if !isempty(break_rows)
             first_break = break_rows[1]
