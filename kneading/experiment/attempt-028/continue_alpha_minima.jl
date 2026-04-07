@@ -82,6 +82,41 @@ struct TraceRow028
     first_derivative_mismatch::Float64
 end
 
+function failure_row_028(direction::String, step_index::Int, alpha::Float64, predicted_s::Float64, status::String)
+    return ContinuationRow028(
+        direction,
+        step_index,
+        alpha,
+        predicted_s,
+        0,
+        NaN,
+        NaN,
+        NaN,
+        false,
+        true,
+        status,
+        0,
+        0,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+    )
+end
+
 function discrete_local_extrema_indices_028(values::Vector{Float64}; minimum::Bool)
     idxs = Int[]
     for i in 2:(length(values) - 1)
@@ -225,38 +260,9 @@ function continuation_direction_028(
             predicted_s = eval.s
             prev_state = eval.current_state
         catch err
-            push!(rows, ContinuationRow028(
-                direction,
-                step_index,
-                alpha,
-                predicted_s,
-                0,
-                NaN,
-                NaN,
-                NaN,
-                false,
-                true,
-                sprint(showerror, err),
-                0,
-                0,
-                NaN,
-                NaN,
-                NaN,
-                NaN,
-                NaN,
-                NaN,
-                NaN,
-                NaN,
-                NaN,
-                NaN,
-                NaN,
-                NaN,
-                NaN,
-                NaN,
-                NaN,
-                NaN,
-            ))
-            println("[$direction]   failed: $(sprint(showerror, err))")
+            status = sprint(showerror, err)
+            push!(rows, failure_row_028(direction, step_index, alpha, predicted_s, status))
+            println("[$direction]   failed: $status")
             break
         end
     end
