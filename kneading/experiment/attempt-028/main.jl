@@ -656,6 +656,105 @@ function solve_next_absx_event_sciml_028(
     return physical_state, physical_d1
 end
 
+function solve_next_absx_event_sciml_xfixed_028(
+    alpha::Float64,
+    lambda::Float64,
+    x0::Float64,
+    z0::Float64,
+    target_next_sign::Int,
+)
+    function current_state_from_parameter(param_x::T, fixed_z::T) where {T<:Real}
+        return @SVector [param_x, zero(T), fixed_z]
+    end
+
+    function current_state_derivative()
+        return @SVector [1.0, 0.0, 0.0]
+    end
+
+    function transformed_flow!(du, w, p, t)
+        α = p[1]
+        λ = p[2]
+        param_x = p[3]
+        fixed_z = p[4]
+        current_state = current_state_from_parameter(param_x, fixed_z)
+        u = @SVector [w[1] + current_state[1], w[2], w[3] + current_state[3]]
+        flow = shimizu_morioka_vector_028(u, α, λ)
+        du[1] = flow[1]
+        du[2] = flow[2]
+        du[3] = flow[3]
+        return nothing
+    end
+
+    p = [alpha, lambda, x0, z0]
+    ATTEMPT028_MIN_EVENT_TIME < ATTEMPT028_EVENT_T_END || error("ATTEMPT028_MIN_EVENT_TIME must stay below ATTEMPT028_EVENT_T_END")
+    hit = Ref(false)
+    armed = Ref(false)
+
+    condition(u, t, integrator) = armed[] ? u[2] : 1.0
+
+    function affect!(integrator)
+        param_x = integrator.p[3]
+        fixed_z = integrator.p[4]
+        current_state = current_state_from_parameter(param_x, fixed_z)
+        x = integrator.u[1] + current_state[1]
+        z = integrator.u[3] + current_state[3]
+        sign_ok = target_next_sign < 0 ? x < -ATTEMPT028_MIN_SECTION_X : x > ATTEMPT028_MIN_SECTION_X
+        if sign_ok && z > 1.0
+            hit[] = true
+            terminate!(integrator)
+        end
+    end
+
+    arm_cb = PresetTimeCallback([ATTEMPT028_MIN_EVENT_TIME], integrator -> begin
+        armed[] = true
+    end)
+    cont_cb = ContinuousCallback(
+        condition,
+        affect!;
+        rootfind=true,
+        save_positions=(false, false),
+    )
+    cb = CallbackSet(arm_cb, cont_cb)
+    prob = ODEForwardSensitivityProblem(
+        transformed_flow!,
+        zeros(3),
+        (0.0, ATTEMPT028_EVENT_T_END),
+        p,
+        ForwardSensitivity(),
+    )
+    sol = solve(
+        prob,
+        Vern9();
+        callback=cb,
+        adaptive=true,
+        dt=ATTEMPT028_EVENT_DT,
+        dtmax=ATTEMPT028_EVENT_DT,
+        abstol=ATTEMPT028_EVENT_ABSTOL,
+        reltol=ATTEMPT028_EVENT_RELTOL,
+        maxiters=ATTEMPT028_EVENT_MAXITERS,
+        save_start=false,
+        save_end=true,
+        save_everystep=false,
+    )
+
+    hit[] || error("SciMLSensitivity solve did not hit the next |x|-maximum")
+
+    w_final, sensitivity_matrix = extract_local_sensitivities(sol, length(sol.u), Val(true))
+    current_state = current_state_from_parameter(x0, z0)
+    current_state_d1 = current_state_derivative()
+    physical_state = @SVector [
+        w_final[1] + current_state[1],
+        w_final[2],
+        w_final[3] + current_state[3],
+    ]
+    physical_d1 = @SVector [
+        sensitivity_matrix[1, 3] + current_state_d1[1],
+        sensitivity_matrix[2, 3],
+        sensitivity_matrix[3, 3] + current_state_d1[3],
+    ]
+    return physical_state, physical_d1
+end
+
 function evaluate_return_map_028(alpha::Float64, lambda::Float64, s::Float64, spline::NaturalSpline028, target_next_sign::Int)
     current_state, current_d1, current_d2 = section_curve_data_028(s, spline)
     event_state, S1, S2, event_time = solve_next_absx_event_manual_028(
@@ -708,6 +807,69 @@ function evaluate_return_map_028(alpha::Float64, lambda::Float64, s::Float64, sp
         first_derivative_mismatch,
         spline.xs[1],
         spline.xs[end],
+    )
+end
+
+function evaluate_return_map_xfixed_028(alpha::Float64, lambda::Float64, x0::Float64, z0::Float64, target_next_sign::Int)
+    x0 > ATTEMPT028_MIN_SECTION_X || error("Initial x must stay positive and away from the section singularity")
+    current_state = @SVector [x0, 0.0, z0]
+    current_d1 = @SVector [1.0, 0.0, 0.0]
+    current_d2 = @SVector [0.0, 0.0, 0.0]
+
+    event_state, S1, S2, event_time = solve_next_absx_event_manual_028(
+        alpha,
+        lambda,
+        current_state,
+        current_d1,
+        current_d2,
+        target_next_sign,
+    )
+
+    flow = shimizu_morioka_vector_028(event_state, alpha, lambda)
+    jacobian = shimizu_morioka_jacobian_028(event_state, alpha, lambda)
+    JS1 = jacobian * S1
+    Jf = jacobian * flow
+
+    denom = flow[2]
+    abs(denom) > 1e-12 || error("Event-time derivative denominator nearly singular")
+
+    event_time_d1 = -S1[2] / denom
+    event_time_d2 = -(S2[2] + 2.0 * JS1[2] * event_time_d1 + Jf[2] * event_time_d1^2) / denom
+
+    event_state_d1 = S1 + flow * event_time_d1
+    event_state_d2 = S2 + 2.0 * JS1 * event_time_d1 + Jf * event_time_d1^2 + flow * event_time_d2
+
+    value = event_state[1]^2
+    first_derivative_x = 2.0 * event_state[1] * event_state_d1[1]
+    second_derivative_x = 2.0 * event_state_d1[1]^2 + 2.0 * event_state[1] * event_state_d2[1]
+
+    sciml_state, sciml_state_d1 = solve_next_absx_event_sciml_xfixed_028(alpha, lambda, x0, z0, target_next_sign)
+    sciml_flow = shimizu_morioka_vector_028(sciml_state, alpha, lambda)
+    sciml_event_time_d1 = -sciml_state_d1[2] / sciml_flow[2]
+    sciml_event_state_d1 = sciml_state_d1 + sciml_flow * sciml_event_time_d1
+    sciml_first_derivative_x = 2.0 * sciml_state[1] * sciml_event_state_d1[1]
+    first_derivative_mismatch = abs(first_derivative_x - sciml_first_derivative_x)
+
+    s = x0^2
+    first_derivative_s = first_derivative_x / (2.0 * x0)
+    second_derivative_s = second_derivative_x / (4.0 * x0^2) - first_derivative_x / (4.0 * x0^3)
+
+    return ReturnMapEval028(
+        s,
+        value,
+        first_derivative_s,
+        second_derivative_s,
+        event_time,
+        event_state,
+        current_state,
+        current_d1,
+        current_d2,
+        event_time_d1,
+        event_time_d2,
+        sciml_first_derivative_x / (2.0 * x0),
+        first_derivative_mismatch / (2.0 * x0),
+        x0,
+        x0,
     )
 end
 
@@ -788,6 +950,88 @@ function run_damped_newton_028(alpha::Float64, lambda::Float64, s0::Float64, spl
     end
 
     final_eval = evaluate_return_map_028(alpha, lambda, current_s, spline, target_next_sign)
+    return trace, final_eval
+end
+
+function run_damped_newton_xfixed_028(alpha::Float64, lambda::Float64, x0::Float64, z0::Float64, target_next_sign::Int)
+    trace = NewtonTrace028[]
+    current_x = x0
+
+    for iter in 1:ATTEMPT028_NEWTON_MAX_ITERS
+        evaluation = evaluate_return_map_xfixed_028(alpha, lambda, current_x, z0, target_next_sign)
+        gradient = 2.0 * current_x * evaluation.first_derivative
+        hessian = 2.0 * evaluation.first_derivative + 4.0 * current_x^2 * evaluation.second_derivative
+
+        if abs(gradient) <= ATTEMPT028_NEWTON_GRAD_TOL
+            target_curvature_sign_028() * hessian > 0.0 || error("Newton landed on the wrong extremum type at x=$(current_x)")
+            push!(
+                trace,
+                NewtonTrace028(
+                    iter,
+                    evaluation.s,
+                    evaluation.value,
+                    evaluation.first_derivative,
+                    evaluation.second_derivative,
+                    0.0,
+                    1.0,
+                    true,
+                    evaluation.sciml_first_derivative,
+                    evaluation.first_derivative_mismatch,
+                ),
+            )
+            return trace, evaluation
+        end
+
+        abs(hessian) > 1e-12 || error("Second derivative nearly singular during Newton refinement")
+        raw_step = -gradient / hessian
+        damping = 1.0
+        accepted = false
+        candidate_x = current_x
+
+        while damping >= ATTEMPT028_NEWTON_MIN_DAMPING
+            candidate_x = current_x + damping * raw_step
+
+            try
+                candidate_eval = evaluate_return_map_xfixed_028(alpha, lambda, candidate_x, z0, target_next_sign)
+                candidate_gradient = 2.0 * candidate_x * candidate_eval.first_derivative
+                candidate_hessian = 2.0 * candidate_eval.first_derivative + 4.0 * candidate_x^2 * candidate_eval.second_derivative
+                if abs(candidate_gradient) < abs(gradient) &&
+                   target_curvature_sign_028() * candidate_hessian > 0.0
+                    accepted = true
+                    break
+                end
+            catch
+            end
+            damping *= 0.5
+        end
+
+        push!(
+            trace,
+            NewtonTrace028(
+                iter,
+                evaluation.s,
+                evaluation.value,
+                evaluation.first_derivative,
+                evaluation.second_derivative,
+                raw_step,
+                damping,
+                accepted,
+                evaluation.sciml_first_derivative,
+                evaluation.first_derivative_mismatch,
+            ),
+        )
+
+        accepted || error("Damped Newton failed to find an acceptable step from x=$(current_x)")
+
+        current_x = candidate_x
+
+        if abs(damping * raw_step) <= ATTEMPT028_NEWTON_STEP_TOL
+            final_eval = evaluate_return_map_xfixed_028(alpha, lambda, current_x, z0, target_next_sign)
+            return trace, final_eval
+        end
+    end
+
+    final_eval = evaluate_return_map_xfixed_028(alpha, lambda, current_x, z0, target_next_sign)
     return trace, final_eval
 end
 

@@ -16,7 +16,7 @@ const ATTEMPT028_CONT_SEED_TARGET_S = parse(Float64, get(ENV, "ATTEMPT028_CONT_S
 const ATTEMPT028_CONT_BREAK_S_JUMP = parse(Float64, get(ENV, "ATTEMPT028_CONT_BREAK_S_JUMP", "0.05"))
 const ATTEMPT028_CONT_BREAK_STATE_JUMP = parse(Float64, get(ENV, "ATTEMPT028_CONT_BREAK_STATE_JUMP", "0.05"))
 const ATTEMPT028_CONT_MAX_STEPS_PER_DIRECTION = parse(Int, get(ENV, "ATTEMPT028_CONT_MAX_STEPS_PER_DIRECTION", "0"))
-const ATTEMPT028_CONT_CORRECT_EVERY = parse(Int, get(ENV, "ATTEMPT028_CONT_CORRECT_EVERY", "20"))
+const ATTEMPT028_CONT_CORRECT_EVERY = parse(Int, get(ENV, "ATTEMPT028_CONT_CORRECT_EVERY", "5"))
 
 const ATTEMPT028_CONT_ALPHAS = collect(range(
     ATTEMPT028_CONT_ALPHA_MIN,
@@ -126,7 +126,6 @@ function predictor_row_028(
     alpha::Float64,
     predicted_s::Float64,
     used_s0::Float64,
-    branch::Vector{BranchPoint028},
     evaluation::ReturnMapEval028,
     prev_state::Union{Nothing, SVector{3, Float64}},
     status::String,
@@ -138,9 +137,9 @@ function predictor_row_028(
         step_index,
         alpha,
         predicted_s,
-        length(branch),
-        first(branch).s,
-        last(branch).s,
+        0,
+        NaN,
+        NaN,
         used_s0,
         false,
         true,
@@ -173,7 +172,6 @@ function carried_predictor_row_028(
     step_index::Int,
     alpha::Float64,
     predicted_s::Float64,
-    branch::Vector{BranchPoint028},
     current_state::SVector{3, Float64},
     prev_state::Union{Nothing, SVector{3, Float64}},
     status::String,
@@ -185,9 +183,9 @@ function carried_predictor_row_028(
         step_index,
         alpha,
         predicted_s,
-        length(branch),
-        first(branch).s,
-        last(branch).s,
+        0,
+        NaN,
+        NaN,
         predicted_s,
         false,
         true,
@@ -245,21 +243,12 @@ function seed_from_target_minimum_028(branch::Vector{BranchPoint028}, target_s::
     return chosen, branch[chosen].s
 end
 
-function nearest_sampled_minimum_028(branch::Vector{BranchPoint028}, target_s::Float64)
-    branch_r = [point.next_r for point in branch]
-    mins = discrete_local_extrema_indices_028(branch_r; minimum=true)
-    isempty(mins) && return nothing
-    chosen = mins[argmin(abs.([branch[i].s - target_s for i in mins]))]
-    return chosen, branch[chosen].s
-end
-
 function build_row_028(
     direction::String,
     step_index::Int,
     alpha::Float64,
     predicted_s::Float64,
     used_s0::Float64,
-    branch::Vector{BranchPoint028},
     trace::Vector{NewtonTrace028},
     evaluation::ReturnMapEval028,
     prev_state::Union{Nothing, SVector{3, Float64}},
@@ -274,9 +263,9 @@ function build_row_028(
         step_index,
         alpha,
         predicted_s,
-        length(branch),
-        first(branch).s,
-        last(branch).s,
+        0,
+        NaN,
+        NaN,
         used_s0,
         true,
         false,
@@ -312,7 +301,8 @@ function continuation_direction_028(
 )
     rows = ContinuationRow028[]
     traces = TraceRow028[]
-    predicted_s = seed_eval.s
+    predicted_x = seed_eval.current_state[1]
+    predicted_z = seed_eval.current_state[3]
     prev_state = seed_eval.current_state
 
     if ATTEMPT028_CONT_MAX_STEPS_PER_DIRECTION > 0
@@ -321,46 +311,20 @@ function continuation_direction_028(
 
     for (step_index, alpha) in enumerate(alphas)
         alpha_str = @sprintf("%.12f", alpha)
-        predictor_str = @sprintf("%.12f", predicted_s)
-        println("[$direction] alpha=$alpha_str predictor_s=$predictor_str")
+        predictor_x_str = @sprintf("%.12f", predicted_x)
+        println("[$direction] alpha=$alpha_str predictor_x=$predictor_x_str")
         try
-            branch, spline = branch_for_alpha_028(alpha, lambda)
             do_corrector = ATTEMPT028_CONT_CORRECT_EVERY <= 1 || (step_index % ATTEMPT028_CONT_CORRECT_EVERY == 0)
             if !do_corrector
-                current_state, _, _ = section_curve_data_028(predicted_s, spline)
-                state_jump = norm(current_state - prev_state)
-                broke = state_jump > ATTEMPT028_CONT_BREAK_STATE_JUMP
+                current_state = @SVector [predicted_x, 0.0, predicted_z]
                 status = "predictor_only_cadence_skip"
-                row = carried_predictor_row_028(direction, step_index, alpha, predicted_s, branch, current_state, prev_state, status, broke)
+                row = carried_predictor_row_028(direction, step_index, alpha, predicted_x^2, current_state, prev_state, status, false)
                 push!(rows, row)
-                jump_state_str = @sprintf("%.3e", state_jump)
-                println("[$direction]   predictor-only cadence skip s=$predictor_str jump_state=$jump_state_str broke=$(broke ? "true" : "false")")
-                if broke
-                    println("[$direction]   stopping on jump break")
-                    break
-                end
-                prev_state = current_state
+                println("[$direction]   predictor-only cadence skip x=$predictor_x_str (initial condition held fixed)")
                 continue
             end
-            nearest_min = nearest_sampled_minimum_028(branch, predicted_s)
-            if isnothing(nearest_min)
-                current_state, _, _ = section_curve_data_028(predicted_s, spline)
-                state_jump = norm(current_state - prev_state)
-                broke = state_jump > ATTEMPT028_CONT_BREAK_STATE_JUMP
-                status = "predictor_only_no_discrete_minimum"
-                row = carried_predictor_row_028(direction, step_index, alpha, predicted_s, branch, current_state, prev_state, status, broke)
-                push!(rows, row)
-                jump_state_str = @sprintf("%.3e", state_jump)
-                println("[$direction]   predictor-only (no sampled minimum) s=$predictor_str jump_state=$jump_state_str broke=$(broke ? "true" : "false")")
-                if broke
-                    println("[$direction]   stopping on jump break")
-                    break
-                end
-                prev_state = current_state
-                continue
-            end
-            _, used_s0 = nearest_min
-            trace, eval = run_damped_newton_028(alpha, lambda, used_s0, spline, ATTEMPT028_TARGET_NEXT_SIGN)
+            used_x0 = predicted_x
+            trace, eval = run_damped_newton_xfixed_028(alpha, lambda, used_x0, predicted_z, ATTEMPT028_TARGET_NEXT_SIGN)
 
             for row in trace
                 push!(traces, TraceRow028(
@@ -380,47 +344,33 @@ function continuation_direction_028(
                 ))
             end
 
-            correction_abs = abs(eval.s - predicted_s)
+            correction_abs = abs(eval.s - predicted_x^2)
             state_jump = norm(eval.current_state - prev_state)
             broke = correction_abs > ATTEMPT028_CONT_BREAK_S_JUMP || state_jump > ATTEMPT028_CONT_BREAK_STATE_JUMP
             status = broke ? "jump_break" : "ok"
-            row = build_row_028(direction, step_index, alpha, predicted_s, used_s0, branch, trace, eval, prev_state, status, broke)
+            row = build_row_028(direction, step_index, alpha, predicted_x^2, used_x0^2, trace, eval, prev_state, status, broke)
             push!(rows, row)
+            x_str = @sprintf("%.12f", eval.current_state[1])
             s_str = @sprintf("%.12f", eval.s)
             fp_str = @sprintf("%.3e", eval.first_derivative)
             jump_s_str = @sprintf("%.3e", correction_abs)
             jump_state_str = @sprintf("%.3e", state_jump)
-            println("[$direction]   converged s=$s_str F'=$fp_str jump_s=$jump_s_str jump_state=$jump_state_str status=$status")
+            println("[$direction]   converged x=$x_str s=$s_str F'=$fp_str jump_s=$jump_s_str jump_state=$jump_state_str status=$status")
             if broke
                 println("[$direction]   stopping on jump break")
                 break
             end
 
-            predicted_s = eval.s
+            predicted_x = eval.current_state[1]
+            predicted_z = eval.current_state[3]
             prev_state = eval.current_state
         catch err
             corrector_status = sprint(showerror, err)
-            try
-                branch, spline = branch_for_alpha_028(alpha, lambda)
-                current_state, _, _ = section_curve_data_028(predicted_s, spline)
-                state_jump = norm(current_state - prev_state)
-                broke = state_jump > ATTEMPT028_CONT_BREAK_STATE_JUMP
-                status = "predictor_only_after_corrector_failure: $corrector_status"
-                row = carried_predictor_row_028(direction, step_index, alpha, predicted_s, branch, current_state, prev_state, status, broke)
-                push!(rows, row)
-                jump_state_str = @sprintf("%.3e", state_jump)
-                println("[$direction]   predictor-only after corrector failure s=$predictor_str jump_state=$jump_state_str broke=$(broke ? "true" : "false")")
-                if broke
-                    println("[$direction]   stopping on jump break")
-                    break
-                end
-                prev_state = current_state
-            catch branch_err
-                status = "corrector_failed: $corrector_status | branch_failed: $(sprint(showerror, branch_err))"
-                push!(rows, failure_row_028(direction, step_index, alpha, predicted_s, status))
-                println("[$direction]   failed: $status")
-                break
-            end
+            current_state = @SVector [predicted_x, 0.0, predicted_z]
+            status = "predictor_only_after_corrector_failure: $corrector_status"
+            row = carried_predictor_row_028(direction, step_index, alpha, predicted_x^2, current_state, prev_state, status, false)
+            push!(rows, row)
+            println("[$direction]   predictor-only after corrector failure x=$predictor_x_str (initial condition held fixed)")
         end
     end
 
@@ -530,7 +480,9 @@ function write_summary_md_028(path::String, seed_row::ContinuationRow028, dec_ro
         @printf(io, "- Alpha grid matches attempt-027: `range(%.1f, %.1f, length=%d)`\n", ATTEMPT028_CONT_ALPHA_MIN, ATTEMPT028_CONT_ALPHA_MAX, ATTEMPT028_CONT_N_ALPHA)
         @printf(io, "- Exact seed alpha: `%.6f`\n", ATTEMPT028_CONT_SEED_ALPHA)
         @printf(io, "- Seed target minimum guess near `s = %.4f`\n", ATTEMPT028_CONT_SEED_TARGET_S)
+        println(io, "- Corrector uses `x` as the Newton variable and keeps `z` fixed during each Newton solve")
         @printf(io, "- Corrector cadence: every `%d` alpha values\n", ATTEMPT028_CONT_CORRECT_EVERY)
+        println(io, "- On cadence-skipped alpha values, the full initial condition is held unchanged from the last corrected point")
         @printf(io, "- Break thresholds: `|Δs| > %.6f` or `||Δstate|| > %.6f`\n", ATTEMPT028_CONT_BREAK_S_JUMP, ATTEMPT028_CONT_BREAK_STATE_JUMP)
         println(io)
         println(io, "## Seed")
@@ -576,11 +528,19 @@ function main()
     println("  max steps per direction = $max_steps_label")
     println()
 
-    seed_branch, seed_spline = branch_for_alpha_028(ATTEMPT028_CONT_SEED_ALPHA, ATTEMPT028_CONT_LAMBDA)
+    seed_branch, _ = branch_for_alpha_028(ATTEMPT028_CONT_SEED_ALPHA, ATTEMPT028_CONT_LAMBDA)
     seed_index, seed_s0 = seed_from_target_minimum_028(seed_branch, ATTEMPT028_CONT_SEED_TARGET_S)
+    seed_x0 = seed_branch[seed_index].x
+    seed_z0 = seed_branch[seed_index].z
     println("Seed discrete minimum index = $seed_index")
     @printf("Seed discrete s0 = %.12f\n", seed_s0)
-    seed_trace, seed_eval = run_damped_newton_028(ATTEMPT028_CONT_SEED_ALPHA, ATTEMPT028_CONT_LAMBDA, seed_s0, seed_spline, ATTEMPT028_TARGET_NEXT_SIGN)
+    seed_trace, seed_eval = run_damped_newton_xfixed_028(
+        ATTEMPT028_CONT_SEED_ALPHA,
+        ATTEMPT028_CONT_LAMBDA,
+        seed_x0,
+        seed_z0,
+        ATTEMPT028_TARGET_NEXT_SIGN,
+    )
     @printf("Seed refined s* = %.12f\n", seed_eval.s)
     @printf("Seed current state = (%.12f, %.12f, %.12f)\n", seed_eval.current_state[1], seed_eval.current_state[2], seed_eval.current_state[3])
     println()
@@ -591,7 +551,6 @@ function main()
         ATTEMPT028_CONT_SEED_ALPHA,
         seed_s0,
         seed_s0,
-        seed_branch,
         seed_trace,
         seed_eval,
         nothing,
