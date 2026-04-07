@@ -167,6 +167,50 @@ function predictor_row_028(
     )
 end
 
+function carried_predictor_row_028(
+    direction::String,
+    step_index::Int,
+    alpha::Float64,
+    predicted_s::Float64,
+    branch::Vector{BranchPoint028},
+    prev_state::SVector{3, Float64},
+    status::String,
+)
+    return ContinuationRow028(
+        direction,
+        step_index,
+        alpha,
+        predicted_s,
+        length(branch),
+        first(branch).s,
+        last(branch).s,
+        predicted_s,
+        false,
+        true,
+        false,
+        status,
+        0,
+        0,
+        predicted_s,
+        NaN,
+        NaN,
+        NaN,
+        0.0,
+        0.0,
+        NaN,
+        prev_state[1],
+        prev_state[2],
+        prev_state[3],
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+    )
+end
+
 function discrete_local_extrema_indices_028(values::Vector{Float64}; minimum::Bool)
     idxs = Int[]
     for i in 2:(length(values) - 1)
@@ -193,6 +237,14 @@ function seed_from_target_minimum_028(branch::Vector{BranchPoint028}, target_s::
     branch_r = [point.next_r for point in branch]
     mins = discrete_local_extrema_indices_028(branch_r; minimum=true)
     isempty(mins) && error("No discrete local minima found on filtered branch")
+    chosen = mins[argmin(abs.([branch[i].s - target_s for i in mins]))]
+    return chosen, branch[chosen].s
+end
+
+function nearest_sampled_minimum_028(branch::Vector{BranchPoint028}, target_s::Float64)
+    branch_r = [point.next_r for point in branch]
+    mins = discrete_local_extrema_indices_028(branch_r; minimum=true)
+    isempty(mins) && return nothing
     chosen = mins[argmin(abs.([branch[i].s - target_s for i in mins]))]
     return chosen, branch[chosen].s
 end
@@ -269,7 +321,15 @@ function continuation_direction_028(
         println("[$direction] alpha=$alpha_str predictor_s=$predictor_str")
         try
             branch, spline = branch_for_alpha_028(alpha, lambda)
-            used_s0 = predicted_s
+            nearest_min = nearest_sampled_minimum_028(branch, predicted_s)
+            if isnothing(nearest_min)
+                status = "predictor_only_no_discrete_minimum"
+                row = carried_predictor_row_028(direction, step_index, alpha, predicted_s, branch, prev_state, status)
+                push!(rows, row)
+                println("[$direction]   predictor-only (no sampled minimum) s=$predictor_str")
+                continue
+            end
+            _, used_s0 = nearest_min
             trace, eval = run_damped_newton_028(alpha, lambda, used_s0, spline, ATTEMPT028_TARGET_NEXT_SIGN)
 
             for row in trace
@@ -312,21 +372,12 @@ function continuation_direction_028(
             corrector_status = sprint(showerror, err)
             try
                 branch, spline = branch_for_alpha_028(alpha, lambda)
-                predictor_eval = evaluate_return_map_028(alpha, lambda, predicted_s, spline, ATTEMPT028_TARGET_NEXT_SIGN)
-                state_jump = norm(predictor_eval.current_state - prev_state)
-                broke = state_jump > ATTEMPT028_CONT_BREAK_STATE_JUMP
                 status = "predictor_only_after_corrector_failure: $corrector_status"
-                row = predictor_row_028(direction, step_index, alpha, predicted_s, predicted_s, branch, predictor_eval, prev_state, status, broke)
+                row = carried_predictor_row_028(direction, step_index, alpha, predicted_s, branch, prev_state, status)
                 push!(rows, row)
-                jump_state_str = @sprintf("%.3e", state_jump)
-                println("[$direction]   predictor-only s=$predictor_str jump_state=$jump_state_str broke=$(broke ? "true" : "false")")
-                if broke
-                    println("[$direction]   stopping on jump break")
-                    break
-                end
-                prev_state = predictor_eval.current_state
-            catch predictor_err
-                status = "corrector_failed: $corrector_status | predictor_failed: $(sprint(showerror, predictor_err))"
+                println("[$direction]   predictor-only after corrector failure s=$predictor_str")
+            catch branch_err
+                status = "corrector_failed: $corrector_status | branch_failed: $(sprint(showerror, branch_err))"
                 push!(rows, failure_row_028(direction, step_index, alpha, predicted_s, status))
                 println("[$direction]   failed: $status")
                 break
