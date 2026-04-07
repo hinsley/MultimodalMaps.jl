@@ -84,15 +84,6 @@ struct TraceRow028
     first_derivative_mismatch::Float64
 end
 
-@inline function symmetry_identified_state_distance_028(
-    a::SVector{3, Float64},
-    b::SVector{3, Float64},
-)
-    direct = norm(a - b)
-    flipped = norm(a - @SVector [-b[1], -b[2], b[3]])
-    return min(direct, flipped)
-end
-
 function failure_row_028(direction::String, step_index::Int, alpha::Float64, predicted_s::Float64, status::String)
     return ContinuationRow028(
         direction,
@@ -140,7 +131,7 @@ function predictor_row_028(
     status::String,
     broke::Bool,
 )
-    state_jump = isnothing(prev_state) ? 0.0 : symmetry_identified_state_distance_028(evaluation.current_state, prev_state)
+    state_jump = isnothing(prev_state) ? 0.0 : norm(evaluation.current_state - prev_state)
     return ContinuationRow028(
         direction,
         step_index,
@@ -186,7 +177,7 @@ function carried_predictor_row_028(
     status::String,
     broke::Bool,
 )
-    state_jump = isnothing(prev_state) ? 0.0 : symmetry_identified_state_distance_028(current_state, prev_state)
+    state_jump = isnothing(prev_state) ? 0.0 : norm(current_state - prev_state)
     return ContinuationRow028(
         direction,
         step_index,
@@ -266,7 +257,7 @@ function build_row_028(
 )
     accepted_steps = count(row -> row.accepted, trace)
     correction_abs = abs(evaluation.s - predicted_s)
-    state_jump = isnothing(prev_state) ? 0.0 : symmetry_identified_state_distance_028(evaluation.current_state, prev_state)
+    state_jump = isnothing(prev_state) ? 0.0 : norm(evaluation.current_state - prev_state)
     return ContinuationRow028(
         direction,
         step_index,
@@ -354,7 +345,7 @@ function continuation_direction_028(
             end
 
             correction_abs = abs(eval.s - predicted_x^2)
-            state_jump = symmetry_identified_state_distance_028(eval.current_state, prev_state)
+            state_jump = norm(eval.current_state - prev_state)
             broke = correction_abs > ATTEMPT028_CONT_BREAK_S_JUMP || state_jump > ATTEMPT028_CONT_BREAK_STATE_JUMP
             status = broke ? "jump_break" : "ok"
             row = build_row_028(direction, step_index, alpha, predicted_x^2, used_x0^2, trace, eval, prev_state, status, broke)
@@ -492,7 +483,7 @@ function write_summary_md_028(path::String, seed_row::ContinuationRow028, dec_ro
         println(io, "- Corrector uses `x` as the Newton variable and keeps `z` fixed during each Newton solve")
         @printf(io, "- Corrector cadence: every `%d` alpha values\n", ATTEMPT028_CONT_CORRECT_EVERY)
         println(io, "- On cadence-skipped alpha values, the full initial condition is held unchanged from the last corrected point")
-        @printf(io, "- Break thresholds: `|Δs| > %.6f` or symmetry-identified `||Δstate|| > %.6f`\n", ATTEMPT028_CONT_BREAK_S_JUMP, ATTEMPT028_CONT_BREAK_STATE_JUMP)
+        @printf(io, "- Break thresholds: `|Δs| > %.6f` or `||Δstate|| > %.6f`\n", ATTEMPT028_CONT_BREAK_S_JUMP, ATTEMPT028_CONT_BREAK_STATE_JUMP)
         println(io)
         println(io, "## Seed")
         println(io)
