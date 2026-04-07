@@ -7,13 +7,14 @@ This attempt replaces the tangent-vector / orthonormalization contour scalar fro
 For each parameter point `(alpha, lambda)` in the Shimizu-Morioka sweep:
 
 - seed one unstable-manifold branch of the origin equilibrium exactly as before
-- integrate once only
-- harvest successive local `|x|`-maxima from that single trajectory
+- integrate first to the **first actual** local `|x|`-maximum on the attractor
+- restart there and integrate once only for the return-map dynamics
+- harvest successive later local `|x|`-maxima from that single return-map trajectory
 - save the signed forward sensitivity
   \[
-  \frac{\partial}{\partial z_0}\left(x_{\mathrm{return}}^2\right)
+  \frac{\partial}{\partial x_0}\left(x_{\mathrm{return}}^2\right)
   \]
-  at each detected `|x|`-maximum return
+  where `x_0` is the `x` coordinate at that **first** `|x|`-maximum, i.e. a point in the domain of the 1D map
 
 Because the saved value is a real sensitivity rather than just a sign, the same dataset can support:
 
@@ -39,16 +40,18 @@ So a return is kept iff:
 
 ## Sensitivity model
 
-The varied quantity is the initial `z` coordinate only. This attempt does **not** evolve a tangent vector manually.
+The varied quantity is the `x` coordinate of the first actual `|x|`-maximum on the attractor. This attempt does **not** evolve a tangent vector manually.
 
 Instead:
 
 - the physical initial condition is
   \[
-  X_0(\varepsilon)=X_{\mathrm{unstable}} + (0,0,\varepsilon)
+  X_1(\varepsilon)=X_{\mathrm{first\ |x|-max}} + (\varepsilon,0,0)
   \]
 - `SciMLSensitivity.ODEForwardSensitivityProblem` is used with one sensitivity parameter `\varepsilon`
 - the forward sensitivity returned by the augmented solve is corrected for event-time shift at the `y=0` hit before evaluating the sensitivity of `x^2`
+
+This means the tiny unstable-manifold seed near the origin is used only to locate the first domain point of the map. The saved sensitivities are **not** with respect to that seed.
 
 If `S = \partial_\varepsilon X` at the event time and `f` is the flow, then with `g(X)=y`,
 
@@ -70,9 +73,10 @@ Successive iterates do **not** trigger new solves.
 
 Each grid point is handled by:
 
-1. one forward-sensitivity integration
-2. one pass through the trajectory
-3. one event list containing up to `ATTEMPT031_MAX_EVENT_ITERATES` `|x|`-maxima
+1. one plain integration from the unstable-manifold seed to the first valid `|x|`-maximum
+2. one forward-sensitivity integration started from that first `|x|`-maximum
+3. one pass through the later return-map trajectory
+4. one event list containing up to `ATTEMPT031_MAX_EVENT_ITERATES` later `|x|`-maxima
 
 The plotter later reads those saved per-iterate sensitivities and contours whichever iterate indices are requested.
 
@@ -104,10 +108,10 @@ The default full run is:
 
 Use the provided runner:
 
-- [run_grid500_branch16_zsensabsx_plot7_upload.sh](/home/guest_coder/github/repos/hinsley/MultimodalMaps.jl/kneading/experiment/attempt-031/run_grid500_branch16_zsensabsx_plot7_upload.sh)
+- [run_grid500_branch16_xsensabsx_plot7_upload.sh](/home/guest_coder/github/repos/hinsley/MultimodalMaps.jl/kneading/experiment/attempt-031/run_grid500_branch16_xsensabsx_plot7_upload.sh)
 
 ## Main files
 
 - [main.jl](/home/guest_coder/github/repos/hinsley/MultimodalMaps.jl/kneading/experiment/attempt-031/main.jl)
 - [contours.jl](/home/guest_coder/github/repos/hinsley/MultimodalMaps.jl/kneading/experiment/attempt-031/contours.jl)
-- [run_grid500_branch16_zsensabsx_plot7_upload.sh](/home/guest_coder/github/repos/hinsley/MultimodalMaps.jl/kneading/experiment/attempt-031/run_grid500_branch16_zsensabsx_plot7_upload.sh)
+- [run_grid500_branch16_xsensabsx_plot7_upload.sh](/home/guest_coder/github/repos/hinsley/MultimodalMaps.jl/kneading/experiment/attempt-031/run_grid500_branch16_xsensabsx_plot7_upload.sh)
