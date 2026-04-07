@@ -1,6 +1,6 @@
 # Attempt 028 Alpha Continuation of `|x|`-Map Local Minimum
 
-- Generated: `2026-04-07 09:33:03`
+- Generated: `2026-04-07 13:29:48`
 - Fixed `lambda = 0.700000`
 - Fixed `B = 0.0`
 - Alpha grid matches attempt-027: `range(0.0, 0.7, length=2000)`
@@ -9,7 +9,7 @@
 - Corrector uses `x` as the Newton variable and keeps `z` fixed during each Newton solve
 - Corrector cadence: every `5` alpha values
 - On cadence-skipped alpha values, the full initial condition is held unchanged from the last corrected point
-- Break thresholds: `|Δs| > 0.050000` or `||Δstate|| > 0.050000`
+- Break thresholds: `|Δs| > 0.050000` or symmetry-identified `||Δstate|| > 0.050000`
 
 ## Seed
 
