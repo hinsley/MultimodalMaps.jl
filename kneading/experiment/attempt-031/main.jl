@@ -280,21 +280,11 @@ function event_sensitivity_x2_031(
     return 2.0 * event_state[1] * event_state_d1[1]
 end
 
-function scan_orbit_031(alpha::Float64, lambda::Float64)::SMSensitivityResult31
-    first_event_state, _, prelude_status = find_first_absxmax_state_031(alpha, lambda)
-    if isnothing(first_event_state)
-        return SMSensitivityResult31(
-            alpha,
-            lambda,
-            0,
-            Float64[],
-            Float64[],
-            SVector{3, Float64}[],
-            prelude_status,
-        )
-    end
-
-    base_state = first_event_state
+function next_absxmax_sensitivity_031(
+    alpha::Float64,
+    lambda::Float64,
+    base_state::SVector{3, Float64},
+)
     prob = transformed_problem_031(alpha, lambda, base_state)
     integ = init(
         prob,
@@ -310,20 +300,12 @@ function scan_orbit_031(alpha::Float64, lambda::Float64)::SMSensitivityResult31
         save_end=false,
     )
 
-    absxmax_sensitivity_values = Float64[]
-    absxmax_return_times = Float64[]
-    absxmax_states = SVector{3, Float64}[]
-    sizehint!(absxmax_sensitivity_values, ATTEMPT031_MAX_EVENT_ITERATES)
-    sizehint!(absxmax_return_times, ATTEMPT031_MAX_EVENT_ITERATES)
-    sizehint!(absxmax_states, ATTEMPT031_MAX_EVENT_ITERATES)
-
-    status = "ok"
     prev_augmented = SVector{6, Float64}(integ.u)
     prev_state, _ = physical_state_and_sensitivity_031(prev_augmented, base_state)
     prev_t = integ.t
     prev_y = section_event_value_031(prev_state)
 
-    while integ.t < ATTEMPT031_T_END && length(absxmax_sensitivity_values) < ATTEMPT031_MAX_EVENT_ITERATES
+    while integ.t < ATTEMPT031_T_END
         step!(integ)
 
         curr_augmented = SVector{6, Float64}(integ.u)
@@ -332,12 +314,10 @@ function scan_orbit_031(alpha::Float64, lambda::Float64)::SMSensitivityResult31
         curr_y = section_event_value_031(curr_state)
 
         if !all(isfinite, curr_state) || !all(isfinite, curr_augmented)
-            status = "nonfinite"
-            break
+            return nothing, NaN, NaN, "nonfinite"
         end
         if maximum(abs, curr_state) > ATTEMPT031_MAX_STATE
-            status = "blowup"
-            break
+            return nothing, NaN, NaN, "blowup"
         end
 
         crossed_section =
@@ -351,13 +331,10 @@ function scan_orbit_031(alpha::Float64, lambda::Float64)::SMSensitivityResult31
             if abs(event_state[1]) > ATTEMPT031_MIN_SECTION_X && event_state[3] > 1.0
                 try
                     sensitivity_value = event_sensitivity_x2_031(event_state, raw_sensitivity, alpha, lambda)
-                    push!(absxmax_sensitivity_values, sensitivity_value)
-                    push!(absxmax_return_times, t_hit)
-                    push!(absxmax_states, event_state)
+                    return event_state, t_hit, sensitivity_value, "ok"
                 catch error
                     if error isa ErrorException && occursin("denominator nearly singular", sprint(showerror, error))
-                        status = "near_tangency"
-                        break
+                        return nothing, NaN, NaN, "near_tangency"
                     end
                     rethrow(error)
                 end
@@ -368,6 +345,52 @@ function scan_orbit_031(alpha::Float64, lambda::Float64)::SMSensitivityResult31
         prev_state = curr_state
         prev_t = curr_t
         prev_y = curr_y
+    end
+
+    return nothing, NaN, NaN, "no_next_absxmax"
+end
+
+function scan_orbit_031(alpha::Float64, lambda::Float64)::SMSensitivityResult31
+    first_event_state, _, prelude_status = find_first_absxmax_state_031(alpha, lambda)
+    if isnothing(first_event_state)
+        return SMSensitivityResult31(
+            alpha,
+            lambda,
+            0,
+            Float64[],
+            Float64[],
+            SVector{3, Float64}[],
+            prelude_status,
+        )
+    end
+
+    absxmax_sensitivity_values = Float64[]
+    absxmax_return_times = Float64[]
+    absxmax_states = SVector{3, Float64}[]
+    sizehint!(absxmax_sensitivity_values, ATTEMPT031_MAX_EVENT_ITERATES)
+    sizehint!(absxmax_return_times, ATTEMPT031_MAX_EVENT_ITERATES)
+    sizehint!(absxmax_states, ATTEMPT031_MAX_EVENT_ITERATES)
+
+    status = "ok"
+    current_state = first_event_state
+
+    while length(absxmax_sensitivity_values) < ATTEMPT031_MAX_EVENT_ITERATES
+        next_state, dt_return, sensitivity_value, next_status =
+            next_absxmax_sensitivity_031(alpha, lambda, current_state)
+
+        if isnothing(next_state)
+            if next_status == "no_next_absxmax"
+                status = "short"
+            else
+                status = next_status
+            end
+            break
+        end
+
+        push!(absxmax_sensitivity_values, sensitivity_value)
+        push!(absxmax_return_times, dt_return)
+        push!(absxmax_states, next_state)
+        current_state = next_state
     end
 
     if status == "ok" && length(absxmax_sensitivity_values) < ATTEMPT031_MAX_EVENT_ITERATES

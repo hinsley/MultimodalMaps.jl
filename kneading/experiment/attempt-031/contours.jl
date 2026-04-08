@@ -14,7 +14,7 @@ using Printf
 const CONTOUR_OUTPUT_TAG_031 = get(
     ENV,
     "ATTEMPT031_OUTPUT_TAG",
-    "grid500_branch16_xsensabsx_plot7_shimizu_morioka_cpu",
+    "grid500_branch16_xpartialabsx_plot7_shimizu_morioka_cpu",
 )
 const SWEEP_SOURCE_TAG_031 = get(ENV, "ATTEMPT031_SWEEP_TAG", CONTOUR_OUTPUT_TAG_031)
 const SWEEP_DIR_031 = joinpath(ATTEMPT31_ROOT, "$(SWEEP_SOURCE_TAG_031)_columns")
@@ -402,7 +402,7 @@ function build_contour_figure_031(iterate_segments::Dict{Int, Vector{NTuple{4, F
         fig[1, 1];
         xlabel="alpha",
         ylabel="lambda",
-        title="Shimizu-Morioka forward-sensitivity contours of ∂(x²_return)/∂x₀, iterates $(OVERLAY_ITERATE_START_031):$(OVERLAY_ITERATE_END_031)",
+        title="Shimizu-Morioka forward-sensitivity contours of ∂(x²_{n+1})/∂x_n, iterates $(OVERLAY_ITERATE_START_031):$(OVERLAY_ITERATE_END_031)",
         xgridvisible=false,
         ygridvisible=false,
     )

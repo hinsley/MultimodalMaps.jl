@@ -8,13 +8,13 @@ For each parameter point `(alpha, lambda)` in the Shimizu-Morioka sweep:
 
 - seed one unstable-manifold branch of the origin equilibrium exactly as before
 - integrate first to the **first actual** local `|x|`-maximum on the attractor
-- restart there and integrate once only for the return-map dynamics
-- harvest successive later local `|x|`-maxima from that single return-map trajectory
+- then, for each current `|x|`-maximum in the return sequence, restart a forward-sensitivity solve from that current return state only
+- integrate each restarted solve only to the **next** local `|x|`-maximum
 - save the signed forward sensitivity
   \[
-  \frac{\partial}{\partial x_0}\left(x_{\mathrm{return}}^2\right)
+  \frac{\partial}{\partial x_n}\left(x_{n+1}^2\right)
   \]
-  where `x_0` is the `x` coordinate at that **first** `|x|`-maximum, i.e. a point in the domain of the 1D map
+  where `x_n` is the `x` coordinate at the **current** `|x|`-maximum and the partial is taken at fixed current-return `z_n`
 
 Because the saved value is a real sensitivity rather than just a sign, the same dataset can support:
 
@@ -40,18 +40,18 @@ So a return is kept iff:
 
 ## Sensitivity model
 
-The varied quantity is the `x` coordinate of the first actual `|x|`-maximum on the attractor. This attempt does **not** evolve a tangent vector manually.
+The varied quantity is the `x` coordinate of the current `|x|`-maximum on the attractor. This attempt does **not** evolve a tangent vector manually.
 
 Instead:
 
 - the physical initial condition is
   \[
-  X_1(\varepsilon)=X_{\mathrm{first\ |x|-max}} + (\varepsilon,0,0)
+  X_n(\varepsilon)=X_{\mathrm{current\ |x|-max}} + (\varepsilon,0,0)
   \]
 - `SciMLSensitivity.ODEForwardSensitivityProblem` is used with one sensitivity parameter `\varepsilon`
-- the forward sensitivity returned by the augmented solve is corrected for event-time shift at the `y=0` hit before evaluating the sensitivity of `x^2`
+- the forward sensitivity returned by the augmented solve is corrected for event-time shift at the next `y=0` hit before evaluating the sensitivity of `x^2`
 
-This means the tiny unstable-manifold seed near the origin is used only to locate the first domain point of the map. The saved sensitivities are **not** with respect to that seed.
+This means the tiny unstable-manifold seed near the origin is used only to locate the first domain point of the map. The saved sensitivities are **not** with respect to that seed, and they are **not** derivatives with respect to the first return for all later iterates. Each saved iterate uses its own current-return restart.
 
 If `S = \partial_\varepsilon X` at the event time and `f` is the flow, then with `g(X)=y`,
 
@@ -67,18 +67,22 @@ The saved scalar is then
 \partial_\varepsilon(x^2) = 2x\,(\partial_\varepsilon X_{\mathrm{event}})_x.
 \]
 
-## No repeat work across iterates
+## Per-iterate restarts
 
-Successive iterates do **not** trigger new solves.
+Successive iterates do trigger new short solves, because this attempt is measuring the true per-return partial
+\[
+\partial(x_{n+1}^2)/\partial x_n
+\]
+at each current `|x|`-maximum.
 
 Each grid point is handled by:
 
 1. one plain integration from the unstable-manifold seed to the first valid `|x|`-maximum
-2. one forward-sensitivity integration started from that first `|x|`-maximum
-3. one pass through the later return-map trajectory
-4. one event list containing up to `ATTEMPT031_MAX_EVENT_ITERATES` later `|x|`-maxima
+2. one forward-sensitivity integration from that first `|x|`-maximum to the second
+3. one forward-sensitivity integration from the second `|x|`-maximum to the third
+4. and so on, up to `ATTEMPT031_MAX_EVENT_ITERATES` one-step return segments
 
-The plotter later reads those saved per-iterate sensitivities and contours whichever iterate indices are requested.
+The plotter later reads those saved per-iterate one-step sensitivities and contours whichever iterate indices are requested.
 
 ## Output schema
 
@@ -94,9 +98,13 @@ Each saved row contains:
 
 Notes:
 
-- `absxmax_sensitivity_values` are signed real sensitivities, not signs only
+- `absxmax_sensitivity_values[k]` is the signed one-step partial
+  \[
+  \partial(x_{k+1}^2)/\partial x_k
+  \]
+  at fixed current-return `z_k`
 - heatmaps should use `abs.(absxmax_sensitivity_values)`
-- `absxmax_return_times` are the refined event times on the exact `y=0` section
+- `absxmax_return_times[k]` is the refined one-step return time from the current `|x|`-maximum to the next one
 
 ## Default run
 
