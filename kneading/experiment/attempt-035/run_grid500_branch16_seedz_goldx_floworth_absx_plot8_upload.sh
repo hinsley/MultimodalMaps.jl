@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/../../.." && pwd)"
+cd "${REPO_ROOT}"
+
+OUTPUT_TAG="${ATTEMPT033_OUTPUT_TAG:-grid500_branch16_seedzalign_goldx_floworth_absx_plot8_shimizu_morioka_cpu}"
+PNG_PATH="${SCRIPT_DIR}/${OUTPUT_TAG}_contours.png"
+UPLOAD_JSON="${SCRIPT_DIR}/${OUTPUT_TAG}_upload.json"
+UPLOAD_STDERR="${SCRIPT_DIR}/${OUTPUT_TAG}_upload.stderr"
+
+export JULIA_NUM_THREADS="${JULIA_NUM_THREADS:-32}"
+export ATTEMPT033_OUTPUT_TAG="${OUTPUT_TAG}"
+export ATTEMPT033_N_ALPHA="${ATTEMPT033_N_ALPHA:-500}"
+export ATTEMPT033_N_LAMBDA="${ATTEMPT033_N_LAMBDA:-500}"
+export ATTEMPT033_MAX_EVENT_ITERATES="${ATTEMPT033_MAX_EVENT_ITERATES:-16}"
+export ATTEMPT033_OVERLAY_ITERATE_START="${ATTEMPT033_OVERLAY_ITERATE_START:-2}"
+export ATTEMPT033_OVERLAY_ITERATE_END="${ATTEMPT033_OVERLAY_ITERATE_END:-8}"
+export ATTEMPT033_LINEWIDTH="${ATTEMPT033_LINEWIDTH:-0.35}"
+export ATTEMPT033_FIG_WIDTH="${ATTEMPT033_FIG_WIDTH:-2000}"
+export ATTEMPT033_FIG_HEIGHT="${ATTEMPT033_FIG_HEIGHT:-2000}"
+export ATTEMPT033_PX_PER_UNIT="${ATTEMPT033_PX_PER_UNIT:-4.0}"
+export ATTEMPT033_RESEED_PERIOD="${ATTEMPT033_RESEED_PERIOD:-25}"
+
+echo "Running attempt-035 critical-seeded |x|-max contour sweep."
+echo "Output tag: ${OUTPUT_TAG}"
+echo "Threads: ${JULIA_NUM_THREADS}"
+echo "Grid: ${ATTEMPT033_N_ALPHA} x ${ATTEMPT033_N_LAMBDA}"
+echo "Stored iterates: ${ATTEMPT033_MAX_EVENT_ITERATES}, overlay range: ${ATTEMPT033_OVERLAY_ITERATE_START}:${ATTEMPT033_OVERLAY_ITERATE_END}"
+
+julia --project=. "${SCRIPT_DIR}/contours.jl"
+
+tglfs upload --json "${PNG_PATH}" > "${UPLOAD_JSON}" 2> "${UPLOAD_STDERR}"
+
+echo "Uploaded ${PNG_PATH}"
