@@ -31,7 +31,7 @@ The continuation uses two layers:
    - use the resulting `(x_n, 0, z_n)` as the initial guess for the new
      angle-based corrector below.
 
-2. **Local x-only damped Newton corrector**
+2. **Local x-only secant corrector on `theta'(x)`**
    - hold the carried `z_*` fixed,
    - build the Jacobian of the next-return map on the `(x, z)` section by a
      `SciMLSensitivity.ODEForwardSensitivityProblem`,
@@ -40,12 +40,14 @@ The continuation uses two layers:
    - form the `2 x 2` return-map Jacobian in `(x, z)` coordinates,
    - compute the minimal eigendirection angle
      `theta(x) = atan(sqrt((a-d)^2 + 4bc), abs(b-c))`,
-   - solve `theta'(x) = 0` by damped Newton, updating `x` only.
+   - approximate `theta'(x)` by a centered two-point stencil in `x`,
+   - solve `theta'(x) = 0` by a safeguarded secant step, updating `x` only.
 
-If direct damped Newton fails from the carried point, the code scans a small
-local `x` window at fixed `z_*`, looks for the most stationary positive-
-curvature sampled point it can find, and retries Newton from there. If even
-that still fails, the scanned fallback point is used directly.
+If direct local secant continuation fails from the carried point, the code
+scans a small local `x` window at fixed `z_*`, looks for either a nearby sign
+change of `theta'(x)` or, failing that, the smallest sampled `|theta'(x)|`,
+and uses that local information to seed the secant pair. If the local secant
+still fails, the best scanned fallback point is used directly.
 
 If the local corrector fails at a point, the code falls back to a fresh
 attractor-map reseed there. If that also fails, the previous seed is carried.
@@ -57,17 +59,19 @@ Columns are solved at fixed `alpha`, with `lambda` traversed from
 
 `theta(x)` itself is built from a forward-sensitivity return-map Jacobian.
 However, to avoid implementing second- and third-order event-time sensitivity
-equations for `theta'` and `theta''`, this attempt uses a centered five-point
-finite-difference stencil in `x` for those two scalar derivatives.
+equations for exact higher derivatives of `theta`, this attempt uses a centered
+two-point finite-difference stencil in `x` only for `theta'(x)`.
 
 So:
 
 - the return-map Jacobian is sensitivity-based,
-- the Newton derivatives of the angle objective are finite-difference
-  derivatives of that sensitivity-based scalar.
+- the secant corrector only sees a finite-difference approximation of the
+  scalar derivative `theta'(x)`,
+- there is no exact `theta''(x)` in this attempt, so the stored
+  `critical_theta_dxx` field is `NaN`.
 
 That is the only intended approximation relative to a fully exact higher-order
-event-sensitivity Newton method.
+event-sensitivity method.
 
 ## Outputs
 
@@ -75,9 +79,9 @@ The final contour plot overlays iterates `2:8`.
 
 Default output files:
 
-- `grid500_branch16_attractorseed_anglenewton_floworth_absx_plot8_shimizu_morioka_cpu_results.tsv`
-- `grid500_branch16_attractorseed_anglenewton_floworth_absx_plot8_shimizu_morioka_cpu_iterate_colors.tsv`
-- `grid500_branch16_attractorseed_anglenewton_floworth_absx_plot8_shimizu_morioka_cpu_contours.png`
+- `grid500_branch16_attractorseed_anglesecant_floworth_absx_plot8_shimizu_morioka_cpu_results.tsv`
+- `grid500_branch16_attractorseed_anglesecant_floworth_absx_plot8_shimizu_morioka_cpu_iterate_colors.tsv`
+- `grid500_branch16_attractorseed_anglesecant_floworth_absx_plot8_shimizu_morioka_cpu_contours.png`
 
 Run from repo root:
 

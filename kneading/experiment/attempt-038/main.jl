@@ -55,13 +55,10 @@ const ATTEMPT033_ANGLE_FD_ABS_STEP = parse(Float64, get(ENV, "ATTEMPT033_ANGLE_F
 const ATTEMPT033_ANGLE_FD_REL_STEP = parse(Float64, get(ENV, "ATTEMPT033_ANGLE_FD_REL_STEP", "1e-3"))
 const ATTEMPT033_ANGLE_FD_MAX_SHRINKS = parse(Int, get(ENV, "ATTEMPT033_ANGLE_FD_MAX_SHRINKS", "6"))
 const ATTEMPT033_ANGLE_DELTA_TOL = parse(Float64, get(ENV, "ATTEMPT033_ANGLE_DELTA_TOL", "1e-10"))
-const ATTEMPT033_ANGLE_NEWTON_MAX_ITERS = parse(Int, get(ENV, "ATTEMPT033_ANGLE_NEWTON_MAX_ITERS", "6"))
+const ATTEMPT033_ANGLE_SECANT_MAX_ITERS = parse(Int, get(ENV, "ATTEMPT033_ANGLE_SECANT_MAX_ITERS", "8"))
 const ATTEMPT033_ANGLE_GRAD_TOL = parse(Float64, get(ENV, "ATTEMPT033_ANGLE_GRAD_TOL", "1e-6"))
 const ATTEMPT033_ANGLE_STEP_TOL = parse(Float64, get(ENV, "ATTEMPT033_ANGLE_STEP_TOL", "1e-8"))
-const ATTEMPT033_ANGLE_MIN_DAMPING = parse(Float64, get(ENV, "ATTEMPT033_ANGLE_MIN_DAMPING", "0.03125"))
-const ATTEMPT033_ANGLE_HESS_TOL = parse(Float64, get(ENV, "ATTEMPT033_ANGLE_HESS_TOL", "1e-8"))
-const ATTEMPT033_ANGLE_SCAN_POINTS = parse(Int, get(ENV, "ATTEMPT033_ANGLE_SCAN_POINTS", "41"))
-const ATTEMPT033_ANGLE_MAX_RAW_STEP = parse(Float64, get(ENV, "ATTEMPT033_ANGLE_MAX_RAW_STEP", "0.02"))
+const ATTEMPT033_ANGLE_SCAN_POINTS = parse(Int, get(ENV, "ATTEMPT033_ANGLE_SCAN_POINTS", "17"))
 
 const ALPHAS_033 = collect(range(ATTEMPT033_ALPHA_MIN, ATTEMPT033_ALPHA_MAX, length=ATTEMPT033_N_ALPHA))
 const LAMBDAS_033 = collect(range(ATTEMPT033_LAMBDA_MIN, ATTEMPT033_LAMBDA_MAX, length=ATTEMPT033_N_LAMBDA))
@@ -121,15 +118,14 @@ struct AngleEval33
     jacobian::SMatrix{2, 2, Float64, 4}
 end
 
-struct AngleNewtonTrace33
+struct AngleSecantTrace33
     iter::Int
-    x::Float64
+    x_left::Float64
+    x_right::Float64
+    x_next::Float64
     theta::Float64
     theta_dx::Float64
-    theta_dxx::Float64
-    step::Float64
-    damping::Float64
-    accepted::Bool
+    bracketed::Bool
 end
 
 @inline function shimizu_morioka_vector_033(u::SVector{3, TU}, p::SVector{2, TP}) where {TU<:Real, TP<:Real}
@@ -576,29 +572,25 @@ end
 end
 
 function evaluate_angle_033(alpha::Float64, lambda::Float64, x::Float64, z_fixed::Float64)
+    theta_0, linearization_0, A_0 = angle_value_033(alpha, lambda, x, z_fixed)
     h = angle_fd_step_033(x)
     for _ in 1:ATTEMPT033_ANGLE_FD_MAX_SHRINKS
-        lower = x - 2.0 * h
+        lower = x - h
         if lower <= ATTEMPT033_MIN_SECTION_X
             h *= 0.5
             continue
         end
 
         try
-            theta_m2, _, _ = angle_value_033(alpha, lambda, x - 2.0 * h, z_fixed)
-            theta_m1, _, _ = angle_value_033(alpha, lambda, x - h, z_fixed)
-            theta_0, linearization_0, A_0 = angle_value_033(alpha, lambda, x, z_fixed)
-            theta_p1, _, _ = angle_value_033(alpha, lambda, x + h, z_fixed)
-            theta_p2, _, _ = angle_value_033(alpha, lambda, x + 2.0 * h, z_fixed)
-
-            theta_dx = (theta_m2 - 8.0 * theta_m1 + 8.0 * theta_p1 - theta_p2) / (12.0 * h)
-            theta_dxx = (-theta_p2 + 16.0 * theta_p1 - 30.0 * theta_0 + 16.0 * theta_m1 - theta_m2) / (12.0 * h * h)
+            theta_m, _, _ = angle_value_033(alpha, lambda, x - h, z_fixed)
+            theta_p, _, _ = angle_value_033(alpha, lambda, x + h, z_fixed)
+            theta_dx = (theta_p - theta_m) / (2.0 * h)
             return AngleEval33(
                 x,
                 z_fixed,
                 theta_0,
                 theta_dx,
-                theta_dxx,
+                NaN,
                 linearization_0.current_state,
                 linearization_0.event_state,
                 A_0,
@@ -608,60 +600,7 @@ function evaluate_angle_033(alpha::Float64, lambda::Float64, x::Float64, z_fixed
         end
     end
 
-    error("Angle evaluation stencil failed at x=$(x), z=$(z_fixed)")
-end
-
-function run_damped_newton_angle_033(alpha::Float64, lambda::Float64, x0::Float64, z_fixed::Float64)
-    trace = AngleNewtonTrace33[]
-    current_x = x0
-
-    for iter in 1:ATTEMPT033_ANGLE_NEWTON_MAX_ITERS
-        evaluation = evaluate_angle_033(alpha, lambda, current_x, z_fixed)
-        gradient = evaluation.theta_dx
-        hessian = evaluation.theta_dxx
-
-        if abs(gradient) <= ATTEMPT033_ANGLE_GRAD_TOL
-            hessian > 0.0 || error("Angle Newton landed on a non-minimum at x=$(current_x)")
-            push!(trace, AngleNewtonTrace33(iter, current_x, evaluation.theta, gradient, hessian, 0.0, 1.0, true))
-            return trace, evaluation
-        end
-
-        abs(hessian) > ATTEMPT033_ANGLE_HESS_TOL || error("Angle Newton second derivative nearly singular at x=$(current_x)")
-        raw_step = clamp(-gradient / hessian, -ATTEMPT033_ANGLE_MAX_RAW_STEP, ATTEMPT033_ANGLE_MAX_RAW_STEP)
-        damping = 1.0
-        accepted = false
-        candidate_x = current_x
-
-        while damping >= ATTEMPT033_ANGLE_MIN_DAMPING
-            candidate_x = current_x + damping * raw_step
-            if candidate_x <= ATTEMPT033_MIN_SECTION_X
-                damping *= 0.5
-                continue
-            end
-
-            try
-                candidate_eval = evaluate_angle_033(alpha, lambda, candidate_x, z_fixed)
-                if abs(candidate_eval.theta_dx) < abs(gradient) && candidate_eval.theta_dxx > 0.0
-                    accepted = true
-                    break
-                end
-            catch
-            end
-            damping *= 0.5
-        end
-
-        push!(trace, AngleNewtonTrace33(iter, current_x, evaluation.theta, gradient, hessian, raw_step, damping, accepted))
-        accepted || error("Damped angle Newton failed to find an acceptable step from x=$(current_x)")
-
-        current_x = candidate_x
-        if abs(damping * raw_step) <= ATTEMPT033_ANGLE_STEP_TOL
-            final_eval = evaluate_angle_033(alpha, lambda, current_x, z_fixed)
-            return trace, final_eval
-        end
-    end
-
-    final_eval = evaluate_angle_033(alpha, lambda, current_x, z_fixed)
-    return trace, final_eval
+    error("Angle derivative stencil failed at x=$(x), z=$(z_fixed)")
 end
 
 function scan_angle_minimum_033(
@@ -689,71 +628,135 @@ function scan_angle_minimum_033(
         end
     end
 
-    stationaries = Int[]
+    best_idx = 0
+    best_abs_dx = Inf
+    best_distance = Inf
     for idx in eachindex(xs)
         eval = evals[idx]
         isnothing(eval) && continue
-        eval.theta_dxx > 0.0 || continue
-        push!(stationaries, idx)
-    end
-    if !isempty(stationaries)
-        best_idx = stationaries[1]
-        best_eval = evals[best_idx]::AngleEval33
-        best_abs_dx = abs(best_eval.theta_dx)
-        best_distance = abs(xs[best_idx] - center_x)
-        for idx in stationaries[2:end]
-            eval = evals[idx]::AngleEval33
-            abs_dx = abs(eval.theta_dx)
-            distance = abs(xs[idx] - center_x)
-            if abs_dx < best_abs_dx || (abs_dx == best_abs_dx && distance < best_distance)
-                best_idx = idx
-                best_abs_dx = abs_dx
-                best_distance = distance
-            end
-        end
-        return xs[best_idx], evals[best_idx]
-    end
-
-    candidates = Int[]
-    for idx in 2:(length(xs) - 1)
-        all(isfinite, (thetas[idx - 1], thetas[idx], thetas[idx + 1])) || continue
-        if thetas[idx] <= thetas[idx - 1] && thetas[idx] <= thetas[idx + 1]
-            push!(candidates, idx)
-        end
-    end
-
-    if isempty(candidates)
-        best_idx = 0
-        best_theta = Inf
-        best_distance = Inf
-        for idx in eachindex(xs)
-            isfinite(thetas[idx]) || continue
-            theta = thetas[idx]
-            distance = abs(xs[idx] - center_x)
-            if theta < best_theta || (theta == best_theta && distance < best_distance)
-                best_idx = idx
-                best_theta = theta
-                best_distance = distance
-            end
-        end
-        best_idx == 0 && return nothing
-        return xs[best_idx], evals[best_idx]
-    end
-
-    best_idx = candidates[1]
-    best_distance = abs(xs[best_idx] - center_x)
-    best_theta = thetas[best_idx]
-    for idx in candidates[2:end]
+        abs_dx = abs(eval.theta_dx)
         distance = abs(xs[idx] - center_x)
-        theta = thetas[idx]
-        if distance < best_distance || (distance == best_distance && theta < best_theta)
+        if abs_dx < best_abs_dx || (abs_dx == best_abs_dx && distance < best_distance)
             best_idx = idx
+            best_abs_dx = abs_dx
             best_distance = distance
-            best_theta = theta
+        end
+    end
+    best_idx == 0 && return nothing
+
+    sign_change_pairs = Tuple{Int, Int}[]
+    for idx in 1:(length(xs) - 1)
+        eval_left = evals[idx]
+        eval_right = evals[idx + 1]
+        if isnothing(eval_left) || isnothing(eval_right)
+            continue
+        end
+        phi_left = eval_left.theta_dx
+        phi_right = eval_right.theta_dx
+        if phi_left == 0.0 || phi_right == 0.0 || signbit(phi_left) != signbit(phi_right)
+            push!(sign_change_pairs, (idx, idx + 1))
         end
     end
 
-    return xs[best_idx], evals[best_idx]
+    if !isempty(sign_change_pairs)
+        best_pair = sign_change_pairs[1]
+        best_pair_distance = abs(0.5 * (xs[best_pair[1]] + xs[best_pair[2]]) - center_x)
+        for pair in sign_change_pairs[2:end]
+            distance = abs(0.5 * (xs[pair[1]] + xs[pair[2]]) - center_x)
+            if distance < best_pair_distance
+                best_pair = pair
+                best_pair_distance = distance
+            end
+        end
+        return best_pair, xs, evals
+    end
+
+    neighbor_idx = 0
+    for offset in 1:(length(xs) - 1)
+        for candidate in (best_idx - offset, best_idx + offset)
+            if 1 <= candidate <= length(xs) && !isnothing(evals[candidate])
+                neighbor_idx = candidate
+                break
+            end
+        end
+        neighbor_idx != 0 && break
+    end
+    neighbor_idx == 0 && return nothing
+    return (min(best_idx, neighbor_idx), max(best_idx, neighbor_idx)), xs, evals
+end
+
+function run_secant_angle_033(
+    alpha::Float64,
+    lambda::Float64,
+    x0::Float64,
+    z_fixed::Float64;
+    half_width::Float64=ATTEMPT033_LOCAL_X_WINDOW,
+)
+    scanned = scan_angle_minimum_033(alpha, lambda, z_fixed, x0, half_width)
+    isnothing(scanned) && return nothing
+    (idx_left, idx_right), xs, evals = scanned
+
+    left_eval = evals[idx_left]::AngleEval33
+    right_eval = evals[idx_right]::AngleEval33
+    left_x = xs[idx_left]
+    right_x = xs[idx_right]
+    bracketed = signbit(left_eval.theta_dx) != signbit(right_eval.theta_dx)
+    trace = AngleSecantTrace33[]
+
+    best_eval = abs(left_eval.theta_dx) <= abs(right_eval.theta_dx) ? left_eval : right_eval
+    left_bound = max(ATTEMPT033_MIN_SECTION_X, x0 - half_width)
+    right_bound = x0 + half_width
+
+    for iter in 1:ATTEMPT033_ANGLE_SECANT_MAX_ITERS
+        if abs(left_eval.theta_dx) < abs(best_eval.theta_dx)
+            best_eval = left_eval
+        end
+        if abs(right_eval.theta_dx) < abs(best_eval.theta_dx)
+            best_eval = right_eval
+        end
+        abs(best_eval.theta_dx) <= ATTEMPT033_ANGLE_GRAD_TOL && return trace, best_eval
+
+        denom = right_eval.theta_dx - left_eval.theta_dx
+        if abs(denom) <= 1e-14
+            x_next = bracketed ? 0.5 * (left_x + right_x) : 0.5 * (left_x + right_x)
+        else
+            x_next = right_x - right_eval.theta_dx * (right_x - left_x) / denom
+            if bracketed && !(min(left_x, right_x) < x_next < max(left_x, right_x))
+                x_next = 0.5 * (left_x + right_x)
+            end
+        end
+        x_next = clamp(x_next, left_bound, right_bound)
+
+        push!(trace, AngleSecantTrace33(iter, left_x, right_x, x_next, best_eval.theta, best_eval.theta_dx, bracketed))
+        abs(x_next - right_x) <= ATTEMPT033_ANGLE_STEP_TOL && return trace, best_eval
+
+        next_eval = try
+            evaluate_angle_033(alpha, lambda, x_next, z_fixed)
+        catch
+            return trace, best_eval
+        end
+        if abs(next_eval.theta_dx) < abs(best_eval.theta_dx)
+            best_eval = next_eval
+        end
+
+        if bracketed
+            if next_eval.theta_dx == 0.0
+                return trace, next_eval
+            elseif signbit(left_eval.theta_dx) != signbit(next_eval.theta_dx)
+                right_x = x_next
+                right_eval = next_eval
+            else
+                left_x = x_next
+                left_eval = next_eval
+            end
+        else
+            left_x, left_eval = right_x, right_eval
+            right_x, right_eval = x_next, next_eval
+            bracketed = signbit(left_eval.theta_dx) != signbit(right_eval.theta_dx)
+        end
+    end
+
+    return trace, best_eval
 end
 
 function refine_angle_seed_033(
@@ -763,22 +766,10 @@ function refine_angle_seed_033(
     z_fixed::Float64;
     half_width::Float64=ATTEMPT033_LOCAL_X_WINDOW,
 )
-    try
-        _, eval = run_damped_newton_angle_033(alpha, lambda, x0, z_fixed)
-        return eval, "angle_newton"
-    catch
-    end
-
-    scanned = scan_angle_minimum_033(alpha, lambda, z_fixed, x0, half_width)
-    isnothing(scanned) && return nothing
-    scanned_x, scanned_eval = scanned
-
-    try
-        _, eval = run_damped_newton_angle_033(alpha, lambda, scanned_x, z_fixed)
-        return eval, "angle_scan_newton"
-    catch
-        return scanned_eval, "angle_scan_fallback"
-    end
+    secant = run_secant_angle_033(alpha, lambda, x0, z_fixed; half_width=half_width)
+    isnothing(secant) && return nothing
+    _, eval = secant
+    return eval, "angle_secant"
 end
 
 @inline objective_transform_033(value::Float64, kind::Symbol) = kind === :minimum ? value : -value

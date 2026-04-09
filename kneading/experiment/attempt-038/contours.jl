@@ -13,7 +13,7 @@ using Random
 const CONTOUR_OUTPUT_TAG_033 = get(
     ENV,
     "ATTEMPT033_OUTPUT_TAG",
-    "grid500_branch16_attractorseed_anglenewton_floworth_absx_plot8_shimizu_morioka_cpu",
+    "grid500_branch16_attractorseed_anglesecant_floworth_absx_plot8_shimizu_morioka_cpu",
 )
 const SWEEP_DIR_033 = joinpath(ATTEMPT33_ROOT, "$(CONTOUR_OUTPUT_TAG_033)_columns")
 const LOG_LOCK_033 = ReentrantLock()
@@ -392,7 +392,7 @@ function save_contour_plot_033(
         fig[1, 1];
         xlabel="alpha",
         ylabel="lambda",
-        title="Shimizu-Morioka |x|-max contour plot from x-only angle-Newton critical-point seeding, iterates $(first(PLOT_ITERATES_033)):$(last(PLOT_ITERATES_033))",
+        title="Shimizu-Morioka |x|-max contour plot from x-only angle-secant critical-point seeding, iterates $(first(PLOT_ITERATES_033)):$(last(PLOT_ITERATES_033))",
     )
     for iterate in PLOT_ITERATES_033
         xs, ys = segments_to_polyline_033(segments_by_iterate[iterate])
@@ -405,13 +405,13 @@ function save_contour_plot_033(
 end
 
 function main()
-    println("Running attempt-038 Shimizu-Morioka angle-seeded |x|-max contour scan.")
+    println("Running attempt-038 Shimizu-Morioka angle-secant-seeded |x|-max contour scan.")
     println("Grid: $(length(ALPHAS_033)) alpha points × $(length(LAMBDAS_033)) lambda points")
     println("Threads: $(nthreads()), max event iterates: $(ATTEMPT033_MAX_EVENT_ITERATES)")
     println("Overlay iterates: $(first(PLOT_ITERATES_033)):$(last(PLOT_ITERATES_033))")
     println("Lambda traversal within each alpha column: descending")
     println("Critical reseed period within each alpha column: $(ATTEMPT033_RESEED_PERIOD)")
-    println("Local corrector: x-only damped Newton on the eigendirection-angle minimum")
+    println("Local corrector: x-only safeguarded secant on the eigendirection-angle derivative")
     println("Sweep dir: $(SWEEP_DIR_033)")
     flush(stdout)
 
