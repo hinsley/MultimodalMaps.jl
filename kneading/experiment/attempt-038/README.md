@@ -11,6 +11,37 @@ This attempt keeps the contour quantity from `attempt-037` unchanged:
 The change is again only the **initial condition** used for the kneading-style
 scan.
 
+## Outcome
+
+Empirically, this was the best-performing version of the angle-based
+critical-point continuation attempts in this sequence.
+
+What worked well:
+
+- the continuation stayed on the visually correct branch through much more of
+  the parameter plane than the exact higher-order Newton variant,
+- the resulting contour plot matched the expected large-scale geometry much
+  better than the neighboring attempts,
+- the method was numerically forgiving because the local corrector only needed
+  a first derivative estimate of the angle objective.
+
+What still went wrong:
+
+- a visible seam / line split the plot,
+- inspection of the finished `results.tsv` shows that this seam is **not**
+  densely populated by explicit full reseeds,
+- many columns in the suspect region remain labeled
+  `continued_angle_secant`, yet the carried `x` value moves in repeated
+  `0.015`-sized jumps, which is exactly the local scan spacing from the
+  `17`-point scan over a `0.24`-wide window,
+- so the most likely failure mode here is not “lots of obvious full reseeds”;
+  it is that the local secant corrector is often returning a scan-grid fallback
+  point, and that scan-grid snapping creates a seam where the chosen fallback
+  branch changes.
+
+That seam is the motivation for the follow-up instrumentation attempt in
+`attempt-040`.
+
 ## Critical-point continuation
 
 For each parameter point, the initial condition is constrained to the section
@@ -54,6 +85,12 @@ attractor-map reseed there. If that also fails, the previous seed is carried.
 
 Columns are solved at fixed `alpha`, with `lambda` traversed from
 `ATTEMPT033_LAMBDA_MAX` down to `ATTEMPT033_LAMBDA_MIN`.
+
+One important implementation detail is that the continued state keeps the
+section `z_*` fixed within a column and only updates the section `x`
+coordinate. That makes the method robust and cheap, but it also means any bad
+local `x` fallback can be propagated for the rest of that column unless a later
+full reseed intervenes.
 
 ## Numerical concession
 
