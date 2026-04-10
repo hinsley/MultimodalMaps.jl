@@ -527,10 +527,6 @@ function save_diagnostic_overlay_plot_033(
         ylabel="lambda",
         title="Attempt-040 seam diagnostics over angle-secant-seeded |x|-max contours",
     )
-    for iterate in PLOT_ITERATES_033
-        xs, ys = segments_to_polyline_033(segments_by_iterate[iterate])
-        lines!(ax, xs, ys; color=colors[iterate], linewidth=ATTEMPT033_LINEWIDTH)
-    end
 
     if !isempty(diagnostics.full_reseed_points)
         xs = first.(diagnostics.full_reseed_points)
@@ -578,6 +574,11 @@ function save_diagnostic_overlay_plot_033(
             label="large x jump vs previous lambda",
         )
         has_legend = true
+    end
+
+    for iterate in PLOT_ITERATES_033
+        xs, ys = segments_to_polyline_033(segments_by_iterate[iterate])
+        lines!(ax, xs, ys; color=colors[iterate], linewidth=ATTEMPT033_LINEWIDTH)
     end
 
     xlims!(ax, ATTEMPT033_ALPHA_MIN, ATTEMPT033_ALPHA_MAX)
