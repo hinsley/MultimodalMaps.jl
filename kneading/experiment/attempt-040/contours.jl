@@ -25,6 +25,7 @@ const ATTEMPT033_FIG_WIDTH = parse(Int, get(ENV, "ATTEMPT033_FIG_WIDTH", "1200")
 const ATTEMPT033_FIG_HEIGHT = parse(Int, get(ENV, "ATTEMPT033_FIG_HEIGHT", "1200"))
 const ATTEMPT033_PX_PER_UNIT = parse(Float64, get(ENV, "ATTEMPT033_PX_PER_UNIT", "1.0"))
 const ATTEMPT033_COLOR_SEED = parse(Int, get(ENV, "ATTEMPT033_COLOR_SEED", "33"))
+const ATTEMPT033_DIAGNOSTIC_ALPHA = parse(Float64, get(ENV, "ATTEMPT033_DIAGNOSTIC_ALPHA", "0.32"))
 
 column_path_033(col_idx::Int) = joinpath(SWEEP_DIR_033, @sprintf("column_%04d.tsv", col_idx))
 results_path_033() = joinpath(ATTEMPT33_ROOT, "$(CONTOUR_OUTPUT_TAG_033)_results.tsv")
@@ -534,12 +535,28 @@ function save_diagnostic_overlay_plot_033(
     if !isempty(diagnostics.full_reseed_points)
         xs = first.(diagnostics.full_reseed_points)
         ys = last.(diagnostics.full_reseed_points)
-        scatter!(ax, xs, ys; color=:red, marker=:xcross, markersize=10, label="full reseed/fallback full")
+        scatter!(
+            ax,
+            xs,
+            ys;
+            color=RGBAf(1.0, 0.0, 0.0, ATTEMPT033_DIAGNOSTIC_ALPHA),
+            marker=:xcross,
+            markersize=10,
+            label="full reseed/fallback full",
+        )
     end
     if !isempty(diagnostics.scan_fallback_points)
         xs = first.(diagnostics.scan_fallback_points)
         ys = last.(diagnostics.scan_fallback_points)
-        scatter!(ax, xs, ys; color=:orange, marker=:rect, markersize=7, label="scan fallback / unbracketed local corrector")
+        scatter!(
+            ax,
+            xs,
+            ys;
+            color=RGBAf(1.0, 0.5, 0.0, ATTEMPT033_DIAGNOSTIC_ALPHA),
+            marker=:rect,
+            markersize=7,
+            label="scan fallback / unbracketed local corrector",
+        )
     end
     has_legend = false
     if !isempty(diagnostics.full_reseed_points)
@@ -551,7 +568,15 @@ function save_diagnostic_overlay_plot_033(
     if !isempty(diagnostics.jump_points)
         xs = first.(diagnostics.jump_points)
         ys = last.(diagnostics.jump_points)
-        scatter!(ax, xs, ys; color=:cyan, marker=:diamond, markersize=8, label="large x jump vs previous lambda")
+        scatter!(
+            ax,
+            xs,
+            ys;
+            color=RGBAf(0.0, 1.0, 1.0, ATTEMPT033_DIAGNOSTIC_ALPHA),
+            marker=:diamond,
+            markersize=8,
+            label="large x jump vs previous lambda",
+        )
         has_legend = true
     end
 
