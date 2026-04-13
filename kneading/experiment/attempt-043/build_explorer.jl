@@ -21,6 +21,8 @@ const HTML_PATH_043 = joinpath(ATTEMPT043_ROOT, "$(OUTPUT_TAG_043).html")
 const STATS_PATH_043 = joinpath(ATTEMPT043_ROOT, "$(OUTPUT_TAG_043)_iterate_stats.tsv")
 
 @inline sign_code_043(value::Float64) = value > 0.0 ? UInt16(0x2) : value < 0.0 ? UInt16(0x1) : UInt16(0x0)
+@inline skip_bit_043(nominal_iterate::Int) = UInt8(1) << (nominal_iterate - 2)
+@inline point_linear_index_043(i::Int, j::Int, n_alpha::Int) = (j - 1) * n_alpha + i
 
 function pack_sign_word_043(result::A27.SMAbsXResult25)
     word = UInt16(0)
@@ -56,6 +58,121 @@ function build_sign_words_043()
     return sign_words
 end
 
+function mark_point_skip_masks_043!(
+    point_skip_masks::Vector{UInt8},
+    j::Int,
+    i::Int,
+    signs::NTuple{4, Int8},
+    shorter_sign::Int8,
+    nominal_iterate::Int,
+    n_alpha::Int,
+)
+    2 <= nominal_iterate <= 8 || return nothing
+    bit = skip_bit_043(nominal_iterate)
+    if signs[1] == shorter_sign
+        point_skip_masks[point_linear_index_043(i, j, n_alpha)] |= bit
+    end
+    if signs[2] == shorter_sign
+        point_skip_masks[point_linear_index_043(i + 1, j, n_alpha)] |= bit
+    end
+    if signs[3] == shorter_sign
+        point_skip_masks[point_linear_index_043(i + 1, j + 1, n_alpha)] |= bit
+    end
+    if signs[4] == shorter_sign
+        point_skip_masks[point_linear_index_043(i, j + 1, n_alpha)] |= bit
+    end
+    return nothing
+end
+
+function process_nominal_iterate_for_explorer_043!(
+    nominal_iterate::Int,
+    dot_grids::Vector{Matrix{Float64}},
+    time_grids::Vector{Matrix{Float64}},
+    skip_state::A27.SkipState25,
+    retired_cells::BitMatrix,
+    black_segments_by_iter::Vector{Vector{NTuple{4, Float64}}},
+    red_segments_by_iter::Vector{Vector{NTuple{4, Float64}}},
+    point_skip_masks::Vector{UInt8},
+)
+    stats = A27.zero_iterate_stats_025()
+    n_lambda_cells = length(A27.LAMBDAS_025) - 1
+    n_alpha_cells = length(A27.ALPHAS_025) - 1
+    n_alpha_points = length(A27.ALPHAS_025)
+    black_segments = nominal_iterate <= length(black_segments_by_iter) ? black_segments_by_iter[nominal_iterate] : NTuple{4, Float64}[]
+    red_segments = nominal_iterate <= length(red_segments_by_iter) ? red_segments_by_iter[nominal_iterate] : NTuple{4, Float64}[]
+
+    for j in 1:n_lambda_cells
+        y_tl = Float64(A27.LAMBDAS_025[j])
+        y_bl = Float64(A27.LAMBDAS_025[j + 1])
+        for i in 1:n_alpha_cells
+            retired_cells[j, i] && continue
+
+            evaluation = A27.evaluate_square_025(j, i, nominal_iterate, dot_grids, time_grids, skip_state)
+            if evaluation.status == A27.EVAL_MISSING_025
+                stats.missing_data += 1
+                continue
+            elseif evaluation.status == A27.EVAL_CONSTANT_025
+                stats.constant_sign += 1
+                continue
+            end
+
+            should_increment, shorter_sign = A27.skip_increment_decision_025(evaluation)
+            if should_increment
+                mark_point_skip_masks_043!(
+                    point_skip_masks,
+                    j,
+                    i,
+                    evaluation.sign,
+                    shorter_sign,
+                    nominal_iterate,
+                    n_alpha_points,
+                )
+                x_tl = Float64(A27.ALPHAS_025[i])
+                x_tr = Float64(A27.ALPHAS_025[i + 1])
+                A27.append_march_square_zero_segments_025!(
+                    red_segments,
+                    evaluation.current_dot,
+                    x_tl,
+                    y_tl,
+                    x_tr,
+                    y_tl,
+                    x_tr,
+                    y_bl,
+                    x_tl,
+                    y_bl,
+                )
+                A27.increment_skip_state_for_sign_025!(j, i, evaluation.sign, shorter_sign, skip_state)
+                retired_cells[j, i] = true
+                stats.incremented += 1
+                continue
+            end
+
+            if 2 <= nominal_iterate <= 8
+                x_tl = Float64(A27.ALPHAS_025[i])
+                x_tr = Float64(A27.ALPHAS_025[i + 1])
+                added = A27.append_march_square_zero_segments_025!(
+                    black_segments,
+                    evaluation.current_dot,
+                    x_tl,
+                    y_tl,
+                    x_tr,
+                    y_tl,
+                    x_tr,
+                    y_bl,
+                    x_tl,
+                    y_bl,
+                )
+                if added > 0
+                    stats.contoured_squares += 1
+                    stats.emitted_segments += added
+                end
+            end
+        end
+    end
+
+    return stats
+end
+
 function collect_retired_overlay_segments_043()
     dot_grids = A27.build_iterate_grids_025(result -> result.absxmax_count, result -> result.absxmax_dot_values)
     cumulative_time_grids = A27.build_iterate_grids_025(result -> result.absxmax_count, result -> result.absxmax_return_times)
@@ -63,35 +180,26 @@ function collect_retired_overlay_segments_043()
 
     skip_state = A27.initialize_skip_state_025()
     retired_cells = falses(length(A27.LAMBDAS_025) - 1, length(A27.ALPHAS_025) - 1)
-    accepted_segments = NTuple{4, Float64}[]
-    excluded_segments = NTuple{4, Float64}[]
+    black_segments_by_iter = [NTuple{4, Float64}[] for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    red_segments_by_iter = [NTuple{4, Float64}[] for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    point_skip_masks = fill(UInt8(0), length(A27.ALPHAS_025) * length(A27.LAMBDAS_025))
     iterate_stats = [A27.zero_iterate_stats_025() for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
 
     for nominal_iterate in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP
-        local_accepted =
-            nominal_iterate >= 2 && nominal_iterate <= 8 ?
-            accepted_segments :
-            nothing
-        local_excluded =
-            nominal_iterate >= 2 && nominal_iterate <= 8 ?
-            NTuple{4, Float64}[] :
-            nothing
-
-        stats = A27.process_nominal_iterate_027(
+        stats = process_nominal_iterate_for_explorer_043!(
             nominal_iterate,
             dot_grids,
             time_grids,
             skip_state,
             retired_cells,
-            local_accepted,
-            nothing,
-            local_excluded,
+            black_segments_by_iter,
+            red_segments_by_iter,
+            point_skip_masks,
         )
         iterate_stats[nominal_iterate] = stats
-        local_excluded !== nothing && append!(excluded_segments, local_excluded)
     end
 
-    return accepted_segments, excluded_segments, iterate_stats
+    return black_segments_by_iter, red_segments_by_iter, point_skip_masks, iterate_stats
 end
 
 function flatten_segments_043(segments::Vector{NTuple{4, Float64}})
@@ -134,9 +242,10 @@ end
 
 function write_html_043(
     path::String,
-    black_segments_b64::String,
-    red_segments_b64::String,
+    black_segments_b64_by_iter::Vector{String},
+    red_segments_b64_by_iter::Vector{String},
     sign_words_b64::String,
+    skip_words_b64::String,
 )
     n_alpha = length(A27.ALPHAS_025)
     n_lambda = length(A27.LAMBDAS_025)
@@ -179,7 +288,7 @@ function write_html_043(
     #viewerWrap { position: relative; flex: 1 1 auto; min-height: 0; background: white; }
     canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
     #sidebar {
-      width: 360px; max-width: 40vw; border-left: 1px solid var(--border);
+      width: 430px; max-width: 46vw; border-left: 1px solid var(--border);
       background: var(--panel); padding: 14px 16px; overflow: auto;
     }
     h1, h2 { margin: 0 0 10px 0; font-size: 16px; }
@@ -199,9 +308,18 @@ function write_html_043(
       border: 1px solid var(--border); border-radius: 999px; padding: 3px 8px;
       font-size: 12px; background: white;
     }
-    .chip.pos { color: #0f766e; }
-    .chip.neg { color: #b91c1c; }
+    .chip.pos { color: #111111; }
+    .chip.neg { color: #111111; }
     .chip.missing { color: #6b7280; }
+    .iter-controls { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+    .iter-controls label { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+    .iter-buttons { display: flex; gap: 8px; margin-bottom: 10px; }
+    .iter-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .iter-table th, .iter-table td { border-bottom: 1px solid var(--border); padding: 6px 8px; text-align: left; }
+    .iter-table th { color: var(--muted); font-weight: 600; background: #fbfbfb; position: sticky; top: 0; }
+    .iter-row.skip { color: var(--skip); font-weight: 600; }
+    .iter-row.normal { color: #111111; }
+    .highlight-note { margin-top: 8px; font-size: 12px; color: var(--muted); }
   </style>
 </head>
 <body>
@@ -229,6 +347,15 @@ function write_html_043(
         <div class="legend-row"><span class="swatch black"></span><span>accepted contour segments</span></div>
         <div class="legend-row"><span class="swatch red"></span><span>skip-trigger / retired-square contour segments</span></div>
         <div class="legend-row"><span class="swatch cyan"></span><span>selected sampled grid point</span></div>
+        <div class="legend-row"><span class="swatch" style="background:#bcbcbc;"></span><span>four marched squares around the selected point</span></div>
+      </div>
+      <h2>Contours</h2>
+      <div class="box">
+        <div class="iter-buttons">
+          <button id="showAllIterates">Show All</button>
+          <button id="hideAllIterates">Hide All</button>
+        </div>
+        <div id="iterateControls" class="iter-controls"></div>
       </div>
       <h2>Hover</h2>
       <div class="box">
@@ -238,7 +365,13 @@ function write_html_043(
       <h2>Selected</h2>
       <div class="box">
         <div id="selectedInfo" class="kv"></div>
-        <div id="selectedSigns" class="signs"></div>
+        <div class="highlight-note">Rows are red where the selected sampled point was incremented by a skip at that nominal iterate.</div>
+        <table class="iter-table">
+          <thead>
+            <tr><th>Iterate</th><th>Sign</th><th>Skip</th></tr>
+          </thead>
+          <tbody id="selectedTableBody"></tbody>
+        </table>
       </div>
       <h2>View</h2>
       <div class="box">
@@ -255,14 +388,31 @@ function write_html_043(
       lambdaMin: $(lambda_min),
       lambdaMax: $(lambda_max)
     };
-    const BLACK_SEGMENTS_B64 = '""")
-        print(io, black_segments_b64)
-        print(io, """';
-    const RED_SEGMENTS_B64 = '""")
-        print(io, red_segments_b64)
-        print(io, """';
+    const BLACK_SEGMENTS_B64_BY_ITER = {
+""")
+        for idx in 2:length(black_segments_b64_by_iter)
+            print(io, "      ")
+            print(io, idx)
+            print(io, ": '")
+            print(io, black_segments_b64_by_iter[idx])
+            print(io, "',\n")
+        end
+        print(io, """    };
+    const RED_SEGMENTS_B64_BY_ITER = {
+""")
+        for idx in 2:length(red_segments_b64_by_iter)
+            print(io, "      ")
+            print(io, idx)
+            print(io, ": '")
+            print(io, red_segments_b64_by_iter[idx])
+            print(io, "',\n")
+        end
+        print(io, """    };
     const SIGN_WORDS_B64 = '""")
         print(io, sign_words_b64)
+        print(io, """';
+    const SKIP_WORDS_B64 = '""")
+        print(io, skip_words_b64)
         print(io, """';
 
     function decodeBase64Bytes(b64) {
@@ -282,9 +432,14 @@ function write_html_043(
       return new Float32Array(bytes.buffer);
     }
 
-    const blackSegments = decodeFloat32Array(BLACK_SEGMENTS_B64);
-    const redSegments = decodeFloat32Array(RED_SEGMENTS_B64);
+    const blackSegmentsByIter = {};
+    const redSegmentsByIter = {};
+    for (let nominal = 2; nominal <= 8; nominal += 1) {
+      blackSegmentsByIter[nominal] = BLACK_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(BLACK_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+      redSegmentsByIter[nominal] = RED_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(RED_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+    }
     const signWords = decodeUint16Array(SIGN_WORDS_B64);
+    const skipWords = decodeBase64Bytes(SKIP_WORDS_B64);
 
     const baseCanvas = document.getElementById('baseCanvas');
     const overlayCanvas = document.getElementById('overlayCanvas');
@@ -294,16 +449,20 @@ function write_html_043(
     const hoverInfo = document.getElementById('hoverInfo');
     const hoverSigns = document.getElementById('hoverSigns');
     const selectedInfo = document.getElementById('selectedInfo');
-    const selectedSigns = document.getElementById('selectedSigns');
+    const selectedTableBody = document.getElementById('selectedTableBody');
     const viewInfo = document.getElementById('viewInfo');
+    const iterateControls = document.getElementById('iterateControls');
     const resetViewButton = document.getElementById('resetView');
     const clearSelectionButton = document.getElementById('clearSelection');
+    const showAllIteratesButton = document.getElementById('showAllIterates');
+    const hideAllIteratesButton = document.getElementById('hideAllIterates');
 
     const state = {
       view: { a0: CONFIG.alphaMin, a1: CONFIG.alphaMax, l0: CONFIG.lambdaMin, l1: CONFIG.lambdaMax },
       hover: null,
       selected: null,
-      dragging: null
+      dragging: null,
+      visibleIterates: new Set([2, 3, 4, 5, 6, 7, 8])
     };
 
     function cssRect() {
@@ -377,7 +536,15 @@ function write_html_043(
       const i = clampInt(Math.round((alpha - CONFIG.alphaMin) / alphaStep()), 0, CONFIG.nAlpha - 1);
       const j = clampInt(Math.round((lambda - CONFIG.lambdaMin) / lambdaStep()), 0, CONFIG.nLambda - 1);
       const idx = pointIndex(i, j);
-      return { i, j, idx, alpha: alphaAt(i), lambda: lambdaAt(j), signWord: signWords[idx] };
+      return {
+        i,
+        j,
+        idx,
+        alpha: alphaAt(i),
+        lambda: lambdaAt(j),
+        signWord: signWords[idx],
+        skipWord: skipWords[idx]
+      };
     }
 
     function decodeSignWord(word) {
@@ -422,6 +589,36 @@ function write_html_043(
         return '<span class="chip ' + codeClass(entry.code) + '">k=' + entry.nominal + ': ' + codeText(entry.code) + '</span>';
       });
       target.innerHTML = chips.join('');
+    }
+
+    function decodeSkipWord(word) {
+      const result = [];
+      for (let nominal = 2; nominal <= 8; nominal += 1) {
+        result.push({ nominal, skip: !!(word & (1 << (nominal - 2))) });
+      }
+      return result;
+    }
+
+    function setSelectedTable(point) {
+      if (!point) {
+        selectedTableBody.innerHTML = '<tr><td colspan="3" class="small">No point selected.</td></tr>';
+        return;
+      }
+      const signs = decodeSignWord(point.signWord);
+      const skips = decodeSkipWord(point.skipWord);
+      const rows = [];
+      for (let idx = 0; idx < signs.length; idx += 1) {
+        const signEntry = signs[idx];
+        const skipEntry = skips[idx];
+        rows.push(
+          '<tr class="iter-row ' + (skipEntry.skip ? 'skip' : 'normal') + '">' +
+            '<td>' + signEntry.nominal + '</td>' +
+            '<td>' + codeText(signEntry.code) + '</td>' +
+            '<td>' + (skipEntry.skip ? 'yes' : 'no') + '</td>' +
+          '</tr>'
+        );
+      }
+      selectedTableBody.innerHTML = rows.join('');
     }
 
     function niceTickStep(span, targetTicks) {
@@ -500,6 +697,30 @@ function write_html_043(
       baseCtx.stroke();
     }
 
+    function drawSelectedNeighborCells() {
+      if (!state.selected) return;
+      const cellCoords = [
+        [state.selected.i - 1, state.selected.j - 1],
+        [state.selected.i, state.selected.j - 1],
+        [state.selected.i - 1, state.selected.j],
+        [state.selected.i, state.selected.j]
+      ];
+      overlayCtx.save();
+      overlayCtx.fillStyle = 'rgba(170, 170, 170, 0.18)';
+      overlayCtx.strokeStyle = 'rgba(90, 90, 90, 0.95)';
+      overlayCtx.lineWidth = 1.2;
+      for (const [ci, cj] of cellCoords) {
+        if (ci < 0 || cj < 0 || ci >= CONFIG.nAlpha - 1 || cj >= CONFIG.nLambda - 1) continue;
+        const x0 = plotX(alphaAt(ci));
+        const x1 = plotX(alphaAt(ci + 1));
+        const yTop = plotY(lambdaAt(cj + 1));
+        const yBot = plotY(lambdaAt(cj));
+        overlayCtx.fillRect(x0, yTop, x1 - x0, yBot - yTop);
+        overlayCtx.strokeRect(x0, yTop, x1 - x0, yBot - yTop);
+      }
+      overlayCtx.restore();
+    }
+
     function drawBase() {
       const w = viewerWrap.clientWidth;
       const h = viewerWrap.clientHeight;
@@ -511,8 +732,11 @@ function write_html_043(
       baseCtx.beginPath();
       baseCtx.rect(r.x, r.y, r.w, r.h);
       baseCtx.clip();
-      drawSegmentArray(blackSegments, '#000000');
-      drawSegmentArray(redSegments, '#c00000');
+      for (let nominal = 2; nominal <= 8; nominal += 1) {
+        if (!state.visibleIterates.has(nominal)) continue;
+        drawSegmentArray(blackSegmentsByIter[nominal], '#000000');
+        drawSegmentArray(redSegmentsByIter[nominal], '#c00000');
+      }
       baseCtx.restore();
       drawAxes();
       updateViewInfo();
@@ -543,20 +767,29 @@ function write_html_043(
       const w = viewerWrap.clientWidth;
       const h = viewerWrap.clientHeight;
       overlayCtx.clearRect(0, 0, w, h);
+      drawSelectedNeighborCells();
       drawPointMarker(overlayCtx, state.hover, '#6b7280', 4, [4, 4]);
       drawPointMarker(overlayCtx, state.selected, '#0891b2', 6, null);
       setInfo(hoverInfo, state.hover);
       setSigns(hoverSigns, state.hover);
       setInfo(selectedInfo, state.selected);
-      setSigns(selectedSigns, state.selected);
+      setSelectedTable(state.selected);
     }
 
     function updateViewInfo() {
+      let visibleBlack = 0;
+      let visibleRed = 0;
+      for (let nominal = 2; nominal <= 8; nominal += 1) {
+        if (!state.visibleIterates.has(nominal)) continue;
+        visibleBlack += blackSegmentsByIter[nominal].length / 4;
+        visibleRed += redSegmentsByIter[nominal].length / 4;
+      }
       const rows = [
         ['alpha range', state.view.a0.toFixed(6) + ' .. ' + state.view.a1.toFixed(6)],
         ['lambda range', state.view.l0.toFixed(6) + ' .. ' + state.view.l1.toFixed(6)],
         ['grid', CONFIG.nAlpha + ' x ' + CONFIG.nLambda],
-        ['segments', (blackSegments.length / 4).toLocaleString() + ' black, ' + (redSegments.length / 4).toLocaleString() + ' red']
+        ['visible iterates', Array.from(state.visibleIterates).sort(function(a, b) { return a - b; }).join(', ') || '(none)'],
+        ['segments', visibleBlack.toLocaleString() + ' black, ' + visibleRed.toLocaleString() + ' red']
       ];
       viewInfo.innerHTML = rows.map(function(pair) {
         return '<div class="label">' + pair[0] + '</div><div class="mono">' + pair[1] + '</div>';
@@ -672,7 +905,42 @@ function write_html_043(
       drawOverlay();
     });
 
+    function renderIterateControls() {
+      const html = [];
+      for (let nominal = 2; nominal <= 8; nominal += 1) {
+        const checked = state.visibleIterates.has(nominal) ? 'checked' : '';
+        html.push(
+          '<label><input type="checkbox" class="iterateToggle" data-iterate="' + nominal + '" ' + checked + '>k=' + nominal + '</label>'
+        );
+      }
+      iterateControls.innerHTML = html.join('');
+      for (const input of iterateControls.querySelectorAll('.iterateToggle')) {
+        input.addEventListener('change', function(event) {
+          const nominal = Number(event.target.getAttribute('data-iterate'));
+          if (event.target.checked) state.visibleIterates.add(nominal);
+          else state.visibleIterates.delete(nominal);
+          drawBase();
+          drawOverlay();
+        });
+      }
+    }
+
+    showAllIteratesButton.addEventListener('click', function() {
+      state.visibleIterates = new Set([2, 3, 4, 5, 6, 7, 8]);
+      renderIterateControls();
+      drawBase();
+      drawOverlay();
+    });
+
+    hideAllIteratesButton.addEventListener('click', function() {
+      state.visibleIterates = new Set();
+      renderIterateControls();
+      drawBase();
+      drawOverlay();
+    });
+
     window.addEventListener('resize', resizeCanvases);
+    renderIterateControls();
     resizeCanvases();
   </script>
 </body>
@@ -690,16 +958,23 @@ function main()
     println("Packed sign words for $(length(sign_words)) sampled grid points.")
     flush(stdout)
 
-    black_segments, red_segments, iterate_stats = collect_retired_overlay_segments_043()
-    println("Collected $(length(black_segments)) black segments and $(length(red_segments)) red segments.")
+    black_segments_by_iter, red_segments_by_iter, point_skip_masks, iterate_stats = collect_retired_overlay_segments_043()
+    total_black = sum(length, black_segments_by_iter)
+    total_red = sum(length, red_segments_by_iter)
+    println("Collected $(total_black) black segments and $(total_red) red segments.")
     flush(stdout)
 
-    black_blob = base64_bytes_043(flatten_segments_043(black_segments))
-    red_blob = base64_bytes_043(flatten_segments_043(red_segments))
+    black_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    red_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    for nominal_iterate in 2:min(8, A27.ATTEMPT025_PLOT_ITERATE_CAP)
+        black_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(black_segments_by_iter[nominal_iterate]))
+        red_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(red_segments_by_iter[nominal_iterate]))
+    end
     sign_blob = base64_bytes_043(sign_words)
+    skip_blob = base64_bytes_043(point_skip_masks)
 
     write_iterate_stats_043(STATS_PATH_043, iterate_stats)
-    write_html_043(HTML_PATH_043, black_blob, red_blob, sign_blob)
+    write_html_043(HTML_PATH_043, black_blobs, red_blobs, sign_blob, skip_blob)
 
     println("Saved iterate stats to $(STATS_PATH_043)")
     println("Saved explorer HTML to $(HTML_PATH_043)")

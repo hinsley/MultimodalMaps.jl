@@ -8,10 +8,13 @@
 Provide an interactive artifact where you can:
 
 - see the overlaid nominal-iterate `2:8` contour plot directly in the browser
+- toggle individual nominal iterates on and off with checkboxes
 - inspect exact sampled grid points by hover and click
 - recover the exact `(alpha, lambda)` value of the nearest sampled point
 - see the per-point sign sequence of the saved dot-product scalar for iterates
-  `2:8`
+  `2:8` in a selected-point table
+- see which iterates incremented the selected sampled point via skip logic
+- highlight the four marched squares surrounding the selected sampled point
 
 ## Rendering model
 
@@ -30,6 +33,12 @@ The generated HTML is self-contained:
 - red contour segments are embedded the same way
 - sampled-point sign sequences for iterates `2:8` are embedded as packed
   `UInt16` words, with 2 bits per iterate
+- sampled-point skip flags for iterates `2:8` are embedded as packed `UInt8`
+  bitmasks
+
+The full per-point iterate state/time payload from the original `3.7 GB`
+results TSV is intentionally not embedded, to keep the explorer artifact
+lightweight enough to use interactively.
 
 The browser decodes those arrays locally and renders the explorer on an HTML
 canvas with zoom, pan, hover, and click interaction.
