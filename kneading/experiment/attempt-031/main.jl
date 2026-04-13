@@ -8,6 +8,7 @@ using DifferentialEquations
 using Printf
 using SciMLSensitivity
 using StaticArrays
+using LinearAlgebra
 
 const ATTEMPT031_N_ALPHA = parse(Int, get(ENV, "ATTEMPT031_N_ALPHA", "500"))
 const ATTEMPT031_N_LAMBDA = parse(Int, get(ENV, "ATTEMPT031_N_LAMBDA", "500"))
@@ -31,6 +32,7 @@ const ATTEMPT031_MIN_SECTION_X = parse(Float64, get(ENV, "ATTEMPT031_MIN_SECTION
 const ATTEMPT031_DENOM_TOL = parse(Float64, get(ENV, "ATTEMPT031_DENOM_TOL", "1e-12"))
 const ATTEMPT031_EVENT_BISECTION_STEPS = parse(Int, get(ENV, "ATTEMPT031_EVENT_BISECTION_STEPS", "56"))
 const ATTEMPT031_EVENT_TIME_TOL = parse(Float64, get(ENV, "ATTEMPT031_EVENT_TIME_TOL", "1e-12"))
+const ATTEMPT031_TANGENT_NORM_TOL = parse(Float64, get(ENV, "ATTEMPT031_TANGENT_NORM_TOL", "1e-12"))
 const ATTEMPT031_FIG_WIDTH = parse(Int, get(ENV, "ATTEMPT031_FIG_WIDTH", "2000"))
 const ATTEMPT031_FIG_HEIGHT = parse(Int, get(ENV, "ATTEMPT031_FIG_HEIGHT", "2000"))
 const ATTEMPT031_PX_PER_UNIT = parse(Float64, get(ENV, "ATTEMPT031_PX_PER_UNIT", "4.0"))
@@ -69,6 +71,12 @@ end
     return eps0 * (vec / sqrt(sum(abs2, vec)))
 end
 
+@inline function unstable_side_direction_031(lambda::Float64)
+    mu = 0.5 * (-lambda + sqrt(lambda * lambda + 4.0))
+    vec = @SVector [1.0, mu, 0.0]
+    return vec / sqrt(sum(abs2, vec))
+end
+
 @inline section_event_value_031(u::SVector{3, Float64}) = u[2]
 @inline absx_value_031(u::SVector{3, Float64}) = u[1] * u[1]
 
@@ -84,10 +92,19 @@ function base_problem_031(alpha::Float64, lambda::Float64, u0::SVector{3, Float6
     return ODEProblem(base_flow!, collect(u0), (0.0, ATTEMPT031_T_END))
 end
 
-function transformed_problem_031(alpha::Float64, lambda::Float64, base_state::SVector{3, Float64})
+function seed_tangent_problem_031(
+    alpha::Float64,
+    lambda::Float64,
+    base_seed::SVector{3, Float64},
+    seed_direction::SVector{3, Float64},
+)
     function transformed_flow!(du, w, p, t)
-        xshift = p[1]
-        u = @SVector [w[1] + base_state[1] + xshift, w[2] + base_state[2], w[3] + base_state[3]]
+        amp_shift = p[1]
+        u = @SVector [
+            w[1] + base_seed[1] + amp_shift * seed_direction[1],
+            w[2] + base_seed[2] + amp_shift * seed_direction[2],
+            w[3] + base_seed[3] + amp_shift * seed_direction[3],
+        ]
         flow = shimizu_morioka_vector_031(u, alpha, lambda)
         du[1] = flow[1]
         du[2] = flow[2]
@@ -104,7 +121,46 @@ function transformed_problem_031(alpha::Float64, lambda::Float64, base_state::SV
     )
 end
 
-@inline function physical_state_and_sensitivity_031(
+function section_jacobian_problem_031(alpha::Float64, lambda::Float64, base_state::SVector{3, Float64})
+    function transformed_flow!(du, w, p, t)
+        xshift = p[1]
+        zshift = p[2]
+        u = @SVector [w[1] + base_state[1] + xshift, w[2] + base_state[2], w[3] + base_state[3] + zshift]
+        flow = shimizu_morioka_vector_031(u, alpha, lambda)
+        du[1] = flow[1]
+        du[2] = flow[2]
+        du[3] = flow[3]
+        return nothing
+    end
+
+    return ODEForwardSensitivityProblem(
+        transformed_flow!,
+        zeros(3),
+        (0.0, ATTEMPT031_T_END),
+        [0.0, 0.0],
+        ForwardSensitivity(),
+    )
+end
+
+@inline function physical_state_and_sensitivity1_031(
+    augmented_state::AbstractVector{<:Real},
+    base_state::SVector{3, Float64},
+    shift_direction::SVector{3, Float64},
+)
+    physical_state = @SVector [
+        Float64(augmented_state[1]) + base_state[1],
+        Float64(augmented_state[2]) + base_state[2],
+        Float64(augmented_state[3]) + base_state[3],
+    ]
+    physical_sensitivity = @SVector [
+        Float64(augmented_state[4]) + shift_direction[1],
+        Float64(augmented_state[5]) + shift_direction[2],
+        Float64(augmented_state[6]) + shift_direction[3],
+    ]
+    return physical_state, physical_sensitivity
+end
+
+@inline function physical_state_and_sensitivities2_031(
     augmented_state::AbstractVector{<:Real},
     base_state::SVector{3, Float64},
 )
@@ -113,16 +169,25 @@ end
         Float64(augmented_state[2]) + base_state[2],
         Float64(augmented_state[3]) + base_state[3],
     ]
-    physical_sensitivity = @SVector [
+    sensitivity_x = @SVector [
         Float64(augmented_state[4]) + 1.0,
         Float64(augmented_state[5]),
         Float64(augmented_state[6]),
     ]
-    return physical_state, physical_sensitivity
+    sensitivity_z = @SVector [
+        Float64(augmented_state[7]),
+        Float64(augmented_state[8]),
+        Float64(augmented_state[9]) + 1.0,
+    ]
+    return physical_state, sensitivity_x, sensitivity_z
 end
 
-@inline function augmented_state_at_031(integ, t::Float64)
+@inline function augmented_state1_at_031(integ, t::Float64)
     return SVector{6, Float64}(integ(t))
+end
+
+@inline function augmented_state2_at_031(integ, t::Float64)
+    return SVector{9, Float64}(integ(t))
 end
 
 @inline function base_state_at_031(integ, t::Float64)
@@ -169,19 +234,20 @@ function refine_section_root_base_031(
     return t_hit, base_state_at_031(integ, t_hit)
 end
 
-function refine_section_root_031(
+function refine_section_root_sensitivity1_031(
     integ,
     base_state::SVector{3, Float64},
+    shift_direction::SVector{3, Float64},
     left_t::Float64,
     right_t::Float64,
     left_y::Float64,
     right_y::Float64,
 )
     if abs(left_y) <= ATTEMPT031_DENOM_TOL
-        augmented_state = augmented_state_at_031(integ, left_t)
+        augmented_state = augmented_state1_at_031(integ, left_t)
         return left_t, augmented_state
     elseif abs(right_y) <= ATTEMPT031_DENOM_TOL
-        augmented_state = augmented_state_at_031(integ, right_t)
+        augmented_state = augmented_state1_at_031(integ, right_t)
         return right_t, augmented_state
     end
 
@@ -195,10 +261,10 @@ function refine_section_root_031(
     for _ in 1:ATTEMPT031_EVENT_BISECTION_STEPS
         (right - left) <= ATTEMPT031_EVENT_TIME_TOL && break
         mid = 0.5 * (left + right)
-        physical_state, _ = physical_state_and_sensitivity_031(augmented_state_at_031(integ, mid), base_state)
+        physical_state, _ = physical_state_and_sensitivity1_031(augmented_state1_at_031(integ, mid), base_state, shift_direction)
         f_mid = section_event_value_031(physical_state)
         if abs(f_mid) <= ATTEMPT031_DENOM_TOL
-            return mid, augmented_state_at_031(integ, mid)
+            return mid, augmented_state1_at_031(integ, mid)
         elseif signbit(f_mid) == signbit(f_left)
             left = mid
             f_left = f_mid
@@ -209,83 +275,54 @@ function refine_section_root_031(
     end
 
     t_hit = 0.5 * (left + right)
-    return t_hit, augmented_state_at_031(integ, t_hit)
+    return t_hit, augmented_state1_at_031(integ, t_hit)
 end
 
-function find_first_absxmax_state_031(alpha::Float64, lambda::Float64)
-    u0 = unstable_side_initial_condition_031(lambda)
-    prob = base_problem_031(alpha, lambda, u0)
-    integ = init(
-        prob,
-        Tsit5();
-        adaptive=true,
-        dt=ATTEMPT031_DT,
-        dtmax=ATTEMPT031_DT,
-        abstol=ATTEMPT031_ABSTOL,
-        reltol=ATTEMPT031_RELTOL,
-        maxiters=ATTEMPT031_MAX_ITERS,
-        save_everystep=false,
-        save_start=false,
-        save_end=false,
-    )
-
-    prev_state = u0
-    prev_t = integ.t
-    prev_y = section_event_value_031(prev_state)
-
-    while integ.t < ATTEMPT031_T_END
-        step!(integ)
-
-        curr_state = SVector{3, Float64}(integ.u)
-        curr_t = integ.t
-        curr_y = section_event_value_031(curr_state)
-
-        if !all(isfinite, curr_state)
-            return nothing, NaN, "nonfinite"
-        end
-        if maximum(abs, curr_state) > ATTEMPT031_MAX_STATE
-            return nothing, NaN, "blowup"
-        end
-
-        crossed_section =
-            (prev_y > 0.0 && curr_y <= 0.0) ||
-            (prev_y < 0.0 && curr_y >= 0.0)
-
-        if crossed_section
-            t_hit, event_state = refine_section_root_base_031(integ, prev_t, curr_t, prev_y, curr_y)
-            if abs(event_state[1]) > ATTEMPT031_MIN_SECTION_X && event_state[3] > 1.0
-                return event_state, t_hit, "ok"
-            end
-        end
-
-        prev_state = curr_state
-        prev_t = curr_t
-        prev_y = curr_y
+function refine_section_root_sensitivity2_031(
+    integ,
+    base_state::SVector{3, Float64},
+    left_t::Float64,
+    right_t::Float64,
+    left_y::Float64,
+    right_y::Float64,
+)
+    if abs(left_y) <= ATTEMPT031_DENOM_TOL
+        augmented_state = augmented_state2_at_031(integ, left_t)
+        return left_t, augmented_state
+    elseif abs(right_y) <= ATTEMPT031_DENOM_TOL
+        augmented_state = augmented_state2_at_031(integ, right_t)
+        return right_t, augmented_state
     end
 
-    return nothing, NaN, "no_first_absxmax"
+    signbit(left_y) == signbit(right_y) && error("Section root refinement requires a sign change.")
+
+    left = left_t
+    right = right_t
+    f_left = left_y
+
+    for _ in 1:ATTEMPT031_EVENT_BISECTION_STEPS
+        (right - left) <= ATTEMPT031_EVENT_TIME_TOL && break
+        mid = 0.5 * (left + right)
+        physical_state, _, _ = physical_state_and_sensitivities2_031(augmented_state2_at_031(integ, mid), base_state)
+        f_mid = section_event_value_031(physical_state)
+        if abs(f_mid) <= ATTEMPT031_DENOM_TOL
+            return mid, augmented_state2_at_031(integ, mid)
+        elseif signbit(f_mid) == signbit(f_left)
+            left = mid
+            f_left = f_mid
+        else
+            right = mid
+        end
+    end
+
+    t_hit = 0.5 * (left + right)
+    return t_hit, augmented_state2_at_031(integ, t_hit)
 end
 
-function event_sensitivity_x2_031(
-    event_state::SVector{3, Float64},
-    raw_sensitivity::SVector{3, Float64},
-    alpha::Float64,
-    lambda::Float64,
-)
-    flow = shimizu_morioka_vector_031(event_state, alpha, lambda)
-    denom = flow[2]
-    abs(denom) > ATTEMPT031_DENOM_TOL || error("Event-time sensitivity denominator nearly singular.")
-    event_time_d1 = -raw_sensitivity[2] / denom
-    event_state_d1 = raw_sensitivity + flow * event_time_d1
-    return 2.0 * event_state[1] * event_state_d1[1]
-end
-
-function next_absxmax_sensitivity_031(
-    alpha::Float64,
-    lambda::Float64,
-    base_state::SVector{3, Float64},
-)
-    prob = transformed_problem_031(alpha, lambda, base_state)
+function find_first_absxmax_state_and_tangent_031(alpha::Float64, lambda::Float64)
+    base_seed = unstable_side_initial_condition_031(lambda)
+    seed_direction = unstable_side_direction_031(lambda)
+    prob = seed_tangent_problem_031(alpha, lambda, base_seed, seed_direction)
     integ = init(
         prob,
         Tsit5();
@@ -301,7 +338,7 @@ function next_absxmax_sensitivity_031(
     )
 
     prev_augmented = SVector{6, Float64}(integ.u)
-    prev_state, _ = physical_state_and_sensitivity_031(prev_augmented, base_state)
+    prev_state, _ = physical_state_and_sensitivity1_031(prev_augmented, base_seed, seed_direction)
     prev_t = integ.t
     prev_y = section_event_value_031(prev_state)
 
@@ -309,7 +346,94 @@ function next_absxmax_sensitivity_031(
         step!(integ)
 
         curr_augmented = SVector{6, Float64}(integ.u)
-        curr_state, _ = physical_state_and_sensitivity_031(curr_augmented, base_state)
+        curr_state, _ = physical_state_and_sensitivity1_031(curr_augmented, base_seed, seed_direction)
+        curr_t = integ.t
+        curr_y = section_event_value_031(curr_state)
+
+        if !all(isfinite, curr_state) || !all(isfinite, curr_augmented)
+            return nothing, NaN, "nonfinite"
+        end
+        if maximum(abs, curr_state) > ATTEMPT031_MAX_STATE
+            return nothing, NaN, "blowup"
+        end
+
+        crossed_section =
+            (prev_y > 0.0 && curr_y <= 0.0) ||
+            (prev_y < 0.0 && curr_y >= 0.0)
+
+        if crossed_section
+            t_hit, augmented_hit =
+                refine_section_root_sensitivity1_031(integ, base_seed, seed_direction, prev_t, curr_t, prev_y, curr_y)
+            event_state, raw_sensitivity =
+                physical_state_and_sensitivity1_031(augmented_hit, base_seed, seed_direction)
+            if abs(event_state[1]) > ATTEMPT031_MIN_SECTION_X && event_state[3] > 1.0
+                try
+                    event_tangent = event_corrected_state_sensitivity_031(event_state, raw_sensitivity, alpha, lambda)
+                    tangent_xz = @SVector [event_tangent[1], event_tangent[3]]
+                    tangent_norm = norm(tangent_xz)
+                    tangent_norm > ATTEMPT031_TANGENT_NORM_TOL || return nothing, NaN, "degenerate_seed_tangent"
+                    return event_state, tangent_xz / tangent_norm, "ok"
+                catch error
+                    if error isa ErrorException && occursin("denominator nearly singular", sprint(showerror, error))
+                        return nothing, NaN, "near_tangency"
+                    end
+                    rethrow(error)
+                end
+            end
+        end
+
+        prev_augmented = curr_augmented
+        prev_state = curr_state
+        prev_t = curr_t
+        prev_y = curr_y
+    end
+
+    return nothing, NaN, "no_first_absxmax"
+end
+
+function event_corrected_state_sensitivity_031(
+    event_state::SVector{3, Float64},
+    raw_sensitivity::SVector{3, Float64},
+    alpha::Float64,
+    lambda::Float64,
+)
+    flow = shimizu_morioka_vector_031(event_state, alpha, lambda)
+    denom = flow[2]
+    abs(denom) > ATTEMPT031_DENOM_TOL || error("Event-time sensitivity denominator nearly singular.")
+    event_time_d1 = -raw_sensitivity[2] / denom
+    return raw_sensitivity + flow * event_time_d1
+end
+
+function next_absxmax_jacobian_031(
+    alpha::Float64,
+    lambda::Float64,
+    base_state::SVector{3, Float64},
+)
+    prob = section_jacobian_problem_031(alpha, lambda, base_state)
+    integ = init(
+        prob,
+        Tsit5();
+        adaptive=true,
+        dt=ATTEMPT031_DT,
+        dtmax=ATTEMPT031_DT,
+        abstol=ATTEMPT031_ABSTOL,
+        reltol=ATTEMPT031_RELTOL,
+        maxiters=ATTEMPT031_MAX_ITERS,
+        save_everystep=false,
+        save_start=false,
+        save_end=false,
+    )
+
+    prev_augmented = SVector{9, Float64}(integ.u)
+    prev_state, _, _ = physical_state_and_sensitivities2_031(prev_augmented, base_state)
+    prev_t = integ.t
+    prev_y = section_event_value_031(prev_state)
+
+    while integ.t < ATTEMPT031_T_END
+        step!(integ)
+
+        curr_augmented = SVector{9, Float64}(integ.u)
+        curr_state, _, _ = physical_state_and_sensitivities2_031(curr_augmented, base_state)
         curr_t = integ.t
         curr_y = section_event_value_031(curr_state)
 
@@ -325,13 +449,21 @@ function next_absxmax_sensitivity_031(
             (prev_y < 0.0 && curr_y >= 0.0)
 
         if crossed_section
-            t_hit, augmented_hit = refine_section_root_031(integ, base_state, prev_t, curr_t, prev_y, curr_y)
-            event_state, raw_sensitivity = physical_state_and_sensitivity_031(augmented_hit, base_state)
+            t_hit, augmented_hit = refine_section_root_sensitivity2_031(integ, base_state, prev_t, curr_t, prev_y, curr_y)
+            event_state, raw_sensitivity_x, raw_sensitivity_z =
+                physical_state_and_sensitivities2_031(augmented_hit, base_state)
 
             if abs(event_state[1]) > ATTEMPT031_MIN_SECTION_X && event_state[3] > 1.0
                 try
-                    sensitivity_value = event_sensitivity_x2_031(event_state, raw_sensitivity, alpha, lambda)
-                    return event_state, t_hit, sensitivity_value, "ok"
+                    event_sensitivity_x =
+                        event_corrected_state_sensitivity_031(event_state, raw_sensitivity_x, alpha, lambda)
+                    event_sensitivity_z =
+                        event_corrected_state_sensitivity_031(event_state, raw_sensitivity_z, alpha, lambda)
+                    jacobian = @SMatrix [
+                        event_sensitivity_x[1] event_sensitivity_z[1]
+                        event_sensitivity_x[3] event_sensitivity_z[3]
+                    ]
+                    return event_state, t_hit, jacobian, "ok"
                 catch error
                     if error isa ErrorException && occursin("denominator nearly singular", sprint(showerror, error))
                         return nothing, NaN, NaN, "near_tangency"
@@ -351,7 +483,7 @@ function next_absxmax_sensitivity_031(
 end
 
 function scan_orbit_031(alpha::Float64, lambda::Float64)::SMSensitivityResult31
-    first_event_state, _, prelude_status = find_first_absxmax_state_031(alpha, lambda)
+    first_event_state, current_tangent, prelude_status = find_first_absxmax_state_and_tangent_031(alpha, lambda)
     if isnothing(first_event_state)
         return SMSensitivityResult31(
             alpha,
@@ -375,8 +507,8 @@ function scan_orbit_031(alpha::Float64, lambda::Float64)::SMSensitivityResult31
     current_state = first_event_state
 
     while length(absxmax_sensitivity_values) < ATTEMPT031_MAX_EVENT_ITERATES
-        next_state, dt_return, sensitivity_value, next_status =
-            next_absxmax_sensitivity_031(alpha, lambda, current_state)
+        next_state, dt_return, jacobian, next_status =
+            next_absxmax_jacobian_031(alpha, lambda, current_state)
 
         if isnothing(next_state)
             if next_status == "no_next_absxmax"
@@ -387,9 +519,19 @@ function scan_orbit_031(alpha::Float64, lambda::Float64)::SMSensitivityResult31
             break
         end
 
+        x_derivative_along_tangent = jacobian[1, 1] * current_tangent[1] + jacobian[1, 2] * current_tangent[2]
+        sensitivity_value = 2.0 * next_state[1] * x_derivative_along_tangent
         push!(absxmax_sensitivity_values, sensitivity_value)
         push!(absxmax_return_times, dt_return)
         push!(absxmax_states, next_state)
+
+        next_tangent = jacobian * current_tangent
+        tangent_norm = norm(next_tangent)
+        if tangent_norm <= ATTEMPT031_TANGENT_NORM_TOL
+            status = "degenerate_tangent"
+            break
+        end
+        current_tangent = next_tangent / tangent_norm
         current_state = next_state
     end
 

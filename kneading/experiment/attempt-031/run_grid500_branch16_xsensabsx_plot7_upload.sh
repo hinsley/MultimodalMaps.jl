@@ -5,7 +5,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../../.." && pwd)"
 cd "${REPO_ROOT}"
 
-OUTPUT_TAG="${ATTEMPT031_OUTPUT_TAG:-grid500_branch16_xpartialabsx_plot7_shimizu_morioka_cpu}"
+OUTPUT_TAG="${ATTEMPT031_OUTPUT_TAG:-grid500_branch16_xtangentabsx_plot7_shimizu_morioka_cpu}"
 PNG_PATH="${SCRIPT_DIR}/${OUTPUT_TAG}_contours.png"
 UPLOAD_JSON="${SCRIPT_DIR}/${OUTPUT_TAG}_upload.json"
 UPLOAD_STDERR="${SCRIPT_DIR}/${OUTPUT_TAG}_upload.stderr"
