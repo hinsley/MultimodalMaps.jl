@@ -27,9 +27,8 @@ Provide an interactive artifact where you can:
 - after that forced skip, the explorer re-evaluates the same nominal iterate
   once with the compressed indices before moving on to later nominal iterates
 - later mixed squares inside `2:8` are drawn in black
-- if the first mixed square is at nominal iterate `8` and there is no second
-  mixed square in `2:8`, then mixed squares in `9:16` are used only to decide
-  whether that earliest iterate-8 contour should be grey
+- if there is no second mixed square in `2:8`, then mixed squares in `9:16`
+  are used to decide whether that earliest contour should be grey
 - earliest contours that are not promoted to black/grey remain red
 - the explorer uses the same saved `attempt-027` contour scalar
   `sign(x) * v_x`

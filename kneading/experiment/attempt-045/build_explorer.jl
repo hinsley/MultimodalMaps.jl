@@ -258,18 +258,18 @@ function collect_forcedfirstskip_overlay_segments_045(
                     target_segments = red_local[earliest_nominal]
                     target_cell_local = red_cell_local
                     target_segment_local = red_segment_local
-                    if earliest_nominal == plot_iterate_end && later_iterate_end > plot_iterate_end
+                    if later_iterate_end > plot_iterate_end
                         later_nominal = plot_iterate_end + 1
-                        later_after_8_found = false
+                        later_after_plot_found = false
                         while later_nominal <= later_iterate_end
                             later_evaluation = evaluate_square_local_045(j, i, later_nominal, dot_grids, time_grids, skip)
                             if later_evaluation.status == A27.EVAL_MIXED_025
-                                later_after_8_found = true
+                                later_after_plot_found = true
                                 break
                             end
                             later_nominal += 1
                         end
-                        if later_after_8_found
+                        if later_after_plot_found
                             target_segments = grey_local[earliest_nominal]
                             target_cell_local = grey_cell_local
                             target_segment_local = grey_segment_local
@@ -551,15 +551,15 @@ function write_html_043(
       <div class="box small">
 	        Self-contained HTML explorer built from the saved attempt-027 `2000 x 2000` sweep.
 	        Within nominal iterates `2:8`, the first contouring iterate forces one shorter-return-time
-	        skip. A second mixed square inside `2:8` is drawn black. If the first mixed square is at
-	        nominal iterate `8` and there is no second mixed square in `2:8`, then later mixed squares
-	        in `9:16` recolor that earliest iterate-8 contour grey; otherwise it stays red.
+	        skip. A second mixed square inside `2:8` is drawn black. If no second mixed square appears
+	        in `2:8`, then later mixed squares in `9:16` recolor that earliest contour grey; otherwise
+	        it stays red.
 	      </div>
 	      <h2>Legend</h2>
 	      <div class="box">
 	        <div class="legend-row"><span class="swatch black"></span><span>later surviving contours after the forced first skip</span></div>
-	        <div class="legend-row"><span class="swatch red"></span><span>earliest contour only, with no second mixed square in `2:8`; iterate `8` also requires none in `9:16`</span></div>
-	        <div class="legend-row"><span class="swatch grey"></span><span>first mixed square at nominal iterate `8`, no second mixed square in `2:8`, but one appears in `9:16`</span></div>
+	        <div class="legend-row"><span class="swatch red"></span><span>earliest contour only, with no second mixed square in `2:8` or `9:16`</span></div>
+	        <div class="legend-row"><span class="swatch grey"></span><span>no second mixed square in `2:8`, but one appears in `9:16`</span></div>
 	        <div class="legend-row"><span class="swatch cyan"></span><span>selected sampled grid point</span></div>
 	        <div class="legend-row"><span class="swatch" style="background:#bcbcbc;"></span><span>four marched squares around the selected point</span></div>
 	      </div>
