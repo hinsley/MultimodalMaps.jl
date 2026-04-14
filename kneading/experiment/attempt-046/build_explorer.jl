@@ -29,24 +29,45 @@ const MISSING_TIME_WORD_043 = UInt16(0xffff)
 @inline skip_bit_043(nominal_iterate::Int) = UInt8(1) << (nominal_iterate - 2)
 @inline point_linear_index_043(i::Int, j::Int, n_alpha::Int) = (j - 1) * n_alpha + i
 
-function cumulative_sign_adjusted_dots_046(raw_values::AbstractVector{Float64})
+function raw_sign_word_046(result::A27.SMAbsXResult25)
+    word = UInt16(0)
+    max_iter = min(result.absxmax_count, 8, length(result.absxmax_dot_values))
+    for nominal_iterate in 2:8
+        code = nominal_iterate <= max_iter ? sign_code_043(result.absxmax_dot_values[nominal_iterate]) : UInt16(0)
+        word |= code << (2 * (nominal_iterate - 2))
+    end
+    return word
+end
+
+function monotone_sign_adjusted_dots_046(raw_values::AbstractVector{Float64})
     adjusted = Vector{Float64}(undef, length(raw_values))
-    negative_count = 0
+    isempty(raw_values) && return adjusted
     @inbounds for idx in eachindex(raw_values)
         value = raw_values[idx]
         if !isfinite(value) || value == 0.0
             adjusted[idx] = value
-            continue
+        else
+            adjusted[idx] = abs(value)
         end
-        value < 0.0 && (negative_count += 1)
-        adjusted[idx] = isodd(negative_count) ? -abs(value) : abs(value)
+    end
+
+    prev_sign = isfinite(raw_values[1]) ? A27.sign_class_025(raw_values[1]) : Int8(0)
+    for idx in 2:length(raw_values)
+        value = raw_values[idx]
+        current_sign = isfinite(value) ? A27.sign_class_025(value) : Int8(0)
+        if current_sign == Int8(0) || prev_sign == Int8(0)
+            adjusted[idx] = value
+        else
+            adjusted[idx] = current_sign == prev_sign ? abs(value) : -abs(value)
+        end
+        current_sign != Int8(0) && (prev_sign = current_sign)
     end
     return adjusted
 end
 
-function pack_sign_word_043(result::A27.SMAbsXResult25)
+function monotone_sign_word_046(result::A27.SMAbsXResult25)
     word = UInt16(0)
-    adjusted = cumulative_sign_adjusted_dots_046(result.absxmax_dot_values)
+    adjusted = monotone_sign_adjusted_dots_046(result.absxmax_dot_values)
     max_iter = min(result.absxmax_count, 8, length(adjusted))
     for nominal_iterate in 2:8
         code = nominal_iterate <= max_iter ? sign_code_043(adjusted[nominal_iterate]) : UInt16(0)
@@ -58,7 +79,8 @@ end
 function build_sign_words_043()
     n_alpha = length(A27.ALPHAS_025)
     n_lambda = length(A27.LAMBDAS_025)
-    sign_words = fill(UInt16(0), n_alpha * n_lambda)
+    raw_sign_words = fill(UInt16(0), n_alpha * n_lambda)
+    monotone_sign_words = fill(UInt16(0), n_alpha * n_lambda)
 
     for col_idx in eachindex(A27.ALPHAS_025)
         path = A27.column_path_025(col_idx)
@@ -70,13 +92,14 @@ function build_sign_words_043()
                 row_idx += 1
                 result = A27.parse_result_025(split(line, '\t'))
                 linear_idx = (row_idx - 1) * n_alpha + col_idx
-                sign_words[linear_idx] = pack_sign_word_043(result)
+                raw_sign_words[linear_idx] = raw_sign_word_046(result)
+                monotone_sign_words[linear_idx] = monotone_sign_word_046(result)
             end
             row_idx == n_lambda || error("Column $(col_idx) ended at $(row_idx) rows, expected $(n_lambda)")
         end
     end
 
-    return sign_words
+    return raw_sign_words, monotone_sign_words
 end
 
 function mark_point_skip_masks_043!(
@@ -174,7 +197,7 @@ end
 function build_grids_043()
     dot_grids = A27.build_iterate_grids_025(
         result -> result.absxmax_count,
-        result -> cumulative_sign_adjusted_dots_046(result.absxmax_dot_values),
+        result -> monotone_sign_adjusted_dots_046(result.absxmax_dot_values),
     )
     cumulative_time_grids = A27.build_iterate_grids_025(result -> result.absxmax_count, result -> result.absxmax_return_times)
     time_grids = A27.cumulative_to_interval_grids_025(cumulative_time_grids)
@@ -659,7 +682,8 @@ function write_html_043(
     red_segments_b64_by_iter::Vector{String},
     blue_segments_b64_by_iter::Vector{String},
     green_segments_b64_by_iter::Vector{String},
-    sign_words_b64::String,
+    raw_sign_words_b64::String,
+    monotone_sign_words_b64::String,
     skip_words_b64::String,
     time_words_gz_b64::String,
     time_scale::Int,
@@ -758,8 +782,8 @@ function write_html_043(
 	      <h1>Attempt-046 Explorer</h1>
 	      <div class="box small">
 	        Self-contained HTML explorer built from the saved attempt-027 `2000 x 2000` sweep.
-	        Sign symbols are cumulative: at iterate `k`, the sign shown and contoured is `(-1)^N`,
-	        where `N` is the number of negative raw tangent symbols seen through iterate `k`.
+	        The contoured monotone sign at iterate `k` is `+` when the raw dot-product sign stays the same
+	        from iterate `k-1` to `k`, and `-` when it flips. Iterate `2` uses raw iterate `1` as its reference.
 	        Each earliest mixed square in `2:8` is classified from the two representative cumulative
 	        sign sequences using the full saved `2:16` symbol data.
 	      </div>
@@ -785,23 +809,23 @@ function write_html_043(
       <h2>Hover</h2>
       <div class="box">
         <div id="hoverInfo" class="kv compact-meta"></div>
-        <table class="iter-table">
-          <thead>
-            <tr><th>Iter</th><th>Sign</th><th>Time</th><th>Skip</th></tr>
-          </thead>
-          <tbody id="hoverTableBody"></tbody>
-        </table>
+	        <table class="iter-table">
+	          <thead>
+	            <tr><th>Iter</th><th>Dot</th><th>Mono</th><th>Time</th><th>Skip</th></tr>
+	          </thead>
+	          <tbody id="hoverTableBody"></tbody>
+	        </table>
       </div>
       <h2>Selected</h2>
       <div class="box">
-        <div id="selectedInfo" class="kv compact-meta"></div>
-        <div class="highlight-note">Rows are red where the selected sampled point lies on the shorter-return-time side of the forced first skip for some surrounding square at that nominal iterate.</div>
-        <table class="iter-table">
-          <thead>
-            <tr><th>Iter</th><th>Sign</th><th>Time</th><th>Skip</th></tr>
-          </thead>
-          <tbody id="selectedTableBody"></tbody>
-        </table>
+	        <div id="selectedInfo" class="kv compact-meta"></div>
+	        <div class="highlight-note">Rows are red where the selected sampled point lies on the shorter-return-time side of the forced first skip for some surrounding square at that nominal iterate.</div>
+	        <table class="iter-table">
+	          <thead>
+	            <tr><th>Iter</th><th>Dot</th><th>Mono</th><th>Time</th><th>Skip</th></tr>
+	          </thead>
+	          <tbody id="selectedTableBody"></tbody>
+	        </table>
       </div>
       <h2>View</h2>
       <div class="box">
@@ -858,10 +882,13 @@ function write_html_043(
             print(io, "',\n")
         end
         print(io, """    };
-		    const SIGN_WORDS_B64 = '""")
-        print(io, sign_words_b64)
+			    const RAW_SIGN_WORDS_B64 = '""")
+        print(io, raw_sign_words_b64)
         print(io, """';
-    const SKIP_WORDS_B64 = '""")
+	    const MONOTONE_SIGN_WORDS_B64 = '""")
+        print(io, monotone_sign_words_b64)
+        print(io, """';
+	    const SKIP_WORDS_B64 = '""")
         print(io, skip_words_b64)
         print(io, """';
     const TIME_WORDS_GZ_B64 = '""")
@@ -908,9 +935,10 @@ function write_html_043(
 		      blueSegmentsByIter[nominal] = BLUE_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(BLUE_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
 		      greenSegmentsByIter[nominal] = GREEN_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(GREEN_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
 		    }
-    const signWords = decodeUint16Array(SIGN_WORDS_B64);
-    const skipWords = decodeBase64Bytes(SKIP_WORDS_B64);
-    let timeWords = null;
+	    const rawSignWords = decodeUint16Array(RAW_SIGN_WORDS_B64);
+	    const monotoneSignWords = decodeUint16Array(MONOTONE_SIGN_WORDS_B64);
+	    const skipWords = decodeBase64Bytes(SKIP_WORDS_B64);
+	    let timeWords = null;
 
     const baseCanvas = document.getElementById('baseCanvas');
     const overlayCanvas = document.getElementById('overlayCanvas');
@@ -1011,16 +1039,17 @@ function write_html_043(
       const i = clampInt(Math.round((alpha - CONFIG.alphaMin) / alphaStep()), 0, CONFIG.nAlpha - 1);
       const j = clampInt(Math.round((lambda - CONFIG.lambdaMin) / lambdaStep()), 0, CONFIG.nLambda - 1);
       const idx = pointIndex(i, j);
-      return {
-        i,
-        j,
-        idx,
-        alpha: alphaAt(i),
-        lambda: lambdaAt(j),
-        signWord: signWords[idx],
-        skipWord: skipWords[idx]
-      };
-    }
+	      return {
+	        i,
+	        j,
+	        idx,
+	        alpha: alphaAt(i),
+	        lambda: lambdaAt(j),
+	        rawSignWord: rawSignWords[idx],
+	        monotoneSignWord: monotoneSignWords[idx],
+	        skipWord: skipWords[idx]
+	      };
+	    }
 
     function decodeSignWord(word) {
       const result = [];
@@ -1044,15 +1073,16 @@ function write_html_043(
         target.innerHTML = '<div class="small">' + emptyText + '</div>';
         return;
       }
-      target.innerHTML = [
-        ['alpha', point.alpha.toFixed(6)],
-        ['lambda', point.lambda.toFixed(6)],
-        ['grid index', '(' + point.i + ', ' + point.j + ')'],
-        ['flat index', String(point.idx)],
-	        ['cumulative sign word', '0x' + point.signWord.toString(16).padStart(4, '0')]
-      ].map(function(pair) {
-        return '<div class="label">' + pair[0] + '</div><div class="mono">' + pair[1] + '</div>';
-      }).join('');
+	      target.innerHTML = [
+	        ['alpha', point.alpha.toFixed(6)],
+	        ['lambda', point.lambda.toFixed(6)],
+	        ['grid index', '(' + point.i + ', ' + point.j + ')'],
+	        ['flat index', String(point.idx)],
+		        ['raw sign word', '0x' + point.rawSignWord.toString(16).padStart(4, '0')],
+		        ['monotone sign word', '0x' + point.monotoneSignWord.toString(16).padStart(4, '0')]
+	      ].map(function(pair) {
+	        return '<div class="label">' + pair[0] + '</div><div class="mono">' + pair[1] + '</div>';
+	      }).join('');
     }
 
     function decodeSkipWord(word) {
@@ -1082,20 +1112,23 @@ function write_html_043(
         target.innerHTML = '<tr><td colspan="4" class="small">' + emptyText + '</td></tr>';
         return;
       }
-      const signs = decodeSignWord(point.signWord);
-      const skips = decodeSkipWord(point.skipWord);
-      const rows = [];
-      for (let idx = 0; idx < signs.length; idx += 1) {
-        const signEntry = signs[idx];
-        const skipEntry = skips[idx];
-        const timeValue = formatTimeValue(decodeTimeForPoint(point.idx, signEntry.nominal));
-        rows.push(
-          '<tr class="iter-row ' + (skipEntry.skip ? 'skip' : 'normal') + '">' +
-            '<td>' + signEntry.nominal + '</td>' +
-            '<td>' + codeText(signEntry.code) + '</td>' +
-            '<td>' + timeValue + '</td>' +
-            '<td>' + (skipEntry.skip ? 'yes' : 'no') + '</td>' +
-          '</tr>'
+	      const rawSigns = decodeSignWord(point.rawSignWord);
+	      const monotoneSigns = decodeSignWord(point.monotoneSignWord);
+	      const skips = decodeSkipWord(point.skipWord);
+	      const rows = [];
+	      for (let idx = 0; idx < rawSigns.length; idx += 1) {
+	        const rawEntry = rawSigns[idx];
+	        const monotoneEntry = monotoneSigns[idx];
+	        const skipEntry = skips[idx];
+	        const timeValue = formatTimeValue(decodeTimeForPoint(point.idx, rawEntry.nominal));
+	        rows.push(
+	          '<tr class="iter-row ' + (skipEntry.skip ? 'skip' : 'normal') + '">' +
+	            '<td>' + rawEntry.nominal + '</td>' +
+	            '<td>' + codeText(rawEntry.code) + '</td>' +
+	            '<td>' + codeText(monotoneEntry.code) + '</td>' +
+	            '<td>' + timeValue + '</td>' +
+	            '<td>' + (skipEntry.skip ? 'yes' : 'no') + '</td>' +
+	          '</tr>'
         );
       }
       target.innerHTML = rows.join('');
@@ -1478,8 +1511,8 @@ function main()
     println("Source columns: $(A27.SWEEP_DIR_025)")
     flush(stdout)
 
-    sign_words = build_sign_words_043()
-    println("Packed sign words for $(length(sign_words)) sampled grid points.")
+    raw_sign_words, monotone_sign_words = build_sign_words_043()
+    println("Packed raw and monotone sign words for $(length(raw_sign_words)) sampled grid points.")
     flush(stdout)
 
     dot_grids, time_grids = build_grids_043()
@@ -1506,12 +1539,13 @@ function main()
         blue_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(blue_segments_by_iter[nominal_iterate]))
         green_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(green_segments_by_iter[nominal_iterate]))
     end
-    sign_blob = base64_bytes_043(sign_words)
+    raw_sign_blob = base64_bytes_043(raw_sign_words)
+    monotone_sign_blob = base64_bytes_043(monotone_sign_words)
     skip_blob = base64_bytes_043(point_skip_masks)
     time_blob = base64_gzip_bytes_043(time_words)
 
     write_iterate_stats_043(STATS_PATH_043, iterate_stats)
-    write_html_043(HTML_PATH_043, black_blobs, red_blobs, blue_blobs, green_blobs, sign_blob, skip_blob, time_blob, time_scale)
+    write_html_043(HTML_PATH_043, black_blobs, red_blobs, blue_blobs, green_blobs, raw_sign_blob, monotone_sign_blob, skip_blob, time_blob, time_scale)
 
     println("Saved iterate stats to $(STATS_PATH_043)")
     println("Saved explorer HTML to $(HTML_PATH_043)")

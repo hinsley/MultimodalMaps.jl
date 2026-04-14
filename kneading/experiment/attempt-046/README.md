@@ -18,6 +18,8 @@ Provide an interactive artifact where you can:
 - recover the exact `(alpha, lambda)` value of the nearest sampled point
 - see the per-point sign sequence and return times for iterates `2:8` in both
   the hover table and the selected-point table
+- see both the raw dot-product sign sequence and the monotone sign sequence in
+  those tables
 - see which iterates place the selected sampled point on the shorter side of a
   forced first skip
 - highlight the four marched squares surrounding the selected sampled point
@@ -29,8 +31,10 @@ Provide an interactive artifact where you can:
 - if a square first contours at nominal iterate `k in 2:8`, that first contour
   is the only contour drawn for that square
 - the contour scalar magnitudes stay equal to the saved `|sign(x) * v_x|`
-  magnitudes from `attempt-027`, but each iterate sign is replaced by the
-  cumulative parity sign `(-1)^N`
+  magnitudes from `attempt-027`
+- the contoured monotone sign at iterate `k` is `+` when the raw dot-product
+  sign stays the same from iterate `k-1` to `k`, and `-` when it flips
+- iterate `2` uses raw iterate `1` as the reference for that monotone sign
 - the two representative sides are still chosen from the first mixed square
   using the shorter-return-time convention from the original skip logic
 - blue means grazing: deleting one cumulative sign in `2:8` on either side
@@ -43,7 +47,7 @@ Provide an interactive artifact where you can:
 - green means the square is mixed in `2:8` but does not satisfy any of the
   black/red/blue tests
 - the explorer uses the same saved `attempt-027` tangent magnitudes and return
-  times, but swaps in cumulative signs before any contouring or table display
+  times, but swaps in those monotone signs before any contouring
 - because the saved dataset stops at iterate `16`, a one-symbol grazing test
   compares the longest aligned suffix available after the deletion and leaves
   one unmatched terminal symbol on the undeleted side
