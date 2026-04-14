@@ -1,11 +1,10 @@
 # attempt-046
 
 `attempt-046` builds a self-contained HTML explorer for the saved
-`attempt-027` Shimizu-Morioka `|x|`-maximum sweep, but changes the
-recoloring rule from `attempt-045` so black and blue only apply when
-later contours use the same marched-square edge pair as the original
-earliest contour segment. It also uses cumulative sign parity instead of
-the raw per-iterate tangent sign.
+`attempt-027` Shimizu-Morioka `|x|`-maximum sweep. It uses cumulative sign
+parity instead of the raw per-iterate tangent sign, and it classifies each
+earliest mixed contour in `2:8` as black, red, blue, or green from the two
+representative cumulative sign sequences on either side of the contour.
 
 ## Goal
 
@@ -28,22 +27,26 @@ Provide an interactive artifact where you can:
 ## Rendering model
 
 - if a square first contours at nominal iterate `k in 2:8`, that first contour
-  forces exactly one skip on the shorter-return-time sign class
+  is the only contour drawn for that square
 - the contour scalar magnitudes stay equal to the saved `|sign(x) * v_x|`
   magnitudes from `attempt-027`, but each iterate sign is replaced by the
   cumulative parity sign `(-1)^N`
-- after that forced skip, the explorer re-evaluates the same nominal iterate
-  once with the compressed indices before moving on to later nominal iterates
-- the original earliest contour is decomposed into one or two contour segments,
-  each tagged by its marched-square edge pair
-- later contours in `2:8` are drawn in black only when they use the same edge
-  pair as one of those original earliest contour segments
-- if no same-edge later contour appears in `2:8`, then same-edge contours in
-  `9:16` recolor the original earliest segment blue
-- original earliest segments with no same-edge recoloring in either range stay
-  red
+- the two representative sides are still chosen from the first mixed square
+  using the shorter-return-time convention from the original skip logic
+- blue means grazing: deleting one cumulative sign in `2:8` on either side
+  makes the remaining `2:16` sequences match, with suffix inversion applied
+  after deleting a `-`
+- red means coordinate singularity: exactly one consecutive same-sign pair
+  flips sign and the rest of the `2:16` sequences match
+- black means a real contour: the two cumulative sign sequences differ in
+  exactly one place over `2:16`
+- green means the square is mixed in `2:8` but does not satisfy any of the
+  black/red/blue tests
 - the explorer uses the same saved `attempt-027` tangent magnitudes and return
   times, but swaps in cumulative signs before any contouring or table display
+- because the saved dataset stops at iterate `16`, a one-symbol grazing test
+  compares the longest aligned suffix available after the deletion and leaves
+  one unmatched terminal symbol on the undeleted side
 - no trajectories are reintegrated; everything is reconstructed from the saved
   sweep columns
 
@@ -54,6 +57,7 @@ The generated HTML is self-contained:
 - black contour segments are embedded as packed `Float32` endpoint arrays
 - red contour segments are embedded the same way
 - blue contour segments are embedded the same way
+- green contour segments are embedded the same way
 - sampled-point sign sequences for iterates `2:8` are embedded as packed
   `UInt16` words, with 2 bits per iterate
 - sampled-point skip flags for iterates `2:8` are embedded as packed `UInt8`

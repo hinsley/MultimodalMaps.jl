@@ -181,6 +181,103 @@ function build_grids_043()
     return dot_grids, time_grids
 end
 
+@inline function corner_point_indices_046(j::Int, i::Int, corner::Int)
+    return corner == 1 ? (j, i) :
+           corner == 2 ? (j, i + 1) :
+           corner == 3 ? (j + 1, i + 1) :
+           (j + 1, i)
+end
+
+function point_sign_sequence_046(
+    row_idx::Int,
+    col_idx::Int,
+    dot_grids::Vector{Matrix{Float64}};
+    first_iter::Int=2,
+    last_iter::Int=16,
+)
+    last_iter <= length(dot_grids) || return nothing
+    seq = Vector{Int8}(undef, last_iter - first_iter + 1)
+    seq_idx = 1
+    for nominal_iterate in first_iter:last_iter
+        value = dot_grids[nominal_iterate][row_idx, col_idx]
+        isfinite(value) || return nothing
+        sign = A27.sign_class_025(value)
+        sign == Int8(0) && return nothing
+        seq[seq_idx] = sign
+        seq_idx += 1
+    end
+    return seq
+end
+
+# A single deletion in cumulative signs leaves one unmatched terminal symbol on
+# the undeleted side because attempt-027 stores iterates only through 16.
+@inline function plus_delete_matches_046(candidate::Vector{Int8}, other::Vector{Int8}, delete_idx::Int)
+    candidate[delete_idx] == Int8(1) || return false
+    @inbounds for idx in 1:(delete_idx - 1)
+        candidate[idx] == other[idx] || return false
+    end
+    @inbounds for idx in delete_idx:(length(candidate) - 1)
+        candidate[idx + 1] == other[idx] || return false
+    end
+    return true
+end
+
+@inline function minus_delete_matches_046(candidate::Vector{Int8}, other::Vector{Int8}, delete_idx::Int)
+    candidate[delete_idx] == Int8(-1) || return false
+    @inbounds for idx in 1:(delete_idx - 1)
+        candidate[idx] == other[idx] || return false
+    end
+    @inbounds for idx in delete_idx:(length(candidate) - 1)
+        -candidate[idx + 1] == other[idx] || return false
+    end
+    return true
+end
+
+function is_grazing_046(seq_a::Vector{Int8}, seq_b::Vector{Int8})
+    length(seq_a) == length(seq_b) || return false
+    max_delete_idx = min(7, length(seq_a) - 1)
+    max_delete_idx >= 1 || return false
+    for delete_idx in 1:max_delete_idx
+        if plus_delete_matches_046(seq_a, seq_b, delete_idx) ||
+           minus_delete_matches_046(seq_a, seq_b, delete_idx) ||
+           plus_delete_matches_046(seq_b, seq_a, delete_idx) ||
+           minus_delete_matches_046(seq_b, seq_a, delete_idx)
+            return true
+        end
+    end
+    return false
+end
+
+function is_coordinate_singularity_046(seq_a::Vector{Int8}, seq_b::Vector{Int8})
+    length(seq_a) == length(seq_b) || return false
+    diff_idx = Int[]
+    @inbounds for idx in eachindex(seq_a)
+        seq_a[idx] == seq_b[idx] || push!(diff_idx, idx)
+    end
+    length(diff_idx) == 2 || return false
+    diff_idx[2] == diff_idx[1] + 1 || return false
+    idx = diff_idx[1]
+    return seq_a[idx] == seq_a[idx + 1] &&
+           seq_b[idx] == seq_b[idx + 1] &&
+           seq_a[idx] == -seq_b[idx] &&
+           seq_a[idx + 1] == -seq_b[idx + 1]
+end
+
+@inline function real_contour_difference_count_046(seq_a::Vector{Int8}, seq_b::Vector{Int8})
+    count = 0
+    @inbounds for idx in eachindex(seq_a)
+        count += (seq_a[idx] != seq_b[idx])
+    end
+    return count
+end
+
+function classify_contour_046(seq_a::Vector{Int8}, seq_b::Vector{Int8})
+    is_grazing_046(seq_a, seq_b) && return :blue
+    is_coordinate_singularity_046(seq_a, seq_b) && return :red
+    real_contour_difference_count_046(seq_a, seq_b) == 1 && return :black
+    return :green
+end
+
 @inline function edge_pair_code_046(edge_a::Int, edge_b::Int)
     lo = min(edge_a, edge_b)
     hi = max(edge_a, edge_b)
@@ -284,27 +381,29 @@ function segment_specs_046(
     return specs
 end
 
-function collect_forcedfirstskip_overlay_segments_045(
+function collect_sequence_classified_segments_046(
     dot_grids::Vector{Matrix{Float64}},
     time_grids::Vector{Matrix{Float64}},
 )
     n_plot = A27.ATTEMPT025_PLOT_ITERATE_CAP
     plot_iterate_end = min(8, n_plot)
-    later_iterate_end = min(16, length(dot_grids), length(time_grids) - 1)
     n_lambda_cells = length(A27.LAMBDAS_025) - 1
     n_alpha_cells = length(A27.ALPHAS_025) - 1
     n_threads = Threads.maxthreadid()
 
     black_tls = [[NTuple{4, Float64}[] for _ in 1:n_plot] for _ in 1:n_threads]
     red_tls = [[NTuple{4, Float64}[] for _ in 1:n_plot] for _ in 1:n_threads]
-    grey_tls = [[NTuple{4, Float64}[] for _ in 1:n_plot] for _ in 1:n_threads]
+    blue_tls = [[NTuple{4, Float64}[] for _ in 1:n_plot] for _ in 1:n_threads]
+    green_tls = [[NTuple{4, Float64}[] for _ in 1:n_plot] for _ in 1:n_threads]
     earliest_source_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     black_cell_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     black_segment_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     red_cell_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     red_segment_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
-    grey_cell_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
-    grey_segment_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
+    blue_cell_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
+    blue_segment_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
+    green_cell_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
+    green_segment_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
 
     earliest_iterate_cells = zeros(UInt8, n_lambda_cells, n_alpha_cells)
     shorter_sign_cells = zeros(Int8, n_lambda_cells, n_alpha_cells)
@@ -313,14 +412,17 @@ function collect_forcedfirstskip_overlay_segments_045(
         tid = Threads.threadid()
         black_local = black_tls[tid]
         red_local = red_tls[tid]
-        grey_local = grey_tls[tid]
+        blue_local = blue_tls[tid]
+        green_local = green_tls[tid]
         earliest_local = earliest_source_tls[tid]
         black_cell_local = black_cell_tls[tid]
         black_segment_local = black_segment_tls[tid]
         red_cell_local = red_cell_tls[tid]
         red_segment_local = red_segment_tls[tid]
-        grey_cell_local = grey_cell_tls[tid]
-        grey_segment_local = grey_segment_tls[tid]
+        blue_cell_local = blue_cell_tls[tid]
+        blue_segment_local = blue_segment_tls[tid]
+        green_cell_local = green_cell_tls[tid]
+        green_segment_local = green_segment_tls[tid]
 
         y_tl = Float64(A27.LAMBDAS_025[j])
         y_bl = Float64(A27.LAMBDAS_025[j + 1])
@@ -328,46 +430,20 @@ function collect_forcedfirstskip_overlay_segments_045(
         for i in 1:n_alpha_cells
             x_tl = Float64(A27.ALPHAS_025[i])
             x_tr = Float64(A27.ALPHAS_025[i + 1])
-            skip = (0, 0, 0, 0)
-            earliest_nominal = 0
-            earliest_evaluation = A27.missing_evaluation_025()
-            earliest_specs = Tuple{UInt8, NTuple{4, Float64}}[]
-            matched_black_pairs = UInt8[]
+            for nominal_iterate in 2:plot_iterate_end
+                evaluation = evaluate_square_local_045(j, i, nominal_iterate, dot_grids, time_grids, (0, 0, 0, 0))
+                evaluation.status == A27.EVAL_MIXED_025 || continue
 
-            nominal_iterate = 2
-            while nominal_iterate <= plot_iterate_end
-                evaluation = evaluate_square_local_045(j, i, nominal_iterate, dot_grids, time_grids, skip)
-                if evaluation.status != A27.EVAL_MIXED_025
-                    nominal_iterate += 1
-                    continue
+                shorter_sign, short_rep, long_rep = A27.choose_representatives_025(evaluation)
+                short_row, short_col = corner_point_indices_046(j, i, short_rep)
+                long_row, long_col = corner_point_indices_046(j, i, long_rep)
+                short_seq = point_sign_sequence_046(short_row, short_col, dot_grids)
+                long_seq = point_sign_sequence_046(long_row, long_col, dot_grids)
+                if isnothing(short_seq) || isnothing(long_seq)
+                    break
                 end
 
-                if earliest_nominal == 0
-                    earliest_nominal = nominal_iterate
-                    earliest_evaluation = evaluation
-                    earliest_specs = segment_specs_046(
-                        evaluation.current_dot,
-                        x_tl,
-                        y_tl,
-                        x_tr,
-                        y_tl,
-                        x_tr,
-                        y_bl,
-                        x_tl,
-                        y_bl,
-                    )
-                    earliest_local[nominal_iterate] += 1
-                    shorter_sign, _, _ = A27.choose_representatives_025(evaluation)
-                    earliest_iterate_cells[j, i] = UInt8(nominal_iterate)
-                    shorter_sign_cells[j, i] = shorter_sign
-                    skip = increment_local_skip_045(skip, evaluation.sign, shorter_sign)
-                    # Re-evaluate the same nominal iterate once after forcing the
-                    # shorter-side skip so the compressed symbol sequence is tested
-                    # immediately instead of being deferred to the next nominal step.
-                    continue
-                end
-
-                later_specs = segment_specs_046(
+                specs = segment_specs_046(
                     evaluation.current_dot,
                     x_tl,
                     y_tl,
@@ -378,97 +454,73 @@ function collect_forcedfirstskip_overlay_segments_045(
                     x_tl,
                     y_bl,
                 )
-                added = 0
-                @inbounds for (pair_code, segment) in later_specs
-                    if pair_in_specs_046(earliest_specs, pair_code)
+                isempty(specs) && break
+
+                classification = classify_contour_046(short_seq, long_seq)
+                segment_count = length(specs)
+                earliest_local[nominal_iterate] += 1
+                earliest_iterate_cells[j, i] = UInt8(nominal_iterate)
+                shorter_sign_cells[j, i] = shorter_sign
+
+                if classification == :black
+                    @inbounds for (_, segment) in specs
                         push!(black_local[nominal_iterate], segment)
-                        added += 1
-                        push_unique_pair_046!(matched_black_pairs, pair_code)
                     end
-                end
-                if added > 0
                     black_cell_local[nominal_iterate] += 1
-                    black_segment_local[nominal_iterate] += added
-                end
-                nominal_iterate += 1
-            end
-
-            if earliest_nominal != 0
-                matched_blue_pairs = UInt8[]
-                if later_iterate_end > plot_iterate_end
-                    later_nominal = plot_iterate_end + 1
-                    while later_nominal <= later_iterate_end
-                        later_evaluation = evaluate_square_local_045(j, i, later_nominal, dot_grids, time_grids, skip)
-                        if later_evaluation.status == A27.EVAL_MIXED_025
-                            later_specs = segment_specs_046(
-                                later_evaluation.current_dot,
-                                x_tl,
-                                y_tl,
-                                x_tr,
-                                y_tl,
-                                x_tr,
-                                y_bl,
-                                x_tl,
-                                y_bl,
-                            )
-                            @inbounds for (pair_code, _) in later_specs
-                                if pair_in_specs_046(earliest_specs, pair_code) && !has_pair_046(matched_black_pairs, pair_code)
-                                    push_unique_pair_046!(matched_blue_pairs, pair_code)
-                                end
-                            end
-                        end
-                        later_nominal += 1
+                    black_segment_local[nominal_iterate] += segment_count
+                elseif classification == :red
+                    @inbounds for (_, segment) in specs
+                        push!(red_local[nominal_iterate], segment)
                     end
-                end
-
-                red_added = 0
-                blue_added = 0
-                @inbounds for (pair_code, segment) in earliest_specs
-                    if has_pair_046(matched_black_pairs, pair_code)
-                        continue
-                    elseif has_pair_046(matched_blue_pairs, pair_code)
-                        push!(grey_local[earliest_nominal], segment)
-                        blue_added += 1
-                    else
-                        push!(red_local[earliest_nominal], segment)
-                        red_added += 1
+                    red_cell_local[nominal_iterate] += 1
+                    red_segment_local[nominal_iterate] += segment_count
+                elseif classification == :blue
+                    @inbounds for (_, segment) in specs
+                        push!(blue_local[nominal_iterate], segment)
                     end
+                    blue_cell_local[nominal_iterate] += 1
+                    blue_segment_local[nominal_iterate] += segment_count
+                else
+                    @inbounds for (_, segment) in specs
+                        push!(green_local[nominal_iterate], segment)
+                    end
+                    green_cell_local[nominal_iterate] += 1
+                    green_segment_local[nominal_iterate] += segment_count
                 end
-                if red_added > 0
-                    red_cell_local[earliest_nominal] += 1
-                    red_segment_local[earliest_nominal] += red_added
-                end
-                if blue_added > 0
-                    grey_cell_local[earliest_nominal] += 1
-                    grey_segment_local[earliest_nominal] += blue_added
-                end
+                break
             end
         end
     end
 
     black_segments_by_iter = [NTuple{4, Float64}[] for _ in 1:n_plot]
     red_segments_by_iter = [NTuple{4, Float64}[] for _ in 1:n_plot]
-    grey_segments_by_iter = [NTuple{4, Float64}[] for _ in 1:n_plot]
+    blue_segments_by_iter = [NTuple{4, Float64}[] for _ in 1:n_plot]
+    green_segments_by_iter = [NTuple{4, Float64}[] for _ in 1:n_plot]
     earliest_source_cells = zeros(Int, n_plot)
     black_contoured_cells = zeros(Int, n_plot)
     black_segments_count = zeros(Int, n_plot)
     red_contoured_cells = zeros(Int, n_plot)
     red_segments_count = zeros(Int, n_plot)
-    grey_contoured_cells = zeros(Int, n_plot)
-    grey_segments_count = zeros(Int, n_plot)
+    blue_contoured_cells = zeros(Int, n_plot)
+    blue_segments_count = zeros(Int, n_plot)
+    green_contoured_cells = zeros(Int, n_plot)
+    green_segments_count = zeros(Int, n_plot)
 
     for tid in 1:n_threads
         for iterate in 2:plot_iterate_end
             append!(black_segments_by_iter[iterate], black_tls[tid][iterate])
             append!(red_segments_by_iter[iterate], red_tls[tid][iterate])
-            append!(grey_segments_by_iter[iterate], grey_tls[tid][iterate])
+            append!(blue_segments_by_iter[iterate], blue_tls[tid][iterate])
+            append!(green_segments_by_iter[iterate], green_tls[tid][iterate])
             earliest_source_cells[iterate] += earliest_source_tls[tid][iterate]
             black_contoured_cells[iterate] += black_cell_tls[tid][iterate]
             black_segments_count[iterate] += black_segment_tls[tid][iterate]
             red_contoured_cells[iterate] += red_cell_tls[tid][iterate]
             red_segments_count[iterate] += red_segment_tls[tid][iterate]
-            grey_contoured_cells[iterate] += grey_cell_tls[tid][iterate]
-            grey_segments_count[iterate] += grey_segment_tls[tid][iterate]
+            blue_contoured_cells[iterate] += blue_cell_tls[tid][iterate]
+            blue_segments_count[iterate] += blue_segment_tls[tid][iterate]
+            green_contoured_cells[iterate] += green_cell_tls[tid][iterate]
+            green_segments_count[iterate] += green_segment_tls[tid][iterate]
         end
     end
 
@@ -499,11 +551,13 @@ function collect_forcedfirstskip_overlay_segments_045(
         black_segments_count=black_segments_count,
         red_contoured_cells=red_contoured_cells,
         red_segments_count=red_segments_count,
-        grey_contoured_cells=grey_contoured_cells,
-        grey_segments_count=grey_segments_count,
+        blue_contoured_cells=blue_contoured_cells,
+        blue_segments_count=blue_segments_count,
+        green_contoured_cells=green_contoured_cells,
+        green_segments_count=green_segments_count,
     )
 
-    return black_segments_by_iter, red_segments_by_iter, grey_segments_by_iter, point_skip_masks, iterate_stats
+    return black_segments_by_iter, red_segments_by_iter, blue_segments_by_iter, green_segments_by_iter, point_skip_masks, iterate_stats
 end
 
 function flatten_segments_043(segments::Vector{NTuple{4, Float64}})
@@ -578,7 +632,7 @@ end
 
 function write_iterate_stats_043(path::String, stats)
     open(path, "w") do io
-        println(io, "nominal_iterate\tearliest_source_cells\tblack_contoured_cells\tblack_segments\tred_contoured_cells\tred_segments\tblue_contoured_cells\tblue_segments")
+        println(io, "nominal_iterate\tearliest_source_cells\tblack_contoured_cells\tblack_segments\tred_contoured_cells\tred_segments\tblue_contoured_cells\tblue_segments\tgreen_contoured_cells\tgreen_segments")
         for iterate in 2:min(8, length(stats.earliest_source_cells))
             println(
                 io,
@@ -589,8 +643,10 @@ function write_iterate_stats_043(path::String, stats)
                     string(stats.black_segments_count[iterate]),
                     string(stats.red_contoured_cells[iterate]),
                     string(stats.red_segments_count[iterate]),
-                    string(stats.grey_contoured_cells[iterate]),
-                    string(stats.grey_segments_count[iterate]),
+                    string(stats.blue_contoured_cells[iterate]),
+                    string(stats.blue_segments_count[iterate]),
+                    string(stats.green_contoured_cells[iterate]),
+                    string(stats.green_segments_count[iterate]),
                 ], '\t'),
             )
         end
@@ -601,7 +657,8 @@ function write_html_043(
     path::String,
     black_segments_b64_by_iter::Vector{String},
     red_segments_b64_by_iter::Vector{String},
-    grey_segments_b64_by_iter::Vector{String},
+    blue_segments_b64_by_iter::Vector{String},
+    green_segments_b64_by_iter::Vector{String},
     sign_words_b64::String,
     skip_words_b64::String,
     time_words_gz_b64::String,
@@ -621,7 +678,7 @@ function write_html_043(
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Shimizu-Morioka Forced-First-Skip Explorer</title>
+  <title>Shimizu-Morioka Cumulative-Sign Explorer</title>
   <style>
     :root {
       color-scheme: light;
@@ -661,7 +718,8 @@ function write_html_043(
 	    .swatch { width: 20px; height: 3px; border-radius: 2px; }
 	    .swatch.black { background: #000000; }
 	    .swatch.red { background: #c00000; }
-	    .swatch.grey { background: #3b82f6; }
+	    .swatch.blue { background: #3b82f6; }
+	    .swatch.green { background: #008000; }
 	    .swatch.cyan { background: #0ea5e9; }
     .small { font-size: 10px; color: var(--muted); }
     .chip {
@@ -702,14 +760,15 @@ function write_html_043(
 	        Self-contained HTML explorer built from the saved attempt-027 `2000 x 2000` sweep.
 	        Sign symbols are cumulative: at iterate `k`, the sign shown and contoured is `(-1)^N`,
 	        where `N` is the number of negative raw tangent symbols seen through iterate `k`.
-	        Recoloring is done per original earliest contour segment. Later black or blue contours only
-	        count if they use the same marched-square edge pair as that original earliest segment.
+	        Each earliest mixed square in `2:8` is classified from the two representative cumulative
+	        sign sequences using the full saved `2:16` symbol data.
 	      </div>
 	      <h2>Legend</h2>
 	      <div class="box">
-	        <div class="legend-row"><span class="swatch black"></span><span>later contour in `2:8` with the same edge pair as the original earliest contour segment</span></div>
-	        <div class="legend-row"><span class="swatch red"></span><span>original earliest contour segment, with no same-edge recoloring later in `2:8` or `9:16`</span></div>
-	        <div class="legend-row"><span class="swatch grey"></span><span>original earliest contour segment, with no same-edge recoloring in `2:8` but one in `9:16`</span></div>
+	        <div class="legend-row"><span class="swatch black"></span><span>real contour: the two cumulative sign sequences differ in exactly one place</span></div>
+	        <div class="legend-row"><span class="swatch red"></span><span>coordinate singularity: one consecutive same-sign pair flips and the rest matches</span></div>
+	        <div class="legend-row"><span class="swatch blue"></span><span>grazing: one deletion in `2:8` reconciles the two cumulative sign sequences across `2:16`</span></div>
+	        <div class="legend-row"><span class="swatch green"></span><span>other mixed square: not black, red, or blue under the above tests</span></div>
 	        <div class="legend-row"><span class="swatch cyan"></span><span>selected sampled grid point</span></div>
 	        <div class="legend-row"><span class="swatch" style="background:#bcbcbc;"></span><span>four marched squares around the selected point</span></div>
 	      </div>
@@ -779,13 +838,23 @@ function write_html_043(
             print(io, "',\n")
         end
         print(io, """    };
-	    const GREY_SEGMENTS_B64_BY_ITER = {
-""")
-        for idx in 2:length(grey_segments_b64_by_iter)
+		    const BLUE_SEGMENTS_B64_BY_ITER = {
+	""")
+        for idx in 2:length(blue_segments_b64_by_iter)
             print(io, "      ")
             print(io, idx)
             print(io, ": '")
-            print(io, grey_segments_b64_by_iter[idx])
+            print(io, blue_segments_b64_by_iter[idx])
+            print(io, "',\n")
+        end
+        print(io, """    };
+		    const GREEN_SEGMENTS_B64_BY_ITER = {
+	""")
+        for idx in 2:length(green_segments_b64_by_iter)
+            print(io, "      ")
+            print(io, idx)
+            print(io, ": '")
+            print(io, green_segments_b64_by_iter[idx])
             print(io, "',\n")
         end
         print(io, """    };
@@ -831,11 +900,13 @@ function write_html_043(
 
 		    const blackSegmentsByIter = {};
 		    const redSegmentsByIter = {};
-		    const greySegmentsByIter = {};
+		    const blueSegmentsByIter = {};
+		    const greenSegmentsByIter = {};
 		    for (let nominal = 2; nominal <= 8; nominal += 1) {
 		      blackSegmentsByIter[nominal] = BLACK_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(BLACK_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
 		      redSegmentsByIter[nominal] = RED_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(RED_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
-		      greySegmentsByIter[nominal] = GREY_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(GREY_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+		      blueSegmentsByIter[nominal] = BLUE_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(BLUE_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+		      greenSegmentsByIter[nominal] = GREEN_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(GREEN_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
 		    }
     const signWords = decodeUint16Array(SIGN_WORDS_B64);
     const skipWords = decodeBase64Bytes(SKIP_WORDS_B64);
@@ -856,18 +927,18 @@ function write_html_043(
     const clearSelectionButton = document.getElementById('clearSelection');
 		    const showAllIteratesButton = document.getElementById('showAllIterates');
 		    const hideAllIteratesButton = document.getElementById('hideAllIterates');
-		    const toggleRedContoursButton = document.getElementById('toggleRedContours');
-		    const toggleGreyContoursButton = document.getElementById('toggleGreyContours');
+			    const toggleRedContoursButton = document.getElementById('toggleRedContours');
+			    const toggleBlueContoursButton = document.getElementById('toggleGreyContours');
 
 		    const state = {
 		      view: { a0: CONFIG.alphaMin, a1: CONFIG.alphaMax, l0: CONFIG.lambdaMin, l1: CONFIG.lambdaMax },
 		      hover: null,
 		      selected: null,
 		      dragging: null,
-		      visibleIterates: new Set([2, 3, 4, 5, 6, 7, 8]),
-		      showRedContours: true,
-		      showGreyContours: true
-		    };
+			      visibleIterates: new Set([2, 3, 4, 5, 6, 7, 8]),
+			      showRedContours: true,
+			      showBlueContours: true
+			    };
 
     function cssRect() {
       const w = viewerWrap.clientWidth;
@@ -1141,12 +1212,13 @@ function write_html_043(
       baseCtx.beginPath();
       baseCtx.rect(r.x, r.y, r.w, r.h);
       baseCtx.clip();
-		      for (let nominal = 2; nominal <= 8; nominal += 1) {
-		        if (!state.visibleIterates.has(nominal)) continue;
-		        drawSegmentArray(blackSegmentsByIter[nominal], '#000000');
-		        if (state.showRedContours) drawSegmentArray(redSegmentsByIter[nominal], '#c00000');
-		        if (state.showGreyContours) drawSegmentArray(greySegmentsByIter[nominal], '#3b82f6');
-		      }
+			      for (let nominal = 2; nominal <= 8; nominal += 1) {
+			        if (!state.visibleIterates.has(nominal)) continue;
+			        drawSegmentArray(greenSegmentsByIter[nominal], '#008000');
+			        drawSegmentArray(blackSegmentsByIter[nominal], '#000000');
+			        if (state.showRedContours) drawSegmentArray(redSegmentsByIter[nominal], '#c00000');
+			        if (state.showBlueContours) drawSegmentArray(blueSegmentsByIter[nominal], '#3b82f6');
+			      }
       baseCtx.restore();
       drawAxes();
       updateViewInfo();
@@ -1187,26 +1259,28 @@ function write_html_043(
     }
 
     function updateViewInfo() {
-		      let visibleBlack = 0;
-		      let totalRed = 0;
-		      let totalGrey = 0;
-		      for (let nominal = 2; nominal <= 8; nominal += 1) {
-		        if (!state.visibleIterates.has(nominal)) continue;
-		        visibleBlack += blackSegmentsByIter[nominal].length / 4;
-		        totalRed += redSegmentsByIter[nominal].length / 4;
-		        totalGrey += greySegmentsByIter[nominal].length / 4;
-		      }
-		      const visibleRed = state.showRedContours ? totalRed : 0;
-		      const visibleGrey = state.showGreyContours ? totalGrey : 0;
-		      const rows = [
-		        ['alpha range', state.view.a0.toFixed(6) + ' .. ' + state.view.a1.toFixed(6)],
-		        ['lambda range', state.view.l0.toFixed(6) + ' .. ' + state.view.l1.toFixed(6)],
-		        ['grid', CONFIG.nAlpha + ' x ' + CONFIG.nLambda],
-		        ['visible iterates', Array.from(state.visibleIterates).sort(function(a, b) { return a - b; }).join(', ') || '(none)'],
-		        ['red contours', state.showRedContours ? 'shown' : 'hidden'],
-		        ['blue contours', state.showGreyContours ? 'shown' : 'hidden'],
-		        ['segments', visibleBlack.toLocaleString() + ' black, ' + visibleRed.toLocaleString() + ' red, ' + visibleGrey.toLocaleString() + ' blue']
-		      ];
+			      let visibleBlack = 0;
+			      let totalRed = 0;
+			      let totalBlue = 0;
+			      let totalGreen = 0;
+			      for (let nominal = 2; nominal <= 8; nominal += 1) {
+			        if (!state.visibleIterates.has(nominal)) continue;
+			        visibleBlack += blackSegmentsByIter[nominal].length / 4;
+			        totalRed += redSegmentsByIter[nominal].length / 4;
+			        totalBlue += blueSegmentsByIter[nominal].length / 4;
+			        totalGreen += greenSegmentsByIter[nominal].length / 4;
+			      }
+			      const visibleRed = state.showRedContours ? totalRed : 0;
+			      const visibleBlue = state.showBlueContours ? totalBlue : 0;
+			      const rows = [
+			        ['alpha range', state.view.a0.toFixed(6) + ' .. ' + state.view.a1.toFixed(6)],
+			        ['lambda range', state.view.l0.toFixed(6) + ' .. ' + state.view.l1.toFixed(6)],
+			        ['grid', CONFIG.nAlpha + ' x ' + CONFIG.nLambda],
+			        ['visible iterates', Array.from(state.visibleIterates).sort(function(a, b) { return a - b; }).join(', ') || '(none)'],
+			        ['red contours', state.showRedContours ? 'shown' : 'hidden'],
+			        ['blue contours', state.showBlueContours ? 'shown' : 'hidden'],
+			        ['segments', visibleBlack.toLocaleString() + ' black, ' + visibleRed.toLocaleString() + ' red, ' + visibleBlue.toLocaleString() + ' blue, ' + totalGreen.toLocaleString() + ' green']
+			      ];
       viewInfo.innerHTML = rows.map(function(pair) {
         return '<div class="label">' + pair[0] + '</div><div class="mono">' + pair[1] + '</div>';
       }).join('');
@@ -1360,7 +1434,7 @@ function write_html_043(
 		    }
 
 		    function updateGreyToggleButton() {
-		      toggleGreyContoursButton.textContent = state.showGreyContours ? 'Hide Blue' : 'Show Blue';
+		      toggleBlueContoursButton.textContent = state.showBlueContours ? 'Hide Blue' : 'Show Blue';
 		    }
 
 		    toggleRedContoursButton.addEventListener('click', function() {
@@ -1370,8 +1444,8 @@ function write_html_043(
 		      drawOverlay();
 		    });
 
-		    toggleGreyContoursButton.addEventListener('click', function() {
-		      state.showGreyContours = !state.showGreyContours;
+		    toggleBlueContoursButton.addEventListener('click', function() {
+		      state.showBlueContours = !state.showBlueContours;
 		      updateGreyToggleButton();
 		      drawBase();
 		      drawOverlay();
@@ -1413,28 +1487,31 @@ function main()
     println("Packed $(length(time_words)) quantized return-time words at scale $(time_scale).")
     flush(stdout)
 
-    black_segments_by_iter, red_segments_by_iter, grey_segments_by_iter, point_skip_masks, iterate_stats =
-        collect_forcedfirstskip_overlay_segments_045(dot_grids, time_grids)
+    black_segments_by_iter, red_segments_by_iter, blue_segments_by_iter, green_segments_by_iter, point_skip_masks, iterate_stats =
+        collect_sequence_classified_segments_046(dot_grids, time_grids)
     total_black = sum(length, black_segments_by_iter)
     total_red = sum(length, red_segments_by_iter)
-    total_grey = sum(length, grey_segments_by_iter)
-    println("Collected $(total_black) black segments, $(total_red) red segments, and $(total_grey) blue segments.")
+    total_blue = sum(length, blue_segments_by_iter)
+    total_green = sum(length, green_segments_by_iter)
+    println("Collected $(total_black) black segments, $(total_red) red segments, $(total_blue) blue segments, and $(total_green) green segments.")
     flush(stdout)
 
     black_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
     red_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
-    grey_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    blue_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    green_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
     for nominal_iterate in 2:min(8, A27.ATTEMPT025_PLOT_ITERATE_CAP)
         black_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(black_segments_by_iter[nominal_iterate]))
         red_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(red_segments_by_iter[nominal_iterate]))
-        grey_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(grey_segments_by_iter[nominal_iterate]))
+        blue_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(blue_segments_by_iter[nominal_iterate]))
+        green_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(green_segments_by_iter[nominal_iterate]))
     end
     sign_blob = base64_bytes_043(sign_words)
     skip_blob = base64_bytes_043(point_skip_masks)
     time_blob = base64_gzip_bytes_043(time_words)
 
     write_iterate_stats_043(STATS_PATH_043, iterate_stats)
-    write_html_043(HTML_PATH_043, black_blobs, red_blobs, grey_blobs, sign_blob, skip_blob, time_blob, time_scale)
+    write_html_043(HTML_PATH_043, black_blobs, red_blobs, blue_blobs, green_blobs, sign_blob, skip_blob, time_blob, time_scale)
 
     println("Saved iterate stats to $(STATS_PATH_043)")
     println("Saved explorer HTML to $(HTML_PATH_043)")
