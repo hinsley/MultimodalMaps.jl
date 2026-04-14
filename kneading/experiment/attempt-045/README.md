@@ -23,6 +23,8 @@ Provide an interactive artifact where you can:
 
 - if a square first contours at nominal iterate `k in 2:8`, that first contour
   forces exactly one skip on the shorter-return-time sign class
+- after that forced skip, the explorer re-evaluates the same nominal iterate
+  once with the compressed indices before moving on to later nominal iterates
 - later iterates in `2:8` are used to decide whether the square has any
   surviving later contour
 - later surviving contours drawn in `2:8` are black

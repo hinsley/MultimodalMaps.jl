@@ -204,9 +204,13 @@ function collect_forcedfirstskip_overlay_segments_045(
             earliest_evaluation = A27.missing_evaluation_025()
             later_found = false
 
-            for nominal_iterate in 2:plot_iterate_end
+            nominal_iterate = 2
+            while nominal_iterate <= plot_iterate_end
                 evaluation = evaluate_square_local_045(j, i, nominal_iterate, dot_grids, time_grids, skip)
-                evaluation.status == A27.EVAL_MIXED_025 || continue
+                if evaluation.status != A27.EVAL_MIXED_025
+                    nominal_iterate += 1
+                    continue
+                end
 
                 if earliest_nominal == 0
                     earliest_nominal = nominal_iterate
@@ -216,6 +220,9 @@ function collect_forcedfirstskip_overlay_segments_045(
                     earliest_iterate_cells[j, i] = UInt8(nominal_iterate)
                     shorter_sign_cells[j, i] = shorter_sign
                     skip = increment_local_skip_045(skip, evaluation.sign, shorter_sign)
+                    # Re-evaluate the same nominal iterate once after forcing the
+                    # shorter-side skip so the compressed symbol sequence is tested
+                    # immediately instead of being deferred to the next nominal step.
                     continue
                 end
 
@@ -236,6 +243,7 @@ function collect_forcedfirstskip_overlay_segments_045(
                     black_cell_local[nominal_iterate] += 1
                     black_segment_local[nominal_iterate] += added
                 end
+                nominal_iterate += 1
             end
 
             if earliest_nominal != 0
