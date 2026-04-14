@@ -19,6 +19,7 @@ const OUTPUT_TAG_043 = get(
 )
 const HTML_PATH_043 = joinpath(ATTEMPT043_ROOT, "$(OUTPUT_TAG_043).html")
 const STATS_PATH_043 = joinpath(ATTEMPT043_ROOT, "$(OUTPUT_TAG_043)_iterate_stats.tsv")
+const MISSING_TIME_WORD_043 = UInt16(0xffff)
 
 @inline sign_code_043(value::Float64) = value > 0.0 ? UInt16(0x2) : value < 0.0 ? UInt16(0x1) : UInt16(0x0)
 @inline skip_bit_043(nominal_iterate::Int) = UInt8(1) << (nominal_iterate - 2)
@@ -173,11 +174,17 @@ function process_nominal_iterate_for_explorer_043!(
     return stats
 end
 
-function collect_retired_overlay_segments_043()
+function build_grids_043()
     dot_grids = A27.build_iterate_grids_025(result -> result.absxmax_count, result -> result.absxmax_dot_values)
     cumulative_time_grids = A27.build_iterate_grids_025(result -> result.absxmax_count, result -> result.absxmax_return_times)
     time_grids = A27.cumulative_to_interval_grids_025(cumulative_time_grids)
+    return dot_grids, time_grids
+end
 
+function collect_retired_overlay_segments_043(
+    dot_grids::Vector{Matrix{Float64}},
+    time_grids::Vector{Matrix{Float64}},
+)
     skip_state = A27.initialize_skip_state_025()
     retired_cells = falses(length(A27.LAMBDAS_025) - 1, length(A27.ALPHAS_025) - 1)
     black_segments_by_iter = [NTuple{4, Float64}[] for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
@@ -220,6 +227,58 @@ function base64_bytes_043(values::AbstractVector{T}) where {T}
     return base64encode(take!(io))
 end
 
+function base64_gzip_bytes_043(values::AbstractVector{T}) where {T}
+    raw = reinterpret(UInt8, values)
+    tmp_path = tempname()
+    write(tmp_path, raw)
+    compressed = try
+        read(`gzip -c $tmp_path`)
+    finally
+        isfile(tmp_path) && rm(tmp_path; force=true)
+    end
+    return base64encode(compressed)
+end
+
+function choose_time_scale_043(time_grids::Vector{Matrix{Float64}})
+    max_time = 0.0
+    for nominal_iterate in 2:min(8, length(time_grids))
+        grid = time_grids[nominal_iterate]
+        @inbounds for value in grid
+            isfinite(value) || continue
+            value > max_time && (max_time = value)
+        end
+    end
+
+    for scale in (1000, 200, 100, 50, 10)
+        max_time <= (65534 / scale) && return scale
+    end
+    return 1
+end
+
+function build_time_words_043(time_grids::Vector{Matrix{Float64}})
+    n_alpha = length(A27.ALPHAS_025)
+    n_lambda = length(A27.LAMBDAS_025)
+    time_scale = choose_time_scale_043(time_grids)
+    words = fill(MISSING_TIME_WORD_043, n_alpha * n_lambda * 7)
+
+    for nominal_iterate in 2:min(8, length(time_grids))
+        grid = time_grids[nominal_iterate]
+        offset = nominal_iterate - 2
+        for col_idx in 1:n_alpha
+            for row_idx in 1:n_lambda
+                value = grid[row_idx, col_idx]
+                isfinite(value) || continue
+                quantized = round(Int, value * time_scale)
+                0 <= quantized <= 65534 || continue
+                linear_idx = ((row_idx - 1) * n_alpha + (col_idx - 1)) * 7 + offset + 1
+                words[linear_idx] = UInt16(quantized)
+            end
+        end
+    end
+
+    return words, time_scale
+end
+
 function write_iterate_stats_043(path::String, stats)
     open(path, "w") do io
         println(io, "nominal_iterate\tmissing_data_squares\tconstant_sign_squares\tincremented_squares\tcontoured_squares\temitted_segments")
@@ -246,6 +305,8 @@ function write_html_043(
     red_segments_b64_by_iter::Vector{String},
     sign_words_b64::String,
     skip_words_b64::String,
+    time_words_gz_b64::String,
+    time_scale::Int,
 )
     n_alpha = length(A27.ALPHAS_025)
     n_lambda = length(A27.LAMBDAS_025)
@@ -288,22 +349,21 @@ function write_html_043(
     #viewerWrap { position: relative; flex: 1 1 auto; min-height: 0; background: white; }
     canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
     #sidebar {
-      width: 430px; max-width: 46vw; border-left: 1px solid var(--border);
-      background: var(--panel); padding: 14px 16px; overflow: auto;
+      width: 344px; max-width: 38vw; border-left: 1px solid var(--border);
+      background: var(--panel); padding: 8px 9px; overflow: auto;
     }
-    h1, h2 { margin: 0 0 10px 0; font-size: 16px; }
-    h2 { margin-top: 18px; font-size: 14px; }
-    .box { border: 1px solid var(--border); background: white; border-radius: 8px; padding: 10px 12px; }
-    .kv { display: grid; grid-template-columns: 120px 1fr; gap: 6px 10px; font-size: 12px; }
+    h1, h2 { margin: 0 0 6px 0; font-size: 14px; }
+    h2 { margin-top: 9px; font-size: 12px; }
+    .box { border: 1px solid var(--border); background: white; border-radius: 8px; padding: 6px 8px; }
+    .kv { display: grid; grid-template-columns: 78px 1fr; gap: 2px 6px; font-size: 10px; }
     .label { color: var(--muted); }
     .mono { white-space: pre-wrap; word-break: break-word; }
-    .legend-row { display: flex; align-items: center; gap: 8px; font-size: 12px; margin: 6px 0; }
+    .legend-row { display: flex; align-items: center; gap: 7px; font-size: 10px; margin: 3px 0; }
     .swatch { width: 20px; height: 3px; border-radius: 2px; }
     .swatch.black { background: #000000; }
     .swatch.red { background: #c00000; }
     .swatch.cyan { background: #0ea5e9; }
-    .small { font-size: 12px; color: var(--muted); }
-    .signs { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+    .small { font-size: 10px; color: var(--muted); }
     .chip {
       border: 1px solid var(--border); border-radius: 999px; padding: 3px 8px;
       font-size: 12px; background: white;
@@ -311,15 +371,16 @@ function write_html_043(
     .chip.pos { color: #111111; }
     .chip.neg { color: #111111; }
     .chip.missing { color: #6b7280; }
-    .iter-controls { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
-    .iter-controls label { display: flex; align-items: center; gap: 6px; font-size: 12px; }
-    .iter-buttons { display: flex; gap: 8px; margin-bottom: 10px; }
-    .iter-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-    .iter-table th, .iter-table td { border-bottom: 1px solid var(--border); padding: 6px 8px; text-align: left; }
+    .iter-controls { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin-top: 6px; }
+    .iter-controls label { display: flex; align-items: center; gap: 4px; font-size: 10px; }
+    .iter-buttons { display: flex; gap: 5px; margin-bottom: 6px; }
+    .iter-table { width: 100%; border-collapse: collapse; font-size: 10px; table-layout: fixed; }
+    .iter-table th, .iter-table td { border-bottom: 1px solid var(--border); padding: 3px 4px; text-align: left; }
     .iter-table th { color: var(--muted); font-weight: 600; background: #fbfbfb; position: sticky; top: 0; }
     .iter-row.skip { color: var(--skip); font-weight: 600; }
     .iter-row.normal { color: #111111; }
-    .highlight-note { margin-top: 8px; font-size: 12px; color: var(--muted); }
+    .highlight-note { margin-top: 4px; font-size: 10px; color: var(--muted); }
+    .compact-meta { margin-bottom: 4px; }
   </style>
 </head>
 <body>
@@ -359,16 +420,21 @@ function write_html_043(
       </div>
       <h2>Hover</h2>
       <div class="box">
-        <div id="hoverInfo" class="kv"></div>
-        <div id="hoverSigns" class="signs"></div>
+        <div id="hoverInfo" class="kv compact-meta"></div>
+        <table class="iter-table">
+          <thead>
+            <tr><th>Iter</th><th>Sign</th><th>Time</th><th>Skip</th></tr>
+          </thead>
+          <tbody id="hoverTableBody"></tbody>
+        </table>
       </div>
       <h2>Selected</h2>
       <div class="box">
-        <div id="selectedInfo" class="kv"></div>
+        <div id="selectedInfo" class="kv compact-meta"></div>
         <div class="highlight-note">Rows are red where the selected sampled point was incremented by a skip at that nominal iterate.</div>
         <table class="iter-table">
           <thead>
-            <tr><th>Iterate</th><th>Sign</th><th>Skip</th></tr>
+            <tr><th>Iter</th><th>Sign</th><th>Time</th><th>Skip</th></tr>
           </thead>
           <tbody id="selectedTableBody"></tbody>
         </table>
@@ -414,6 +480,10 @@ function write_html_043(
     const SKIP_WORDS_B64 = '""")
         print(io, skip_words_b64)
         print(io, """';
+    const TIME_WORDS_GZ_B64 = '""")
+        print(io, time_words_gz_b64)
+        print(io, """';
+    const TIME_SCALE = $(time_scale);
 
     function decodeBase64Bytes(b64) {
       const raw = atob(b64);
@@ -432,6 +502,18 @@ function write_html_043(
       return new Float32Array(bytes.buffer);
     }
 
+    async function decodeGzipUint16Array(b64) {
+      if (!b64) return new Uint16Array(0);
+      if (typeof DecompressionStream === 'undefined') {
+        console.warn('DecompressionStream is unavailable; per-iterate times will not be shown.');
+        return new Uint16Array(0);
+      }
+      const bytes = decodeBase64Bytes(b64);
+      const stream = new Response(bytes).body.pipeThrough(new DecompressionStream('gzip'));
+      const decompressed = await new Response(stream).arrayBuffer();
+      return new Uint16Array(decompressed);
+    }
+
     const blackSegmentsByIter = {};
     const redSegmentsByIter = {};
     for (let nominal = 2; nominal <= 8; nominal += 1) {
@@ -440,6 +522,7 @@ function write_html_043(
     }
     const signWords = decodeUint16Array(SIGN_WORDS_B64);
     const skipWords = decodeBase64Bytes(SKIP_WORDS_B64);
+    let timeWords = null;
 
     const baseCanvas = document.getElementById('baseCanvas');
     const overlayCanvas = document.getElementById('overlayCanvas');
@@ -447,7 +530,7 @@ function write_html_043(
     const overlayCtx = overlayCanvas.getContext('2d');
     const viewerWrap = document.getElementById('viewerWrap');
     const hoverInfo = document.getElementById('hoverInfo');
-    const hoverSigns = document.getElementById('hoverSigns');
+    const hoverTableBody = document.getElementById('hoverTableBody');
     const selectedInfo = document.getElementById('selectedInfo');
     const selectedTableBody = document.getElementById('selectedTableBody');
     const viewInfo = document.getElementById('viewInfo');
@@ -564,9 +647,9 @@ function write_html_043(
       return code === 2 ? 'pos' : code === 1 ? 'neg' : 'missing';
     }
 
-    function setInfo(target, point) {
+    function setInfo(target, point, emptyText) {
       if (!point) {
-        target.innerHTML = '<div class="small">No point selected.</div>';
+        target.innerHTML = '<div class="small">' + emptyText + '</div>';
         return;
       }
       target.innerHTML = [
@@ -580,17 +663,6 @@ function write_html_043(
       }).join('');
     }
 
-    function setSigns(target, point) {
-      if (!point) {
-        target.innerHTML = '';
-        return;
-      }
-      const chips = decodeSignWord(point.signWord).map(function(entry) {
-        return '<span class="chip ' + codeClass(entry.code) + '">k=' + entry.nominal + ': ' + codeText(entry.code) + '</span>';
-      });
-      target.innerHTML = chips.join('');
-    }
-
     function decodeSkipWord(word) {
       const result = [];
       for (let nominal = 2; nominal <= 8; nominal += 1) {
@@ -599,9 +671,23 @@ function write_html_043(
       return result;
     }
 
-    function setSelectedTable(point) {
+    function decodeTimeForPoint(pointIdx, nominalIterate) {
+      if (!timeWords || timeWords.length === 0) return null;
+      const word = timeWords[pointIdx * 7 + (nominalIterate - 2)];
+      if (word === undefined || word === 0xffff) return null;
+      return word / TIME_SCALE;
+    }
+
+    function formatTimeValue(value) {
+      if (value === null) return '·';
+      if (TIME_SCALE >= 100) return value.toFixed(2);
+      if (TIME_SCALE >= 10) return value.toFixed(1);
+      return value.toFixed(0);
+    }
+
+    function setPointTable(target, point, emptyText) {
       if (!point) {
-        selectedTableBody.innerHTML = '<tr><td colspan="3" class="small">No point selected.</td></tr>';
+        target.innerHTML = '<tr><td colspan="4" class="small">' + emptyText + '</td></tr>';
         return;
       }
       const signs = decodeSignWord(point.signWord);
@@ -610,15 +696,17 @@ function write_html_043(
       for (let idx = 0; idx < signs.length; idx += 1) {
         const signEntry = signs[idx];
         const skipEntry = skips[idx];
+        const timeValue = formatTimeValue(decodeTimeForPoint(point.idx, signEntry.nominal));
         rows.push(
           '<tr class="iter-row ' + (skipEntry.skip ? 'skip' : 'normal') + '">' +
             '<td>' + signEntry.nominal + '</td>' +
             '<td>' + codeText(signEntry.code) + '</td>' +
+            '<td>' + timeValue + '</td>' +
             '<td>' + (skipEntry.skip ? 'yes' : 'no') + '</td>' +
           '</tr>'
         );
       }
-      selectedTableBody.innerHTML = rows.join('');
+      target.innerHTML = rows.join('');
     }
 
     function niceTickStep(span, targetTicks) {
@@ -770,10 +858,10 @@ function write_html_043(
       drawSelectedNeighborCells();
       drawPointMarker(overlayCtx, state.hover, '#6b7280', 4, [4, 4]);
       drawPointMarker(overlayCtx, state.selected, '#0891b2', 6, null);
-      setInfo(hoverInfo, state.hover);
-      setSigns(hoverSigns, state.hover);
-      setInfo(selectedInfo, state.selected);
-      setSelectedTable(state.selected);
+      setInfo(hoverInfo, state.hover, 'No point under cursor.');
+      setPointTable(hoverTableBody, state.hover, 'No point under cursor.');
+      setInfo(selectedInfo, state.selected, 'No point selected.');
+      setPointTable(selectedTableBody, state.selected, 'No point selected.');
     }
 
     function updateViewInfo() {
@@ -941,6 +1029,16 @@ function write_html_043(
 
     window.addEventListener('resize', resizeCanvases);
     renderIterateControls();
+    decodeGzipUint16Array(TIME_WORDS_GZ_B64)
+      .then(function(words) {
+        timeWords = words;
+        drawOverlay();
+      })
+      .catch(function(error) {
+        console.error('Failed to decode time payload:', error);
+        timeWords = new Uint16Array(0);
+        drawOverlay();
+      });
     resizeCanvases();
   </script>
 </body>
@@ -958,7 +1056,13 @@ function main()
     println("Packed sign words for $(length(sign_words)) sampled grid points.")
     flush(stdout)
 
-    black_segments_by_iter, red_segments_by_iter, point_skip_masks, iterate_stats = collect_retired_overlay_segments_043()
+    dot_grids, time_grids = build_grids_043()
+    time_words, time_scale = build_time_words_043(time_grids)
+    println("Packed $(length(time_words)) quantized return-time words at scale $(time_scale).")
+    flush(stdout)
+
+    black_segments_by_iter, red_segments_by_iter, point_skip_masks, iterate_stats =
+        collect_retired_overlay_segments_043(dot_grids, time_grids)
     total_black = sum(length, black_segments_by_iter)
     total_red = sum(length, red_segments_by_iter)
     println("Collected $(total_black) black segments and $(total_red) red segments.")
@@ -972,9 +1076,10 @@ function main()
     end
     sign_blob = base64_bytes_043(sign_words)
     skip_blob = base64_bytes_043(point_skip_masks)
+    time_blob = base64_gzip_bytes_043(time_words)
 
     write_iterate_stats_043(STATS_PATH_043, iterate_stats)
-    write_html_043(HTML_PATH_043, black_blobs, red_blobs, sign_blob, skip_blob)
+    write_html_043(HTML_PATH_043, black_blobs, red_blobs, sign_blob, skip_blob, time_blob, time_scale)
 
     println("Saved iterate stats to $(STATS_PATH_043)")
     println("Saved explorer HTML to $(HTML_PATH_043)")

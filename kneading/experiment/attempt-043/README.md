@@ -11,8 +11,8 @@ Provide an interactive artifact where you can:
 - toggle individual nominal iterates on and off with checkboxes
 - inspect exact sampled grid points by hover and click
 - recover the exact `(alpha, lambda)` value of the nearest sampled point
-- see the per-point sign sequence of the saved dot-product scalar for iterates
-  `2:8` in a selected-point table
+- see the per-point sign sequence and return times for iterates `2:8` in both
+  the hover table and the selected-point table
 - see which iterates incremented the selected sampled point via skip logic
 - highlight the four marched squares surrounding the selected sampled point
 
@@ -35,10 +35,12 @@ The generated HTML is self-contained:
   `UInt16` words, with 2 bits per iterate
 - sampled-point skip flags for iterates `2:8` are embedded as packed `UInt8`
   bitmasks
+- per-point per-iterate return times for iterates `2:8` are embedded as packed
+  `UInt16` words after quantization, then gzip-compressed inside the HTML
 
-The full per-point iterate state/time payload from the original `3.7 GB`
-results TSV is intentionally not embedded, to keep the explorer artifact
-lightweight enough to use interactively.
+The full per-point phase-space state payload from the original `3.7 GB`
+results TSV is intentionally not embedded. Only the compact fields needed for
+interactive inspection are included so the browser artifact stays usable.
 
 The browser decodes those arrays locally and renders the explorer on an HTML
 canvas with zoom, pan, hover, and click interaction.
