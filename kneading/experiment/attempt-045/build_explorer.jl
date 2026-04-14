@@ -24,6 +24,7 @@ const OUTPUT_TAG_043 = get(
 const HTML_PATH_043 = joinpath(ATTEMPT043_ROOT, "$(OUTPUT_TAG_043).html")
 const STATS_PATH_043 = joinpath(ATTEMPT043_ROOT, "$(OUTPUT_TAG_043)_iterate_stats.tsv")
 const MISSING_TIME_WORD_043 = UInt16(0xffff)
+const ORANGE_MIDPOINT_TOL_045 = parse(Float64, get(ENV, "ATTEMPT045_ORANGE_MIDPOINT_TOL", "0.01"))
 
 @inline sign_code_043(value::Float64) = value > 0.0 ? UInt16(0x2) : value < 0.0 ? UInt16(0x1) : UInt16(0x0)
 @inline skip_bit_043(nominal_iterate::Int) = UInt8(1) << (nominal_iterate - 2)
@@ -162,6 +163,206 @@ function build_grids_043()
     return dot_grids, time_grids
 end
 
+@inline function edge_midpoint_length_045(
+    edge_id::Int,
+    x_tl::Float64,
+    y_tl::Float64,
+    x_tr::Float64,
+    y_tr::Float64,
+    x_br::Float64,
+    y_br::Float64,
+    x_bl::Float64,
+    y_bl::Float64,
+)
+    if edge_id == 1
+        x1, y1, x2, y2 = x_tl, y_tl, x_tr, y_tr
+    elseif edge_id == 2
+        x1, y1, x2, y2 = x_tr, y_tr, x_br, y_br
+    elseif edge_id == 3
+        x1, y1, x2, y2 = x_br, y_br, x_bl, y_bl
+    else
+        x1, y1, x2, y2 = x_bl, y_bl, x_tl, y_tl
+    end
+    return 0.5 * (x1 + x2), 0.5 * (y1 + y2), hypot(x2 - x1, y2 - y1)
+end
+
+@inline function endpoint_near_edge_midpoint_045(
+    point::Tuple{Float64, Float64},
+    edge_id::Int,
+    x_tl::Float64,
+    y_tl::Float64,
+    x_tr::Float64,
+    y_tr::Float64,
+    x_br::Float64,
+    y_br::Float64,
+    x_bl::Float64,
+    y_bl::Float64,
+)
+    midpoint_x, midpoint_y, edge_length = edge_midpoint_length_045(
+        edge_id,
+        x_tl,
+        y_tl,
+        x_tr,
+        y_tr,
+        x_br,
+        y_br,
+        x_bl,
+        y_bl,
+    )
+    edge_length > 0.0 || return false
+    point_x, point_y = point
+    return hypot(point_x - midpoint_x, point_y - midpoint_y) <= ORANGE_MIDPOINT_TOL_045 * edge_length
+end
+
+function append_segment_classified_045!(
+    primary_segments::Vector{NTuple{4, Float64}},
+    orange_segments::Vector{NTuple{4, Float64}},
+    point_a::Union{Nothing, Tuple{Float64, Float64}},
+    edge_a::Int,
+    point_b::Union{Nothing, Tuple{Float64, Float64}},
+    edge_b::Int,
+    x_tl::Float64,
+    y_tl::Float64,
+    x_tr::Float64,
+    y_tr::Float64,
+    x_br::Float64,
+    y_br::Float64,
+    x_bl::Float64,
+    y_bl::Float64,
+)
+    (isnothing(point_a) || isnothing(point_b)) && return 0, 0
+    endpoint_a_ok = endpoint_near_edge_midpoint_045(
+        point_a,
+        edge_a,
+        x_tl,
+        y_tl,
+        x_tr,
+        y_tr,
+        x_br,
+        y_br,
+        x_bl,
+        y_bl,
+    )
+    endpoint_b_ok = endpoint_near_edge_midpoint_045(
+        point_b,
+        edge_b,
+        x_tl,
+        y_tl,
+        x_tr,
+        y_tr,
+        x_br,
+        y_br,
+        x_bl,
+        y_bl,
+    )
+    x1, y1 = point_a
+    x2, y2 = point_b
+    if endpoint_a_ok && endpoint_b_ok
+        push!(primary_segments, (x1, y1, x2, y2))
+        return 1, 0
+    end
+    push!(orange_segments, (x1, y1, x2, y2))
+    return 0, 1
+end
+
+function append_march_square_zero_segments_classified_045!(
+    primary_segments::Vector{NTuple{4, Float64}},
+    orange_segments::Vector{NTuple{4, Float64}},
+    values::NTuple{4, Float64},
+    x_tl::Float64,
+    y_tl::Float64,
+    x_tr::Float64,
+    y_tr::Float64,
+    x_br::Float64,
+    y_br::Float64,
+    x_bl::Float64,
+    y_bl::Float64;
+    level::Float64=0.0,
+)
+    z_tl, z_tr, z_br, z_bl = values
+    case_idx =
+        (z_tl >= level ? 8 : 0) +
+        (z_tr >= level ? 4 : 0) +
+        (z_br >= level ? 2 : 0) +
+        (z_bl >= level ? 1 : 0)
+
+    (case_idx == 0 || case_idx == 15) && return 0, 0
+
+    p1 = A27.edge_point_025(1, values, x_tl, y_tl, x_tr, y_tr, x_br, y_br, x_bl, y_bl, level)
+    p2 = A27.edge_point_025(2, values, x_tl, y_tl, x_tr, y_tr, x_br, y_br, x_bl, y_bl, level)
+    p3 = A27.edge_point_025(3, values, x_tl, y_tl, x_tr, y_tr, x_br, y_br, x_bl, y_bl, level)
+    p4 = A27.edge_point_025(4, values, x_tl, y_tl, x_tr, y_tr, x_br, y_br, x_bl, y_bl, level)
+    points = (p1, p2, p3, p4)
+
+    primary_added = 0
+    orange_added = 0
+    if case_idx == 5 || case_idx == 10
+        center_value = 0.25 * (z_tl + z_tr + z_br + z_bl)
+        pairing =
+            case_idx == 5 ?
+            (center_value >= level ? ((1, 2), (3, 4)) : ((1, 4), (2, 3))) :
+            (center_value >= level ? ((1, 4), (2, 3)) : ((1, 2), (3, 4)))
+        for (edge_a, edge_b) in pairing
+            primary_delta, orange_delta = append_segment_classified_045!(
+                primary_segments,
+                orange_segments,
+                points[edge_a],
+                edge_a,
+                points[edge_b],
+                edge_b,
+                x_tl,
+                y_tl,
+                x_tr,
+                y_tr,
+                x_br,
+                y_br,
+                x_bl,
+                y_bl,
+            )
+            primary_added += primary_delta
+            orange_added += orange_delta
+        end
+        return primary_added, orange_added
+    end
+
+    pairing =
+        case_idx == 1 ? ((4, 3),) :
+        case_idx == 2 ? ((3, 2),) :
+        case_idx == 3 ? ((4, 2),) :
+        case_idx == 4 ? ((1, 2),) :
+        case_idx == 6 ? ((1, 3),) :
+        case_idx == 7 ? ((1, 4),) :
+        case_idx == 8 ? ((1, 4),) :
+        case_idx == 9 ? ((1, 3),) :
+        case_idx == 11 ? ((1, 2),) :
+        case_idx == 12 ? ((4, 2),) :
+        case_idx == 13 ? ((3, 2),) :
+        case_idx == 14 ? ((4, 3),) :
+        ()
+
+    for (edge_a, edge_b) in pairing
+        primary_delta, orange_delta = append_segment_classified_045!(
+            primary_segments,
+            orange_segments,
+            points[edge_a],
+            edge_a,
+            points[edge_b],
+            edge_b,
+            x_tl,
+            y_tl,
+            x_tr,
+            y_tr,
+            x_br,
+            y_br,
+            x_bl,
+            y_bl,
+        )
+        primary_added += primary_delta
+        orange_added += orange_delta
+    end
+    return primary_added, orange_added
+end
+
 function collect_forcedfirstskip_overlay_segments_045(
     dot_grids::Vector{Matrix{Float64}},
     time_grids::Vector{Matrix{Float64}},
@@ -174,11 +375,14 @@ function collect_forcedfirstskip_overlay_segments_045(
 
     black_tls = [[NTuple{4, Float64}[] for _ in 1:n_plot] for _ in 1:n_threads]
     red_tls = [[NTuple{4, Float64}[] for _ in 1:n_plot] for _ in 1:n_threads]
+    orange_tls = [[NTuple{4, Float64}[] for _ in 1:n_plot] for _ in 1:n_threads]
     earliest_source_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     black_cell_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     black_segment_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     red_cell_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     red_segment_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
+    orange_cell_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
+    orange_segment_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
 
     earliest_iterate_cells = zeros(UInt8, n_lambda_cells, n_alpha_cells)
     shorter_sign_cells = zeros(Int8, n_lambda_cells, n_alpha_cells)
@@ -187,11 +391,14 @@ function collect_forcedfirstskip_overlay_segments_045(
         tid = Threads.threadid()
         black_local = black_tls[tid]
         red_local = red_tls[tid]
+        orange_local = orange_tls[tid]
         earliest_local = earliest_source_tls[tid]
         black_cell_local = black_cell_tls[tid]
         black_segment_local = black_segment_tls[tid]
         red_cell_local = red_cell_tls[tid]
         red_segment_local = red_segment_tls[tid]
+        orange_cell_local = orange_cell_tls[tid]
+        orange_segment_local = orange_segment_tls[tid]
 
         y_tl = Float64(A27.LAMBDAS_025[j])
         y_bl = Float64(A27.LAMBDAS_025[j + 1])
@@ -227,8 +434,9 @@ function collect_forcedfirstskip_overlay_segments_045(
                 end
 
                 later_found = true
-                added = A27.append_march_square_zero_segments_025!(
+                black_added, orange_added = append_march_square_zero_segments_classified_045!(
                     black_local[nominal_iterate],
+                    orange_local[nominal_iterate],
                     evaluation.current_dot,
                     x_tl,
                     y_tl,
@@ -239,17 +447,22 @@ function collect_forcedfirstskip_overlay_segments_045(
                     x_tl,
                     y_bl,
                 )
-                if added > 0
+                if black_added > 0
                     black_cell_local[nominal_iterate] += 1
-                    black_segment_local[nominal_iterate] += added
+                    black_segment_local[nominal_iterate] += black_added
+                end
+                if orange_added > 0
+                    orange_cell_local[nominal_iterate] += 1
+                    orange_segment_local[nominal_iterate] += orange_added
                 end
                 nominal_iterate += 1
             end
 
             if earliest_nominal != 0
                 if !later_found
-                    added = A27.append_march_square_zero_segments_025!(
+                    red_added, orange_added = append_march_square_zero_segments_classified_045!(
                         red_local[earliest_nominal],
+                        orange_local[earliest_nominal],
                         earliest_evaluation.current_dot,
                         x_tl,
                         y_tl,
@@ -260,9 +473,13 @@ function collect_forcedfirstskip_overlay_segments_045(
                         x_tl,
                         y_bl,
                     )
-                    if added > 0
+                    if red_added > 0
                         red_cell_local[earliest_nominal] += 1
-                        red_segment_local[earliest_nominal] += added
+                        red_segment_local[earliest_nominal] += red_added
+                    end
+                    if orange_added > 0
+                        orange_cell_local[earliest_nominal] += 1
+                        orange_segment_local[earliest_nominal] += orange_added
                     end
                 end
             end
@@ -271,21 +488,27 @@ function collect_forcedfirstskip_overlay_segments_045(
 
     black_segments_by_iter = [NTuple{4, Float64}[] for _ in 1:n_plot]
     red_segments_by_iter = [NTuple{4, Float64}[] for _ in 1:n_plot]
+    orange_segments_by_iter = [NTuple{4, Float64}[] for _ in 1:n_plot]
     earliest_source_cells = zeros(Int, n_plot)
     black_contoured_cells = zeros(Int, n_plot)
     black_segments_count = zeros(Int, n_plot)
     red_contoured_cells = zeros(Int, n_plot)
     red_segments_count = zeros(Int, n_plot)
+    orange_contoured_cells = zeros(Int, n_plot)
+    orange_segments_count = zeros(Int, n_plot)
 
     for tid in 1:n_threads
         for iterate in 2:plot_iterate_end
             append!(black_segments_by_iter[iterate], black_tls[tid][iterate])
             append!(red_segments_by_iter[iterate], red_tls[tid][iterate])
+            append!(orange_segments_by_iter[iterate], orange_tls[tid][iterate])
             earliest_source_cells[iterate] += earliest_source_tls[tid][iterate]
             black_contoured_cells[iterate] += black_cell_tls[tid][iterate]
             black_segments_count[iterate] += black_segment_tls[tid][iterate]
             red_contoured_cells[iterate] += red_cell_tls[tid][iterate]
             red_segments_count[iterate] += red_segment_tls[tid][iterate]
+            orange_contoured_cells[iterate] += orange_cell_tls[tid][iterate]
+            orange_segments_count[iterate] += orange_segment_tls[tid][iterate]
         end
     end
 
@@ -316,9 +539,11 @@ function collect_forcedfirstskip_overlay_segments_045(
         black_segments_count=black_segments_count,
         red_contoured_cells=red_contoured_cells,
         red_segments_count=red_segments_count,
+        orange_contoured_cells=orange_contoured_cells,
+        orange_segments_count=orange_segments_count,
     )
 
-    return black_segments_by_iter, red_segments_by_iter, point_skip_masks, iterate_stats
+    return black_segments_by_iter, red_segments_by_iter, orange_segments_by_iter, point_skip_masks, iterate_stats
 end
 
 function flatten_segments_043(segments::Vector{NTuple{4, Float64}})
@@ -393,7 +618,7 @@ end
 
 function write_iterate_stats_043(path::String, stats)
     open(path, "w") do io
-        println(io, "nominal_iterate\tearliest_source_cells\tblack_contoured_cells\tblack_segments\tred_contoured_cells\tred_segments")
+        println(io, "nominal_iterate\tearliest_source_cells\tblack_contoured_cells\tblack_segments\tred_contoured_cells\tred_segments\torange_contoured_cells\torange_segments")
         for iterate in 2:min(8, length(stats.earliest_source_cells))
             println(
                 io,
@@ -404,6 +629,8 @@ function write_iterate_stats_043(path::String, stats)
                     string(stats.black_segments_count[iterate]),
                     string(stats.red_contoured_cells[iterate]),
                     string(stats.red_segments_count[iterate]),
+                    string(stats.orange_contoured_cells[iterate]),
+                    string(stats.orange_segments_count[iterate]),
                 ], '\t'),
             )
         end
@@ -414,6 +641,7 @@ function write_html_043(
     path::String,
     black_segments_b64_by_iter::Vector{String},
     red_segments_b64_by_iter::Vector{String},
+    orange_segments_b64_by_iter::Vector{String},
     sign_words_b64::String,
     skip_words_b64::String,
     time_words_gz_b64::String,
@@ -469,11 +697,13 @@ function write_html_043(
     .kv { display: grid; grid-template-columns: 78px 1fr; gap: 2px 6px; font-size: 10px; }
     .label { color: var(--muted); }
     .mono { white-space: pre-wrap; word-break: break-word; }
-    .legend-row { display: flex; align-items: center; gap: 7px; font-size: 10px; margin: 3px 0; }
-    .swatch { width: 20px; height: 3px; border-radius: 2px; }
-    .swatch.black { background: #000000; }
-    .swatch.red { background: #c00000; }
-    .swatch.cyan { background: #0ea5e9; }
+	    .legend-row { display: flex; align-items: center; gap: 7px; font-size: 10px; margin: 3px 0; }
+	    .swatch { width: 20px; height: 3px; border-radius: 2px; }
+	    .swatch.black { background: #000000; }
+	    .swatch.red { background: #c00000; }
+	    .swatch.grey { background: #7a7a7a; }
+	    .swatch.orange { background: #f97316; }
+	    .swatch.cyan { background: #0ea5e9; }
     .small { font-size: 10px; color: var(--muted); }
     .chip {
       border: 1px solid var(--border); border-radius: 999px; padding: 3px 8px;
@@ -510,26 +740,30 @@ function write_html_043(
     <aside id="sidebar">
       <h1>Attempt-045 Explorer</h1>
       <div class="box small">
-        Self-contained HTML explorer built from the saved attempt-027 `2000 x 2000` sweep.
-        This uses the attempt-044 rule exactly: within nominal iterates `2:8`, the first
-        contouring iterate forces one shorter-return-time skip, later iterates in `2:8`
-        decide whether that square stays red or gets a later black contour, and only
-        iterates `2:8` are drawn.
-      </div>
-      <h2>Legend</h2>
-      <div class="box">
-        <div class="legend-row"><span class="swatch black"></span><span>later surviving contours after the forced first skip</span></div>
-        <div class="legend-row"><span class="swatch red"></span><span>earliest contour only, when no later contour survives</span></div>
-        <div class="legend-row"><span class="swatch cyan"></span><span>selected sampled grid point</span></div>
-        <div class="legend-row"><span class="swatch" style="background:#bcbcbc;"></span><span>four marched squares around the selected point</span></div>
-      </div>
+	        Self-contained HTML explorer built from the saved attempt-027 `2000 x 2000` sweep.
+	        This uses the attempt-044 rule exactly: within nominal iterates `2:8`, the first
+	        contouring iterate forces one shorter-return-time skip, later iterates in `2:8`
+	        decide whether that square stays red or gets a later black contour, and only
+	        iterates `2:8` are drawn. Segments with either endpoint farther than `1%` of the
+	        corresponding edge length from that edge midpoint are recolored orange.
+	      </div>
+	      <h2>Legend</h2>
+	      <div class="box">
+	        <div class="legend-row"><span class="swatch black"></span><span>later surviving contours after the forced first skip</span></div>
+	        <div class="legend-row"><span class="swatch red"></span><span>earliest contour only, when no later contour survives</span></div>
+	        <div class="legend-row"><span class="swatch grey"></span><span>same as red, but only for nominal iterate `8`</span></div>
+	        <div class="legend-row"><span class="swatch orange"></span><span>endpoint not within `1%` of its marched-edge midpoint; overrides black/red</span></div>
+	        <div class="legend-row"><span class="swatch cyan"></span><span>selected sampled grid point</span></div>
+	        <div class="legend-row"><span class="swatch" style="background:#bcbcbc;"></span><span>four marched squares around the selected point</span></div>
+	      </div>
       <h2>Contours</h2>
       <div class="box">
-        <div class="iter-buttons">
-          <button id="showAllIterates">Show All</button>
-          <button id="hideAllIterates">Hide All</button>
-          <button id="toggleRedContours">Hide Red</button>
-        </div>
+	        <div class="iter-buttons">
+	          <button id="showAllIterates">Show All</button>
+	          <button id="hideAllIterates">Hide All</button>
+	          <button id="toggleRedContours">Hide Red/Grey</button>
+	          <button id="toggleOrangeContours">Hide Orange</button>
+	        </div>
         <div id="iterateControls" class="iter-controls"></div>
       </div>
       <h2>Hover</h2>
@@ -578,7 +812,7 @@ function write_html_043(
             print(io, "',\n")
         end
         print(io, """    };
-    const RED_SEGMENTS_B64_BY_ITER = {
+	    const RED_SEGMENTS_B64_BY_ITER = {
 """)
         for idx in 2:length(red_segments_b64_by_iter)
             print(io, "      ")
@@ -588,7 +822,17 @@ function write_html_043(
             print(io, "',\n")
         end
         print(io, """    };
-    const SIGN_WORDS_B64 = '""")
+	    const ORANGE_SEGMENTS_B64_BY_ITER = {
+""")
+        for idx in 2:length(orange_segments_b64_by_iter)
+            print(io, "      ")
+            print(io, idx)
+            print(io, ": '")
+            print(io, orange_segments_b64_by_iter[idx])
+            print(io, "',\n")
+        end
+        print(io, """    };
+	    const SIGN_WORDS_B64 = '""")
         print(io, sign_words_b64)
         print(io, """';
     const SKIP_WORDS_B64 = '""")
@@ -628,12 +872,14 @@ function write_html_043(
       return new Uint16Array(decompressed);
     }
 
-    const blackSegmentsByIter = {};
-    const redSegmentsByIter = {};
-    for (let nominal = 2; nominal <= 8; nominal += 1) {
-      blackSegmentsByIter[nominal] = BLACK_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(BLACK_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
-      redSegmentsByIter[nominal] = RED_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(RED_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
-    }
+	    const blackSegmentsByIter = {};
+	    const redSegmentsByIter = {};
+	    const orangeSegmentsByIter = {};
+	    for (let nominal = 2; nominal <= 8; nominal += 1) {
+	      blackSegmentsByIter[nominal] = BLACK_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(BLACK_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+	      redSegmentsByIter[nominal] = RED_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(RED_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+	      orangeSegmentsByIter[nominal] = ORANGE_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(ORANGE_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+	    }
     const signWords = decodeUint16Array(SIGN_WORDS_B64);
     const skipWords = decodeBase64Bytes(SKIP_WORDS_B64);
     let timeWords = null;
@@ -651,18 +897,20 @@ function write_html_043(
     const iterateControls = document.getElementById('iterateControls');
     const resetViewButton = document.getElementById('resetView');
     const clearSelectionButton = document.getElementById('clearSelection');
-    const showAllIteratesButton = document.getElementById('showAllIterates');
-    const hideAllIteratesButton = document.getElementById('hideAllIterates');
-    const toggleRedContoursButton = document.getElementById('toggleRedContours');
+	    const showAllIteratesButton = document.getElementById('showAllIterates');
+	    const hideAllIteratesButton = document.getElementById('hideAllIterates');
+	    const toggleRedContoursButton = document.getElementById('toggleRedContours');
+	    const toggleOrangeContoursButton = document.getElementById('toggleOrangeContours');
 
     const state = {
       view: { a0: CONFIG.alphaMin, a1: CONFIG.alphaMax, l0: CONFIG.lambdaMin, l1: CONFIG.lambdaMax },
       hover: null,
       selected: null,
-      dragging: null,
-      visibleIterates: new Set([2, 3, 4, 5, 6, 7, 8]),
-      showRedContours: true
-    };
+	      dragging: null,
+	      visibleIterates: new Set([2, 3, 4, 5, 6, 7, 8]),
+	      showRedContours: true,
+	      showOrangeContours: true
+	    };
 
     function cssRect() {
       const w = viewerWrap.clientWidth;
@@ -936,11 +1184,12 @@ function write_html_043(
       baseCtx.beginPath();
       baseCtx.rect(r.x, r.y, r.w, r.h);
       baseCtx.clip();
-      for (let nominal = 2; nominal <= 8; nominal += 1) {
-        if (!state.visibleIterates.has(nominal)) continue;
-        drawSegmentArray(blackSegmentsByIter[nominal], '#000000');
-        if (state.showRedContours) drawSegmentArray(redSegmentsByIter[nominal], '#c00000');
-      }
+	      for (let nominal = 2; nominal <= 8; nominal += 1) {
+	        if (!state.visibleIterates.has(nominal)) continue;
+	        drawSegmentArray(blackSegmentsByIter[nominal], '#000000');
+	        if (state.showRedContours) drawSegmentArray(redSegmentsByIter[nominal], nominal === 8 ? '#7a7a7a' : '#c00000');
+	        if (state.showOrangeContours) drawSegmentArray(orangeSegmentsByIter[nominal], '#f97316');
+	      }
       baseCtx.restore();
       drawAxes();
       updateViewInfo();
@@ -981,23 +1230,28 @@ function write_html_043(
     }
 
     function updateViewInfo() {
-      let visibleBlack = 0;
-      let visibleRed = 0;
-      let totalRed = 0;
-      for (let nominal = 2; nominal <= 8; nominal += 1) {
-        if (!state.visibleIterates.has(nominal)) continue;
-        visibleBlack += blackSegmentsByIter[nominal].length / 4;
-        totalRed += redSegmentsByIter[nominal].length / 4;
-      }
-      visibleRed = state.showRedContours ? totalRed : 0;
-      const rows = [
-        ['alpha range', state.view.a0.toFixed(6) + ' .. ' + state.view.a1.toFixed(6)],
-        ['lambda range', state.view.l0.toFixed(6) + ' .. ' + state.view.l1.toFixed(6)],
-        ['grid', CONFIG.nAlpha + ' x ' + CONFIG.nLambda],
-        ['visible iterates', Array.from(state.visibleIterates).sort(function(a, b) { return a - b; }).join(', ') || '(none)'],
-        ['red contours', state.showRedContours ? 'shown' : 'hidden'],
-        ['segments', visibleBlack.toLocaleString() + ' black, ' + visibleRed.toLocaleString() + ' red']
-      ];
+	      let visibleBlack = 0;
+	      let visibleRed = 0;
+	      let totalRed = 0;
+	      let visibleOrange = 0;
+	      let totalOrange = 0;
+	      for (let nominal = 2; nominal <= 8; nominal += 1) {
+	        if (!state.visibleIterates.has(nominal)) continue;
+	        visibleBlack += blackSegmentsByIter[nominal].length / 4;
+	        totalRed += redSegmentsByIter[nominal].length / 4;
+	        totalOrange += orangeSegmentsByIter[nominal].length / 4;
+	      }
+	      visibleRed = state.showRedContours ? totalRed : 0;
+	      visibleOrange = state.showOrangeContours ? totalOrange : 0;
+	      const rows = [
+	        ['alpha range', state.view.a0.toFixed(6) + ' .. ' + state.view.a1.toFixed(6)],
+	        ['lambda range', state.view.l0.toFixed(6) + ' .. ' + state.view.l1.toFixed(6)],
+	        ['grid', CONFIG.nAlpha + ' x ' + CONFIG.nLambda],
+	        ['visible iterates', Array.from(state.visibleIterates).sort(function(a, b) { return a - b; }).join(', ') || '(none)'],
+	        ['red/grey contours', state.showRedContours ? 'shown' : 'hidden'],
+	        ['orange contours', state.showOrangeContours ? 'shown' : 'hidden'],
+	        ['segments', visibleBlack.toLocaleString() + ' black, ' + visibleRed.toLocaleString() + ' red/grey, ' + visibleOrange.toLocaleString() + ' orange']
+	      ];
       viewInfo.innerHTML = rows.map(function(pair) {
         return '<div class="label">' + pair[0] + '</div><div class="mono">' + pair[1] + '</div>';
       }).join('');
@@ -1146,21 +1400,33 @@ function write_html_043(
       drawOverlay();
     });
 
-    function updateRedToggleButton() {
-      toggleRedContoursButton.textContent = state.showRedContours ? 'Hide Red' : 'Show Red';
-    }
+	    function updateRedToggleButton() {
+	      toggleRedContoursButton.textContent = state.showRedContours ? 'Hide Red/Grey' : 'Show Red/Grey';
+	    }
 
-    toggleRedContoursButton.addEventListener('click', function() {
-      state.showRedContours = !state.showRedContours;
-      updateRedToggleButton();
-      drawBase();
-      drawOverlay();
-    });
+	    function updateOrangeToggleButton() {
+	      toggleOrangeContoursButton.textContent = state.showOrangeContours ? 'Hide Orange' : 'Show Orange';
+	    }
 
-    window.addEventListener('resize', resizeCanvases);
-    renderIterateControls();
-    updateRedToggleButton();
-    decodeGzipUint16Array(TIME_WORDS_GZ_B64)
+	    toggleRedContoursButton.addEventListener('click', function() {
+	      state.showRedContours = !state.showRedContours;
+	      updateRedToggleButton();
+	      drawBase();
+	      drawOverlay();
+	    });
+
+	    toggleOrangeContoursButton.addEventListener('click', function() {
+	      state.showOrangeContours = !state.showOrangeContours;
+	      updateOrangeToggleButton();
+	      drawBase();
+	      drawOverlay();
+	    });
+
+	    window.addEventListener('resize', resizeCanvases);
+	    renderIterateControls();
+	    updateRedToggleButton();
+	    updateOrangeToggleButton();
+	    decodeGzipUint16Array(TIME_WORDS_GZ_B64)
       .then(function(words) {
         timeWords = words;
         drawOverlay();
@@ -1192,25 +1458,28 @@ function main()
     println("Packed $(length(time_words)) quantized return-time words at scale $(time_scale).")
     flush(stdout)
 
-    black_segments_by_iter, red_segments_by_iter, point_skip_masks, iterate_stats =
+    black_segments_by_iter, red_segments_by_iter, orange_segments_by_iter, point_skip_masks, iterate_stats =
         collect_forcedfirstskip_overlay_segments_045(dot_grids, time_grids)
     total_black = sum(length, black_segments_by_iter)
     total_red = sum(length, red_segments_by_iter)
-    println("Collected $(total_black) black segments and $(total_red) red segments.")
+    total_orange = sum(length, orange_segments_by_iter)
+    println("Collected $(total_black) black segments, $(total_red) red segments, and $(total_orange) orange segments.")
     flush(stdout)
 
     black_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
     red_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    orange_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
     for nominal_iterate in 2:min(8, A27.ATTEMPT025_PLOT_ITERATE_CAP)
         black_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(black_segments_by_iter[nominal_iterate]))
         red_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(red_segments_by_iter[nominal_iterate]))
+        orange_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(orange_segments_by_iter[nominal_iterate]))
     end
     sign_blob = base64_bytes_043(sign_words)
     skip_blob = base64_bytes_043(point_skip_masks)
     time_blob = base64_gzip_bytes_043(time_words)
 
     write_iterate_stats_043(STATS_PATH_043, iterate_stats)
-    write_html_043(HTML_PATH_043, black_blobs, red_blobs, sign_blob, skip_blob, time_blob, time_scale)
+    write_html_043(HTML_PATH_043, black_blobs, red_blobs, orange_blobs, sign_blob, skip_blob, time_blob, time_scale)
 
     println("Saved iterate stats to $(STATS_PATH_043)")
     println("Saved explorer HTML to $(HTML_PATH_043)")

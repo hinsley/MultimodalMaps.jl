@@ -11,6 +11,7 @@ Provide an interactive artifact where you can:
 - see the overlaid nominal-iterate `2:8` contour plot directly in the browser
 - toggle individual nominal iterates on and off with checkboxes
 - hide or show red contours globally with a single button
+- hide or show orange contours globally with a single button
 - inspect exact sampled grid points by hover and click
 - recover the exact `(alpha, lambda)` value of the nearest sampled point
 - see the per-point sign sequence and return times for iterates `2:8` in both
@@ -29,7 +30,10 @@ Provide an interactive artifact where you can:
   surviving later contour
 - later surviving contours drawn in `2:8` are black
 - if no later contour survives at all, the original earliest contour is drawn
-  in red
+  in red, except nominal iterate `8`, which is drawn in grey
+- any segment with either endpoint farther than `1%` of the corresponding
+  marched-edge length from that edge midpoint is drawn in orange instead of
+  black/red
 - the explorer uses the same saved `attempt-027` contour scalar
   `sign(x) * v_x`
 - no trajectories are reintegrated; everything is reconstructed from the saved
@@ -41,6 +45,7 @@ The generated HTML is self-contained:
 
 - black contour segments are embedded as packed `Float32` endpoint arrays
 - red contour segments are embedded the same way
+- orange contour segments are embedded the same way
 - sampled-point sign sequences for iterates `2:8` are embedded as packed
   `UInt16` words, with 2 bits per iterate
 - sampled-point skip flags for iterates `2:8` are embedded as packed `UInt8`
