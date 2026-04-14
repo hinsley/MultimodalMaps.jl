@@ -3,8 +3,9 @@
 `attempt-046` builds a self-contained HTML explorer for the saved
 `attempt-027` Shimizu-Morioka `|x|`-maximum sweep. It uses the derived
 monotone sign sequence instead of the raw per-iterate tangent sign, and it
-classifies each mixed contour in `2:8` as black, red, blue, or green from the
-two representative monotone sign sequences on either side of the contour.
+classifies each mixed contour in `2:8` as black, red, blue, purple, or green
+from the two representative monotone sign sequences on either side of the
+contour.
 
 ## Goal
 
@@ -16,6 +17,7 @@ Provide an interactive artifact where you can:
 - hide or show green contours globally with a single button
 - hide or show red contours globally with a single button
 - hide or show blue contours globally with a single button
+- hide or show purple contours globally with a single button
 - inspect exact sampled grid points by hover and click
 - recover the exact `(alpha, lambda)` value of the nearest sampled point
 - see the per-point sign sequence and return times for iterates `2:8` in both
@@ -41,18 +43,20 @@ Provide an interactive artifact where you can:
 - the two representative sides for each mixed square are still chosen using the
   shorter-return-time convention from the original marching-square logic, but
   no skips are applied to the iterate index
-- blue means grazing: deleting one monotone sign in `2:8` on either side
-  makes the remaining `2:10` sequences match, with suffix inversion applied
-  after deleting a `-`
+- blue means grazing by `+` deletion: deleting one `+` monotone sign in `2:8`
+  on either side makes the remaining `2:12` sequences match
+- purple means grazing by `-` deletion: deleting one `-` monotone sign in
+  `2:8` on either side and then inverting the suffix makes the remaining
+  `2:12` sequences match
 - red means coordinate singularity: exactly one consecutive same-sign pair
-  flips sign and the rest of the `2:10` sequences match
+  flips sign and the rest of the `2:12` sequences match
 - black means a real contour: the two monotone sign sequences differ in
-  exactly one place over `2:10`
+  exactly one place over `2:12`
 - green means the square is mixed in `2:8` but does not satisfy any of the
-  black/red/blue tests
+  black/red/blue/purple tests
 - the explorer uses the same saved `attempt-027` tangent magnitudes and return
   times, but swaps in those monotone signs before any contouring
-- the classification tests are intentionally truncated to iterates `2:10`
+- the classification tests are intentionally truncated to iterates `2:12`
 - no trajectories are reintegrated; everything is reconstructed from the saved
   sweep columns
 
@@ -63,6 +67,7 @@ The generated HTML is self-contained:
 - black contour segments are embedded as packed `Float32` endpoint arrays
 - red contour segments are embedded the same way
 - blue contour segments are embedded the same way
+- purple contour segments are embedded the same way
 - green contour segments are embedded the same way
 - sampled-point sign sequences for iterates `2:8` are embedded as packed
   `UInt16` words, with 2 bits per iterate

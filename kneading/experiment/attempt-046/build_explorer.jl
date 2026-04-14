@@ -216,7 +216,7 @@ function point_sign_sequence_046(
     col_idx::Int,
     dot_grids::Vector{Matrix{Float64}};
     first_iter::Int=2,
-    last_iter::Int=10,
+    last_iter::Int=12,
 )
     last_iter <= length(dot_grids) || return nothing
     seq = Vector{Int8}(undef, last_iter - first_iter + 1)
@@ -256,19 +256,21 @@ end
     return true
 end
 
-function is_grazing_046(seq_a::Vector{Int8}, seq_b::Vector{Int8})
-    length(seq_a) == length(seq_b) || return false
+function grazing_kind_046(seq_a::Vector{Int8}, seq_b::Vector{Int8})
+    length(seq_a) == length(seq_b) || return nothing
     max_delete_idx = min(7, length(seq_a) - 1)
-    max_delete_idx >= 1 || return false
+    max_delete_idx >= 1 || return nothing
     for delete_idx in 1:max_delete_idx
         if plus_delete_matches_046(seq_a, seq_b, delete_idx) ||
-           minus_delete_matches_046(seq_a, seq_b, delete_idx) ||
-           plus_delete_matches_046(seq_b, seq_a, delete_idx) ||
+           plus_delete_matches_046(seq_b, seq_a, delete_idx)
+            return :blue
+        end
+        if minus_delete_matches_046(seq_a, seq_b, delete_idx) ||
            minus_delete_matches_046(seq_b, seq_a, delete_idx)
-            return true
+            return :purple
         end
     end
-    return false
+    return nothing
 end
 
 function is_coordinate_singularity_046(seq_a::Vector{Int8}, seq_b::Vector{Int8})
@@ -295,7 +297,8 @@ end
 end
 
 function classify_contour_046(seq_a::Vector{Int8}, seq_b::Vector{Int8})
-    is_grazing_046(seq_a, seq_b) && return :blue
+    grazing_kind = grazing_kind_046(seq_a, seq_b)
+    !isnothing(grazing_kind) && return grazing_kind
     is_coordinate_singularity_046(seq_a, seq_b) && return :red
     real_contour_difference_count_046(seq_a, seq_b) == 1 && return :black
     return :green
@@ -410,7 +413,7 @@ function collect_sequence_classified_segments_046(
 )
     n_plot = A27.ATTEMPT025_PLOT_ITERATE_CAP
     plot_iterate_end = min(8, n_plot)
-    classification_iterate_end = min(10, length(dot_grids))
+    classification_iterate_end = min(12, length(dot_grids))
     n_lambda_cells = length(A27.LAMBDAS_025) - 1
     n_alpha_cells = length(A27.ALPHAS_025) - 1
     n_threads = Threads.maxthreadid()
@@ -418,6 +421,7 @@ function collect_sequence_classified_segments_046(
     black_tls = [[NTuple{4, Float64}[] for _ in 1:n_plot] for _ in 1:n_threads]
     red_tls = [[NTuple{4, Float64}[] for _ in 1:n_plot] for _ in 1:n_threads]
     blue_tls = [[NTuple{4, Float64}[] for _ in 1:n_plot] for _ in 1:n_threads]
+    purple_tls = [[NTuple{4, Float64}[] for _ in 1:n_plot] for _ in 1:n_threads]
     green_tls = [[NTuple{4, Float64}[] for _ in 1:n_plot] for _ in 1:n_threads]
     source_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     black_cell_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
@@ -426,6 +430,8 @@ function collect_sequence_classified_segments_046(
     red_segment_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     blue_cell_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     blue_segment_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
+    purple_cell_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
+    purple_segment_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     green_cell_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     green_segment_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     zero_skip = (0, 0, 0, 0)
@@ -435,6 +441,7 @@ function collect_sequence_classified_segments_046(
         black_local = black_tls[tid]
         red_local = red_tls[tid]
         blue_local = blue_tls[tid]
+        purple_local = purple_tls[tid]
         green_local = green_tls[tid]
         source_local = source_tls[tid]
         black_cell_local = black_cell_tls[tid]
@@ -443,6 +450,8 @@ function collect_sequence_classified_segments_046(
         red_segment_local = red_segment_tls[tid]
         blue_cell_local = blue_cell_tls[tid]
         blue_segment_local = blue_segment_tls[tid]
+        purple_cell_local = purple_cell_tls[tid]
+        purple_segment_local = purple_segment_tls[tid]
         green_cell_local = green_cell_tls[tid]
         green_segment_local = green_segment_tls[tid]
 
@@ -500,6 +509,12 @@ function collect_sequence_classified_segments_046(
                     end
                     blue_cell_local[nominal_iterate] += 1
                     blue_segment_local[nominal_iterate] += segment_count
+                elseif classification == :purple
+                    @inbounds for (_, segment) in specs
+                        push!(purple_local[nominal_iterate], segment)
+                    end
+                    purple_cell_local[nominal_iterate] += 1
+                    purple_segment_local[nominal_iterate] += segment_count
                 else
                     @inbounds for (_, segment) in specs
                         push!(green_local[nominal_iterate], segment)
@@ -514,6 +529,7 @@ function collect_sequence_classified_segments_046(
     black_segments_by_iter = [NTuple{4, Float64}[] for _ in 1:n_plot]
     red_segments_by_iter = [NTuple{4, Float64}[] for _ in 1:n_plot]
     blue_segments_by_iter = [NTuple{4, Float64}[] for _ in 1:n_plot]
+    purple_segments_by_iter = [NTuple{4, Float64}[] for _ in 1:n_plot]
     green_segments_by_iter = [NTuple{4, Float64}[] for _ in 1:n_plot]
     source_cells = zeros(Int, n_plot)
     black_contoured_cells = zeros(Int, n_plot)
@@ -522,6 +538,8 @@ function collect_sequence_classified_segments_046(
     red_segments_count = zeros(Int, n_plot)
     blue_contoured_cells = zeros(Int, n_plot)
     blue_segments_count = zeros(Int, n_plot)
+    purple_contoured_cells = zeros(Int, n_plot)
+    purple_segments_count = zeros(Int, n_plot)
     green_contoured_cells = zeros(Int, n_plot)
     green_segments_count = zeros(Int, n_plot)
 
@@ -530,6 +548,7 @@ function collect_sequence_classified_segments_046(
             append!(black_segments_by_iter[iterate], black_tls[tid][iterate])
             append!(red_segments_by_iter[iterate], red_tls[tid][iterate])
             append!(blue_segments_by_iter[iterate], blue_tls[tid][iterate])
+            append!(purple_segments_by_iter[iterate], purple_tls[tid][iterate])
             append!(green_segments_by_iter[iterate], green_tls[tid][iterate])
             source_cells[iterate] += source_tls[tid][iterate]
             black_contoured_cells[iterate] += black_cell_tls[tid][iterate]
@@ -538,6 +557,8 @@ function collect_sequence_classified_segments_046(
             red_segments_count[iterate] += red_segment_tls[tid][iterate]
             blue_contoured_cells[iterate] += blue_cell_tls[tid][iterate]
             blue_segments_count[iterate] += blue_segment_tls[tid][iterate]
+            purple_contoured_cells[iterate] += purple_cell_tls[tid][iterate]
+            purple_segments_count[iterate] += purple_segment_tls[tid][iterate]
             green_contoured_cells[iterate] += green_cell_tls[tid][iterate]
             green_segments_count[iterate] += green_segment_tls[tid][iterate]
         end
@@ -553,11 +574,13 @@ function collect_sequence_classified_segments_046(
         red_segments_count=red_segments_count,
         blue_contoured_cells=blue_contoured_cells,
         blue_segments_count=blue_segments_count,
+        purple_contoured_cells=purple_contoured_cells,
+        purple_segments_count=purple_segments_count,
         green_contoured_cells=green_contoured_cells,
         green_segments_count=green_segments_count,
     )
 
-    return black_segments_by_iter, red_segments_by_iter, blue_segments_by_iter, green_segments_by_iter, point_skip_masks, iterate_stats
+    return black_segments_by_iter, red_segments_by_iter, blue_segments_by_iter, purple_segments_by_iter, green_segments_by_iter, point_skip_masks, iterate_stats
 end
 
 function flatten_segments_043(segments::Vector{NTuple{4, Float64}})
@@ -632,7 +655,7 @@ end
 
 function write_iterate_stats_043(path::String, stats)
     open(path, "w") do io
-        println(io, "nominal_iterate\tsource_mixed_cells\tblack_contoured_cells\tblack_segments\tred_contoured_cells\tred_segments\tblue_contoured_cells\tblue_segments\tgreen_contoured_cells\tgreen_segments")
+        println(io, "nominal_iterate\tsource_mixed_cells\tblack_contoured_cells\tblack_segments\tred_contoured_cells\tred_segments\tblue_contoured_cells\tblue_segments\tpurple_contoured_cells\tpurple_segments\tgreen_contoured_cells\tgreen_segments")
         for iterate in 2:min(8, length(stats.source_cells))
             println(
                 io,
@@ -645,6 +668,8 @@ function write_iterate_stats_043(path::String, stats)
                     string(stats.red_segments_count[iterate]),
                     string(stats.blue_contoured_cells[iterate]),
                     string(stats.blue_segments_count[iterate]),
+                    string(stats.purple_contoured_cells[iterate]),
+                    string(stats.purple_segments_count[iterate]),
                     string(stats.green_contoured_cells[iterate]),
                     string(stats.green_segments_count[iterate]),
                 ], '\t'),
@@ -658,6 +683,7 @@ function write_html_043(
     black_segments_b64_by_iter::Vector{String},
     red_segments_b64_by_iter::Vector{String},
     blue_segments_b64_by_iter::Vector{String},
+    purple_segments_b64_by_iter::Vector{String},
     green_segments_b64_by_iter::Vector{String},
     raw_sign_words_b64::String,
     monotone_sign_words_b64::String,
@@ -720,6 +746,7 @@ function write_html_043(
 	    .swatch.black { background: #000000; }
 	    .swatch.red { background: #c00000; }
 	    .swatch.blue { background: #3b82f6; }
+	    .swatch.purple { background: #7c3aed; }
 	    .swatch.green { background: #008000; }
 	    .swatch.cyan { background: #0ea5e9; }
     .small { font-size: 10px; color: var(--muted); }
@@ -762,14 +789,15 @@ function write_html_043(
 	        The contoured monotone sign at iterate `k` is `+` when the raw dot-product sign stays the same
 	        from iterate `k-1` to `k`, and `-` when it flips. Iterate `2` uses raw iterate `1` as its reference.
 	        Old-style skip compression is disabled here: every mixed square at every nominal iterate in `2:8`
-	        is classified independently, and the classification tests only use the saved symbol data through `2:10`.
+	        is classified independently, and the classification tests only use the saved symbol data through `2:12`.
 	      </div>
 	      <h2>Legend</h2>
 	      <div class="box">
 	        <div class="legend-row"><span class="swatch black"></span><span>real contour: the two monotone sign sequences differ in exactly one place</span></div>
 	        <div class="legend-row"><span class="swatch red"></span><span>coordinate singularity: one consecutive same-sign pair flips and the rest matches</span></div>
-	        <div class="legend-row"><span class="swatch blue"></span><span>grazing: one deletion in `2:8` reconciles the two monotone sign sequences across `2:10`</span></div>
-	        <div class="legend-row"><span class="swatch green"></span><span>other mixed square: not black, red, or blue under the above tests</span></div>
+	        <div class="legend-row"><span class="swatch blue"></span><span>grazing (`+` deletion): deleting one `+` in `2:8` reconciles the two monotone sign sequences across `2:12`</span></div>
+	        <div class="legend-row"><span class="swatch purple"></span><span>grazing (`-` deletion): deleting one `-` in `2:8` and inverting the suffix reconciles the two monotone sign sequences across `2:12`</span></div>
+	        <div class="legend-row"><span class="swatch green"></span><span>other mixed square: not black, red, blue, or purple under the above tests</span></div>
 	        <div class="legend-row"><span class="swatch cyan"></span><span>selected sampled grid point</span></div>
 	        <div class="legend-row"><span class="swatch" style="background:#bcbcbc;"></span><span>four marched squares around the selected point</span></div>
 	      </div>
@@ -782,6 +810,7 @@ function write_html_043(
 	          <button id="toggleGreenContours">Hide Green</button>
 	          <button id="toggleRedContours">Hide Red</button>
 	          <button id="toggleGreyContours">Hide Blue</button>
+	          <button id="togglePurpleContours">Hide Purple</button>
 	        </div>
         <div id="iterateControls" class="iter-controls"></div>
       </div>
@@ -851,6 +880,16 @@ function write_html_043(
             print(io, "',\n")
         end
         print(io, """    };
+		    const PURPLE_SEGMENTS_B64_BY_ITER = {
+	""")
+        for idx in 2:length(purple_segments_b64_by_iter)
+            print(io, "      ")
+            print(io, idx)
+            print(io, ": '")
+            print(io, purple_segments_b64_by_iter[idx])
+            print(io, "',\n")
+        end
+        print(io, """    };
 		    const GREEN_SEGMENTS_B64_BY_ITER = {
 	""")
         for idx in 2:length(green_segments_b64_by_iter)
@@ -907,11 +946,13 @@ function write_html_043(
 		    const blackSegmentsByIter = {};
 		    const redSegmentsByIter = {};
 		    const blueSegmentsByIter = {};
+		    const purpleSegmentsByIter = {};
 		    const greenSegmentsByIter = {};
 		    for (let nominal = 2; nominal <= 8; nominal += 1) {
 		      blackSegmentsByIter[nominal] = BLACK_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(BLACK_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
 		      redSegmentsByIter[nominal] = RED_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(RED_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
 		      blueSegmentsByIter[nominal] = BLUE_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(BLUE_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+		      purpleSegmentsByIter[nominal] = PURPLE_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(PURPLE_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
 		      greenSegmentsByIter[nominal] = GREEN_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(GREEN_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
 		    }
 	    const rawSignWords = decodeUint16Array(RAW_SIGN_WORDS_B64);
@@ -938,6 +979,7 @@ function write_html_043(
 			    const toggleGreenContoursButton = document.getElementById('toggleGreenContours');
 			    const toggleRedContoursButton = document.getElementById('toggleRedContours');
 			    const toggleBlueContoursButton = document.getElementById('toggleGreyContours');
+			    const togglePurpleContoursButton = document.getElementById('togglePurpleContours');
 
 		    const state = {
 		      view: { a0: CONFIG.alphaMin, a1: CONFIG.alphaMax, l0: CONFIG.lambdaMin, l1: CONFIG.lambdaMax },
@@ -948,7 +990,8 @@ function write_html_043(
 			      showBlackContours: true,
 			      showGreenContours: true,
 			      showRedContours: true,
-			      showBlueContours: true
+			      showBlueContours: true,
+			      showPurpleContours: true
 			    };
 
     function cssRect() {
@@ -1234,6 +1277,7 @@ function write_html_043(
 			        if (state.showBlackContours) drawSegmentArray(blackSegmentsByIter[nominal], '#000000');
 			        if (state.showRedContours) drawSegmentArray(redSegmentsByIter[nominal], '#c00000');
 			        if (state.showBlueContours) drawSegmentArray(blueSegmentsByIter[nominal], '#3b82f6');
+			        if (state.showPurpleContours) drawSegmentArray(purpleSegmentsByIter[nominal], '#7c3aed');
 			      }
       baseCtx.restore();
       drawAxes();
@@ -1278,18 +1322,21 @@ function write_html_043(
 			      let totalBlack = 0;
 			      let totalRed = 0;
 			      let totalBlue = 0;
+			      let totalPurple = 0;
 			      let totalGreen = 0;
 			      for (let nominal = 2; nominal <= 8; nominal += 1) {
 			        if (!state.visibleIterates.has(nominal)) continue;
 			        totalBlack += blackSegmentsByIter[nominal].length / 4;
 			        totalRed += redSegmentsByIter[nominal].length / 4;
 			        totalBlue += blueSegmentsByIter[nominal].length / 4;
+			        totalPurple += purpleSegmentsByIter[nominal].length / 4;
 			        totalGreen += greenSegmentsByIter[nominal].length / 4;
 			      }
 			      const visibleBlack = state.showBlackContours ? totalBlack : 0;
 			      const visibleGreen = state.showGreenContours ? totalGreen : 0;
 			      const visibleRed = state.showRedContours ? totalRed : 0;
 			      const visibleBlue = state.showBlueContours ? totalBlue : 0;
+			      const visiblePurple = state.showPurpleContours ? totalPurple : 0;
 			      const rows = [
 			        ['alpha range', state.view.a0.toFixed(6) + ' .. ' + state.view.a1.toFixed(6)],
 			        ['lambda range', state.view.l0.toFixed(6) + ' .. ' + state.view.l1.toFixed(6)],
@@ -1299,7 +1346,8 @@ function write_html_043(
 			        ['green contours', state.showGreenContours ? 'shown' : 'hidden'],
 			        ['red contours', state.showRedContours ? 'shown' : 'hidden'],
 			        ['blue contours', state.showBlueContours ? 'shown' : 'hidden'],
-			        ['segments', visibleBlack.toLocaleString() + ' black, ' + visibleRed.toLocaleString() + ' red, ' + visibleBlue.toLocaleString() + ' blue, ' + visibleGreen.toLocaleString() + ' green']
+			        ['purple contours', state.showPurpleContours ? 'shown' : 'hidden'],
+			        ['segments', visibleBlack.toLocaleString() + ' black, ' + visibleRed.toLocaleString() + ' red, ' + visibleBlue.toLocaleString() + ' blue, ' + visiblePurple.toLocaleString() + ' purple, ' + visibleGreen.toLocaleString() + ' green']
 			      ];
       viewInfo.innerHTML = rows.map(function(pair) {
         return '<div class="label">' + pair[0] + '</div><div class="mono">' + pair[1] + '</div>';
@@ -1465,6 +1513,10 @@ function write_html_043(
 		      toggleBlueContoursButton.textContent = state.showBlueContours ? 'Hide Blue' : 'Show Blue';
 		    }
 
+		    function updatePurpleToggleButton() {
+		      togglePurpleContoursButton.textContent = state.showPurpleContours ? 'Hide Purple' : 'Show Purple';
+		    }
+
 		    toggleBlackContoursButton.addEventListener('click', function() {
 		      state.showBlackContours = !state.showBlackContours;
 		      updateBlackToggleButton();
@@ -1493,12 +1545,20 @@ function write_html_043(
 		      drawOverlay();
 		    });
 
+		    togglePurpleContoursButton.addEventListener('click', function() {
+		      state.showPurpleContours = !state.showPurpleContours;
+		      updatePurpleToggleButton();
+		      drawBase();
+		      drawOverlay();
+		    });
+
 		    window.addEventListener('resize', resizeCanvases);
 		    renderIterateControls();
 		    updateBlackToggleButton();
 		    updateGreenToggleButton();
 		    updateRedToggleButton();
 		    updateBlueToggleButton();
+		    updatePurpleToggleButton();
 		    decodeGzipUint16Array(TIME_WORDS_GZ_B64)
       .then(function(words) {
         timeWords = words;
@@ -1531,23 +1591,26 @@ function main()
     println("Packed $(length(time_words)) quantized return-time words at scale $(time_scale).")
     flush(stdout)
 
-    black_segments_by_iter, red_segments_by_iter, blue_segments_by_iter, green_segments_by_iter, point_skip_masks, iterate_stats =
+    black_segments_by_iter, red_segments_by_iter, blue_segments_by_iter, purple_segments_by_iter, green_segments_by_iter, point_skip_masks, iterate_stats =
         collect_sequence_classified_segments_046(dot_grids, time_grids)
     total_black = sum(length, black_segments_by_iter)
     total_red = sum(length, red_segments_by_iter)
     total_blue = sum(length, blue_segments_by_iter)
+    total_purple = sum(length, purple_segments_by_iter)
     total_green = sum(length, green_segments_by_iter)
-    println("Collected $(total_black) black segments, $(total_red) red segments, $(total_blue) blue segments, and $(total_green) green segments.")
+    println("Collected $(total_black) black segments, $(total_red) red segments, $(total_blue) blue segments, $(total_purple) purple segments, and $(total_green) green segments.")
     flush(stdout)
 
     black_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
     red_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
     blue_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    purple_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
     green_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
     for nominal_iterate in 2:min(8, A27.ATTEMPT025_PLOT_ITERATE_CAP)
         black_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(black_segments_by_iter[nominal_iterate]))
         red_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(red_segments_by_iter[nominal_iterate]))
         blue_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(blue_segments_by_iter[nominal_iterate]))
+        purple_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(purple_segments_by_iter[nominal_iterate]))
         green_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(green_segments_by_iter[nominal_iterate]))
     end
     raw_sign_blob = base64_bytes_043(raw_sign_words)
@@ -1556,7 +1619,7 @@ function main()
     time_blob = base64_gzip_bytes_043(time_words)
 
     write_iterate_stats_043(STATS_PATH_043, iterate_stats)
-    write_html_043(HTML_PATH_043, black_blobs, red_blobs, blue_blobs, green_blobs, raw_sign_blob, monotone_sign_blob, skip_blob, time_blob, time_scale)
+    write_html_043(HTML_PATH_043, black_blobs, red_blobs, blue_blobs, purple_blobs, green_blobs, raw_sign_blob, monotone_sign_blob, skip_blob, time_blob, time_scale)
 
     println("Saved iterate stats to $(STATS_PATH_043)")
     println("Saved explorer HTML to $(HTML_PATH_043)")
