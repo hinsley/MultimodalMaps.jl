@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/../../.." && pwd)"
+cd "${REPO_ROOT}"
+
+SWEEP_TAG="${ATTEMPT025_SWEEP_TAG:-grid2000_branch16_absxskip16_plot8_deltatfix_nominal_iterates2_8_black_red_retired_shimizu_morioka_cpu}"
+OUTPUT_TAG="${ATTEMPT044_OUTPUT_TAG:-grid2000_branch16_absxskip16_plot8_forcedfirstskip_black_red_shimizu_morioka_cpu}"
+PNG_PATH="${SCRIPT_DIR}/${OUTPUT_TAG}_contours.png"
+UPLOAD_JSON="${SCRIPT_DIR}/${OUTPUT_TAG}_upload.json"
+UPLOAD_STDERR="${SCRIPT_DIR}/${OUTPUT_TAG}_upload.stderr"
+
+export JULIA_NUM_THREADS="${JULIA_NUM_THREADS:-32}"
+export ATTEMPT025_SWEEP_TAG="${SWEEP_TAG}"
+export ATTEMPT025_RUN_COLUMNS="${ATTEMPT025_RUN_COLUMNS:-false}"
+export ATTEMPT025_WRITE_MERGED_RESULTS="${ATTEMPT025_WRITE_MERGED_RESULTS:-false}"
+export ATTEMPT025_WRITE_ITERATE_STATS="${ATTEMPT025_WRITE_ITERATE_STATS:-false}"
+export ATTEMPT025_N_ALPHA="${ATTEMPT025_N_ALPHA:-2000}"
+export ATTEMPT025_N_LAMBDA="${ATTEMPT025_N_LAMBDA:-2000}"
+export ATTEMPT025_MAX_EVENT_ITERATES="${ATTEMPT025_MAX_EVENT_ITERATES:-16}"
+export ATTEMPT025_PLOT_ITERATE_CAP="${ATTEMPT025_PLOT_ITERATE_CAP:-8}"
+export ATTEMPT025_LINEWIDTH="${ATTEMPT025_LINEWIDTH:-0.35}"
+export ATTEMPT025_FIG_WIDTH="${ATTEMPT025_FIG_WIDTH:-2000}"
+export ATTEMPT025_FIG_HEIGHT="${ATTEMPT025_FIG_HEIGHT:-2000}"
+export ATTEMPT025_PX_PER_UNIT="${ATTEMPT025_PX_PER_UNIT:-4.0}"
+export ATTEMPT044_OUTPUT_TAG="${OUTPUT_TAG}"
+export ATTEMPT044_OVERLAY_ITERATE_START="${ATTEMPT044_OVERLAY_ITERATE_START:-2}"
+export ATTEMPT044_OVERLAY_ITERATE_END="${ATTEMPT044_OVERLAY_ITERATE_END:-8}"
+
+echo "Running attempt-044 first-contour forced-skip overlay from saved attempt-027 sweep."
+echo "Output tag: ${OUTPUT_TAG}"
+echo "Sweep tag: ${SWEEP_TAG}"
+echo "Threads: ${JULIA_NUM_THREADS}"
+echo "Grid: ${ATTEMPT025_N_ALPHA} x ${ATTEMPT025_N_LAMBDA}"
+echo "Stored iterates: ${ATTEMPT025_MAX_EVENT_ITERATES}, plotted range: ${ATTEMPT044_OVERLAY_ITERATE_START}:${ATTEMPT044_OVERLAY_ITERATE_END}"
+echo "Figure: ${ATTEMPT025_FIG_WIDTH}x${ATTEMPT025_FIG_HEIGHT}, px_per_unit=${ATTEMPT025_PX_PER_UNIT}, linewidth=${ATTEMPT025_LINEWIDTH}"
+
+julia --project=. "${SCRIPT_DIR}/contours.jl"
+
+tglfs upload --json "${PNG_PATH}" > "${UPLOAD_JSON}" 2> "${UPLOAD_STDERR}"
+
+echo "Uploaded ${PNG_PATH}"
