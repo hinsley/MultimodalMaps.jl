@@ -168,7 +168,6 @@ function collect_forcedfirstskip_overlay_segments_045(
 )
     n_plot = A27.ATTEMPT025_PLOT_ITERATE_CAP
     plot_iterate_end = min(8, n_plot)
-    stored_iterate_end = min(length(dot_grids), length(time_grids) - 1)
     n_lambda_cells = length(A27.LAMBDAS_025) - 1
     n_alpha_cells = length(A27.ALPHAS_025) - 1
     n_threads = Threads.maxthreadid()
@@ -205,12 +204,11 @@ function collect_forcedfirstskip_overlay_segments_045(
             earliest_evaluation = A27.missing_evaluation_025()
             later_found = false
 
-            for nominal_iterate in 2:stored_iterate_end
+            for nominal_iterate in 2:plot_iterate_end
                 evaluation = evaluate_square_local_045(j, i, nominal_iterate, dot_grids, time_grids, skip)
                 evaluation.status == A27.EVAL_MIXED_025 || continue
 
                 if earliest_nominal == 0
-                    nominal_iterate <= plot_iterate_end || break
                     earliest_nominal = nominal_iterate
                     earliest_evaluation = evaluation
                     earliest_local[nominal_iterate] += 1
@@ -222,30 +220,9 @@ function collect_forcedfirstskip_overlay_segments_045(
                 end
 
                 later_found = true
-                if nominal_iterate <= plot_iterate_end
-                    added = A27.append_march_square_zero_segments_025!(
-                        black_local[nominal_iterate],
-                        evaluation.current_dot,
-                        x_tl,
-                        y_tl,
-                        x_tr,
-                        y_tl,
-                        x_tr,
-                        y_bl,
-                        x_tl,
-                        y_bl,
-                    )
-                    if added > 0
-                        black_cell_local[nominal_iterate] += 1
-                        black_segment_local[nominal_iterate] += added
-                    end
-                end
-            end
-
-            if earliest_nominal != 0 && !later_found
                 added = A27.append_march_square_zero_segments_025!(
-                    red_local[earliest_nominal],
-                    earliest_evaluation.current_dot,
+                    black_local[nominal_iterate],
+                    evaluation.current_dot,
                     x_tl,
                     y_tl,
                     x_tr,
@@ -256,8 +233,29 @@ function collect_forcedfirstskip_overlay_segments_045(
                     y_bl,
                 )
                 if added > 0
-                    red_cell_local[earliest_nominal] += 1
-                    red_segment_local[earliest_nominal] += added
+                    black_cell_local[nominal_iterate] += 1
+                    black_segment_local[nominal_iterate] += added
+                end
+            end
+
+            if earliest_nominal != 0
+                if !later_found
+                    added = A27.append_march_square_zero_segments_025!(
+                        red_local[earliest_nominal],
+                        earliest_evaluation.current_dot,
+                        x_tl,
+                        y_tl,
+                        x_tr,
+                        y_tl,
+                        x_tr,
+                        y_bl,
+                        x_tl,
+                        y_bl,
+                    )
+                    if added > 0
+                        red_cell_local[earliest_nominal] += 1
+                        red_segment_local[earliest_nominal] += added
+                    end
                 end
             end
         end
@@ -505,10 +503,10 @@ function write_html_043(
       <h1>Attempt-045 Explorer</h1>
       <div class="box small">
         Self-contained HTML explorer built from the saved attempt-027 `2000 x 2000` sweep.
-        This uses the attempt-044 rule: the first contouring iterate in `2:8` forces one
-        shorter-return-time skip, later iterates up through the stored 16th iterate decide
-        whether that square stays red or gets a later black contour, and only iterates `2:8`
-        are actually drawn.
+        This uses the attempt-044 rule exactly: within nominal iterates `2:8`, the first
+        contouring iterate forces one shorter-return-time skip, later iterates in `2:8`
+        decide whether that square stays red or gets a later black contour, and only
+        iterates `2:8` are drawn.
       </div>
       <h2>Legend</h2>
       <div class="box">
