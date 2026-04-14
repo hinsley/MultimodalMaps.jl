@@ -511,7 +511,7 @@ function write_html_043(
 	    .swatch { width: 20px; height: 3px; border-radius: 2px; }
 	    .swatch.black { background: #000000; }
 	    .swatch.red { background: #c00000; }
-	    .swatch.grey { background: #7a7a7a; }
+	    .swatch.grey { background: #3b82f6; }
 	    .swatch.cyan { background: #0ea5e9; }
     .small { font-size: 10px; color: var(--muted); }
     .chip {
@@ -552,7 +552,7 @@ function write_html_043(
 	        Self-contained HTML explorer built from the saved attempt-027 `2000 x 2000` sweep.
 	        Within nominal iterates `2:8`, the first contouring iterate forces one shorter-return-time
 	        skip. A second mixed square inside `2:8` is drawn black. If no second mixed square appears
-	        in `2:8`, then later mixed squares in `9:16` recolor that earliest contour grey; otherwise
+	        in `2:8`, then later mixed squares in `9:16` recolor that earliest contour blue; otherwise
 	        it stays red.
 	      </div>
 	      <h2>Legend</h2>
@@ -569,7 +569,7 @@ function write_html_043(
 	          <button id="showAllIterates">Show All</button>
 	          <button id="hideAllIterates">Hide All</button>
 	          <button id="toggleRedContours">Hide Red</button>
-	          <button id="toggleGreyContours">Hide Grey</button>
+	          <button id="toggleGreyContours">Hide Blue</button>
 	        </div>
         <div id="iterateControls" class="iter-controls"></div>
       </div>
@@ -995,7 +995,7 @@ function write_html_043(
 		        if (!state.visibleIterates.has(nominal)) continue;
 		        drawSegmentArray(blackSegmentsByIter[nominal], '#000000');
 		        if (state.showRedContours) drawSegmentArray(redSegmentsByIter[nominal], '#c00000');
-		        if (state.showGreyContours) drawSegmentArray(greySegmentsByIter[nominal], '#7a7a7a');
+		        if (state.showGreyContours) drawSegmentArray(greySegmentsByIter[nominal], '#3b82f6');
 		      }
       baseCtx.restore();
       drawAxes();
@@ -1054,8 +1054,8 @@ function write_html_043(
 		        ['grid', CONFIG.nAlpha + ' x ' + CONFIG.nLambda],
 		        ['visible iterates', Array.from(state.visibleIterates).sort(function(a, b) { return a - b; }).join(', ') || '(none)'],
 		        ['red contours', state.showRedContours ? 'shown' : 'hidden'],
-		        ['grey contours', state.showGreyContours ? 'shown' : 'hidden'],
-		        ['segments', visibleBlack.toLocaleString() + ' black, ' + visibleRed.toLocaleString() + ' red, ' + visibleGrey.toLocaleString() + ' grey']
+		        ['blue contours', state.showGreyContours ? 'shown' : 'hidden'],
+		        ['segments', visibleBlack.toLocaleString() + ' black, ' + visibleRed.toLocaleString() + ' red, ' + visibleGrey.toLocaleString() + ' blue']
 		      ];
       viewInfo.innerHTML = rows.map(function(pair) {
         return '<div class="label">' + pair[0] + '</div><div class="mono">' + pair[1] + '</div>';
@@ -1210,7 +1210,7 @@ function write_html_043(
 		    }
 
 		    function updateGreyToggleButton() {
-		      toggleGreyContoursButton.textContent = state.showGreyContours ? 'Hide Grey' : 'Show Grey';
+		      toggleGreyContoursButton.textContent = state.showGreyContours ? 'Hide Blue' : 'Show Blue';
 		    }
 
 		    toggleRedContoursButton.addEventListener('click', function() {

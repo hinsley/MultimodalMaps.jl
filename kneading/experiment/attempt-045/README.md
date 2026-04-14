@@ -11,7 +11,7 @@ Provide an interactive artifact where you can:
 - see the overlaid nominal-iterate `2:8` contour plot directly in the browser
 - toggle individual nominal iterates on and off with checkboxes
 - hide or show red contours globally with a single button
-- hide or show grey contours globally with a single button
+- hide or show blue contours globally with a single button
 - inspect exact sampled grid points by hover and click
 - recover the exact `(alpha, lambda)` value of the nearest sampled point
 - see the per-point sign sequence and return times for iterates `2:8` in both
@@ -28,7 +28,7 @@ Provide an interactive artifact where you can:
   once with the compressed indices before moving on to later nominal iterates
 - later mixed squares inside `2:8` are drawn in black
 - if there is no second mixed square in `2:8`, then mixed squares in `9:16`
-  are used to decide whether that earliest contour should be grey
+  are used to decide whether that earliest contour should be blue
 - earliest contours that are not promoted to black/grey remain red
 - the explorer uses the same saved `attempt-027` contour scalar
   `sign(x) * v_x`
