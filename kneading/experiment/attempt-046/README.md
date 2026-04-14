@@ -1,10 +1,10 @@
 # attempt-046
 
 `attempt-046` builds a self-contained HTML explorer for the saved
-`attempt-027` Shimizu-Morioka `|x|`-maximum sweep. It uses cumulative sign
-parity instead of the raw per-iterate tangent sign, and it classifies each
-earliest mixed contour in `2:8` as black, red, blue, or green from the two
-representative cumulative sign sequences on either side of the contour.
+`attempt-027` Shimizu-Morioka `|x|`-maximum sweep. It uses the derived
+monotone sign sequence instead of the raw per-iterate tangent sign, and it
+classifies each mixed contour in `2:8` as black, red, blue, or green from the
+two representative monotone sign sequences on either side of the contour.
 
 ## Goal
 
@@ -12,6 +12,8 @@ Provide an interactive artifact where you can:
 
 - see the overlaid nominal-iterate `2:8` contour plot directly in the browser
 - toggle individual nominal iterates on and off with checkboxes
+- hide or show black contours globally with a single button
+- hide or show green contours globally with a single button
 - hide or show red contours globally with a single button
 - hide or show blue contours globally with a single button
 - inspect exact sampled grid points by hover and click
@@ -20,37 +22,37 @@ Provide an interactive artifact where you can:
   the hover table and the selected-point table
 - see both the raw dot-product sign sequence and the monotone sign sequence in
   those tables
-- see which iterates place the selected sampled point on the shorter side of a
-  forced first skip
+- see that the retained skip column stays empty in this no-old-skip variant
 - highlight the four marched squares surrounding the selected sampled point
-- see cumulative signs, where the sign at iterate `k` is `(-1)^N` and `N`
-  counts negative raw tangent symbols seen through iterate `k`
+- see monotone signs, where the sign at iterate `k` is `+` if the raw
+  dot-product sign stayed the same from iterate `k-1` to `k`, and `-` if it
+  flipped
 
 ## Rendering model
 
-- if a square first contours at nominal iterate `k in 2:8`, that first contour
-  is the only contour drawn for that square
+- old-style skip compression is disabled
+- every mixed square is evaluated independently at every nominal iterate in
+  `2:8`
 - the contour scalar magnitudes stay equal to the saved `|sign(x) * v_x|`
   magnitudes from `attempt-027`
 - the contoured monotone sign at iterate `k` is `+` when the raw dot-product
   sign stays the same from iterate `k-1` to `k`, and `-` when it flips
 - iterate `2` uses raw iterate `1` as the reference for that monotone sign
-- the two representative sides are still chosen from the first mixed square
-  using the shorter-return-time convention from the original skip logic
-- blue means grazing: deleting one cumulative sign in `2:8` on either side
-  makes the remaining `2:16` sequences match, with suffix inversion applied
+- the two representative sides for each mixed square are still chosen using the
+  shorter-return-time convention from the original marching-square logic, but
+  no skips are applied to the iterate index
+- blue means grazing: deleting one monotone sign in `2:8` on either side
+  makes the remaining `2:10` sequences match, with suffix inversion applied
   after deleting a `-`
 - red means coordinate singularity: exactly one consecutive same-sign pair
-  flips sign and the rest of the `2:16` sequences match
-- black means a real contour: the two cumulative sign sequences differ in
-  exactly one place over `2:16`
+  flips sign and the rest of the `2:10` sequences match
+- black means a real contour: the two monotone sign sequences differ in
+  exactly one place over `2:10`
 - green means the square is mixed in `2:8` but does not satisfy any of the
   black/red/blue tests
 - the explorer uses the same saved `attempt-027` tangent magnitudes and return
   times, but swaps in those monotone signs before any contouring
-- because the saved dataset stops at iterate `16`, a one-symbol grazing test
-  compares the longest aligned suffix available after the deletion and leaves
-  one unmatched terminal symbol on the undeleted side
+- the classification tests are intentionally truncated to iterates `2:10`
 - no trajectories are reintegrated; everything is reconstructed from the saved
   sweep columns
 

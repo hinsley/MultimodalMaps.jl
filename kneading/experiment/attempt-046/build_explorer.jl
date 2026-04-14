@@ -216,7 +216,7 @@ function point_sign_sequence_046(
     col_idx::Int,
     dot_grids::Vector{Matrix{Float64}};
     first_iter::Int=2,
-    last_iter::Int=16,
+    last_iter::Int=10,
 )
     last_iter <= length(dot_grids) || return nothing
     seq = Vector{Int8}(undef, last_iter - first_iter + 1)
@@ -232,7 +232,7 @@ function point_sign_sequence_046(
     return seq
 end
 
-# A single deletion in cumulative signs leaves one unmatched terminal symbol on
+# A single deletion in the monotone-sign sequence leaves one unmatched terminal symbol on
 # the undeleted side because attempt-027 stores iterates only through 16.
 @inline function plus_delete_matches_046(candidate::Vector{Int8}, other::Vector{Int8}, delete_idx::Int)
     candidate[delete_idx] == Int8(1) || return false
@@ -410,6 +410,7 @@ function collect_sequence_classified_segments_046(
 )
     n_plot = A27.ATTEMPT025_PLOT_ITERATE_CAP
     plot_iterate_end = min(8, n_plot)
+    classification_iterate_end = min(10, length(dot_grids))
     n_lambda_cells = length(A27.LAMBDAS_025) - 1
     n_alpha_cells = length(A27.ALPHAS_025) - 1
     n_threads = Threads.maxthreadid()
@@ -418,7 +419,7 @@ function collect_sequence_classified_segments_046(
     red_tls = [[NTuple{4, Float64}[] for _ in 1:n_plot] for _ in 1:n_threads]
     blue_tls = [[NTuple{4, Float64}[] for _ in 1:n_plot] for _ in 1:n_threads]
     green_tls = [[NTuple{4, Float64}[] for _ in 1:n_plot] for _ in 1:n_threads]
-    earliest_source_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
+    source_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     black_cell_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     black_segment_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     red_cell_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
@@ -427,9 +428,7 @@ function collect_sequence_classified_segments_046(
     blue_segment_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     green_cell_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     green_segment_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
-
-    earliest_iterate_cells = zeros(UInt8, n_lambda_cells, n_alpha_cells)
-    shorter_sign_cells = zeros(Int8, n_lambda_cells, n_alpha_cells)
+    zero_skip = (0, 0, 0, 0)
 
     Threads.@threads :dynamic for j in 1:n_lambda_cells
         tid = Threads.threadid()
@@ -437,7 +436,7 @@ function collect_sequence_classified_segments_046(
         red_local = red_tls[tid]
         blue_local = blue_tls[tid]
         green_local = green_tls[tid]
-        earliest_local = earliest_source_tls[tid]
+        source_local = source_tls[tid]
         black_cell_local = black_cell_tls[tid]
         black_segment_local = black_segment_tls[tid]
         red_cell_local = red_cell_tls[tid]
@@ -454,16 +453,16 @@ function collect_sequence_classified_segments_046(
             x_tl = Float64(A27.ALPHAS_025[i])
             x_tr = Float64(A27.ALPHAS_025[i + 1])
             for nominal_iterate in 2:plot_iterate_end
-                evaluation = evaluate_square_local_045(j, i, nominal_iterate, dot_grids, time_grids, (0, 0, 0, 0))
+                evaluation = evaluate_square_local_045(j, i, nominal_iterate, dot_grids, time_grids, zero_skip)
                 evaluation.status == A27.EVAL_MIXED_025 || continue
 
                 shorter_sign, short_rep, long_rep = A27.choose_representatives_025(evaluation)
                 short_row, short_col = corner_point_indices_046(j, i, short_rep)
                 long_row, long_col = corner_point_indices_046(j, i, long_rep)
-                short_seq = point_sign_sequence_046(short_row, short_col, dot_grids)
-                long_seq = point_sign_sequence_046(long_row, long_col, dot_grids)
+                short_seq = point_sign_sequence_046(short_row, short_col, dot_grids; last_iter=classification_iterate_end)
+                long_seq = point_sign_sequence_046(long_row, long_col, dot_grids; last_iter=classification_iterate_end)
                 if isnothing(short_seq) || isnothing(long_seq)
-                    break
+                    continue
                 end
 
                 specs = segment_specs_046(
@@ -477,13 +476,11 @@ function collect_sequence_classified_segments_046(
                     x_tl,
                     y_bl,
                 )
-                isempty(specs) && break
+                isempty(specs) && continue
 
                 classification = classify_contour_046(short_seq, long_seq)
                 segment_count = length(specs)
-                earliest_local[nominal_iterate] += 1
-                earliest_iterate_cells[j, i] = UInt8(nominal_iterate)
-                shorter_sign_cells[j, i] = shorter_sign
+                source_local[nominal_iterate] += 1
 
                 if classification == :black
                     @inbounds for (_, segment) in specs
@@ -510,7 +507,6 @@ function collect_sequence_classified_segments_046(
                     green_cell_local[nominal_iterate] += 1
                     green_segment_local[nominal_iterate] += segment_count
                 end
-                break
             end
         end
     end
@@ -519,7 +515,7 @@ function collect_sequence_classified_segments_046(
     red_segments_by_iter = [NTuple{4, Float64}[] for _ in 1:n_plot]
     blue_segments_by_iter = [NTuple{4, Float64}[] for _ in 1:n_plot]
     green_segments_by_iter = [NTuple{4, Float64}[] for _ in 1:n_plot]
-    earliest_source_cells = zeros(Int, n_plot)
+    source_cells = zeros(Int, n_plot)
     black_contoured_cells = zeros(Int, n_plot)
     black_segments_count = zeros(Int, n_plot)
     red_contoured_cells = zeros(Int, n_plot)
@@ -535,7 +531,7 @@ function collect_sequence_classified_segments_046(
             append!(red_segments_by_iter[iterate], red_tls[tid][iterate])
             append!(blue_segments_by_iter[iterate], blue_tls[tid][iterate])
             append!(green_segments_by_iter[iterate], green_tls[tid][iterate])
-            earliest_source_cells[iterate] += earliest_source_tls[tid][iterate]
+            source_cells[iterate] += source_tls[tid][iterate]
             black_contoured_cells[iterate] += black_cell_tls[tid][iterate]
             black_segments_count[iterate] += black_segment_tls[tid][iterate]
             red_contoured_cells[iterate] += red_cell_tls[tid][iterate]
@@ -548,28 +544,9 @@ function collect_sequence_classified_segments_046(
     end
 
     point_skip_masks = fill(UInt8(0), length(A27.ALPHAS_025) * length(A27.LAMBDAS_025))
-    n_alpha_points = length(A27.ALPHAS_025)
-    zero_skip = (0, 0, 0, 0)
-    for j in 1:n_lambda_cells
-        for i in 1:n_alpha_cells
-            nominal_iterate = Int(earliest_iterate_cells[j, i])
-            nominal_iterate == 0 && continue
-            evaluation = evaluate_square_local_045(j, i, nominal_iterate, dot_grids, time_grids, zero_skip)
-            evaluation.status == A27.EVAL_MIXED_025 || continue
-            mark_point_skip_masks_043!(
-                point_skip_masks,
-                j,
-                i,
-                evaluation.sign,
-                shorter_sign_cells[j, i],
-                nominal_iterate,
-                n_alpha_points,
-            )
-        end
-    end
 
     iterate_stats = (
-        earliest_source_cells=earliest_source_cells,
+        source_cells=source_cells,
         black_contoured_cells=black_contoured_cells,
         black_segments_count=black_segments_count,
         red_contoured_cells=red_contoured_cells,
@@ -655,13 +632,13 @@ end
 
 function write_iterate_stats_043(path::String, stats)
     open(path, "w") do io
-        println(io, "nominal_iterate\tearliest_source_cells\tblack_contoured_cells\tblack_segments\tred_contoured_cells\tred_segments\tblue_contoured_cells\tblue_segments\tgreen_contoured_cells\tgreen_segments")
-        for iterate in 2:min(8, length(stats.earliest_source_cells))
+        println(io, "nominal_iterate\tsource_mixed_cells\tblack_contoured_cells\tblack_segments\tred_contoured_cells\tred_segments\tblue_contoured_cells\tblue_segments\tgreen_contoured_cells\tgreen_segments")
+        for iterate in 2:min(8, length(stats.source_cells))
             println(
                 io,
                 join([
                     string(iterate),
-                    string(stats.earliest_source_cells[iterate]),
+                    string(stats.source_cells[iterate]),
                     string(stats.black_contoured_cells[iterate]),
                     string(stats.black_segments_count[iterate]),
                     string(stats.red_contoured_cells[iterate]),
@@ -784,14 +761,14 @@ function write_html_043(
 	        Self-contained HTML explorer built from the saved attempt-027 `2000 x 2000` sweep.
 	        The contoured monotone sign at iterate `k` is `+` when the raw dot-product sign stays the same
 	        from iterate `k-1` to `k`, and `-` when it flips. Iterate `2` uses raw iterate `1` as its reference.
-	        Each earliest mixed square in `2:8` is classified from the two representative cumulative
-	        sign sequences using the full saved `2:16` symbol data.
+	        Old-style skip compression is disabled here: every mixed square at every nominal iterate in `2:8`
+	        is classified independently, and the classification tests only use the saved symbol data through `2:10`.
 	      </div>
 	      <h2>Legend</h2>
 	      <div class="box">
-	        <div class="legend-row"><span class="swatch black"></span><span>real contour: the two cumulative sign sequences differ in exactly one place</span></div>
+	        <div class="legend-row"><span class="swatch black"></span><span>real contour: the two monotone sign sequences differ in exactly one place</span></div>
 	        <div class="legend-row"><span class="swatch red"></span><span>coordinate singularity: one consecutive same-sign pair flips and the rest matches</span></div>
-	        <div class="legend-row"><span class="swatch blue"></span><span>grazing: one deletion in `2:8` reconciles the two cumulative sign sequences across `2:16`</span></div>
+	        <div class="legend-row"><span class="swatch blue"></span><span>grazing: one deletion in `2:8` reconciles the two monotone sign sequences across `2:10`</span></div>
 	        <div class="legend-row"><span class="swatch green"></span><span>other mixed square: not black, red, or blue under the above tests</span></div>
 	        <div class="legend-row"><span class="swatch cyan"></span><span>selected sampled grid point</span></div>
 	        <div class="legend-row"><span class="swatch" style="background:#bcbcbc;"></span><span>four marched squares around the selected point</span></div>
@@ -801,6 +778,8 @@ function write_html_043(
 	        <div class="iter-buttons">
 	          <button id="showAllIterates">Show All</button>
 	          <button id="hideAllIterates">Hide All</button>
+	          <button id="toggleBlackContours">Hide Black</button>
+	          <button id="toggleGreenContours">Hide Green</button>
 	          <button id="toggleRedContours">Hide Red</button>
 	          <button id="toggleGreyContours">Hide Blue</button>
 	        </div>
@@ -819,7 +798,7 @@ function write_html_043(
       <h2>Selected</h2>
       <div class="box">
 	        <div id="selectedInfo" class="kv compact-meta"></div>
-	        <div class="highlight-note">Rows are red where the selected sampled point lies on the shorter-return-time side of the forced first skip for some surrounding square at that nominal iterate.</div>
+	        <div class="highlight-note">Old-style skip compression is disabled in this version, so the skip column should remain `no`.</div>
 	        <table class="iter-table">
 	          <thead>
 	            <tr><th>Iter</th><th>Dot</th><th>Mono</th><th>Time</th><th>Skip</th></tr>
@@ -952,9 +931,11 @@ function write_html_043(
     const viewInfo = document.getElementById('viewInfo');
     const iterateControls = document.getElementById('iterateControls');
     const resetViewButton = document.getElementById('resetView');
-    const clearSelectionButton = document.getElementById('clearSelection');
+		    const clearSelectionButton = document.getElementById('clearSelection');
 		    const showAllIteratesButton = document.getElementById('showAllIterates');
 		    const hideAllIteratesButton = document.getElementById('hideAllIterates');
+			    const toggleBlackContoursButton = document.getElementById('toggleBlackContours');
+			    const toggleGreenContoursButton = document.getElementById('toggleGreenContours');
 			    const toggleRedContoursButton = document.getElementById('toggleRedContours');
 			    const toggleBlueContoursButton = document.getElementById('toggleGreyContours');
 
@@ -964,6 +945,8 @@ function write_html_043(
 		      selected: null,
 		      dragging: null,
 			      visibleIterates: new Set([2, 3, 4, 5, 6, 7, 8]),
+			      showBlackContours: true,
+			      showGreenContours: true,
 			      showRedContours: true,
 			      showBlueContours: true
 			    };
@@ -1109,7 +1092,7 @@ function write_html_043(
 
     function setPointTable(target, point, emptyText) {
       if (!point) {
-        target.innerHTML = '<tr><td colspan="4" class="small">' + emptyText + '</td></tr>';
+        target.innerHTML = '<tr><td colspan="5" class="small">' + emptyText + '</td></tr>';
         return;
       }
 	      const rawSigns = decodeSignWord(point.rawSignWord);
@@ -1247,8 +1230,8 @@ function write_html_043(
       baseCtx.clip();
 			      for (let nominal = 2; nominal <= 8; nominal += 1) {
 			        if (!state.visibleIterates.has(nominal)) continue;
-			        drawSegmentArray(greenSegmentsByIter[nominal], '#008000');
-			        drawSegmentArray(blackSegmentsByIter[nominal], '#000000');
+			        if (state.showGreenContours) drawSegmentArray(greenSegmentsByIter[nominal], '#008000');
+			        if (state.showBlackContours) drawSegmentArray(blackSegmentsByIter[nominal], '#000000');
 			        if (state.showRedContours) drawSegmentArray(redSegmentsByIter[nominal], '#c00000');
 			        if (state.showBlueContours) drawSegmentArray(blueSegmentsByIter[nominal], '#3b82f6');
 			      }
@@ -1292,17 +1275,19 @@ function write_html_043(
     }
 
     function updateViewInfo() {
-			      let visibleBlack = 0;
+			      let totalBlack = 0;
 			      let totalRed = 0;
 			      let totalBlue = 0;
 			      let totalGreen = 0;
 			      for (let nominal = 2; nominal <= 8; nominal += 1) {
 			        if (!state.visibleIterates.has(nominal)) continue;
-			        visibleBlack += blackSegmentsByIter[nominal].length / 4;
+			        totalBlack += blackSegmentsByIter[nominal].length / 4;
 			        totalRed += redSegmentsByIter[nominal].length / 4;
 			        totalBlue += blueSegmentsByIter[nominal].length / 4;
 			        totalGreen += greenSegmentsByIter[nominal].length / 4;
 			      }
+			      const visibleBlack = state.showBlackContours ? totalBlack : 0;
+			      const visibleGreen = state.showGreenContours ? totalGreen : 0;
 			      const visibleRed = state.showRedContours ? totalRed : 0;
 			      const visibleBlue = state.showBlueContours ? totalBlue : 0;
 			      const rows = [
@@ -1310,9 +1295,11 @@ function write_html_043(
 			        ['lambda range', state.view.l0.toFixed(6) + ' .. ' + state.view.l1.toFixed(6)],
 			        ['grid', CONFIG.nAlpha + ' x ' + CONFIG.nLambda],
 			        ['visible iterates', Array.from(state.visibleIterates).sort(function(a, b) { return a - b; }).join(', ') || '(none)'],
+			        ['black contours', state.showBlackContours ? 'shown' : 'hidden'],
+			        ['green contours', state.showGreenContours ? 'shown' : 'hidden'],
 			        ['red contours', state.showRedContours ? 'shown' : 'hidden'],
 			        ['blue contours', state.showBlueContours ? 'shown' : 'hidden'],
-			        ['segments', visibleBlack.toLocaleString() + ' black, ' + visibleRed.toLocaleString() + ' red, ' + visibleBlue.toLocaleString() + ' blue, ' + totalGreen.toLocaleString() + ' green']
+			        ['segments', visibleBlack.toLocaleString() + ' black, ' + visibleRed.toLocaleString() + ' red, ' + visibleBlue.toLocaleString() + ' blue, ' + visibleGreen.toLocaleString() + ' green']
 			      ];
       viewInfo.innerHTML = rows.map(function(pair) {
         return '<div class="label">' + pair[0] + '</div><div class="mono">' + pair[1] + '</div>';
@@ -1462,13 +1449,35 @@ function write_html_043(
       drawOverlay();
     });
 
+		    function updateBlackToggleButton() {
+		      toggleBlackContoursButton.textContent = state.showBlackContours ? 'Hide Black' : 'Show Black';
+		    }
+
+		    function updateGreenToggleButton() {
+		      toggleGreenContoursButton.textContent = state.showGreenContours ? 'Hide Green' : 'Show Green';
+		    }
+
 		    function updateRedToggleButton() {
 		      toggleRedContoursButton.textContent = state.showRedContours ? 'Hide Red' : 'Show Red';
 		    }
 
-		    function updateGreyToggleButton() {
+		    function updateBlueToggleButton() {
 		      toggleBlueContoursButton.textContent = state.showBlueContours ? 'Hide Blue' : 'Show Blue';
 		    }
+
+		    toggleBlackContoursButton.addEventListener('click', function() {
+		      state.showBlackContours = !state.showBlackContours;
+		      updateBlackToggleButton();
+		      drawBase();
+		      drawOverlay();
+		    });
+
+		    toggleGreenContoursButton.addEventListener('click', function() {
+		      state.showGreenContours = !state.showGreenContours;
+		      updateGreenToggleButton();
+		      drawBase();
+		      drawOverlay();
+		    });
 
 		    toggleRedContoursButton.addEventListener('click', function() {
 		      state.showRedContours = !state.showRedContours;
@@ -1479,15 +1488,17 @@ function write_html_043(
 
 		    toggleBlueContoursButton.addEventListener('click', function() {
 		      state.showBlueContours = !state.showBlueContours;
-		      updateGreyToggleButton();
+		      updateBlueToggleButton();
 		      drawBase();
 		      drawOverlay();
 		    });
 
 		    window.addEventListener('resize', resizeCanvases);
 		    renderIterateControls();
+		    updateBlackToggleButton();
+		    updateGreenToggleButton();
 		    updateRedToggleButton();
-		    updateGreyToggleButton();
+		    updateBlueToggleButton();
 		    decodeGzipUint16Array(TIME_WORDS_GZ_B64)
       .then(function(words) {
         timeWords = words;
