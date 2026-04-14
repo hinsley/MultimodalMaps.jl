@@ -4,7 +4,8 @@
 `attempt-027` Shimizu-Morioka `|x|`-maximum sweep, but changes the
 recoloring rule from `attempt-045` so black and blue only apply when
 later contours use the same marched-square edge pair as the original
-earliest contour segment.
+earliest contour segment. It also uses cumulative sign parity instead of
+the raw per-iterate tangent sign.
 
 ## Goal
 
@@ -21,11 +22,16 @@ Provide an interactive artifact where you can:
 - see which iterates place the selected sampled point on the shorter side of a
   forced first skip
 - highlight the four marched squares surrounding the selected sampled point
+- see cumulative signs, where the sign at iterate `k` is `(-1)^N` and `N`
+  counts negative raw tangent symbols seen through iterate `k`
 
 ## Rendering model
 
 - if a square first contours at nominal iterate `k in 2:8`, that first contour
   forces exactly one skip on the shorter-return-time sign class
+- the contour scalar magnitudes stay equal to the saved `|sign(x) * v_x|`
+  magnitudes from `attempt-027`, but each iterate sign is replaced by the
+  cumulative parity sign `(-1)^N`
 - after that forced skip, the explorer re-evaluates the same nominal iterate
   once with the compressed indices before moving on to later nominal iterates
 - the original earliest contour is decomposed into one or two contour segments,
@@ -36,8 +42,8 @@ Provide an interactive artifact where you can:
   `9:16` recolor the original earliest segment blue
 - original earliest segments with no same-edge recoloring in either range stay
   red
-- the explorer uses the same saved `attempt-027` contour scalar
-  `sign(x) * v_x`
+- the explorer uses the same saved `attempt-027` tangent magnitudes and return
+  times, but swaps in cumulative signs before any contouring or table display
 - no trajectories are reintegrated; everything is reconstructed from the saved
   sweep columns
 

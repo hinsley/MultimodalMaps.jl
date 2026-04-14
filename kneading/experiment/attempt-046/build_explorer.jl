@@ -29,11 +29,27 @@ const MISSING_TIME_WORD_043 = UInt16(0xffff)
 @inline skip_bit_043(nominal_iterate::Int) = UInt8(1) << (nominal_iterate - 2)
 @inline point_linear_index_043(i::Int, j::Int, n_alpha::Int) = (j - 1) * n_alpha + i
 
+function cumulative_sign_adjusted_dots_046(raw_values::AbstractVector{Float64})
+    adjusted = Vector{Float64}(undef, length(raw_values))
+    negative_count = 0
+    @inbounds for idx in eachindex(raw_values)
+        value = raw_values[idx]
+        if !isfinite(value) || value == 0.0
+            adjusted[idx] = value
+            continue
+        end
+        value < 0.0 && (negative_count += 1)
+        adjusted[idx] = isodd(negative_count) ? -abs(value) : abs(value)
+    end
+    return adjusted
+end
+
 function pack_sign_word_043(result::A27.SMAbsXResult25)
     word = UInt16(0)
-    max_iter = min(result.absxmax_count, 8, length(result.absxmax_dot_values))
+    adjusted = cumulative_sign_adjusted_dots_046(result.absxmax_dot_values)
+    max_iter = min(result.absxmax_count, 8, length(adjusted))
     for nominal_iterate in 2:8
-        code = nominal_iterate <= max_iter ? sign_code_043(result.absxmax_dot_values[nominal_iterate]) : UInt16(0)
+        code = nominal_iterate <= max_iter ? sign_code_043(adjusted[nominal_iterate]) : UInt16(0)
         word |= code << (2 * (nominal_iterate - 2))
     end
     return word
@@ -156,7 +172,10 @@ function evaluate_square_local_045(
 end
 
 function build_grids_043()
-    dot_grids = A27.build_iterate_grids_025(result -> result.absxmax_count, result -> result.absxmax_dot_values)
+    dot_grids = A27.build_iterate_grids_025(
+        result -> result.absxmax_count,
+        result -> cumulative_sign_adjusted_dots_046(result.absxmax_dot_values),
+    )
     cumulative_time_grids = A27.build_iterate_grids_025(result -> result.absxmax_count, result -> result.absxmax_return_times)
     time_grids = A27.cumulative_to_interval_grids_025(cumulative_time_grids)
     return dot_grids, time_grids
@@ -681,6 +700,8 @@ function write_html_043(
 	      <h1>Attempt-046 Explorer</h1>
 	      <div class="box small">
 	        Self-contained HTML explorer built from the saved attempt-027 `2000 x 2000` sweep.
+	        Sign symbols are cumulative: at iterate `k`, the sign shown and contoured is `(-1)^N`,
+	        where `N` is the number of negative raw tangent symbols seen through iterate `k`.
 	        Recoloring is done per original earliest contour segment. Later black or blue contours only
 	        count if they use the same marched-square edge pair as that original earliest segment.
 	      </div>
@@ -957,7 +978,7 @@ function write_html_043(
         ['lambda', point.lambda.toFixed(6)],
         ['grid index', '(' + point.i + ', ' + point.j + ')'],
         ['flat index', String(point.idx)],
-        ['sign word', '0x' + point.signWord.toString(16).padStart(4, '0')]
+	        ['cumulative sign word', '0x' + point.signWord.toString(16).padStart(4, '0')]
       ].map(function(pair) {
         return '<div class="label">' + pair[0] + '</div><div class="mono">' + pair[1] + '</div>';
       }).join('');
