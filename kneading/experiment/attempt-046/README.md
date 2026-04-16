@@ -52,10 +52,10 @@ Provide an interactive artifact where you can:
   no skips are applied to the iterate index
 - in symbolic grazing mode, blue means grazing by `+` deletion: deleting one
   `+` monotone sign in `k:9` on either side makes the suffixes from that
-  deletion point onward match through `12`
+  deletion point onward match through `16`
 - in symbolic grazing mode, purple means grazing by `-` deletion: deleting one
   `-` monotone sign in `k:9` on either side and then inverting the later
-  suffix makes the sequences match through `12`
+  suffix makes the sequences match through `16`
 - in return-time grazing mode, blue means the old return-time skip condition
   would fire at that square and iterate; purple is unused in that mode
 - red means coordinate singularity: the red test only checks the local window
@@ -71,7 +71,7 @@ Provide an interactive artifact where you can:
   black/red/blue/purple tests
 - the explorer uses the same saved `attempt-027` tangent magnitudes and return
   times, but swaps in those monotone signs before any contouring
-- the classification tests are intentionally truncated to iterates `2:12`
+- the classification tests are intentionally truncated to iterates `2:16`
 - no trajectories are reintegrated; everything is reconstructed from the saved
   sweep columns
 

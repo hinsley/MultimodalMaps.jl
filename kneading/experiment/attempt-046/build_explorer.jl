@@ -216,7 +216,7 @@ function point_sign_sequence_046(
     col_idx::Int,
     dot_grids::Vector{Matrix{Float64}};
     first_iter::Int=2,
-    last_iter::Int=12,
+    last_iter::Int=16,
 )
     first_iter <= last_iter || return Int8[]
     last_iter <= length(dot_grids) || return nothing
@@ -241,7 +241,7 @@ function point_sign_sequence_available_046(
     col_idx::Int,
     dot_grids::Vector{Matrix{Float64}};
     first_iter::Int=2,
-    last_iter::Int=12,
+    last_iter::Int=16,
 )
     first_iter <= last_iter || return Int8[]
     last_iter = min(last_iter, length(dot_grids))
@@ -470,7 +470,7 @@ function collect_sequence_classified_segments_046(
 )
     n_plot = A27.ATTEMPT025_PLOT_ITERATE_CAP
     plot_iterate_end = min(8, n_plot)
-    classification_iterate_end = min(12, length(dot_grids))
+    classification_iterate_end = min(16, length(dot_grids))
     n_lambda_cells = length(A27.LAMBDAS_025) - 1
     n_alpha_cells = length(A27.ALPHAS_025) - 1
     n_threads = Threads.maxthreadid()
@@ -873,7 +873,7 @@ function write_html_043(
 		        from iterate `k-1` to `k`, and `-` when it flips. Iterate `2` uses raw iterate `1` as its reference.
 		        Old-style skip compression is disabled here: every mixed square at every nominal iterate in `2:8`
 		        is classified independently, colors are determined from the suffix starting at that contour iterate,
-		        and the classification tests only use the saved symbol data through `2:12`, with symbolic deletions
+		        and the classification tests only use the saved symbol data through `2:16`, with symbolic deletions
 		        allowed only in the contour-relative range `k:9`. The grazing-mode toggle
 		        switches between symbolic deletion grazing and the old return-time skip criterion; in return-time mode,
 		        blue marks skip-condition grazings and purple is unused.
@@ -882,8 +882,8 @@ function write_html_043(
 	      <div class="box">
 	        <div class="legend-row"><span class="swatch black"></span><span>real contour: the two monotone sign sequences differ in exactly one place</span></div>
 	        <div class="legend-row"><span class="swatch red"></span><span>coordinate singularity: two consecutive monotone signs flip and the rest matches</span></div>
-	        <div class="legend-row"><span class="swatch blue"></span><span>grazing (`+` deletion): at contour iterate `k`, deleting one `+` in the contour-relative range `k:9` makes the suffix from that deletion point onward match through `12`</span></div>
-	        <div class="legend-row"><span class="swatch purple"></span><span>grazing (`-` deletion): at contour iterate `k`, deleting one `-` in the contour-relative range `k:9` and inverting the later suffix makes the sequences match through `12`</span></div>
+	        <div class="legend-row"><span class="swatch blue"></span><span>grazing (`+` deletion): at contour iterate `k`, deleting one `+` in the contour-relative range `k:9` makes the suffix from that deletion point onward match through `16`</span></div>
+	        <div class="legend-row"><span class="swatch purple"></span><span>grazing (`-` deletion): at contour iterate `k`, deleting one `-` in the contour-relative range `k:9` and inverting the later suffix makes the sequences match through `16`</span></div>
 	        <div class="legend-row"><span class="swatch green"></span><span>other mixed square: not black, red, blue, or purple under the above tests</span></div>
 	        <div class="legend-row"><span class="swatch cyan"></span><span>selected sampled grid point</span></div>
 	        <div class="legend-row"><span class="swatch" style="background:#bcbcbc;"></span><span>four marched squares around the selected point</span></div>

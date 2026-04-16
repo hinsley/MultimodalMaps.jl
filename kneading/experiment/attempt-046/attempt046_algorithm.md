@@ -271,14 +271,14 @@ There are three different iterate ranges in play:
 
 - stored source data: `1:16`
 - plotted nominal iterates: `2:8`
-- classification suffix limit: `2:12`
+- classification suffix limit: `2:16`
 
 More precisely:
 
 - the canvas only draws contours for nominal iterates `2, 3, ..., 8`
 - contour geometry at nominal iterate `k` uses the monotone dots `m_k`
 - color classification for a contour at nominal iterate `k` looks at a suffix
-  starting at `k` and ending at `12`, but truncated by data availability
+  starting at `k` and ending at `16`, but truncated by data availability
 
 ## 10. Square Evaluation Used by attempt-046
 
@@ -433,7 +433,7 @@ For a contour at nominal iterate `k`, the code asks for signs on both corners
 from iterates `k:k_end`, where:
 
 ```text
-k_end = min(12, number_of_available_dot_grids)
+k_end = min(16, number_of_available_dot_grids)
 ```
 
 ### 13.1 Shared-suffix truncation
@@ -492,7 +492,8 @@ So deletion is only allowed on the contour-relative iterate range `k:9`.
 
 Blue is assigned if, for some `delete_idx`, either side can delete a `+` and
 then match the other side exactly after shifting the remaining suffix left by
-one place. Only the suffix from that deletion point onward matters.
+one place. Only the suffix from that deletion point onward matters, up through
+stored iterate `16`.
 
 Exact condition for candidate side `c` and other side `o`:
 
@@ -508,7 +509,8 @@ c[idx + 1] == o[idx]
 
 Purple is assigned if, for some `delete_idx`, either side can delete a `-` and
 then match the other side after inverting all later signs on the deleted side.
-Only the suffix from that deletion point onward matters.
+Only the suffix from that deletion point onward matters, up through stored
+iterate `16`.
 
 Exact condition:
 
