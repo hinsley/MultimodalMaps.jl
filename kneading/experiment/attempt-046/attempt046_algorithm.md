@@ -223,7 +223,7 @@ DeltaT_1 = T_1
 DeltaT_k = T_k - T_{k-1}   for k >= 2
 ```
 
-The explorer tables display interval times for iterates `2:8`.
+The explorer tables display interval times for iterates `2:16`.
 
 ## 8. Monotone-Sign Dots Used by attempt-046
 
@@ -279,17 +279,52 @@ More precisely:
 - contour geometry at nominal iterate `k` uses the monotone dots `m_k`
 - color classification for a contour at nominal iterate `k` looks at a suffix
   starting at `k` and ending at `16`, but truncated by data availability
+- that suffix is built from the square's current local carried-forward
+  grazing state, not only from the raw stored point sequence
 
 ## 10. Square Evaluation Used by attempt-046
 
-`attempt-046` deliberately disables the old skip-compression logic. Every
-square is evaluated with zero local skip:
+`attempt-046` does not use the old global point skip masks, but it does keep a
+square-local carried-forward grazing state.
+
+Each square starts with:
 
 ```text
 skip = (0, 0, 0, 0)
+flip = (0, 0, 0, 0)
+scheduled_skip(corner, iterate) = 0
+scheduled_flip(corner, iterate) = 0
 ```
 
-So at nominal iterate `k`, every corner uses stored iterate `k` directly.
+Before evaluating nominal iterate `k`, the square applies any scheduled local
+updates that activate at `k`:
+
+```text
+skip_corner += scheduled_skip(corner, k)
+flip_corner = (flip_corner + scheduled_flip(corner, k)) mod 2
+```
+
+So the effective corner iterate and sign are:
+
+```text
+effective_iterate_corner = k + skip_corner
+effective_dot_corner = stored_monotone_dot[effective_iterate_corner]
+if flip_corner is odd:
+    effective_dot_corner = -effective_dot_corner
+```
+
+Blue and purple symbolic grazings are what create those later square-local
+updates:
+
+- blue (`+` deletion) schedules a later local skip on the affected side
+- purple (`-` deletion) schedules both that later local skip and a persistent
+  later suffix inversion on the affected side
+- the activation iterate is the deleted contour-relative index itself unless
+  that would be the current contour iterate, in which case the update begins at
+  the next nominal iterate
+
+Red still suppresses contour search at `k + 1`, but it does not erase already
+scheduled blue/purple carry-forward updates.
 
 Corner order is always:
 
@@ -686,9 +721,9 @@ for each square (j, i):
 
 For sampled grid points, the explorer shows:
 
-- raw sign sequence for iterates `2:8`
-- monotone sign sequence for iterates `2:8`
-- interval return times for iterates `2:8`
+- raw sign sequence for iterates `2:16`
+- monotone sign sequence for iterates `2:16`
+- interval return times for iterates `2:16`
 - the old skip column, which is intentionally always `no` in `attempt-046`
 
 The displayed times are packed into the HTML after scalar quantization:

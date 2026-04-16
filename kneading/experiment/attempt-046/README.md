@@ -22,7 +22,7 @@ Provide an interactive artifact where you can:
   return-time skip rule
 - inspect exact sampled grid points by hover and click
 - recover the exact `(alpha, lambda)` value of the nearest sampled point
-- see the per-point sign sequence and return times for iterates `2:8` in both
+- see the per-point sign sequence and return times for iterates `2:16` in both
   the hover table and the selected-point table
 - see both the raw dot-product sign sequence and the monotone sign sequence in
   those tables
@@ -34,11 +34,14 @@ Provide an interactive artifact where you can:
 
 ## Rendering model
 
-- old-style skip compression is disabled
-- every mixed square is evaluated independently at every nominal iterate in
-  `2:8`
+- old-style global point skip compression is disabled
+- each square starts with zero local skip/inversion state, but symbolic
+  grazing can schedule later nominal iterates in that same square to use one
+  later iterate on the affected side
 - every contour is classified from the monotone-sign suffix starting at its
   own nominal iterate `k`
+- that suffix is built from the square's current local carried-forward
+  skip/inversion state, not from a globally compressed point history
 - that suffix is truncated to the longest common data actually available on
   the two representative corners, so missing later iterates can weaken a
   classification but cannot erase a valid mixed-square contour
@@ -48,14 +51,16 @@ Provide an interactive artifact where you can:
   sign stays the same from iterate `k-1` to `k`, and `-` when it flips
 - iterate `2` uses raw iterate `1` as the reference for that monotone sign
 - the two representative sides for each mixed square are still chosen using the
-  shorter-return-time convention from the original marching-square logic, but
-  no skips are applied to the iterate index
+  shorter-return-time convention from the original marching-square logic
 - in symbolic grazing mode, blue means grazing by `+` deletion: deleting one
   `+` monotone sign in `k:9` on either side makes the suffixes from that
-  deletion point onward match through `16`
+  deletion point onward match through `16`, and later nominal iterates inherit
+  that local skipped index on the affected side
 - in symbolic grazing mode, purple means grazing by `-` deletion: deleting one
   `-` monotone sign in `k:9` on either side and then inverting the later
-  suffix makes the sequences match through `16`
+  suffix makes the sequences match through `16`, and later nominal iterates
+  inherit both that local skipped index and the persistent suffix inversion on
+  the affected side
 - in return-time grazing mode, blue means the old return-time skip condition
   would fire at that square and iterate; purple is unused in that mode
 - red means coordinate singularity: the red test only checks the local window
@@ -84,11 +89,11 @@ The generated HTML is self-contained:
 - blue contour segments are embedded the same way
 - purple contour segments are embedded the same way
 - green contour segments are embedded the same way
-- sampled-point sign sequences for iterates `2:8` are embedded as packed
-  `UInt16` words, with 2 bits per iterate
+- sampled-point sign sequences for iterates `2:16` are embedded as packed
+  `UInt32` words, with 2 bits per iterate
 - sampled-point skip flags for iterates `2:8` are embedded as packed `UInt8`
   bitmasks
-- per-point per-iterate return times for iterates `2:8` are embedded as packed
+- per-point per-iterate return times for iterates `2:16` are embedded as packed
   `UInt16` words after quantization, then gzip-compressed inside the HTML
 
 The full per-point phase-space state payload from the original `3.7 GB`

@@ -24,17 +24,20 @@ const OUTPUT_TAG_043 = get(
 const HTML_PATH_043 = joinpath(ATTEMPT043_ROOT, "$(OUTPUT_TAG_043).html")
 const STATS_PATH_043 = joinpath(ATTEMPT043_ROOT, "$(OUTPUT_TAG_043)_iterate_stats.tsv")
 const MISSING_TIME_WORD_043 = UInt16(0xffff)
+const TABLE_ITERATE_START_046 = 2
+const TABLE_ITERATE_END_046 = 16
+const TABLE_ITERATE_COUNT_046 = TABLE_ITERATE_END_046 - TABLE_ITERATE_START_046 + 1
 
 @inline sign_code_043(value::Float64) = value > 0.0 ? UInt16(0x2) : value < 0.0 ? UInt16(0x1) : UInt16(0x0)
 @inline skip_bit_043(nominal_iterate::Int) = UInt8(1) << (nominal_iterate - 2)
 @inline point_linear_index_043(i::Int, j::Int, n_alpha::Int) = (j - 1) * n_alpha + i
 
 function raw_sign_word_046(result::A27.SMAbsXResult25)
-    word = UInt16(0)
-    max_iter = min(result.absxmax_count, 8, length(result.absxmax_dot_values))
-    for nominal_iterate in 2:8
-        code = nominal_iterate <= max_iter ? sign_code_043(result.absxmax_dot_values[nominal_iterate]) : UInt16(0)
-        word |= code << (2 * (nominal_iterate - 2))
+    word = UInt32(0)
+    max_iter = min(result.absxmax_count, TABLE_ITERATE_END_046, length(result.absxmax_dot_values))
+    for nominal_iterate in TABLE_ITERATE_START_046:TABLE_ITERATE_END_046
+        code = nominal_iterate <= max_iter ? UInt32(sign_code_043(result.absxmax_dot_values[nominal_iterate])) : UInt32(0)
+        word |= code << (2 * (nominal_iterate - TABLE_ITERATE_START_046))
     end
     return word
 end
@@ -66,12 +69,12 @@ function monotone_sign_adjusted_dots_046(raw_values::AbstractVector{Float64})
 end
 
 function monotone_sign_word_046(result::A27.SMAbsXResult25)
-    word = UInt16(0)
+    word = UInt32(0)
     adjusted = monotone_sign_adjusted_dots_046(result.absxmax_dot_values)
-    max_iter = min(result.absxmax_count, 8, length(adjusted))
-    for nominal_iterate in 2:8
-        code = nominal_iterate <= max_iter ? sign_code_043(adjusted[nominal_iterate]) : UInt16(0)
-        word |= code << (2 * (nominal_iterate - 2))
+    max_iter = min(result.absxmax_count, TABLE_ITERATE_END_046, length(adjusted))
+    for nominal_iterate in TABLE_ITERATE_START_046:TABLE_ITERATE_END_046
+        code = nominal_iterate <= max_iter ? UInt32(sign_code_043(adjusted[nominal_iterate])) : UInt32(0)
+        word |= code << (2 * (nominal_iterate - TABLE_ITERATE_START_046))
     end
     return word
 end
@@ -79,8 +82,8 @@ end
 function build_sign_words_043()
     n_alpha = length(A27.ALPHAS_025)
     n_lambda = length(A27.LAMBDAS_025)
-    raw_sign_words = fill(UInt16(0), n_alpha * n_lambda)
-    monotone_sign_words = fill(UInt16(0), n_alpha * n_lambda)
+    raw_sign_words = fill(UInt32(0), n_alpha * n_lambda)
+    monotone_sign_words = fill(UInt32(0), n_alpha * n_lambda)
 
     for col_idx in eachindex(A27.ALPHAS_025)
         path = A27.column_path_025(col_idx)
@@ -148,6 +151,7 @@ function evaluate_square_local_045(
     dot_grids::Vector{Matrix{Float64}},
     time_grids::Vector{Matrix{Float64}},
     skip::NTuple{4, Int},
+    flip::NTuple{4, Int},
 )
     k_tl = nominal_iterate + skip[1]
     k_tr = nominal_iterate + skip[2]
@@ -157,10 +161,10 @@ function evaluate_square_local_045(
 
     any(k -> k < 1 || k > length(dot_grids) || k + 1 > length(time_grids), ks) && return A27.missing_evaluation_025()
 
-    d_tl = dot_grids[k_tl][j, i]
-    d_tr = dot_grids[k_tr][j, i + 1]
-    d_br = dot_grids[k_br][j + 1, i + 1]
-    d_bl = dot_grids[k_bl][j + 1, i]
+    d_tl = isodd(flip[1]) ? -dot_grids[k_tl][j, i] : dot_grids[k_tl][j, i]
+    d_tr = isodd(flip[2]) ? -dot_grids[k_tr][j, i + 1] : dot_grids[k_tr][j, i + 1]
+    d_br = isodd(flip[3]) ? -dot_grids[k_br][j + 1, i + 1] : dot_grids[k_br][j + 1, i + 1]
+    d_bl = isodd(flip[4]) ? -dot_grids[k_bl][j + 1, i] : dot_grids[k_bl][j + 1, i]
     all(isfinite, (d_tl, d_tr, d_br, d_bl)) || return A27.missing_evaluation_025()
 
     t_tl = time_grids[k_tl][j, i]
@@ -192,6 +196,72 @@ function evaluate_square_local_045(
         signs,
         ks,
     )
+end
+
+@inline function apply_scheduled_local_state_046(
+    skip::NTuple{4, Int},
+    flip::NTuple{4, Int},
+    scheduled_skip::Matrix{UInt8},
+    scheduled_flip::Matrix{UInt8},
+    nominal_iterate::Int,
+)
+    return (
+        skip[1] + Int(scheduled_skip[1, nominal_iterate]),
+        skip[2] + Int(scheduled_skip[2, nominal_iterate]),
+        skip[3] + Int(scheduled_skip[3, nominal_iterate]),
+        skip[4] + Int(scheduled_skip[4, nominal_iterate]),
+    ),
+    (
+        (flip[1] + Int(scheduled_flip[1, nominal_iterate])) & 0x1,
+        (flip[2] + Int(scheduled_flip[2, nominal_iterate])) & 0x1,
+        (flip[3] + Int(scheduled_flip[3, nominal_iterate])) & 0x1,
+        (flip[4] + Int(scheduled_flip[4, nominal_iterate])) & 0x1,
+    )
+end
+
+@inline function effective_sign_at_point_046(
+    row_idx::Int,
+    col_idx::Int,
+    nominal_iterate::Int,
+    dot_grids::Vector{Matrix{Float64}},
+    skip_count::Int,
+    flip_parity::Int,
+)
+    effective_iterate = nominal_iterate + skip_count
+    effective_iterate < 1 && return Int8(0)
+    effective_iterate > length(dot_grids) && return Int8(0)
+    value = dot_grids[effective_iterate][row_idx, col_idx]
+    isfinite(value) || return Int8(0)
+    sign = A27.sign_class_025(value)
+    sign == Int8(0) && return Int8(0)
+    return isodd(flip_parity) ? Int8(-sign) : sign
+end
+
+function point_sign_sequence_effective_046(
+    row_idx::Int,
+    col_idx::Int,
+    dot_grids::Vector{Matrix{Float64}};
+    first_iter::Int,
+    last_iter::Int,
+    active_skip::Int,
+    active_flip::Int,
+    scheduled_skip::AbstractVector{UInt8},
+    scheduled_flip::AbstractVector{UInt8},
+)
+    first_iter <= last_iter || return Int8[]
+    seq = Int8[]
+    skip_count = active_skip
+    flip_parity = active_flip
+    for nominal_iterate in first_iter:last_iter
+        if nominal_iterate > first_iter
+            skip_count += Int(scheduled_skip[nominal_iterate])
+            flip_parity = (flip_parity + Int(scheduled_flip[nominal_iterate])) & 0x1
+        end
+        sign = effective_sign_at_point_046(row_idx, col_idx, nominal_iterate, dot_grids, skip_count, flip_parity)
+        sign == Int8(0) && break
+        push!(seq, sign)
+    end
+    return seq
 end
 
 function build_grids_043()
@@ -297,26 +367,30 @@ end
     return true
 end
 
-function grazing_kind_symbolic_046(seq_a::Vector{Int8}, seq_b::Vector{Int8}, nominal_iterate::Int)
+function grazing_match_symbolic_046(seq_a::Vector{Int8}, seq_b::Vector{Int8}, nominal_iterate::Int)
     length(seq_a) == length(seq_b) || return nothing
     max_delete_idx = min(max(0, 9 - nominal_iterate + 1), length(seq_a) - 1)
     max_delete_idx >= 1 || return nothing
     for delete_idx in 1:max_delete_idx
-        if plus_delete_matches_046(seq_a, seq_b, delete_idx) ||
-           plus_delete_matches_046(seq_b, seq_a, delete_idx)
-            return :blue
+        if plus_delete_matches_046(seq_a, seq_b, delete_idx)
+            return (kind=:blue, mutate_side=:a, delete_idx=delete_idx)
         end
-        if minus_delete_matches_046(seq_a, seq_b, delete_idx) ||
-           minus_delete_matches_046(seq_b, seq_a, delete_idx)
-            return :purple
+        if plus_delete_matches_046(seq_b, seq_a, delete_idx)
+            return (kind=:blue, mutate_side=:b, delete_idx=delete_idx)
+        end
+        if minus_delete_matches_046(seq_a, seq_b, delete_idx)
+            return (kind=:purple, mutate_side=:a, delete_idx=delete_idx)
+        end
+        if minus_delete_matches_046(seq_b, seq_a, delete_idx)
+            return (kind=:purple, mutate_side=:b, delete_idx=delete_idx)
         end
     end
     return nothing
 end
 
-function grazing_kind_returntime_046(evaluation::A27.SquareEvaluation25)
+function grazing_match_returntime_046(evaluation::A27.SquareEvaluation25)
     should_increment, _ = A27.skip_increment_decision_025(evaluation)
-    return should_increment ? :blue : nothing
+    return should_increment ? (kind=:blue, mutate_side=:shorter, delete_idx=1) : nothing
 end
 
 function is_coordinate_singularity_046(seq_a::Vector{Int8}, seq_b::Vector{Int8}; window_len::Int=3)
@@ -349,15 +423,15 @@ function classify_contour_046(
     nominal_iterate::Int;
     grazing_mode::Symbol=:symbolic,
 )
-    grazing_kind =
-        grazing_mode == :symbolic ? grazing_kind_symbolic_046(seq_a, seq_b, nominal_iterate) :
-        grazing_mode == :returntime ? grazing_kind_returntime_046(evaluation) :
+    grazing_match =
+        grazing_mode == :symbolic ? grazing_match_symbolic_046(seq_a, seq_b, nominal_iterate) :
+        grazing_mode == :returntime ? grazing_match_returntime_046(evaluation) :
         error("Unsupported grazing mode: $(grazing_mode)")
-    grazing_kind == :blue && return :blue
-    is_coordinate_singularity_046(seq_a, seq_b; window_len=3) && return :red
-    grazing_kind == :purple && return :purple
-    real_contour_difference_count_046(seq_a, seq_b; window_len=2) == 1 && return :black
-    return :green
+    grazing_match !== nothing && grazing_match.kind == :blue && return (:blue, grazing_match)
+    is_coordinate_singularity_046(seq_a, seq_b; window_len=3) && return (:red, nothing)
+    grazing_match !== nothing && grazing_match.kind == :purple && return (:purple, grazing_match)
+    real_contour_difference_count_046(seq_a, seq_b; window_len=2) == 1 && return (:black, nothing)
+    return (:green, nothing)
 end
 
 @inline function edge_pair_code_046(edge_a::Int, edge_b::Int)
@@ -463,6 +537,38 @@ function segment_specs_046(
     return specs
 end
 
+function schedule_grazing_update_046!(
+    scheduled_skip::Matrix{UInt8},
+    scheduled_flip::Matrix{UInt8},
+    evaluation::A27.SquareEvaluation25,
+    short_rep::Int,
+    long_rep::Int,
+    grazing_match,
+    nominal_iterate::Int,
+    classification_iterate_end::Int,
+)
+    grazing_match === nothing && return nothing
+    mutate_rep =
+        grazing_match.mutate_side == :a ? short_rep :
+        grazing_match.mutate_side == :b ? long_rep :
+        grazing_match.mutate_side == :shorter ? short_rep :
+        0
+    mutate_rep == 0 && return nothing
+
+    activation_nominal = max(nominal_iterate + 1, nominal_iterate + grazing_match.delete_idx - 1)
+    activation_nominal <= classification_iterate_end || return nothing
+
+    mutate_sign = evaluation.sign[mutate_rep]
+    for corner in 1:4
+        evaluation.sign[corner] == mutate_sign || continue
+        scheduled_skip[corner, activation_nominal] += UInt8(1)
+        if grazing_match.kind == :purple
+            scheduled_flip[corner, activation_nominal] = xor(scheduled_flip[corner, activation_nominal], UInt8(1))
+        end
+    end
+    return nothing
+end
+
 function collect_sequence_classified_segments_046(
     dot_grids::Vector{Matrix{Float64}},
     time_grids::Vector{Matrix{Float64}},
@@ -491,7 +597,8 @@ function collect_sequence_classified_segments_046(
     purple_segment_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     green_cell_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     green_segment_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
-    zero_skip = (0, 0, 0, 0)
+    scheduled_skip_tls = [zeros(UInt8, 4, classification_iterate_end) for _ in 1:n_threads]
+    scheduled_flip_tls = [zeros(UInt8, 4, classification_iterate_end) for _ in 1:n_threads]
 
     Threads.@threads :dynamic for j in 1:n_lambda_cells
         tid = Threads.threadid()
@@ -511,6 +618,8 @@ function collect_sequence_classified_segments_046(
         purple_segment_local = purple_segment_tls[tid]
         green_cell_local = green_cell_tls[tid]
         green_segment_local = green_segment_tls[tid]
+        scheduled_skip_local = scheduled_skip_tls[tid]
+        scheduled_flip_local = scheduled_flip_tls[tid]
 
         y_tl = Float64(A27.LAMBDAS_025[j])
         y_bl = Float64(A27.LAMBDAS_025[j + 1])
@@ -518,8 +627,13 @@ function collect_sequence_classified_segments_046(
         for i in 1:n_alpha_cells
             x_tl = Float64(A27.ALPHAS_025[i])
             x_tr = Float64(A27.ALPHAS_025[i + 1])
+            fill!(scheduled_skip_local, 0x00)
+            fill!(scheduled_flip_local, 0x00)
+            skip = (0, 0, 0, 0)
+            flip = (0, 0, 0, 0)
             pending_red_nominal = 0
-            for nominal_iterate in 2:plot_iterate_end
+            for nominal_iterate in TABLE_ITERATE_START_046:plot_iterate_end
+                skip, flip = apply_scheduled_local_state_046(skip, flip, scheduled_skip_local, scheduled_flip_local, nominal_iterate)
                 if pending_red_nominal != 0
                     if nominal_iterate == pending_red_nominal + 1
                         continue
@@ -528,21 +642,38 @@ function collect_sequence_classified_segments_046(
                     end
                 end
 
-                evaluation = evaluate_square_local_045(j, i, nominal_iterate, dot_grids, time_grids, zero_skip)
+                evaluation = evaluate_square_local_045(j, i, nominal_iterate, dot_grids, time_grids, skip, flip)
                 evaluation.status == A27.EVAL_MIXED_025 || continue
 
                 _, short_rep, long_rep = A27.choose_representatives_025(evaluation)
                 short_row, short_col = corner_point_indices_046(j, i, short_rep)
                 long_row, long_col = corner_point_indices_046(j, i, long_rep)
-                short_seq, long_seq = common_point_sign_sequences_046(
+                short_seq = point_sign_sequence_effective_046(
                     short_row,
                     short_col,
+                    dot_grids;
+                    first_iter=nominal_iterate,
+                    last_iter=classification_iterate_end,
+                    active_skip=skip[short_rep],
+                    active_flip=flip[short_rep],
+                    scheduled_skip=@view(scheduled_skip_local[short_rep, :]),
+                    scheduled_flip=@view(scheduled_flip_local[short_rep, :]),
+                )
+                long_seq = point_sign_sequence_effective_046(
                     long_row,
                     long_col,
                     dot_grids;
                     first_iter=nominal_iterate,
                     last_iter=classification_iterate_end,
+                    active_skip=skip[long_rep],
+                    active_flip=flip[long_rep],
+                    scheduled_skip=@view(scheduled_skip_local[long_rep, :]),
+                    scheduled_flip=@view(scheduled_flip_local[long_rep, :]),
                 )
+                n_common = min(length(short_seq), length(long_seq))
+                n_common == 0 && continue
+                n_common == length(short_seq) || resize!(short_seq, n_common)
+                n_common == length(long_seq) || resize!(long_seq, n_common)
                 if isempty(short_seq) || isempty(long_seq)
                     continue
                 end
@@ -560,7 +691,7 @@ function collect_sequence_classified_segments_046(
                 )
                 isempty(specs) && continue
 
-                classification = classify_contour_046(short_seq, long_seq, evaluation, nominal_iterate; grazing_mode)
+                classification, grazing_match = classify_contour_046(short_seq, long_seq, evaluation, nominal_iterate; grazing_mode)
 
                 segment_count = length(specs)
                 source_local[nominal_iterate] += 1
@@ -595,6 +726,18 @@ function collect_sequence_classified_segments_046(
                     end
                     green_cell_local[nominal_iterate] += 1
                     green_segment_local[nominal_iterate] += segment_count
+                end
+                if classification == :blue || classification == :purple
+                    schedule_grazing_update_046!(
+                        scheduled_skip_local,
+                        scheduled_flip_local,
+                        evaluation,
+                        short_rep,
+                        long_rep,
+                        grazing_match,
+                        nominal_iterate,
+                        classification_iterate_end,
+                    )
                 end
                 if classification == :red
                     pending_red_nominal = nominal_iterate
@@ -692,7 +835,7 @@ end
 
 function choose_time_scale_043(time_grids::Vector{Matrix{Float64}})
     max_time = 0.0
-    for nominal_iterate in 2:min(8, length(time_grids))
+    for nominal_iterate in TABLE_ITERATE_START_046:min(TABLE_ITERATE_END_046, length(time_grids))
         grid = time_grids[nominal_iterate]
         @inbounds for value in grid
             isfinite(value) || continue
@@ -710,18 +853,18 @@ function build_time_words_043(time_grids::Vector{Matrix{Float64}})
     n_alpha = length(A27.ALPHAS_025)
     n_lambda = length(A27.LAMBDAS_025)
     time_scale = choose_time_scale_043(time_grids)
-    words = fill(MISSING_TIME_WORD_043, n_alpha * n_lambda * 7)
+    words = fill(MISSING_TIME_WORD_043, n_alpha * n_lambda * TABLE_ITERATE_COUNT_046)
 
-    for nominal_iterate in 2:min(8, length(time_grids))
+    for nominal_iterate in TABLE_ITERATE_START_046:min(TABLE_ITERATE_END_046, length(time_grids))
         grid = time_grids[nominal_iterate]
-        offset = nominal_iterate - 2
+        offset = nominal_iterate - TABLE_ITERATE_START_046
         for col_idx in 1:n_alpha
             for row_idx in 1:n_lambda
                 value = grid[row_idx, col_idx]
                 isfinite(value) || continue
                 quantized = round(Int, value * time_scale)
                 0 <= quantized <= 65534 || continue
-                linear_idx = ((row_idx - 1) * n_alpha + (col_idx - 1)) * 7 + offset + 1
+                linear_idx = ((row_idx - 1) * n_alpha + (col_idx - 1)) * TABLE_ITERATE_COUNT_046 + offset + 1
                 words[linear_idx] = UInt16(quantized)
             end
         end
@@ -848,6 +991,7 @@ function write_html_043(
     .iter-table th { color: var(--muted); font-weight: 600; background: #fbfbfb; position: sticky; top: 0; }
     .iter-row.skip { color: var(--skip); font-weight: 600; }
     .iter-row.normal { color: #111111; }
+    .iter-row.late { color: #a8afb8; }
     .highlight-note { margin-top: 4px; font-size: 10px; color: var(--muted); }
     .compact-meta { margin-bottom: 4px; }
   </style>
@@ -867,23 +1011,12 @@ function write_html_043(
     </section>
     <aside id="sidebar">
 	      <h1>Attempt-046 Explorer</h1>
-		      <div class="box small">
-		        Self-contained HTML explorer built from the saved attempt-027 `2000 x 2000` sweep.
-		        The contoured monotone sign at iterate `k` is `+` when the raw dot-product sign stays the same
-		        from iterate `k-1` to `k`, and `-` when it flips. Iterate `2` uses raw iterate `1` as its reference.
-		        Old-style skip compression is disabled here: every mixed square at every nominal iterate in `2:8`
-		        is classified independently, colors are determined from the suffix starting at that contour iterate,
-		        and the classification tests only use the saved symbol data through `2:16`, with symbolic deletions
-		        allowed only in the contour-relative range `k:9`. The grazing-mode toggle
-		        switches between symbolic deletion grazing and the old return-time skip criterion; in return-time mode,
-		        blue marks skip-condition grazings and purple is unused.
-		      </div>
 	      <h2>Legend</h2>
 	      <div class="box">
 	        <div class="legend-row"><span class="swatch black"></span><span>real contour: the two monotone sign sequences differ in exactly one place</span></div>
 	        <div class="legend-row"><span class="swatch red"></span><span>coordinate singularity: two consecutive monotone signs flip and the rest matches</span></div>
-	        <div class="legend-row"><span class="swatch blue"></span><span>grazing (`+` deletion): at contour iterate `k`, deleting one `+` in the contour-relative range `k:9` makes the suffix from that deletion point onward match through `16`</span></div>
-	        <div class="legend-row"><span class="swatch purple"></span><span>grazing (`-` deletion): at contour iterate `k`, deleting one `-` in the contour-relative range `k:9` and inverting the later suffix makes the sequences match through `16`</span></div>
+	        <div class="legend-row"><span class="swatch blue"></span><span>grazing (`+` deletion): deleting one `+` in the contour-relative range `k:9` reconciles the suffix, and later nominal iterates inherit that local skipped index on the affected side</span></div>
+	        <div class="legend-row"><span class="swatch purple"></span><span>grazing (`-` deletion): deleting one `-` and inverting the later suffix reconciles the contour-relative suffix, and later nominal iterates inherit both the local skipped index and the persistent suffix inversion on the affected side</span></div>
 	        <div class="legend-row"><span class="swatch green"></span><span>other mixed square: not black, red, blue, or purple under the above tests</span></div>
 	        <div class="legend-row"><span class="swatch cyan"></span><span>selected sampled grid point</span></div>
 	        <div class="legend-row"><span class="swatch" style="background:#bcbcbc;"></span><span>four marched squares around the selected point</span></div>
@@ -1070,6 +1203,11 @@ function write_html_043(
       return new Uint16Array(bytes.buffer);
     }
 
+    function decodeUint32Array(b64) {
+      const bytes = decodeBase64Bytes(b64);
+      return new Uint32Array(bytes.buffer);
+    }
+
     function decodeFloat32Array(b64) {
       const bytes = decodeBase64Bytes(b64);
       return new Float32Array(bytes.buffer);
@@ -1109,8 +1247,8 @@ function write_html_043(
 		      returntimePurpleSegmentsByIter[nominal] = RETURNTIME_PURPLE_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(RETURNTIME_PURPLE_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
 		      returntimeGreenSegmentsByIter[nominal] = RETURNTIME_GREEN_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(RETURNTIME_GREEN_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
 		    }
-	    const rawSignWords = decodeUint16Array(RAW_SIGN_WORDS_B64);
-	    const monotoneSignWords = decodeUint16Array(MONOTONE_SIGN_WORDS_B64);
+	    const rawSignWords = decodeUint32Array(RAW_SIGN_WORDS_B64);
+	    const monotoneSignWords = decodeUint32Array(MONOTONE_SIGN_WORDS_B64);
 	    const skipWords = decodeBase64Bytes(SKIP_WORDS_B64);
 	    let timeWords = null;
 
@@ -1251,8 +1389,8 @@ function write_html_043(
 
     function decodeSignWord(word) {
       const result = [];
-      for (let nominal = 2; nominal <= 8; nominal += 1) {
-        const code = (word >> (2 * (nominal - 2))) & 0x3;
+      for (let nominal = $(TABLE_ITERATE_START_046); nominal <= $(TABLE_ITERATE_END_046); nominal += 1) {
+        const code = (word >>> (2 * (nominal - $(TABLE_ITERATE_START_046)))) & 0x3;
         result.push({ nominal, code });
       }
       return result;
@@ -1276,8 +1414,8 @@ function write_html_043(
 	        ['lambda', point.lambda.toFixed(6)],
 	        ['grid index', '(' + point.i + ', ' + point.j + ')'],
 	        ['flat index', String(point.idx)],
-		        ['raw sign word', '0x' + point.rawSignWord.toString(16).padStart(4, '0')],
-		        ['monotone sign word', '0x' + point.monotoneSignWord.toString(16).padStart(4, '0')]
+		        ['raw sign word', '0x' + point.rawSignWord.toString(16).padStart(8, '0')],
+		        ['monotone sign word', '0x' + point.monotoneSignWord.toString(16).padStart(8, '0')]
 	      ].map(function(pair) {
 	        return '<div class="label">' + pair[0] + '</div><div class="mono">' + pair[1] + '</div>';
 	      }).join('');
@@ -1285,15 +1423,16 @@ function write_html_043(
 
     function decodeSkipWord(word) {
       const result = [];
-      for (let nominal = 2; nominal <= 8; nominal += 1) {
-        result.push({ nominal, skip: !!(word & (1 << (nominal - 2))) });
+      for (let nominal = $(TABLE_ITERATE_START_046); nominal <= $(TABLE_ITERATE_END_046); nominal += 1) {
+        const skip = nominal <= 8 ? !!(word & (1 << (nominal - 2))) : false;
+        result.push({ nominal, skip });
       }
       return result;
     }
 
     function decodeTimeForPoint(pointIdx, nominalIterate) {
       if (!timeWords || timeWords.length === 0) return null;
-      const word = timeWords[pointIdx * 7 + (nominalIterate - 2)];
+      const word = timeWords[pointIdx * $(TABLE_ITERATE_COUNT_046) + (nominalIterate - $(TABLE_ITERATE_START_046))];
       if (word === undefined || word === 0xffff) return null;
       return word / TIME_SCALE;
     }
@@ -1319,8 +1458,10 @@ function write_html_043(
 	        const monotoneEntry = monotoneSigns[idx];
 	        const skipEntry = skips[idx];
 	        const timeValue = formatTimeValue(decodeTimeForPoint(point.idx, rawEntry.nominal));
+	        const rowClasses = ['iter-row', skipEntry.skip ? 'skip' : 'normal'];
+	        if (rawEntry.nominal >= 9) rowClasses.push('late');
 	        rows.push(
-	          '<tr class="iter-row ' + (skipEntry.skip ? 'skip' : 'normal') + '">' +
+	          '<tr class="' + rowClasses.join(' ') + '">' +
 	            '<td>' + rawEntry.nominal + '</td>' +
 	            '<td>' + codeText(rawEntry.code) + '</td>' +
 	            '<td>' + codeText(monotoneEntry.code) + '</td>' +
