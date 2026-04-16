@@ -233,6 +233,46 @@ function point_sign_sequence_046(
     return seq
 end
 
+# Classification should not erase a valid mixed square merely because one corner runs out of
+# later iterate data. Build the longest common suffix actually available from the contour
+# iterate onward and classify from that shared suffix only.
+function point_sign_sequence_available_046(
+    row_idx::Int,
+    col_idx::Int,
+    dot_grids::Vector{Matrix{Float64}};
+    first_iter::Int=2,
+    last_iter::Int=12,
+)
+    first_iter <= last_iter || return Int8[]
+    last_iter = min(last_iter, length(dot_grids))
+    seq = Int8[]
+    for nominal_iterate in first_iter:last_iter
+        value = dot_grids[nominal_iterate][row_idx, col_idx]
+        isfinite(value) || break
+        sign = A27.sign_class_025(value)
+        sign == Int8(0) && break
+        push!(seq, sign)
+    end
+    return seq
+end
+
+function common_point_sign_sequences_046(
+    short_row::Int,
+    short_col::Int,
+    long_row::Int,
+    long_col::Int,
+    dot_grids::Vector{Matrix{Float64}};
+    first_iter::Int,
+    last_iter::Int,
+)
+    short_seq = point_sign_sequence_available_046(short_row, short_col, dot_grids; first_iter, last_iter)
+    long_seq = point_sign_sequence_available_046(long_row, long_col, dot_grids; first_iter, last_iter)
+    n_common = min(length(short_seq), length(long_seq))
+    n_common == length(short_seq) || resize!(short_seq, n_common)
+    n_common == length(long_seq) || resize!(long_seq, n_common)
+    return short_seq, long_seq
+end
+
 # A single deletion in the monotone-sign sequence leaves one unmatched terminal symbol on
 # the undeleted side because attempt-027 stores iterates only through 16.
 @inline function plus_delete_matches_046(candidate::Vector{Int8}, other::Vector{Int8}, delete_idx::Int)
@@ -495,9 +535,16 @@ function collect_sequence_classified_segments_046(
                 _, short_rep, long_rep = A27.choose_representatives_025(evaluation)
                 short_row, short_col = corner_point_indices_046(j, i, short_rep)
                 long_row, long_col = corner_point_indices_046(j, i, long_rep)
-                short_seq = point_sign_sequence_046(short_row, short_col, dot_grids; first_iter=nominal_iterate, last_iter=classification_iterate_end)
-                long_seq = point_sign_sequence_046(long_row, long_col, dot_grids; first_iter=nominal_iterate, last_iter=classification_iterate_end)
-                if isnothing(short_seq) || isnothing(long_seq)
+                short_seq, long_seq = common_point_sign_sequences_046(
+                    short_row,
+                    short_col,
+                    long_row,
+                    long_col,
+                    dot_grids;
+                    first_iter=nominal_iterate,
+                    last_iter=classification_iterate_end,
+                )
+                if isempty(short_seq) || isempty(long_seq)
                     continue
                 end
 

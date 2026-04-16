@@ -39,6 +39,9 @@ Provide an interactive artifact where you can:
   `2:8`
 - every contour is classified from the monotone-sign suffix starting at its
   own nominal iterate `k`
+- that suffix is truncated to the longest common data actually available on
+  the two representative corners, so missing later iterates can weaken a
+  classification but cannot erase a valid mixed-square contour
 - the contour scalar magnitudes stay equal to the saved `|sign(x) * v_x|`
   magnitudes from `attempt-027`
 - the contoured monotone sign at iterate `k` is `+` when the raw dot-product
