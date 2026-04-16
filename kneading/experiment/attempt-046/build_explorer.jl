@@ -218,6 +218,7 @@ function point_sign_sequence_046(
     first_iter::Int=2,
     last_iter::Int=12,
 )
+    first_iter <= last_iter || return Int8[]
     last_iter <= length(dot_grids) || return nothing
     seq = Vector{Int8}(undef, last_iter - first_iter + 1)
     seq_idx = 1
@@ -256,9 +257,9 @@ end
     return true
 end
 
-function grazing_kind_046(seq_a::Vector{Int8}, seq_b::Vector{Int8})
+function grazing_kind_symbolic_046(seq_a::Vector{Int8}, seq_b::Vector{Int8}, nominal_iterate::Int)
     length(seq_a) == length(seq_b) || return nothing
-    max_delete_idx = min(7, length(seq_a) - 1)
+    max_delete_idx = min(max(0, 8 - nominal_iterate + 1), length(seq_a) - 1)
     max_delete_idx >= 1 || return nothing
     for delete_idx in 1:max_delete_idx
         if plus_delete_matches_046(seq_a, seq_b, delete_idx) ||
@@ -273,10 +274,17 @@ function grazing_kind_046(seq_a::Vector{Int8}, seq_b::Vector{Int8})
     return nothing
 end
 
-function is_coordinate_singularity_046(seq_a::Vector{Int8}, seq_b::Vector{Int8})
+function grazing_kind_returntime_046(evaluation::A27.SquareEvaluation25)
+    should_increment, _ = A27.skip_increment_decision_025(evaluation)
+    return should_increment ? :blue : nothing
+end
+
+function is_coordinate_singularity_046(seq_a::Vector{Int8}, seq_b::Vector{Int8}; window_len::Int=3)
     length(seq_a) == length(seq_b) || return false
+    n = min(window_len, length(seq_a), length(seq_b))
+    n == window_len || return false
     diff_idx = Int[]
-    @inbounds for idx in eachindex(seq_a)
+    @inbounds for idx in 1:n
         seq_a[idx] == seq_b[idx] || push!(diff_idx, idx)
     end
     length(diff_idx) == 2 || return false
@@ -288,19 +296,30 @@ function is_coordinate_singularity_046(seq_a::Vector{Int8}, seq_b::Vector{Int8})
            seq_a[idx + 1] == -seq_b[idx + 1]
 end
 
-@inline function real_contour_difference_count_046(seq_a::Vector{Int8}, seq_b::Vector{Int8})
+@inline function real_contour_difference_count_046(seq_a::Vector{Int8}, seq_b::Vector{Int8}; window_len::Int=2)
+    n = min(window_len, length(seq_a), length(seq_b))
+    n == window_len || return typemax(Int)
     count = 0
-    @inbounds for idx in eachindex(seq_a)
+    @inbounds for idx in 1:n
         count += (seq_a[idx] != seq_b[idx])
     end
     return count
 end
 
-function classify_contour_046(seq_a::Vector{Int8}, seq_b::Vector{Int8})
-    grazing_kind = grazing_kind_046(seq_a, seq_b)
+function classify_contour_046(
+    seq_a::Vector{Int8},
+    seq_b::Vector{Int8},
+    evaluation::A27.SquareEvaluation25,
+    nominal_iterate::Int;
+    grazing_mode::Symbol=:symbolic,
+)
+    grazing_kind =
+        grazing_mode == :symbolic ? grazing_kind_symbolic_046(seq_a, seq_b, nominal_iterate) :
+        grazing_mode == :returntime ? grazing_kind_returntime_046(evaluation) :
+        error("Unsupported grazing mode: $(grazing_mode)")
     !isnothing(grazing_kind) && return grazing_kind
-    is_coordinate_singularity_046(seq_a, seq_b) && return :red
-    real_contour_difference_count_046(seq_a, seq_b) == 1 && return :black
+    is_coordinate_singularity_046(seq_a, seq_b; window_len=3) && return :red
+    real_contour_difference_count_046(seq_a, seq_b; window_len=2) == 1 && return :black
     return :green
 end
 
@@ -410,6 +429,7 @@ end
 function collect_sequence_classified_segments_046(
     dot_grids::Vector{Matrix{Float64}},
     time_grids::Vector{Matrix{Float64}},
+    grazing_mode::Symbol=:symbolic,
 )
     n_plot = A27.ATTEMPT025_PLOT_ITERATE_CAP
     plot_iterate_end = min(8, n_plot)
@@ -461,15 +481,21 @@ function collect_sequence_classified_segments_046(
         for i in 1:n_alpha_cells
             x_tl = Float64(A27.ALPHAS_025[i])
             x_tr = Float64(A27.ALPHAS_025[i + 1])
+            suppress_next_nominal = false
             for nominal_iterate in 2:plot_iterate_end
+                if suppress_next_nominal
+                    suppress_next_nominal = false
+                    continue
+                end
+
                 evaluation = evaluate_square_local_045(j, i, nominal_iterate, dot_grids, time_grids, zero_skip)
                 evaluation.status == A27.EVAL_MIXED_025 || continue
 
-                shorter_sign, short_rep, long_rep = A27.choose_representatives_025(evaluation)
+                _, short_rep, long_rep = A27.choose_representatives_025(evaluation)
                 short_row, short_col = corner_point_indices_046(j, i, short_rep)
                 long_row, long_col = corner_point_indices_046(j, i, long_rep)
-                short_seq = point_sign_sequence_046(short_row, short_col, dot_grids; last_iter=classification_iterate_end)
-                long_seq = point_sign_sequence_046(long_row, long_col, dot_grids; last_iter=classification_iterate_end)
+                short_seq = point_sign_sequence_046(short_row, short_col, dot_grids; first_iter=nominal_iterate, last_iter=classification_iterate_end)
+                long_seq = point_sign_sequence_046(long_row, long_col, dot_grids; first_iter=nominal_iterate, last_iter=classification_iterate_end)
                 if isnothing(short_seq) || isnothing(long_seq)
                     continue
                 end
@@ -487,7 +513,7 @@ function collect_sequence_classified_segments_046(
                 )
                 isempty(specs) && continue
 
-                classification = classify_contour_046(short_seq, long_seq)
+                classification = classify_contour_046(short_seq, long_seq, evaluation, nominal_iterate; grazing_mode)
                 segment_count = length(specs)
                 source_local[nominal_iterate] += 1
 
@@ -522,6 +548,8 @@ function collect_sequence_classified_segments_046(
                     green_cell_local[nominal_iterate] += 1
                     green_segment_local[nominal_iterate] += segment_count
                 end
+
+                classification == :red && (suppress_next_nominal = true)
             end
         end
     end
@@ -680,11 +708,16 @@ end
 
 function write_html_043(
     path::String,
-    black_segments_b64_by_iter::Vector{String},
-    red_segments_b64_by_iter::Vector{String},
-    blue_segments_b64_by_iter::Vector{String},
-    purple_segments_b64_by_iter::Vector{String},
-    green_segments_b64_by_iter::Vector{String},
+    symbolic_black_segments_b64_by_iter::Vector{String},
+    symbolic_red_segments_b64_by_iter::Vector{String},
+    symbolic_blue_segments_b64_by_iter::Vector{String},
+    symbolic_purple_segments_b64_by_iter::Vector{String},
+    symbolic_green_segments_b64_by_iter::Vector{String},
+    returntime_black_segments_b64_by_iter::Vector{String},
+    returntime_red_segments_b64_by_iter::Vector{String},
+    returntime_blue_segments_b64_by_iter::Vector{String},
+    returntime_purple_segments_b64_by_iter::Vector{String},
+    returntime_green_segments_b64_by_iter::Vector{String},
     raw_sign_words_b64::String,
     monotone_sign_words_b64::String,
     skip_words_b64::String,
@@ -784,13 +817,16 @@ function write_html_043(
     </section>
     <aside id="sidebar">
 	      <h1>Attempt-046 Explorer</h1>
-	      <div class="box small">
-	        Self-contained HTML explorer built from the saved attempt-027 `2000 x 2000` sweep.
-	        The contoured monotone sign at iterate `k` is `+` when the raw dot-product sign stays the same
-	        from iterate `k-1` to `k`, and `-` when it flips. Iterate `2` uses raw iterate `1` as its reference.
-	        Old-style skip compression is disabled here: every mixed square at every nominal iterate in `2:8`
-	        is classified independently, and the classification tests only use the saved symbol data through `2:12`.
-	      </div>
+		      <div class="box small">
+		        Self-contained HTML explorer built from the saved attempt-027 `2000 x 2000` sweep.
+		        The contoured monotone sign at iterate `k` is `+` when the raw dot-product sign stays the same
+		        from iterate `k-1` to `k`, and `-` when it flips. Iterate `2` uses raw iterate `1` as its reference.
+		        Old-style skip compression is disabled here: every mixed square at every nominal iterate in `2:8`
+		        is classified independently, colors are determined from the suffix starting at that contour iterate,
+		        and the classification tests only use the saved symbol data through `2:12`. The grazing-mode toggle
+		        switches between symbolic deletion grazing and the old return-time skip criterion; in return-time mode,
+		        blue marks skip-condition grazings and purple is unused.
+		      </div>
 	      <h2>Legend</h2>
 	      <div class="box">
 	        <div class="legend-row"><span class="swatch black"></span><span>real contour: the two monotone sign sequences differ in exactly one place</span></div>
@@ -803,12 +839,13 @@ function write_html_043(
 	      </div>
       <h2>Contours</h2>
       <div class="box">
-	        <div class="iter-buttons">
-	          <button id="showAllIterates">Show All</button>
-	          <button id="hideAllIterates">Hide All</button>
-	          <button id="toggleBlackContours">Hide Black</button>
-	          <button id="toggleGreenContours">Hide Green</button>
-	          <button id="toggleRedContours">Hide Red</button>
+		        <div class="iter-buttons">
+		          <button id="showAllIterates">Show All</button>
+		          <button id="hideAllIterates">Hide All</button>
+		          <button id="toggleGrazingMode">Grazing: Symbolic</button>
+		          <button id="toggleBlackContours">Hide Black</button>
+		          <button id="toggleGreenContours">Hide Green</button>
+		          <button id="toggleRedContours">Hide Red</button>
 	          <button id="toggleGreyContours">Hide Blue</button>
 	          <button id="togglePurpleContours">Hide Purple</button>
 	        </div>
@@ -850,53 +887,103 @@ function write_html_043(
       lambdaMin: $(lambda_min),
       lambdaMax: $(lambda_max)
     };
-    const BLACK_SEGMENTS_B64_BY_ITER = {
+	    const SYMBOLIC_BLACK_SEGMENTS_B64_BY_ITER = {
 """)
-        for idx in 2:length(black_segments_b64_by_iter)
+        for idx in 2:length(symbolic_black_segments_b64_by_iter)
             print(io, "      ")
             print(io, idx)
             print(io, ": '")
-            print(io, black_segments_b64_by_iter[idx])
+            print(io, symbolic_black_segments_b64_by_iter[idx])
             print(io, "',\n")
         end
         print(io, """    };
-	    const RED_SEGMENTS_B64_BY_ITER = {
+	    const SYMBOLIC_RED_SEGMENTS_B64_BY_ITER = {
 """)
-        for idx in 2:length(red_segments_b64_by_iter)
+        for idx in 2:length(symbolic_red_segments_b64_by_iter)
             print(io, "      ")
             print(io, idx)
             print(io, ": '")
-            print(io, red_segments_b64_by_iter[idx])
+            print(io, symbolic_red_segments_b64_by_iter[idx])
             print(io, "',\n")
         end
         print(io, """    };
-		    const BLUE_SEGMENTS_B64_BY_ITER = {
-	""")
-        for idx in 2:length(blue_segments_b64_by_iter)
+		    const SYMBOLIC_BLUE_SEGMENTS_B64_BY_ITER = {
+		""")
+        for idx in 2:length(symbolic_blue_segments_b64_by_iter)
             print(io, "      ")
             print(io, idx)
             print(io, ": '")
-            print(io, blue_segments_b64_by_iter[idx])
+            print(io, symbolic_blue_segments_b64_by_iter[idx])
             print(io, "',\n")
         end
         print(io, """    };
-		    const PURPLE_SEGMENTS_B64_BY_ITER = {
-	""")
-        for idx in 2:length(purple_segments_b64_by_iter)
+		    const SYMBOLIC_PURPLE_SEGMENTS_B64_BY_ITER = {
+		""")
+        for idx in 2:length(symbolic_purple_segments_b64_by_iter)
             print(io, "      ")
             print(io, idx)
             print(io, ": '")
-            print(io, purple_segments_b64_by_iter[idx])
+            print(io, symbolic_purple_segments_b64_by_iter[idx])
             print(io, "',\n")
         end
         print(io, """    };
-		    const GREEN_SEGMENTS_B64_BY_ITER = {
-	""")
-        for idx in 2:length(green_segments_b64_by_iter)
+		    const SYMBOLIC_GREEN_SEGMENTS_B64_BY_ITER = {
+		""")
+        for idx in 2:length(symbolic_green_segments_b64_by_iter)
             print(io, "      ")
             print(io, idx)
             print(io, ": '")
-            print(io, green_segments_b64_by_iter[idx])
+            print(io, symbolic_green_segments_b64_by_iter[idx])
+            print(io, "',\n")
+        end
+        print(io, """    };
+	    const RETURNTIME_BLACK_SEGMENTS_B64_BY_ITER = {
+""")
+        for idx in 2:length(returntime_black_segments_b64_by_iter)
+            print(io, "      ")
+            print(io, idx)
+            print(io, ": '")
+            print(io, returntime_black_segments_b64_by_iter[idx])
+            print(io, "',\n")
+        end
+        print(io, """    };
+	    const RETURNTIME_RED_SEGMENTS_B64_BY_ITER = {
+""")
+        for idx in 2:length(returntime_red_segments_b64_by_iter)
+            print(io, "      ")
+            print(io, idx)
+            print(io, ": '")
+            print(io, returntime_red_segments_b64_by_iter[idx])
+            print(io, "',\n")
+        end
+        print(io, """    };
+		    const RETURNTIME_BLUE_SEGMENTS_B64_BY_ITER = {
+		""")
+        for idx in 2:length(returntime_blue_segments_b64_by_iter)
+            print(io, "      ")
+            print(io, idx)
+            print(io, ": '")
+            print(io, returntime_blue_segments_b64_by_iter[idx])
+            print(io, "',\n")
+        end
+        print(io, """    };
+		    const RETURNTIME_PURPLE_SEGMENTS_B64_BY_ITER = {
+		""")
+        for idx in 2:length(returntime_purple_segments_b64_by_iter)
+            print(io, "      ")
+            print(io, idx)
+            print(io, ": '")
+            print(io, returntime_purple_segments_b64_by_iter[idx])
+            print(io, "',\n")
+        end
+        print(io, """    };
+		    const RETURNTIME_GREEN_SEGMENTS_B64_BY_ITER = {
+		""")
+        for idx in 2:length(returntime_green_segments_b64_by_iter)
+            print(io, "      ")
+            print(io, idx)
+            print(io, ": '")
+            print(io, returntime_green_segments_b64_by_iter[idx])
             print(io, "',\n")
         end
         print(io, """    };
@@ -943,17 +1030,27 @@ function write_html_043(
       return new Uint16Array(decompressed);
     }
 
-		    const blackSegmentsByIter = {};
-		    const redSegmentsByIter = {};
-		    const blueSegmentsByIter = {};
-		    const purpleSegmentsByIter = {};
-		    const greenSegmentsByIter = {};
+		    const symbolicBlackSegmentsByIter = {};
+		    const symbolicRedSegmentsByIter = {};
+		    const symbolicBlueSegmentsByIter = {};
+		    const symbolicPurpleSegmentsByIter = {};
+		    const symbolicGreenSegmentsByIter = {};
+		    const returntimeBlackSegmentsByIter = {};
+		    const returntimeRedSegmentsByIter = {};
+		    const returntimeBlueSegmentsByIter = {};
+		    const returntimePurpleSegmentsByIter = {};
+		    const returntimeGreenSegmentsByIter = {};
 		    for (let nominal = 2; nominal <= 8; nominal += 1) {
-		      blackSegmentsByIter[nominal] = BLACK_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(BLACK_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
-		      redSegmentsByIter[nominal] = RED_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(RED_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
-		      blueSegmentsByIter[nominal] = BLUE_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(BLUE_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
-		      purpleSegmentsByIter[nominal] = PURPLE_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(PURPLE_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
-		      greenSegmentsByIter[nominal] = GREEN_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(GREEN_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+		      symbolicBlackSegmentsByIter[nominal] = SYMBOLIC_BLACK_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(SYMBOLIC_BLACK_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+		      symbolicRedSegmentsByIter[nominal] = SYMBOLIC_RED_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(SYMBOLIC_RED_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+		      symbolicBlueSegmentsByIter[nominal] = SYMBOLIC_BLUE_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(SYMBOLIC_BLUE_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+		      symbolicPurpleSegmentsByIter[nominal] = SYMBOLIC_PURPLE_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(SYMBOLIC_PURPLE_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+		      symbolicGreenSegmentsByIter[nominal] = SYMBOLIC_GREEN_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(SYMBOLIC_GREEN_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+		      returntimeBlackSegmentsByIter[nominal] = RETURNTIME_BLACK_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(RETURNTIME_BLACK_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+		      returntimeRedSegmentsByIter[nominal] = RETURNTIME_RED_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(RETURNTIME_RED_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+		      returntimeBlueSegmentsByIter[nominal] = RETURNTIME_BLUE_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(RETURNTIME_BLUE_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+		      returntimePurpleSegmentsByIter[nominal] = RETURNTIME_PURPLE_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(RETURNTIME_PURPLE_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+		      returntimeGreenSegmentsByIter[nominal] = RETURNTIME_GREEN_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(RETURNTIME_GREEN_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
 		    }
 	    const rawSignWords = decodeUint16Array(RAW_SIGN_WORDS_B64);
 	    const monotoneSignWords = decodeUint16Array(MONOTONE_SIGN_WORDS_B64);
@@ -968,31 +1065,49 @@ function write_html_043(
     const hoverInfo = document.getElementById('hoverInfo');
     const hoverTableBody = document.getElementById('hoverTableBody');
     const selectedInfo = document.getElementById('selectedInfo');
-    const selectedTableBody = document.getElementById('selectedTableBody');
-    const viewInfo = document.getElementById('viewInfo');
-    const iterateControls = document.getElementById('iterateControls');
-    const resetViewButton = document.getElementById('resetView');
-		    const clearSelectionButton = document.getElementById('clearSelection');
-		    const showAllIteratesButton = document.getElementById('showAllIterates');
-		    const hideAllIteratesButton = document.getElementById('hideAllIterates');
-			    const toggleBlackContoursButton = document.getElementById('toggleBlackContours');
-			    const toggleGreenContoursButton = document.getElementById('toggleGreenContours');
-			    const toggleRedContoursButton = document.getElementById('toggleRedContours');
-			    const toggleBlueContoursButton = document.getElementById('toggleGreyContours');
-			    const togglePurpleContoursButton = document.getElementById('togglePurpleContours');
+	    const selectedTableBody = document.getElementById('selectedTableBody');
+	    const viewInfo = document.getElementById('viewInfo');
+	    const iterateControls = document.getElementById('iterateControls');
+	    const resetViewButton = document.getElementById('resetView');
+			    const clearSelectionButton = document.getElementById('clearSelection');
+			    const showAllIteratesButton = document.getElementById('showAllIterates');
+			    const hideAllIteratesButton = document.getElementById('hideAllIterates');
+				    const toggleGrazingModeButton = document.getElementById('toggleGrazingMode');
+				    const toggleBlackContoursButton = document.getElementById('toggleBlackContours');
+				    const toggleGreenContoursButton = document.getElementById('toggleGreenContours');
+				    const toggleRedContoursButton = document.getElementById('toggleRedContours');
+				    const toggleBlueContoursButton = document.getElementById('toggleGreyContours');
+				    const togglePurpleContoursButton = document.getElementById('togglePurpleContours');
 
-		    const state = {
-		      view: { a0: CONFIG.alphaMin, a1: CONFIG.alphaMax, l0: CONFIG.lambdaMin, l1: CONFIG.lambdaMax },
-		      hover: null,
-		      selected: null,
-		      dragging: null,
-			      visibleIterates: new Set([2, 3, 4, 5, 6, 7, 8]),
-			      showBlackContours: true,
-			      showGreenContours: true,
-			      showRedContours: true,
-			      showBlueContours: true,
-			      showPurpleContours: true
-			    };
+			    const state = {
+			      view: { a0: CONFIG.alphaMin, a1: CONFIG.alphaMax, l0: CONFIG.lambdaMin, l1: CONFIG.lambdaMax },
+			      hover: null,
+			      selected: null,
+			      dragging: null,
+				      grazingMode: 'symbolic',
+				      visibleIterates: new Set([2, 3, 4, 5, 6, 7, 8]),
+				      showBlackContours: true,
+				      showGreenContours: true,
+				      showRedContours: true,
+				      showBlueContours: true,
+				      showPurpleContours: true
+				    };
+
+	    function currentSegmentSets() {
+	      return state.grazingMode === 'symbolic' ? {
+	        black: symbolicBlackSegmentsByIter,
+	        red: symbolicRedSegmentsByIter,
+	        blue: symbolicBlueSegmentsByIter,
+	        purple: symbolicPurpleSegmentsByIter,
+	        green: symbolicGreenSegmentsByIter
+	      } : {
+	        black: returntimeBlackSegmentsByIter,
+	        red: returntimeRedSegmentsByIter,
+	        blue: returntimeBlueSegmentsByIter,
+	        purple: returntimePurpleSegmentsByIter,
+	        green: returntimeGreenSegmentsByIter
+	      };
+	    }
 
     function cssRect() {
       const w = viewerWrap.clientWidth;
@@ -1267,18 +1382,19 @@ function write_html_043(
       baseCtx.fillStyle = '#ffffff';
       baseCtx.fillRect(0, 0, w, h);
       const r = cssRect();
+      const segments = currentSegmentSets();
       baseCtx.save();
       baseCtx.beginPath();
       baseCtx.rect(r.x, r.y, r.w, r.h);
       baseCtx.clip();
-			      for (let nominal = 2; nominal <= 8; nominal += 1) {
-			        if (!state.visibleIterates.has(nominal)) continue;
-			        if (state.showGreenContours) drawSegmentArray(greenSegmentsByIter[nominal], '#008000');
-			        if (state.showBlackContours) drawSegmentArray(blackSegmentsByIter[nominal], '#000000');
-			        if (state.showRedContours) drawSegmentArray(redSegmentsByIter[nominal], '#c00000');
-			        if (state.showBlueContours) drawSegmentArray(blueSegmentsByIter[nominal], '#3b82f6');
-			        if (state.showPurpleContours) drawSegmentArray(purpleSegmentsByIter[nominal], '#7c3aed');
-			      }
+				      for (let nominal = 2; nominal <= 8; nominal += 1) {
+				        if (!state.visibleIterates.has(nominal)) continue;
+				        if (state.showGreenContours) drawSegmentArray(segments.green[nominal], '#008000');
+				        if (state.showBlackContours) drawSegmentArray(segments.black[nominal], '#000000');
+				        if (state.showRedContours) drawSegmentArray(segments.red[nominal], '#c00000');
+				        if (state.showBlueContours) drawSegmentArray(segments.blue[nominal], '#3b82f6');
+				        if (state.showPurpleContours) drawSegmentArray(segments.purple[nominal], '#7c3aed');
+				      }
       baseCtx.restore();
       drawAxes();
       updateViewInfo();
@@ -1319,30 +1435,32 @@ function write_html_043(
     }
 
     function updateViewInfo() {
-			      let totalBlack = 0;
-			      let totalRed = 0;
-			      let totalBlue = 0;
-			      let totalPurple = 0;
-			      let totalGreen = 0;
-			      for (let nominal = 2; nominal <= 8; nominal += 1) {
-			        if (!state.visibleIterates.has(nominal)) continue;
-			        totalBlack += blackSegmentsByIter[nominal].length / 4;
-			        totalRed += redSegmentsByIter[nominal].length / 4;
-			        totalBlue += blueSegmentsByIter[nominal].length / 4;
-			        totalPurple += purpleSegmentsByIter[nominal].length / 4;
-			        totalGreen += greenSegmentsByIter[nominal].length / 4;
-			      }
+				      const segments = currentSegmentSets();
+				      let totalBlack = 0;
+				      let totalRed = 0;
+				      let totalBlue = 0;
+				      let totalPurple = 0;
+				      let totalGreen = 0;
+				      for (let nominal = 2; nominal <= 8; nominal += 1) {
+				        if (!state.visibleIterates.has(nominal)) continue;
+				        totalBlack += segments.black[nominal].length / 4;
+				        totalRed += segments.red[nominal].length / 4;
+				        totalBlue += segments.blue[nominal].length / 4;
+				        totalPurple += segments.purple[nominal].length / 4;
+				        totalGreen += segments.green[nominal].length / 4;
+				      }
 			      const visibleBlack = state.showBlackContours ? totalBlack : 0;
 			      const visibleGreen = state.showGreenContours ? totalGreen : 0;
 			      const visibleRed = state.showRedContours ? totalRed : 0;
 			      const visibleBlue = state.showBlueContours ? totalBlue : 0;
 			      const visiblePurple = state.showPurpleContours ? totalPurple : 0;
-			      const rows = [
-			        ['alpha range', state.view.a0.toFixed(6) + ' .. ' + state.view.a1.toFixed(6)],
-			        ['lambda range', state.view.l0.toFixed(6) + ' .. ' + state.view.l1.toFixed(6)],
-			        ['grid', CONFIG.nAlpha + ' x ' + CONFIG.nLambda],
-			        ['visible iterates', Array.from(state.visibleIterates).sort(function(a, b) { return a - b; }).join(', ') || '(none)'],
-			        ['black contours', state.showBlackContours ? 'shown' : 'hidden'],
+				      const rows = [
+				        ['alpha range', state.view.a0.toFixed(6) + ' .. ' + state.view.a1.toFixed(6)],
+				        ['lambda range', state.view.l0.toFixed(6) + ' .. ' + state.view.l1.toFixed(6)],
+				        ['grid', CONFIG.nAlpha + ' x ' + CONFIG.nLambda],
+				        ['grazing mode', state.grazingMode === 'symbolic' ? 'symbolic deletion' : 'return-time skip'],
+				        ['visible iterates', Array.from(state.visibleIterates).sort(function(a, b) { return a - b; }).join(', ') || '(none)'],
+				        ['black contours', state.showBlackContours ? 'shown' : 'hidden'],
 			        ['green contours', state.showGreenContours ? 'shown' : 'hidden'],
 			        ['red contours', state.showRedContours ? 'shown' : 'hidden'],
 			        ['blue contours', state.showBlueContours ? 'shown' : 'hidden'],
@@ -1497,9 +1615,14 @@ function write_html_043(
       drawOverlay();
     });
 
-		    function updateBlackToggleButton() {
-		      toggleBlackContoursButton.textContent = state.showBlackContours ? 'Hide Black' : 'Show Black';
-		    }
+			    function updateBlackToggleButton() {
+			      toggleBlackContoursButton.textContent = state.showBlackContours ? 'Hide Black' : 'Show Black';
+			    }
+
+			    function updateGrazingModeButton() {
+			      toggleGrazingModeButton.textContent =
+			        state.grazingMode === 'symbolic' ? 'Grazing: Symbolic' : 'Grazing: Return-Time';
+			    }
 
 		    function updateGreenToggleButton() {
 		      toggleGreenContoursButton.textContent = state.showGreenContours ? 'Hide Green' : 'Show Green';
@@ -1517,12 +1640,19 @@ function write_html_043(
 		      togglePurpleContoursButton.textContent = state.showPurpleContours ? 'Hide Purple' : 'Show Purple';
 		    }
 
-		    toggleBlackContoursButton.addEventListener('click', function() {
-		      state.showBlackContours = !state.showBlackContours;
-		      updateBlackToggleButton();
-		      drawBase();
-		      drawOverlay();
-		    });
+			    toggleBlackContoursButton.addEventListener('click', function() {
+			      state.showBlackContours = !state.showBlackContours;
+			      updateBlackToggleButton();
+			      drawBase();
+			      drawOverlay();
+			    });
+
+			    toggleGrazingModeButton.addEventListener('click', function() {
+			      state.grazingMode = state.grazingMode === 'symbolic' ? 'returntime' : 'symbolic';
+			      updateGrazingModeButton();
+			      drawBase();
+			      drawOverlay();
+			    });
 
 		    toggleGreenContoursButton.addEventListener('click', function() {
 		      state.showGreenContours = !state.showGreenContours;
@@ -1552,9 +1682,10 @@ function write_html_043(
 		      drawOverlay();
 		    });
 
-		    window.addEventListener('resize', resizeCanvases);
-		    renderIterateControls();
-		    updateBlackToggleButton();
+			    window.addEventListener('resize', resizeCanvases);
+			    renderIterateControls();
+			    updateGrazingModeButton();
+			    updateBlackToggleButton();
 		    updateGreenToggleButton();
 		    updateRedToggleButton();
 		    updateBlueToggleButton();
@@ -1591,27 +1722,59 @@ function main()
     println("Packed $(length(time_words)) quantized return-time words at scale $(time_scale).")
     flush(stdout)
 
-    black_segments_by_iter, red_segments_by_iter, blue_segments_by_iter, purple_segments_by_iter, green_segments_by_iter, point_skip_masks, iterate_stats =
-        collect_sequence_classified_segments_046(dot_grids, time_grids)
-    total_black = sum(length, black_segments_by_iter)
-    total_red = sum(length, red_segments_by_iter)
-    total_blue = sum(length, blue_segments_by_iter)
-    total_purple = sum(length, purple_segments_by_iter)
-    total_green = sum(length, green_segments_by_iter)
-    println("Collected $(total_black) black segments, $(total_red) red segments, $(total_blue) blue segments, $(total_purple) purple segments, and $(total_green) green segments.")
+    symbolic_black_segments_by_iter,
+    symbolic_red_segments_by_iter,
+    symbolic_blue_segments_by_iter,
+    symbolic_purple_segments_by_iter,
+    symbolic_green_segments_by_iter,
+    point_skip_masks,
+    iterate_stats =
+        collect_sequence_classified_segments_046(dot_grids, time_grids, :symbolic)
+    symbolic_total_black = sum(length, symbolic_black_segments_by_iter)
+    symbolic_total_red = sum(length, symbolic_red_segments_by_iter)
+    symbolic_total_blue = sum(length, symbolic_blue_segments_by_iter)
+    symbolic_total_purple = sum(length, symbolic_purple_segments_by_iter)
+    symbolic_total_green = sum(length, symbolic_green_segments_by_iter)
+    println("Collected symbolic-mode segments: $(symbolic_total_black) black, $(symbolic_total_red) red, $(symbolic_total_blue) blue, $(symbolic_total_purple) purple, $(symbolic_total_green) green.")
     flush(stdout)
 
-    black_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
-    red_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
-    blue_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
-    purple_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
-    green_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    returntime_black_segments_by_iter,
+    returntime_red_segments_by_iter,
+    returntime_blue_segments_by_iter,
+    returntime_purple_segments_by_iter,
+    returntime_green_segments_by_iter,
+    _,
+    _ =
+        collect_sequence_classified_segments_046(dot_grids, time_grids, :returntime)
+    returntime_total_black = sum(length, returntime_black_segments_by_iter)
+    returntime_total_red = sum(length, returntime_red_segments_by_iter)
+    returntime_total_blue = sum(length, returntime_blue_segments_by_iter)
+    returntime_total_purple = sum(length, returntime_purple_segments_by_iter)
+    returntime_total_green = sum(length, returntime_green_segments_by_iter)
+    println("Collected return-time mode segments: $(returntime_total_black) black, $(returntime_total_red) red, $(returntime_total_blue) blue, $(returntime_total_purple) purple, $(returntime_total_green) green.")
+    flush(stdout)
+
+    symbolic_black_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    symbolic_red_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    symbolic_blue_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    symbolic_purple_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    symbolic_green_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    returntime_black_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    returntime_red_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    returntime_blue_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    returntime_purple_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    returntime_green_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
     for nominal_iterate in 2:min(8, A27.ATTEMPT025_PLOT_ITERATE_CAP)
-        black_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(black_segments_by_iter[nominal_iterate]))
-        red_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(red_segments_by_iter[nominal_iterate]))
-        blue_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(blue_segments_by_iter[nominal_iterate]))
-        purple_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(purple_segments_by_iter[nominal_iterate]))
-        green_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(green_segments_by_iter[nominal_iterate]))
+        symbolic_black_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(symbolic_black_segments_by_iter[nominal_iterate]))
+        symbolic_red_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(symbolic_red_segments_by_iter[nominal_iterate]))
+        symbolic_blue_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(symbolic_blue_segments_by_iter[nominal_iterate]))
+        symbolic_purple_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(symbolic_purple_segments_by_iter[nominal_iterate]))
+        symbolic_green_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(symbolic_green_segments_by_iter[nominal_iterate]))
+        returntime_black_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(returntime_black_segments_by_iter[nominal_iterate]))
+        returntime_red_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(returntime_red_segments_by_iter[nominal_iterate]))
+        returntime_blue_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(returntime_blue_segments_by_iter[nominal_iterate]))
+        returntime_purple_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(returntime_purple_segments_by_iter[nominal_iterate]))
+        returntime_green_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(returntime_green_segments_by_iter[nominal_iterate]))
     end
     raw_sign_blob = base64_bytes_043(raw_sign_words)
     monotone_sign_blob = base64_bytes_043(monotone_sign_words)
@@ -1619,7 +1782,24 @@ function main()
     time_blob = base64_gzip_bytes_043(time_words)
 
     write_iterate_stats_043(STATS_PATH_043, iterate_stats)
-    write_html_043(HTML_PATH_043, black_blobs, red_blobs, blue_blobs, purple_blobs, green_blobs, raw_sign_blob, monotone_sign_blob, skip_blob, time_blob, time_scale)
+    write_html_043(
+        HTML_PATH_043,
+        symbolic_black_blobs,
+        symbolic_red_blobs,
+        symbolic_blue_blobs,
+        symbolic_purple_blobs,
+        symbolic_green_blobs,
+        returntime_black_blobs,
+        returntime_red_blobs,
+        returntime_blue_blobs,
+        returntime_purple_blobs,
+        returntime_green_blobs,
+        raw_sign_blob,
+        monotone_sign_blob,
+        skip_blob,
+        time_blob,
+        time_scale,
+    )
 
     println("Saved iterate stats to $(STATS_PATH_043)")
     println("Saved explorer HTML to $(HTML_PATH_043)")

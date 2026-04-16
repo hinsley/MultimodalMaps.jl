@@ -18,6 +18,8 @@ Provide an interactive artifact where you can:
 - hide or show red contours globally with a single button
 - hide or show blue contours globally with a single button
 - hide or show purple contours globally with a single button
+- switch the grazing detector between symbolic deletion rules and the old
+  return-time skip rule
 - inspect exact sampled grid points by hover and click
 - recover the exact `(alpha, lambda)` value of the nearest sampled point
 - see the per-point sign sequence and return times for iterates `2:8` in both
@@ -35,6 +37,8 @@ Provide an interactive artifact where you can:
 - old-style skip compression is disabled
 - every mixed square is evaluated independently at every nominal iterate in
   `2:8`
+- every contour is classified from the monotone-sign suffix starting at its
+  own nominal iterate `k`
 - the contour scalar magnitudes stay equal to the saved `|sign(x) * v_x|`
   magnitudes from `attempt-027`
 - the contoured monotone sign at iterate `k` is `+` when the raw dot-product
@@ -43,15 +47,20 @@ Provide an interactive artifact where you can:
 - the two representative sides for each mixed square are still chosen using the
   shorter-return-time convention from the original marching-square logic, but
   no skips are applied to the iterate index
-- blue means grazing by `+` deletion: deleting one `+` monotone sign in `2:8`
-  on either side makes the remaining `2:12` sequences match
-- purple means grazing by `-` deletion: deleting one `-` monotone sign in
-  `2:8` on either side and then inverting the suffix makes the remaining
-  `2:12` sequences match
-- red means coordinate singularity: exactly one consecutive same-sign pair
-  flips sign and the rest of the `2:12` sequences match
-- black means a real contour: the two monotone sign sequences differ in
-  exactly one place over `2:12`
+- in symbolic grazing mode, blue means grazing by `+` deletion: deleting one
+  `+` monotone sign in `k:8` on either side makes the remaining suffixes
+  through `2:12` match
+- in symbolic grazing mode, purple means grazing by `-` deletion: deleting one
+  `-` monotone sign in `k:8` on either side and then inverting the suffix
+  makes the remaining suffixes through `2:12` match
+- in return-time grazing mode, blue means the old return-time skip condition
+  would fire at that square and iterate; purple is unused in that mode
+- red means coordinate singularity: the red test only checks the local window
+  `k:k+2`
+- after a red contour is drawn at iterate `k`, that same square is suppressed
+  at iterate `k+1` so it does not immediately reappear as a black contour
+- black means a real contour: the black test only checks the local window
+  `k:k+1`
 - green means the square is mixed in `2:8` but does not satisfy any of the
   black/red/blue/purple tests
 - the explorer uses the same saved `attempt-027` tangent magnitudes and return
