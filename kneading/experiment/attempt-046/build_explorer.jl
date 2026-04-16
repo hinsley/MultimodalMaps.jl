@@ -481,11 +481,12 @@ function collect_sequence_classified_segments_046(
         for i in 1:n_alpha_cells
             x_tl = Float64(A27.ALPHAS_025[i])
             x_tr = Float64(A27.ALPHAS_025[i + 1])
-            suppress_next_nominal = false
+            pending_red_pairs = UInt8[]
+            pending_red_nominal = 0
             for nominal_iterate in 2:plot_iterate_end
-                if suppress_next_nominal
-                    suppress_next_nominal = false
-                    continue
+                if pending_red_nominal != 0 && nominal_iterate > pending_red_nominal + 1
+                    empty!(pending_red_pairs)
+                    pending_red_nominal = 0
                 end
 
                 evaluation = evaluate_square_local_045(j, i, nominal_iterate, dot_grids, time_grids, zero_skip)
@@ -514,6 +515,11 @@ function collect_sequence_classified_segments_046(
                 isempty(specs) && continue
 
                 classification = classify_contour_046(short_seq, long_seq, evaluation, nominal_iterate; grazing_mode)
+                if classification == :black && pending_red_nominal + 1 == nominal_iterate && !isempty(pending_red_pairs)
+                    filter!(spec -> !has_pair_046(pending_red_pairs, spec[1]), specs)
+                    isempty(specs) && continue
+                end
+
                 segment_count = length(specs)
                 source_local[nominal_iterate] += 1
 
@@ -548,8 +554,16 @@ function collect_sequence_classified_segments_046(
                     green_cell_local[nominal_iterate] += 1
                     green_segment_local[nominal_iterate] += segment_count
                 end
-
-                classification == :red && (suppress_next_nominal = true)
+                if classification == :red
+                    empty!(pending_red_pairs)
+                    @inbounds for spec in specs
+                        push_unique_pair_046!(pending_red_pairs, spec[1])
+                    end
+                    pending_red_nominal = nominal_iterate
+                elseif pending_red_nominal + 1 == nominal_iterate
+                    empty!(pending_red_pairs)
+                    pending_red_nominal = 0
+                end
             end
         end
     end

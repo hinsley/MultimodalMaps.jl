@@ -57,8 +57,9 @@ Provide an interactive artifact where you can:
   would fire at that square and iterate; purple is unused in that mode
 - red means coordinate singularity: the red test only checks the local window
   `k:k+2`
-- after a red contour is drawn at iterate `k`, that same square is suppressed
-  at iterate `k+1` so it does not immediately reappear as a black contour
+- after a red contour is drawn at iterate `k`, only same-edge black follow-up
+  segments at iterate `k+1` are suppressed, so unrelated next-iterate contours
+  in the same square are still allowed through
 - black means a real contour: the black test only checks the local window
   `k:k+1`
 - green means the square is mixed in `2:8` but does not satisfy any of the
