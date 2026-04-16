@@ -51,15 +51,17 @@ Provide an interactive artifact where you can:
   shorter-return-time convention from the original marching-square logic, but
   no skips are applied to the iterate index
 - in symbolic grazing mode, blue means grazing by `+` deletion: deleting one
-  `+` monotone sign in `k:8` on either side makes the remaining suffixes
-  through `2:12` match
+  `+` monotone sign in `k:9` on either side makes the suffixes from that
+  deletion point onward match through `12`
 - in symbolic grazing mode, purple means grazing by `-` deletion: deleting one
-  `-` monotone sign in `k:8` on either side and then inverting the suffix
-  makes the remaining suffixes through `2:12` match
+  `-` monotone sign in `k:9` on either side and then inverting the later
+  suffix makes the sequences match through `12`
 - in return-time grazing mode, blue means the old return-time skip condition
   would fire at that square and iterate; purple is unused in that mode
 - red means coordinate singularity: the red test only checks the local window
   `k:k+2`
+- if a square satisfies both the red test and the symbolic purple test, it is
+  colored red
 - after a red contour is drawn at iterate `k`, only same-edge black follow-up
   segments at iterate `k+1` are suppressed, so unrelated next-iterate contours
   in the same square are still allowed through

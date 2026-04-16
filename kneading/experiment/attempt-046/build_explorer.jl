@@ -299,7 +299,7 @@ end
 
 function grazing_kind_symbolic_046(seq_a::Vector{Int8}, seq_b::Vector{Int8}, nominal_iterate::Int)
     length(seq_a) == length(seq_b) || return nothing
-    max_delete_idx = min(max(0, 8 - nominal_iterate + 1), length(seq_a) - 1)
+    max_delete_idx = min(max(0, 9 - nominal_iterate + 1), length(seq_a) - 1)
     max_delete_idx >= 1 || return nothing
     for delete_idx in 1:max_delete_idx
         if plus_delete_matches_046(seq_a, seq_b, delete_idx) ||
@@ -357,8 +357,9 @@ function classify_contour_046(
         grazing_mode == :symbolic ? grazing_kind_symbolic_046(seq_a, seq_b, nominal_iterate) :
         grazing_mode == :returntime ? grazing_kind_returntime_046(evaluation) :
         error("Unsupported grazing mode: $(grazing_mode)")
-    !isnothing(grazing_kind) && return grazing_kind
+    grazing_kind == :blue && return :blue
     is_coordinate_singularity_046(seq_a, seq_b; window_len=3) && return :red
+    grazing_kind == :purple && return :purple
     real_contour_difference_count_046(seq_a, seq_b; window_len=2) == 1 && return :black
     return :green
 end
@@ -853,7 +854,8 @@ function write_html_043(
     .chip.missing { color: #6b7280; }
     .iter-controls { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin-top: 6px; }
     .iter-controls label { display: flex; align-items: center; gap: 4px; font-size: 10px; }
-    .iter-buttons { display: flex; gap: 5px; margin-bottom: 6px; }
+    .iter-buttons { display: grid; gap: 6px; margin-bottom: 6px; }
+    .iter-button-row { display: flex; flex-wrap: wrap; gap: 5px; }
     .iter-table { width: 100%; border-collapse: collapse; font-size: 10px; table-layout: fixed; }
     .iter-table th, .iter-table td { border-bottom: 1px solid var(--border); padding: 3px 4px; text-align: left; }
     .iter-table th { color: var(--muted); font-weight: 600; background: #fbfbfb; position: sticky; top: 0; }
@@ -884,7 +886,8 @@ function write_html_043(
 		        from iterate `k-1` to `k`, and `-` when it flips. Iterate `2` uses raw iterate `1` as its reference.
 		        Old-style skip compression is disabled here: every mixed square at every nominal iterate in `2:8`
 		        is classified independently, colors are determined from the suffix starting at that contour iterate,
-		        and the classification tests only use the saved symbol data through `2:12`. The grazing-mode toggle
+		        and the classification tests only use the saved symbol data through `2:12`, with symbolic deletions
+		        allowed only in the contour-relative range `k:9`. The grazing-mode toggle
 		        switches between symbolic deletion grazing and the old return-time skip criterion; in return-time mode,
 		        blue marks skip-condition grazings and purple is unused.
 		      </div>
@@ -892,8 +895,8 @@ function write_html_043(
 	      <div class="box">
 	        <div class="legend-row"><span class="swatch black"></span><span>real contour: the two monotone sign sequences differ in exactly one place</span></div>
 	        <div class="legend-row"><span class="swatch red"></span><span>coordinate singularity: one consecutive same-sign pair flips and the rest matches</span></div>
-	        <div class="legend-row"><span class="swatch blue"></span><span>grazing (`+` deletion): deleting one `+` in `2:8` reconciles the two monotone sign sequences across `2:12`</span></div>
-	        <div class="legend-row"><span class="swatch purple"></span><span>grazing (`-` deletion): deleting one `-` in `2:8` and inverting the suffix reconciles the two monotone sign sequences across `2:12`</span></div>
+	        <div class="legend-row"><span class="swatch blue"></span><span>grazing (`+` deletion): at contour iterate `k`, deleting one `+` in the contour-relative range `k:9` makes the suffix from that deletion point onward match through `12`</span></div>
+	        <div class="legend-row"><span class="swatch purple"></span><span>grazing (`-` deletion): at contour iterate `k`, deleting one `-` in the contour-relative range `k:9` and inverting the later suffix makes the sequences match through `12`</span></div>
 	        <div class="legend-row"><span class="swatch green"></span><span>other mixed square: not black, red, blue, or purple under the above tests</span></div>
 	        <div class="legend-row"><span class="swatch cyan"></span><span>selected sampled grid point</span></div>
 	        <div class="legend-row"><span class="swatch" style="background:#bcbcbc;"></span><span>four marched squares around the selected point</span></div>
@@ -901,15 +904,21 @@ function write_html_043(
       <h2>Contours</h2>
       <div class="box">
 		        <div class="iter-buttons">
-		          <button id="showAllIterates">Show All</button>
-		          <button id="hideAllIterates">Hide All</button>
-		          <button id="toggleGrazingMode">Grazing: Symbolic</button>
-		          <button id="toggleBlackContours">Hide Black</button>
-		          <button id="toggleGreenContours">Hide Green</button>
-		          <button id="toggleRedContours">Hide Red</button>
-	          <button id="toggleGreyContours">Hide Blue</button>
-	          <button id="togglePurpleContours">Hide Purple</button>
-	        </div>
+		          <div class="iter-button-row">
+		            <button id="showAllIterates">Show All</button>
+		            <button id="hideAllIterates">Hide All</button>
+		            <button id="toggleGrazingMode">Grazing: Symbolic</button>
+		          </div>
+		          <div class="iter-button-row">
+		            <button id="toggleBlackContours">Hide Black</button>
+		            <button id="toggleGreenContours">Hide Green</button>
+		            <button id="toggleRedContours">Hide Red</button>
+		          </div>
+		          <div class="iter-button-row">
+	              <button id="toggleGreyContours">Hide Blue</button>
+	              <button id="togglePurpleContours">Hide Purple</button>
+		          </div>
+		        </div>
         <div id="iterateControls" class="iter-controls"></div>
       </div>
       <h2>Hover</h2>

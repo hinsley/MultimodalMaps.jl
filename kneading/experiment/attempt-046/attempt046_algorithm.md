@@ -456,15 +456,17 @@ the suffix is too short to prove a stronger color category.
 For each mixed square and nominal iterate `k`, color is assigned in this exact
 order:
 
-1. grazing test
+1. blue symbolic grazing, or blue return-time grazing when that mode is active
 2. coordinate singularity test
-3. real-contour test
-4. fallback green
+3. purple symbolic grazing
+4. real-contour test
+5. fallback green
 
 So:
 
-- grazing overrides everything
-- red overrides black/green
+- blue overrides everything
+- red overrides purple/black/green
+- purple overrides black/green
 - black overrides green
 
 ## 15. Grazing, Symbolic Mode
@@ -481,16 +483,16 @@ The code requires `length(seq_a) == length(seq_b)`.
 The deletion index range is:
 
 ```text
-delete_idx = 1 : min(max(0, 8 - k + 1), length(seq_a) - 1)
+delete_idx = 1 : min(max(0, 9 - k + 1), length(seq_a) - 1)
 ```
 
-So deletion is only allowed on the plotted contour iterates `k:8`.
+So deletion is only allowed on the contour-relative iterate range `k:9`.
 
 ### 15.1 Blue symbolic grazing: delete one `+`
 
 Blue is assigned if, for some `delete_idx`, either side can delete a `+` and
 then match the other side exactly after shifting the remaining suffix left by
-one place.
+one place. Only the suffix from that deletion point onward matters.
 
 Exact condition for candidate side `c` and other side `o`:
 
@@ -506,6 +508,7 @@ c[idx + 1] == o[idx]
 
 Purple is assigned if, for some `delete_idx`, either side can delete a `-` and
 then match the other side after inverting all later signs on the deleted side.
+Only the suffix from that deletion point onward matters.
 
 Exact condition:
 
@@ -517,14 +520,15 @@ Exact condition:
 -c[idx + 1] == o[idx]
 ```
 
-The exact precedence is:
+The exact precedence inside the symbolic grazing scan is:
 
 - scan `delete_idx` in ascending order
 - at each `delete_idx`, test blue first
 - only if blue fails at that same `delete_idx`, test purple
 
 So the earliest matching deletion index wins, with blue taking precedence over
-purple only at the same deletion index.
+purple only at the same deletion index. The later red test can still override
+purple.
 
 ## 16. Grazing, Return-Time Mode
 
@@ -568,7 +572,7 @@ So the honest statement is:
 
 ## 17. Red: Coordinate Singularity
 
-Red is checked after grazing and before black.
+Red is checked after blue and before purple/black.
 
 Only the local window `k:k+2` matters, meaning the first `3` entries of the
 common suffix.
@@ -593,7 +597,7 @@ seq_a[idx + 1] == -seq_b[idx + 1]
 
 ## 18. Black: Real Contour
 
-Black is checked after grazing and red.
+Black is checked after blue, red, and purple.
 
 Only the local window `k:k+1` matters, meaning the first `2` entries of the
 common suffix.
@@ -678,8 +682,9 @@ for each square (j, i):
             continue
 
         classification =
-            blue/purple if grazing test succeeds
+            blue if the blue grazing test succeeds
             else red if coordinate singularity test succeeds
+            else purple if the purple grazing test succeeds
             else black if real-contour test succeeds
             else green
 
