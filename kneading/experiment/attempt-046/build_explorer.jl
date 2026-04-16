@@ -329,11 +329,7 @@ function is_coordinate_singularity_046(seq_a::Vector{Int8}, seq_b::Vector{Int8};
     end
     length(diff_idx) == 2 || return false
     diff_idx[2] == diff_idx[1] + 1 || return false
-    idx = diff_idx[1]
-    return seq_a[idx] == seq_a[idx + 1] &&
-           seq_b[idx] == seq_b[idx + 1] &&
-           seq_a[idx] == -seq_b[idx] &&
-           seq_a[idx + 1] == -seq_b[idx + 1]
+    return all(seq_a[idx] == -seq_b[idx] for idx in diff_idx)
 end
 
 @inline function real_contour_difference_count_046(seq_a::Vector{Int8}, seq_b::Vector{Int8}; window_len::Int=2)
@@ -522,12 +518,14 @@ function collect_sequence_classified_segments_046(
         for i in 1:n_alpha_cells
             x_tl = Float64(A27.ALPHAS_025[i])
             x_tr = Float64(A27.ALPHAS_025[i + 1])
-            pending_red_pairs = UInt8[]
             pending_red_nominal = 0
             for nominal_iterate in 2:plot_iterate_end
-                if pending_red_nominal != 0 && nominal_iterate > pending_red_nominal + 1
-                    empty!(pending_red_pairs)
-                    pending_red_nominal = 0
+                if pending_red_nominal != 0
+                    if nominal_iterate == pending_red_nominal + 1
+                        continue
+                    elseif nominal_iterate > pending_red_nominal + 1
+                        pending_red_nominal = 0
+                    end
                 end
 
                 evaluation = evaluate_square_local_045(j, i, nominal_iterate, dot_grids, time_grids, zero_skip)
@@ -563,10 +561,6 @@ function collect_sequence_classified_segments_046(
                 isempty(specs) && continue
 
                 classification = classify_contour_046(short_seq, long_seq, evaluation, nominal_iterate; grazing_mode)
-                if classification == :black && pending_red_nominal + 1 == nominal_iterate && !isempty(pending_red_pairs)
-                    filter!(spec -> !has_pair_046(pending_red_pairs, spec[1]), specs)
-                    isempty(specs) && continue
-                end
 
                 segment_count = length(specs)
                 source_local[nominal_iterate] += 1
@@ -603,14 +597,7 @@ function collect_sequence_classified_segments_046(
                     green_segment_local[nominal_iterate] += segment_count
                 end
                 if classification == :red
-                    empty!(pending_red_pairs)
-                    @inbounds for spec in specs
-                        push_unique_pair_046!(pending_red_pairs, spec[1])
-                    end
                     pending_red_nominal = nominal_iterate
-                elseif pending_red_nominal + 1 == nominal_iterate
-                    empty!(pending_red_pairs)
-                    pending_red_nominal = 0
                 end
             end
         end
@@ -894,7 +881,7 @@ function write_html_043(
 	      <h2>Legend</h2>
 	      <div class="box">
 	        <div class="legend-row"><span class="swatch black"></span><span>real contour: the two monotone sign sequences differ in exactly one place</span></div>
-	        <div class="legend-row"><span class="swatch red"></span><span>coordinate singularity: one consecutive same-sign pair flips and the rest matches</span></div>
+	        <div class="legend-row"><span class="swatch red"></span><span>coordinate singularity: two consecutive monotone signs flip and the rest matches</span></div>
 	        <div class="legend-row"><span class="swatch blue"></span><span>grazing (`+` deletion): at contour iterate `k`, deleting one `+` in the contour-relative range `k:9` makes the suffix from that deletion point onward match through `12`</span></div>
 	        <div class="legend-row"><span class="swatch purple"></span><span>grazing (`-` deletion): at contour iterate `k`, deleting one `-` in the contour-relative range `k:9` and inverting the later suffix makes the sequences match through `12`</span></div>
 	        <div class="legend-row"><span class="swatch green"></span><span>other mixed square: not black, red, blue, or purple under the above tests</span></div>

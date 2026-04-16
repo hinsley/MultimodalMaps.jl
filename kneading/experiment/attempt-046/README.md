@@ -59,12 +59,12 @@ Provide an interactive artifact where you can:
 - in return-time grazing mode, blue means the old return-time skip condition
   would fire at that square and iterate; purple is unused in that mode
 - red means coordinate singularity: the red test only checks the local window
-  `k:k+2`
+  `k:k+2`, and it fires whenever two consecutive monotone signs flip across the
+  contour, not only when those two signs are equal on each side
 - if a square satisfies both the red test and the symbolic purple test, it is
   colored red
-- after a red contour is drawn at iterate `k`, only same-edge black follow-up
-  segments at iterate `k+1` are suppressed, so unrelated next-iterate contours
-  in the same square are still allowed through
+- after a red contour is drawn at iterate `k`, no contour is searched for in
+  that square at iterate `k+1`
 - black means a real contour: the black test only checks the local window
   `k:k+1`
 - green means the square is mixed in `2:8` but does not satisfy any of the

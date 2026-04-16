@@ -581,18 +581,21 @@ The exact condition is:
 
 1. the two sequences differ in exactly two positions
 2. those two positions are consecutive
-3. on side `a`, the two differing entries are equal to each other
-4. on side `b`, the two differing entries are equal to each other
-5. the differing sign on side `a` is the opposite of the differing sign on
-   side `b`
+3. at each differing position, the two sides have opposite signs
 
 Equivalently, if the differing positions are `idx` and `idx+1`, then:
 
 ```text
-seq_a[idx]     == seq_a[idx + 1]
-seq_b[idx]     == seq_b[idx + 1]
 seq_a[idx]     == -seq_b[idx]
 seq_a[idx + 1] == -seq_b[idx + 1]
+```
+
+There is no longer any requirement that the two flipped signs be equal to each
+other within one side. So both of these count as red:
+
+```text
+(+, +, s)  versus  (-, -, s)
+(+, -, s)  versus  (-, +, s)
 ```
 
 ## 18. Black: Real Contour
@@ -616,44 +619,27 @@ Green means:
 So green is not "no contour". Green is "contour exists, but it did not meet a
 stronger classification rule."
 
-## 20. Same-Edge Red-to-Black Suppression
+## 20. Red Follow-Up Suppression
 
 `attempt-046` has one local follow-up suppression rule.
 
 For each square, the code stores:
 
-- the edge pairs emitted by the most recent red contour in that square
 - the nominal iterate on which that red contour occurred
-
-An edge pair is the unordered pair of intersected edges, packed as:
-
-```text
-pair_code = (min_edge << 4) | max_edge
-```
 
 ### 20.1 What gets suppressed
 
 Only this situation is suppressed:
 
 - a red contour happened at iterate `k`
-- a black contour happens at iterate `k+1`
-- one of the black segments uses the exact same unordered edge pair as one of
-  the red segments from iterate `k`
+- the algorithm reaches iterate `k+1` in the same marched square
 
-Those black segments are removed.
+Then that square is skipped entirely at iterate `k+1`.
 
 ### 20.2 What does not get suppressed
 
-The code does not suppress:
-
-- black segments on different edge pairs
-- blue segments
-- purple segments
-- green segments
-- anything at iterates later than `k+1`
-
-So this is a very narrow rule: "same square, next iterate only, black only,
-same edge pair only."
+The code does not suppress anything beyond that single next iterate. At
+iterate `k+2` and later, the square is considered again as usual.
 
 ## 21. Pseudocode for the attempt-046 Contour Pass
 
@@ -688,19 +674,10 @@ for each square (j, i):
             else black if real-contour test succeeds
             else green
 
-        if classification is black and previous iterate had red in this square:
-            remove black segments whose edge pair matches a pending red edge pair
-            if no black segments remain:
-                continue
-
         emit all surviving segments in their color bucket
 
         if classification is red:
-            pending_red_pairs = the emitted red edge pairs
             pending_red_nominal = k
-        else if pending_red_nominal + 1 == k:
-            clear pending_red_pairs
-            pending_red_nominal = 0
 ```
 
 ## 22. What the Tables in the Explorer Show
