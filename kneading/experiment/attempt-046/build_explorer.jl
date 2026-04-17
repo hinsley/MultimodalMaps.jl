@@ -430,8 +430,10 @@ function classify_contour_046(
     grazing_match !== nothing && grazing_match.kind == :blue && return (:blue, grazing_match)
     is_coordinate_singularity_046(seq_a, seq_b; window_len=3) && return (:red, nothing)
     grazing_match !== nothing && grazing_match.kind == :purple && return (:purple, grazing_match)
-    real_contour_difference_count_046(seq_a, seq_b; window_len=2) == 1 && return (:black, nothing)
-    return (:green, nothing)
+    # Every remaining mixed square is treated as a real contour. The legacy green
+    # bucket is retained only for compatibility with older saved HTML payloads and
+    # should remain empty in regenerated artifacts.
+    return (:black, nothing)
 end
 
 @inline function edge_pair_code_046(edge_a::Int, edge_b::Int)
@@ -1019,7 +1021,7 @@ function write_html_043(
 	        <div class="legend-row"><span class="swatch red"></span><span>coordinate singularity: two consecutive monotone signs flip and the rest matches</span></div>
 	        <div class="legend-row"><span class="swatch blue"></span><span>grazing (`+` deletion): deleting one `+` in the contour-relative range `k:9` reconciles the suffix, and later nominal iterates inherit that local skipped index on the affected side</span></div>
 	        <div class="legend-row"><span class="swatch purple"></span><span>grazing (`-` deletion): deleting one `-` and inverting the later suffix reconciles the contour-relative suffix, and later nominal iterates inherit both the local skipped index and the persistent suffix inversion on the affected side</span></div>
-	        <div class="legend-row"><span class="swatch green"></span><span>other mixed square: not black, red, blue, or purple under the above tests</span></div>
+	        <div class="legend-row"><span class="swatch green"></span><span>legacy residual class retained for compatibility; regenerated artifacts should leave it empty</span></div>
 	        <div class="legend-row"><span class="swatch cyan"></span><span>selected marched square</span></div>
 	        <div class="legend-row"><span class="swatch" style="background:#d97706;"></span><span>monotone-table row color when no contour is produced at that nominal iterate</span></div>
 	      </div>
@@ -1654,8 +1656,7 @@ function write_html_043(
       if (grazingMatch && grazingMatch.kind === 'blue') return { classification: 'blue', grazingMatch: grazingMatch };
       if (isCoordinateSingularity(seqA, seqB, 3)) return { classification: 'red', grazingMatch: null };
       if (grazingMatch && grazingMatch.kind === 'purple') return { classification: 'purple', grazingMatch: grazingMatch };
-      if (realContourDifferenceCount(seqA, seqB, 2) === 1) return { classification: 'black', grazingMatch: null };
-      return { classification: 'green', grazingMatch: null };
+      return { classification: 'black', grazingMatch: null };
     }
 
     function scheduleGrazingUpdate(squareState, evaluation, reps, grazingMatch, nominalIterate) {

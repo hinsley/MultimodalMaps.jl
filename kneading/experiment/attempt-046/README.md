@@ -3,7 +3,7 @@
 `attempt-046` builds a self-contained HTML explorer for the saved
 `attempt-027` Shimizu-Morioka `|x|`-maximum sweep. It uses the derived
 monotone sign sequence instead of the raw per-iterate tangent sign, and it
-classifies each mixed contour in `2:8` as black, red, blue, purple, or green
+classifies each mixed contour in `2:8` as black, red, blue, or purple
 from the two representative monotone sign sequences on either side of the
 contour.
 
@@ -14,7 +14,7 @@ Provide an interactive artifact where you can:
 - see the overlaid nominal-iterate `2:8` contour plot directly in the browser
 - toggle individual nominal iterates on and off with checkboxes
 - hide or show black contours globally with a single button
-- hide or show green contours globally with a single button
+- hide or show the legacy green layer globally with a single button
 - hide or show red contours globally with a single button
 - hide or show blue contours globally with a single button
 - hide or show purple contours globally with a single button
@@ -72,8 +72,9 @@ Provide an interactive artifact where you can:
   that square at iterate `k+1`
 - black means a real contour: the black test only checks the local window
   `k:k+1`
-- green means the square is mixed in `2:8` but does not satisfy any of the
-  black/red/blue/purple tests
+- the legacy green bucket is retained in the UI and payload format for
+  compatibility with older artifacts, but regenerated artifacts should leave
+  it empty
 - the explorer uses the same saved `attempt-027` tangent magnitudes and return
   times, but swaps in those monotone signs before any contouring
 - the classification tests are intentionally truncated to iterates `2:16`
@@ -88,7 +89,8 @@ The generated HTML is self-contained:
 - red contour segments are embedded the same way
 - blue contour segments are embedded the same way
 - purple contour segments are embedded the same way
-- green contour segments are embedded the same way
+- legacy green contour segments are embedded the same way, but regenerated
+  artifacts should leave that payload empty
 - sampled-point sign sequences for iterates `2:16` are embedded as packed
   `UInt32` words, with 2 bits per iterate
 - sampled-point skip flags for iterates `2:8` are embedded as packed `UInt8`

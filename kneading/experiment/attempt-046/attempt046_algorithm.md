@@ -495,14 +495,14 @@ order:
 2. coordinate singularity test
 3. purple symbolic grazing
 4. real-contour test
-5. fallback green
+5. residual mixed case, which is folded into black
 
 So:
 
 - blue overrides everything
-- red overrides purple/black/green
-- purple overrides black/green
-- black overrides green
+- red overrides purple/black
+- purple overrides black
+- black is the final fallback for any remaining mixed square
 
 ## 15. Grazing, Symbolic Mode
 
@@ -645,16 +645,14 @@ common suffix.
 Black is assigned exactly when those first two entries differ in exactly one
 position.
 
-## 19. Green: Fallback
+## 19. Legacy Green Bucket
 
-Green means:
+The explorer payload still carries a green segment layer for compatibility with
+older artifacts, but regenerated `attempt-046` artifacts should leave it
+empty.
 
-- the square is mixed at the nominal iterate
-- marching squares found one or more contour segments
-- the contour was not classified as grazing, coordinate singularity, or black
-
-So green is not "no contour". Green is "contour exists, but it did not meet a
-stronger classification rule."
+Any square that reaches the residual mixed case after the blue/red/purple tests
+is treated as black instead of green.
 
 ## 20. Red Follow-Up Suppression
 
@@ -708,8 +706,7 @@ for each square (j, i):
             blue if the blue grazing test succeeds
             else red if coordinate singularity test succeeds
             else purple if the purple grazing test succeeds
-            else black if real-contour test succeeds
-            else green
+            else black
 
         emit all surviving segments in their color bucket
 
