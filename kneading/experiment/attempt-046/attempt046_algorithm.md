@@ -721,7 +721,11 @@ For sampled grid points, the explorer shows:
 - raw sign sequence for iterates `2:16`
 - monotone sign sequence for iterates `2:16`
 - interval return times for iterates `2:16`
-- the old skip column, which is intentionally always `no` in `attempt-046`
+- the effective square-local carried-forward skip state for iterates `2:16`
+
+That skip table is not the saved attempt-027 point-level skip bitmask. It is
+the local skip state that the selected grazing mode has accumulated inside the
+selected marched square by that nominal iterate.
 
 The displayed times are packed into the HTML after scalar quantization:
 

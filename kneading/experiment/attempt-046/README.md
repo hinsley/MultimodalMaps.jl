@@ -26,7 +26,7 @@ Provide an interactive artifact where you can:
   the hover table and the selected-point table
 - see both the raw dot-product sign sequence and the monotone sign sequence in
   those tables
-- see that the retained skip column stays empty in this no-old-skip variant
+- see the effective square-local carried-forward skip state for iterates `2:16`
 - highlight the four marched squares surrounding the selected sampled point
 - see monotone signs, where the sign at iterate `k` is `+` if the raw
   dot-product sign stayed the same from iterate `k-1` to `k`, and `-` if it
@@ -72,6 +72,9 @@ Provide an interactive artifact where you can:
   that square at iterate `k+1`
 - black means a real contour: the black test only checks the local window
   `k:k+1`
+- the skip table in the selected-square panel reports the effective local skip
+  state induced by the currently selected grazing mode, not the saved
+  attempt-027 pointwise skip bitmask
 - the legacy green bucket is retained in the UI and payload format for
   compatibility with older artifacts, but regenerated artifacts should leave
   it empty

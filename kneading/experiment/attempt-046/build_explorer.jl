@@ -1052,7 +1052,7 @@ function write_html_043(
       <h2>Selected</h2>
       <div class="box">
 	        <div id="selectedInfo" class="kv compact-meta"></div>
-	        <div class="highlight-note">Old-style skip compression is disabled in this version, so the skip column should remain `no`.</div>
+	        <div class="highlight-note">The skip table shows the effective square-local carried-forward skip state under the currently selected grazing mode.</div>
           <div class="table-stack">
             <div>
               <div class="table-block-title">Raw Dot Sign</div>
@@ -1082,7 +1082,7 @@ function write_html_043(
               </table>
             </div>
             <div>
-              <div class="table-block-title">Legacy Skip Flag</div>
+              <div class="table-block-title">Effective Skip Flag</div>
               <table class="iter-table">
                 <thead>
                   <tr><th>Iter</th><th>TL</th><th>TR</th><th>BR</th><th>BL</th></tr>
@@ -1488,11 +1488,6 @@ function write_html_043(
 	      }).join('');
     }
 
-    function pointSkipFlag(point, nominalIterate) {
-      if (nominalIterate > 8) return false;
-      return !!(point.skipWord & (1 << (nominalIterate - 2)));
-    }
-
     function decodeTimeForPoint(pointIdx, nominalIterate) {
       if (!timeWords || timeWords.length === 0) return null;
       const word = timeWords[pointIdx * $(TABLE_ITERATE_COUNT_046) + (nominalIterate - $(TABLE_ITERATE_START_046))];
@@ -1679,8 +1674,13 @@ function write_html_043(
       }
     }
 
-    function computeSquareContourColors(square) {
+    function displayCornerToInternalIndex(label) {
+      return label === 'TL' ? 3 : label === 'TR' ? 2 : label === 'BR' ? 1 : 0;
+    }
+
+    function computeSquareContourTrace(square) {
       const colors = {};
+      const skipStates = {};
       const points = squareInternalPoints(square);
       const squareState = {
         skip: [0, 0, 0, 0],
@@ -1690,10 +1690,16 @@ function write_html_043(
       };
       let pendingRedNominal = 0;
 
-      for (let nominal = 2; nominal <= 8; nominal += 1) {
+      for (let nominal = 2; nominal <= 16; nominal += 1) {
         for (let corner = 0; corner < 4; corner += 1) {
           squareState.skip[corner] += squareState.scheduledSkip[corner][nominal];
           squareState.flip[corner] = (squareState.flip[corner] + squareState.scheduledFlip[corner][nominal]) & 1;
+        }
+        skipStates[nominal] = squareState.skip.slice();
+
+        if (nominal > 8) {
+          colors[nominal] = 'orange';
+          continue;
         }
 
         if (pendingRedNominal !== 0) {
@@ -1750,8 +1756,7 @@ function write_html_043(
         if (result.classification === 'red') pendingRedNominal = nominal;
       }
 
-      for (let nominal = 9; nominal <= 16; nominal += 1) colors[nominal] = 'orange';
-      return colors;
+      return { colors: colors, skipStates: skipStates };
     }
 
     function rowBaseClass(nominalIterate) {
@@ -1779,7 +1784,7 @@ function write_html_043(
       const rows = [];
       for (let nominal = 2; nominal <= 16; nominal += 1) {
         const cells = corners.map(function(label) {
-          return '<td>' + renderer(square.corners[label], nominal) + '</td>';
+          return '<td>' + renderer(square.corners[label], nominal, label) + '</td>';
         }).join('');
         const style = rowStyleFn ? rowStyleFn(nominal) : '';
         rows.push('<tr class="' + rowBaseClass(nominal) + '"' + style + '><td>' + nominal + '</td>' + cells + '</tr>');
@@ -1797,7 +1802,8 @@ function write_html_043(
         return;
       }
 
-      const contourColors = computeSquareContourColors(square);
+      const contourTrace = computeSquareContourTrace(square);
+      const contourColors = contourTrace.colors;
       selectedDotTableBody.innerHTML = renderSquareTableRows(square, function(point, nominal) {
         return codeText(pointCode(point, 'raw', nominal));
       });
@@ -1813,8 +1819,10 @@ function write_html_043(
       selectedTimeTableBody.innerHTML = renderSquareTableRows(square, function(point, nominal) {
         return formatTimeValue(decodeTimeForPoint(point.idx, nominal));
       });
-      selectedSkipTableBody.innerHTML = renderSquareTableRows(square, function(point, nominal) {
-        return pointSkipFlag(point, nominal) ? 'yes' : 'no';
+      selectedSkipTableBody.innerHTML = renderSquareTableRows(square, function(_point, nominal, label) {
+        const internalIdx = displayCornerToInternalIndex(label);
+        const skipState = contourTrace.skipStates[nominal] || [0, 0, 0, 0];
+        return skipState[internalIdx] > 0 ? 'yes' : 'no';
       });
     }
 
