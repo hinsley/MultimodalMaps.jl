@@ -994,6 +994,8 @@ function write_html_043(
     .iter-row.late { color: #a8afb8; }
     .highlight-note { margin-top: 4px; font-size: 10px; color: var(--muted); }
     .compact-meta { margin-bottom: 4px; }
+    .table-stack { display: grid; gap: 8px; }
+    .table-block-title { margin: 0 0 4px 0; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
   </style>
 </head>
 <body>
@@ -1002,7 +1004,7 @@ function write_html_043(
       <div id="toolbar">
         <button id="resetView">Reset View</button>
         <button id="clearSelection">Clear Selection</button>
-        <span class="note">Wheel: zoom. Drag: pan. Hover snaps to the nearest sampled parameter point. Click pins a point.</span>
+        <span class="note">Wheel: zoom. Drag: pan. Hover shows the marched square under the cursor. Click pins one square.</span>
       </div>
       <div id="viewerWrap">
         <canvas id="baseCanvas"></canvas>
@@ -1018,8 +1020,8 @@ function write_html_043(
 	        <div class="legend-row"><span class="swatch blue"></span><span>grazing (`+` deletion): deleting one `+` in the contour-relative range `k:9` reconciles the suffix, and later nominal iterates inherit that local skipped index on the affected side</span></div>
 	        <div class="legend-row"><span class="swatch purple"></span><span>grazing (`-` deletion): deleting one `-` and inverting the later suffix reconciles the contour-relative suffix, and later nominal iterates inherit both the local skipped index and the persistent suffix inversion on the affected side</span></div>
 	        <div class="legend-row"><span class="swatch green"></span><span>other mixed square: not black, red, blue, or purple under the above tests</span></div>
-	        <div class="legend-row"><span class="swatch cyan"></span><span>selected sampled grid point</span></div>
-	        <div class="legend-row"><span class="swatch" style="background:#bcbcbc;"></span><span>four marched squares around the selected point</span></div>
+	        <div class="legend-row"><span class="swatch cyan"></span><span>selected marched square</span></div>
+	        <div class="legend-row"><span class="swatch" style="background:#d97706;"></span><span>monotone-table row color when no contour is produced at that nominal iterate</span></div>
 	      </div>
       <h2>Contours</h2>
       <div class="box">
@@ -1044,23 +1046,49 @@ function write_html_043(
       <h2>Hover</h2>
       <div class="box">
         <div id="hoverInfo" class="kv compact-meta"></div>
-	        <table class="iter-table">
-	          <thead>
-	            <tr><th>Iter</th><th>Dot</th><th>Mono</th><th>Time</th><th>Skip</th></tr>
-	          </thead>
-	          <tbody id="hoverTableBody"></tbody>
-	        </table>
       </div>
       <h2>Selected</h2>
       <div class="box">
 	        <div id="selectedInfo" class="kv compact-meta"></div>
 	        <div class="highlight-note">Old-style skip compression is disabled in this version, so the skip column should remain `no`.</div>
-	        <table class="iter-table">
-	          <thead>
-	            <tr><th>Iter</th><th>Dot</th><th>Mono</th><th>Time</th><th>Skip</th></tr>
-	          </thead>
-	          <tbody id="selectedTableBody"></tbody>
-	        </table>
+          <div class="table-stack">
+            <div>
+              <div class="table-block-title">Raw Dot Sign</div>
+              <table class="iter-table">
+                <thead>
+                  <tr><th>Iter</th><th>TL</th><th>TR</th><th>BR</th><th>BL</th></tr>
+                </thead>
+                <tbody id="selectedDotTableBody"></tbody>
+              </table>
+            </div>
+            <div>
+              <div class="table-block-title">Monotone Sign</div>
+              <table class="iter-table">
+                <thead>
+                  <tr><th>Iter</th><th>TL</th><th>TR</th><th>BR</th><th>BL</th></tr>
+                </thead>
+                <tbody id="selectedMonotoneTableBody"></tbody>
+              </table>
+            </div>
+            <div>
+              <div class="table-block-title">Interval Return Time</div>
+              <table class="iter-table">
+                <thead>
+                  <tr><th>Iter</th><th>TL</th><th>TR</th><th>BR</th><th>BL</th></tr>
+                </thead>
+                <tbody id="selectedTimeTableBody"></tbody>
+              </table>
+            </div>
+            <div>
+              <div class="table-block-title">Legacy Skip Flag</div>
+              <table class="iter-table">
+                <thead>
+                  <tr><th>Iter</th><th>TL</th><th>TR</th><th>BR</th><th>BL</th></tr>
+                </thead>
+                <tbody id="selectedSkipTableBody"></tbody>
+              </table>
+            </div>
+          </div>
       </div>
       <h2>View</h2>
       <div class="box">
@@ -1258,9 +1286,11 @@ function write_html_043(
     const overlayCtx = overlayCanvas.getContext('2d');
     const viewerWrap = document.getElementById('viewerWrap');
     const hoverInfo = document.getElementById('hoverInfo');
-    const hoverTableBody = document.getElementById('hoverTableBody');
     const selectedInfo = document.getElementById('selectedInfo');
-	    const selectedTableBody = document.getElementById('selectedTableBody');
+	    const selectedDotTableBody = document.getElementById('selectedDotTableBody');
+	    const selectedMonotoneTableBody = document.getElementById('selectedMonotoneTableBody');
+	    const selectedTimeTableBody = document.getElementById('selectedTimeTableBody');
+	    const selectedSkipTableBody = document.getElementById('selectedSkipTableBody');
 	    const viewInfo = document.getElementById('viewInfo');
 	    const iterateControls = document.getElementById('iterateControls');
 	    const resetViewButton = document.getElementById('resetView');
@@ -1346,6 +1376,10 @@ function write_html_043(
       return j * CONFIG.nAlpha + i;
     }
 
+    function cellIndex(i, j) {
+      return j * (CONFIG.nAlpha - 1) + i;
+    }
+
     function plotX(alpha) {
       const r = cssRect();
       return r.x + (alpha - state.view.a0) * r.w / (state.view.a1 - state.view.a0);
@@ -1371,21 +1405,39 @@ function write_html_043(
       return Math.max(lo, Math.min(hi, value));
     }
 
-    function sampleNearestPoint(alpha, lambda) {
-      const i = clampInt(Math.round((alpha - CONFIG.alphaMin) / alphaStep()), 0, CONFIG.nAlpha - 1);
-      const j = clampInt(Math.round((lambda - CONFIG.lambdaMin) / lambdaStep()), 0, CONFIG.nLambda - 1);
+    function samplePoint(i, j) {
       const idx = pointIndex(i, j);
-	      return {
-	        i,
-	        j,
-	        idx,
-	        alpha: alphaAt(i),
-	        lambda: lambdaAt(j),
-	        rawSignWord: rawSignWords[idx],
-	        monotoneSignWord: monotoneSignWords[idx],
-	        skipWord: skipWords[idx]
-	      };
-	    }
+      return {
+        i,
+        j,
+        idx,
+        alpha: alphaAt(i),
+        lambda: lambdaAt(j),
+        rawSignWord: rawSignWords[idx],
+        monotoneSignWord: monotoneSignWords[idx],
+        skipWord: skipWords[idx]
+      };
+    }
+
+    function sampleSquareAt(alpha, lambda) {
+      const i = clampInt(Math.floor((alpha - CONFIG.alphaMin) / alphaStep()), 0, CONFIG.nAlpha - 2);
+      const j = clampInt(Math.floor((lambda - CONFIG.lambdaMin) / lambdaStep()), 0, CONFIG.nLambda - 2);
+      return {
+        i,
+        j,
+        idx: cellIndex(i, j),
+        alpha0: alphaAt(i),
+        alpha1: alphaAt(i + 1),
+        lambda0: lambdaAt(j),
+        lambda1: lambdaAt(j + 1),
+        corners: {
+          TL: samplePoint(i, j + 1),
+          TR: samplePoint(i + 1, j + 1),
+          BR: samplePoint(i + 1, j),
+          BL: samplePoint(i, j)
+        }
+      };
+    }
 
     function decodeSignWord(word) {
       const result = [];
@@ -1404,30 +1456,39 @@ function write_html_043(
       return code === 2 ? 'pos' : code === 1 ? 'neg' : 'missing';
     }
 
-    function setInfo(target, point, emptyText) {
-      if (!point) {
+    function signValueFromCode(code) {
+      return code === 2 ? 1 : code === 1 ? -1 : 0;
+    }
+
+    function pointCode(point, kind, nominalIterate) {
+      const word = kind === 'raw' ? point.rawSignWord : point.monotoneSignWord;
+      return (word >>> (2 * (nominalIterate - $(TABLE_ITERATE_START_046)))) & 0x3;
+    }
+
+    function pointSignValue(point, kind, nominalIterate) {
+      return signValueFromCode(pointCode(point, kind, nominalIterate));
+    }
+
+    function setSquareInfo(target, square, emptyText) {
+      if (!square) {
         target.innerHTML = '<div class="small">' + emptyText + '</div>';
         return;
       }
 	      target.innerHTML = [
-	        ['alpha', point.alpha.toFixed(6)],
-	        ['lambda', point.lambda.toFixed(6)],
-	        ['grid index', '(' + point.i + ', ' + point.j + ')'],
-	        ['flat index', String(point.idx)],
-		        ['raw sign word', '0x' + point.rawSignWord.toString(16).padStart(8, '0')],
-		        ['monotone sign word', '0x' + point.monotoneSignWord.toString(16).padStart(8, '0')]
+	        ['alpha span', square.alpha0.toFixed(6) + ' .. ' + square.alpha1.toFixed(6)],
+	        ['lambda span', square.lambda0.toFixed(6) + ' .. ' + square.lambda1.toFixed(6)],
+	        ['cell index', '(' + square.i + ', ' + square.j + ')'],
+	        ['flat cell', String(square.idx)],
+	        ['TL point', '(' + square.corners.TL.i + ', ' + square.corners.TL.j + ')'],
+	        ['BR point', '(' + square.corners.BR.i + ', ' + square.corners.BR.j + ')']
 	      ].map(function(pair) {
 	        return '<div class="label">' + pair[0] + '</div><div class="mono">' + pair[1] + '</div>';
 	      }).join('');
     }
 
-    function decodeSkipWord(word) {
-      const result = [];
-      for (let nominal = $(TABLE_ITERATE_START_046); nominal <= $(TABLE_ITERATE_END_046); nominal += 1) {
-        const skip = nominal <= 8 ? !!(word & (1 << (nominal - 2))) : false;
-        result.push({ nominal, skip });
-      }
-      return result;
+    function pointSkipFlag(point, nominalIterate) {
+      if (nominalIterate > 8) return false;
+      return !!(point.skipWord & (1 << (nominalIterate - 2)));
     }
 
     function decodeTimeForPoint(pointIdx, nominalIterate) {
@@ -1444,33 +1505,316 @@ function write_html_043(
       return value.toFixed(0);
     }
 
-    function setPointTable(target, point, emptyText) {
-      if (!point) {
-        target.innerHTML = '<tr><td colspan="5" class="small">' + emptyText + '</td></tr>';
+    function squareInternalPoints(square) {
+      return [square.corners.BL, square.corners.BR, square.corners.TR, square.corners.TL];
+    }
+
+    function chooseRepresentatives(evaluation) {
+      let negRep = -1;
+      let posRep = -1;
+      for (let idx = 0; idx < 4; idx += 1) {
+        if (evaluation.signs[idx] === -1 && negRep === -1) negRep = idx;
+        else if (evaluation.signs[idx] === 1 && posRep === -1) posRep = idx;
+      }
+      if (negRep === -1 || posRep === -1) return null;
+      if (evaluation.currentTimes[negRep] < evaluation.currentTimes[posRep]) {
+        return { shorterSign: -1, shortRep: negRep, longRep: posRep };
+      }
+      return { shorterSign: 1, shortRep: posRep, longRep: negRep };
+    }
+
+    function evaluateSquareLocal(square, nominalIterate, skip, flip) {
+      const points = squareInternalPoints(square);
+      const signs = [];
+      const currentTimes = [];
+      const nextTimes = [];
+      const effectiveIterates = [];
+      for (let corner = 0; corner < 4; corner += 1) {
+        const effectiveIterate = nominalIterate + skip[corner];
+        if (effectiveIterate < 1 || effectiveIterate > 16 || effectiveIterate + 1 > 16) {
+          return { status: 'missing' };
+        }
+        let sign = pointSignValue(points[corner], 'monotone', effectiveIterate);
+        if (sign === 0) return { status: 'missing' };
+        if (flip[corner] % 2 === 1) sign = -sign;
+        const currentTime = decodeTimeForPoint(points[corner].idx, effectiveIterate);
+        const nextTime = decodeTimeForPoint(points[corner].idx, effectiveIterate + 1);
+        if (currentTime === null || nextTime === null) return { status: 'missing' };
+        signs.push(sign);
+        currentTimes.push(currentTime);
+        nextTimes.push(nextTime);
+        effectiveIterates.push(effectiveIterate);
+      }
+      const allSame = signs.every(function(sign) { return sign === signs[0]; });
+      return {
+        status: allSame ? 'constant' : 'mixed',
+        signs: signs,
+        currentTimes: currentTimes,
+        nextTimes: nextTimes,
+        effectiveIterates: effectiveIterates
+      };
+    }
+
+    function pointSignSequenceEffective(point, firstIter, lastIter, activeSkip, activeFlip, scheduledSkip, scheduledFlip) {
+      const seq = [];
+      let skipCount = activeSkip;
+      let flipParity = activeFlip;
+      for (let nominal = firstIter; nominal <= lastIter; nominal += 1) {
+        if (nominal > firstIter) {
+          skipCount += scheduledSkip[nominal];
+          flipParity = (flipParity + scheduledFlip[nominal]) & 1;
+        }
+        const effectiveIterate = nominal + skipCount;
+        if (effectiveIterate < 1 || effectiveIterate > 16) break;
+        let sign = pointSignValue(point, 'monotone', effectiveIterate);
+        if (sign === 0) break;
+        if (flipParity % 2 === 1) sign = -sign;
+        seq.push(sign);
+      }
+      return seq;
+    }
+
+    function plusDeleteMatches(candidate, other, deleteIdx) {
+      if (candidate[deleteIdx - 1] !== 1) return false;
+      for (let idx = 0; idx < deleteIdx - 1; idx += 1) {
+        if (candidate[idx] !== other[idx]) return false;
+      }
+      for (let idx = deleteIdx - 1; idx < candidate.length - 1; idx += 1) {
+        if (candidate[idx + 1] !== other[idx]) return false;
+      }
+      return true;
+    }
+
+    function minusDeleteMatches(candidate, other, deleteIdx) {
+      if (candidate[deleteIdx - 1] !== -1) return false;
+      for (let idx = 0; idx < deleteIdx - 1; idx += 1) {
+        if (candidate[idx] !== other[idx]) return false;
+      }
+      for (let idx = deleteIdx - 1; idx < candidate.length - 1; idx += 1) {
+        if (-candidate[idx + 1] !== other[idx]) return false;
+      }
+      return true;
+    }
+
+    function grazingMatchSymbolic(seqA, seqB, nominalIterate) {
+      if (seqA.length !== seqB.length) return null;
+      const maxDeleteIdx = Math.min(Math.max(0, 9 - nominalIterate + 1), seqA.length - 1);
+      if (maxDeleteIdx < 1) return null;
+      for (let deleteIdx = 1; deleteIdx <= maxDeleteIdx; deleteIdx += 1) {
+        if (plusDeleteMatches(seqA, seqB, deleteIdx)) return { kind: 'blue', mutateSide: 'a', deleteIdx: deleteIdx };
+        if (plusDeleteMatches(seqB, seqA, deleteIdx)) return { kind: 'blue', mutateSide: 'b', deleteIdx: deleteIdx };
+        if (minusDeleteMatches(seqA, seqB, deleteIdx)) return { kind: 'purple', mutateSide: 'a', deleteIdx: deleteIdx };
+        if (minusDeleteMatches(seqB, seqA, deleteIdx)) return { kind: 'purple', mutateSide: 'b', deleteIdx: deleteIdx };
+      }
+      return null;
+    }
+
+    function grazingMatchReturnTime(evaluation) {
+      const reps = chooseRepresentatives(evaluation);
+      if (!reps) return null;
+      const errSkip = Math.abs(
+        evaluation.currentTimes[reps.shortRep] +
+        evaluation.nextTimes[reps.shortRep] -
+        evaluation.currentTimes[reps.longRep]
+      );
+      const errNoSkip = Math.abs(
+        evaluation.currentTimes[reps.shortRep] -
+        evaluation.currentTimes[reps.longRep]
+      );
+      return errSkip < errNoSkip ? { kind: 'blue', mutateSide: 'shorter', deleteIdx: 1 } : null;
+    }
+
+    function isCoordinateSingularity(seqA, seqB, windowLen) {
+      const n = Math.min(windowLen, seqA.length, seqB.length);
+      if (n !== windowLen) return false;
+      const diffIdx = [];
+      for (let idx = 0; idx < n; idx += 1) {
+        if (seqA[idx] !== seqB[idx]) diffIdx.push(idx);
+      }
+      return diffIdx.length === 2 &&
+        diffIdx[1] === diffIdx[0] + 1 &&
+        seqA[diffIdx[0]] === -seqB[diffIdx[0]] &&
+        seqA[diffIdx[1]] === -seqB[diffIdx[1]];
+    }
+
+    function realContourDifferenceCount(seqA, seqB, windowLen) {
+      const n = Math.min(windowLen, seqA.length, seqB.length);
+      if (n !== windowLen) return Number.MAX_SAFE_INTEGER;
+      let count = 0;
+      for (let idx = 0; idx < n; idx += 1) {
+        if (seqA[idx] !== seqB[idx]) count += 1;
+      }
+      return count;
+    }
+
+    function classifyContour(seqA, seqB, evaluation, nominalIterate, grazingMode) {
+      const grazingMatch = grazingMode === 'symbolic' ?
+        grazingMatchSymbolic(seqA, seqB, nominalIterate) :
+        grazingMatchReturnTime(evaluation);
+      if (grazingMatch && grazingMatch.kind === 'blue') return { classification: 'blue', grazingMatch: grazingMatch };
+      if (isCoordinateSingularity(seqA, seqB, 3)) return { classification: 'red', grazingMatch: null };
+      if (grazingMatch && grazingMatch.kind === 'purple') return { classification: 'purple', grazingMatch: grazingMatch };
+      if (realContourDifferenceCount(seqA, seqB, 2) === 1) return { classification: 'black', grazingMatch: null };
+      return { classification: 'green', grazingMatch: null };
+    }
+
+    function scheduleGrazingUpdate(squareState, evaluation, reps, grazingMatch, nominalIterate) {
+      if (!grazingMatch) return;
+      const mutateRep =
+        grazingMatch.mutateSide === 'a' ? reps.shortRep :
+        grazingMatch.mutateSide === 'b' ? reps.longRep :
+        grazingMatch.mutateSide === 'shorter' ? reps.shortRep :
+        -1;
+      if (mutateRep === -1) return;
+      const activation = Math.max(nominalIterate + 1, nominalIterate + grazingMatch.deleteIdx - 1);
+      if (activation > 16) return;
+      const mutateSign = evaluation.signs[mutateRep];
+      for (let corner = 0; corner < 4; corner += 1) {
+        if (evaluation.signs[corner] !== mutateSign) continue;
+        squareState.scheduledSkip[corner][activation] += 1;
+        if (grazingMatch.kind === 'purple') {
+          squareState.scheduledFlip[corner][activation] ^= 1;
+        }
+      }
+    }
+
+    function computeSquareContourColors(square) {
+      const colors = {};
+      const points = squareInternalPoints(square);
+      const squareState = {
+        skip: [0, 0, 0, 0],
+        flip: [0, 0, 0, 0],
+        scheduledSkip: Array.from({ length: 4 }, function() { return new Array(17).fill(0); }),
+        scheduledFlip: Array.from({ length: 4 }, function() { return new Array(17).fill(0); })
+      };
+      let pendingRedNominal = 0;
+
+      for (let nominal = 2; nominal <= 8; nominal += 1) {
+        for (let corner = 0; corner < 4; corner += 1) {
+          squareState.skip[corner] += squareState.scheduledSkip[corner][nominal];
+          squareState.flip[corner] = (squareState.flip[corner] + squareState.scheduledFlip[corner][nominal]) & 1;
+        }
+
+        if (pendingRedNominal !== 0) {
+          if (nominal === pendingRedNominal + 1) {
+            colors[nominal] = 'orange';
+            continue;
+          } else if (nominal > pendingRedNominal + 1) {
+            pendingRedNominal = 0;
+          }
+        }
+
+        const evaluation = evaluateSquareLocal(square, nominal, squareState.skip, squareState.flip);
+        if (evaluation.status !== 'mixed') {
+          colors[nominal] = 'orange';
+          continue;
+        }
+
+        const reps = chooseRepresentatives(evaluation);
+        if (!reps) {
+          colors[nominal] = 'orange';
+          continue;
+        }
+
+        const seqA = pointSignSequenceEffective(
+          points[reps.shortRep],
+          nominal,
+          16,
+          squareState.skip[reps.shortRep],
+          squareState.flip[reps.shortRep],
+          squareState.scheduledSkip[reps.shortRep],
+          squareState.scheduledFlip[reps.shortRep]
+        );
+        const seqB = pointSignSequenceEffective(
+          points[reps.longRep],
+          nominal,
+          16,
+          squareState.skip[reps.longRep],
+          squareState.flip[reps.longRep],
+          squareState.scheduledSkip[reps.longRep],
+          squareState.scheduledFlip[reps.longRep]
+        );
+        const nCommon = Math.min(seqA.length, seqB.length);
+        if (nCommon === 0) {
+          colors[nominal] = 'orange';
+          continue;
+        }
+        seqA.length = nCommon;
+        seqB.length = nCommon;
+        const result = classifyContour(seqA, seqB, evaluation, nominal, state.grazingMode);
+        colors[nominal] = result.classification;
+        if (result.classification === 'blue' || result.classification === 'purple') {
+          scheduleGrazingUpdate(squareState, evaluation, reps, result.grazingMatch, nominal);
+        }
+        if (result.classification === 'red') pendingRedNominal = nominal;
+      }
+
+      for (let nominal = 9; nominal <= 16; nominal += 1) colors[nominal] = 'orange';
+      return colors;
+    }
+
+    function rowBaseClass(nominalIterate) {
+      const rowClasses = ['iter-row', 'normal'];
+      if (nominalIterate >= 9) rowClasses.push('late');
+      return rowClasses.join(' ');
+    }
+
+    function contourRowStyle(contourColor, nominalIterate) {
+      const backgrounds = {
+        black: '#f3f4f6',
+        red: '#fee2e2',
+        blue: '#dbeafe',
+        purple: '#ede9fe',
+        green: '#dcfce7',
+        orange: '#ffedd5'
+      };
+      const textColor = nominalIterate >= 9 ? '#98a2b3' : '#111111';
+      return ' style="background:' + (backgrounds[contourColor] || backgrounds.orange) + ';color:' + textColor + ';"';
+    }
+
+    function renderSquareTableRows(square, renderer, rowStyleFn) {
+      if (!square) return '<tr><td colspan="5" class="small">No square selected.</td></tr>';
+      const corners = ['TL', 'TR', 'BR', 'BL'];
+      const rows = [];
+      for (let nominal = 2; nominal <= 16; nominal += 1) {
+        const cells = corners.map(function(label) {
+          return '<td>' + renderer(square.corners[label], nominal) + '</td>';
+        }).join('');
+        const style = rowStyleFn ? rowStyleFn(nominal) : '';
+        rows.push('<tr class="' + rowBaseClass(nominal) + '"' + style + '><td>' + nominal + '</td>' + cells + '</tr>');
+      }
+      return rows.join('');
+    }
+
+    function updateSelectedTables(square) {
+      if (!square) {
+        const emptyRow = '<tr><td colspan="5" class="small">No square selected.</td></tr>';
+        selectedDotTableBody.innerHTML = emptyRow;
+        selectedMonotoneTableBody.innerHTML = emptyRow;
+        selectedTimeTableBody.innerHTML = emptyRow;
+        selectedSkipTableBody.innerHTML = emptyRow;
         return;
       }
-	      const rawSigns = decodeSignWord(point.rawSignWord);
-	      const monotoneSigns = decodeSignWord(point.monotoneSignWord);
-	      const skips = decodeSkipWord(point.skipWord);
-	      const rows = [];
-	      for (let idx = 0; idx < rawSigns.length; idx += 1) {
-	        const rawEntry = rawSigns[idx];
-	        const monotoneEntry = monotoneSigns[idx];
-	        const skipEntry = skips[idx];
-	        const timeValue = formatTimeValue(decodeTimeForPoint(point.idx, rawEntry.nominal));
-	        const rowClasses = ['iter-row', skipEntry.skip ? 'skip' : 'normal'];
-	        if (rawEntry.nominal >= 9) rowClasses.push('late');
-	        rows.push(
-	          '<tr class="' + rowClasses.join(' ') + '">' +
-	            '<td>' + rawEntry.nominal + '</td>' +
-	            '<td>' + codeText(rawEntry.code) + '</td>' +
-	            '<td>' + codeText(monotoneEntry.code) + '</td>' +
-	            '<td>' + timeValue + '</td>' +
-	            '<td>' + (skipEntry.skip ? 'yes' : 'no') + '</td>' +
-	          '</tr>'
-        );
-      }
-      target.innerHTML = rows.join('');
+
+      const contourColors = computeSquareContourColors(square);
+      selectedDotTableBody.innerHTML = renderSquareTableRows(square, function(point, nominal) {
+        return codeText(pointCode(point, 'raw', nominal));
+      });
+      selectedMonotoneTableBody.innerHTML = renderSquareTableRows(
+        square,
+        function(point, nominal) {
+          return codeText(pointCode(point, 'monotone', nominal));
+        },
+        function(nominal) {
+          return contourRowStyle(contourColors[nominal] || 'orange', nominal);
+        }
+      );
+      selectedTimeTableBody.innerHTML = renderSquareTableRows(square, function(point, nominal) {
+        return formatTimeValue(decodeTimeForPoint(point.idx, nominal));
+      });
+      selectedSkipTableBody.innerHTML = renderSquareTableRows(square, function(point, nominal) {
+        return pointSkipFlag(point, nominal) ? 'yes' : 'no';
+      });
     }
 
     function niceTickStep(span, targetTicks) {
@@ -1549,28 +1893,20 @@ function write_html_043(
       baseCtx.stroke();
     }
 
-    function drawSelectedNeighborCells() {
-      if (!state.selected) return;
-      const cellCoords = [
-        [state.selected.i - 1, state.selected.j - 1],
-        [state.selected.i, state.selected.j - 1],
-        [state.selected.i - 1, state.selected.j],
-        [state.selected.i, state.selected.j]
-      ];
-      overlayCtx.save();
-      overlayCtx.fillStyle = 'rgba(170, 170, 170, 0.18)';
-      overlayCtx.strokeStyle = 'rgba(90, 90, 90, 0.95)';
-      overlayCtx.lineWidth = 1.2;
-      for (const [ci, cj] of cellCoords) {
-        if (ci < 0 || cj < 0 || ci >= CONFIG.nAlpha - 1 || cj >= CONFIG.nLambda - 1) continue;
-        const x0 = plotX(alphaAt(ci));
-        const x1 = plotX(alphaAt(ci + 1));
-        const yTop = plotY(lambdaAt(cj + 1));
-        const yBot = plotY(lambdaAt(cj));
-        overlayCtx.fillRect(x0, yTop, x1 - x0, yBot - yTop);
-        overlayCtx.strokeRect(x0, yTop, x1 - x0, yBot - yTop);
-      }
-      overlayCtx.restore();
+    function drawSquareHighlight(ctx, square, strokeStyle, fillStyle, dash) {
+      if (!square) return;
+      const x0 = plotX(square.alpha0);
+      const x1 = plotX(square.alpha1);
+      const yTop = plotY(square.lambda1);
+      const yBot = plotY(square.lambda0);
+      ctx.save();
+      ctx.strokeStyle = strokeStyle;
+      ctx.fillStyle = fillStyle;
+      ctx.lineWidth = 1.5;
+      if (dash) ctx.setLineDash(dash);
+      ctx.fillRect(x0, yTop, x1 - x0, yBot - yTop);
+      ctx.strokeRect(x0, yTop, x1 - x0, yBot - yTop);
+      ctx.restore();
     }
 
     function drawBase() {
@@ -1598,38 +1934,15 @@ function write_html_043(
       updateViewInfo();
     }
 
-    function drawPointMarker(ctx, point, color, radius, dash) {
-      if (!point) return;
-      const x = plotX(point.alpha);
-      const y = plotY(point.lambda);
-      ctx.save();
-      ctx.strokeStyle = color;
-      ctx.fillStyle = color;
-      ctx.lineWidth = 1.5;
-      if (dash) ctx.setLineDash(dash);
-      ctx.beginPath();
-      ctx.arc(x, y, radius, 0, 2 * Math.PI);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(x - radius - 6, y);
-      ctx.lineTo(x + radius + 6, y);
-      ctx.moveTo(x, y - radius - 6);
-      ctx.lineTo(x, y + radius + 6);
-      ctx.stroke();
-      ctx.restore();
-    }
-
     function drawOverlay() {
       const w = viewerWrap.clientWidth;
       const h = viewerWrap.clientHeight;
       overlayCtx.clearRect(0, 0, w, h);
-      drawSelectedNeighborCells();
-      drawPointMarker(overlayCtx, state.hover, '#6b7280', 4, [4, 4]);
-      drawPointMarker(overlayCtx, state.selected, '#0891b2', 6, null);
-      setInfo(hoverInfo, state.hover, 'No point under cursor.');
-      setPointTable(hoverTableBody, state.hover, 'No point under cursor.');
-      setInfo(selectedInfo, state.selected, 'No point selected.');
-      setPointTable(selectedTableBody, state.selected, 'No point selected.');
+      drawSquareHighlight(overlayCtx, state.hover, 'rgba(107, 114, 128, 0.95)', 'rgba(209, 213, 219, 0.14)', [4, 4]);
+      drawSquareHighlight(overlayCtx, state.selected, '#0891b2', 'rgba(14, 165, 233, 0.14)', null);
+      setSquareInfo(hoverInfo, state.hover, 'No square under cursor.');
+      setSquareInfo(selectedInfo, state.selected, 'No square selected.');
+      updateSelectedTables(state.selected);
     }
 
     function updateViewInfo() {
@@ -1730,7 +2043,7 @@ function write_html_043(
         return;
       }
       const data = screenToData(event.clientX, event.clientY);
-      state.hover = data ? sampleNearestPoint(data.alpha, data.lambda) : null;
+      state.hover = data ? sampleSquareAt(data.alpha, data.lambda) : null;
       drawOverlay();
     });
 
@@ -1757,7 +2070,7 @@ function write_html_043(
       state.dragging = null;
       if (moved < 4) {
         const data = screenToData(event.clientX, event.clientY);
-        state.selected = data ? sampleNearestPoint(data.alpha, data.lambda) : null;
+        state.selected = data ? sampleSquareAt(data.alpha, data.lambda) : null;
         drawOverlay();
       }
     });
