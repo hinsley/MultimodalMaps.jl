@@ -24,17 +24,20 @@ const OUTPUT_TAG_043 = get(
 const HTML_PATH_043 = joinpath(ATTEMPT043_ROOT, "$(OUTPUT_TAG_043).html")
 const STATS_PATH_043 = joinpath(ATTEMPT043_ROOT, "$(OUTPUT_TAG_043)_iterate_stats.tsv")
 const MISSING_TIME_WORD_043 = UInt16(0xffff)
+const TABLE_ITERATE_START_046 = 2
+const TABLE_ITERATE_END_046 = 16
+const TABLE_ITERATE_COUNT_046 = TABLE_ITERATE_END_046 - TABLE_ITERATE_START_046 + 1
 
 @inline sign_code_043(value::Float64) = value > 0.0 ? UInt16(0x2) : value < 0.0 ? UInt16(0x1) : UInt16(0x0)
 @inline skip_bit_043(nominal_iterate::Int) = UInt8(1) << (nominal_iterate - 2)
 @inline point_linear_index_043(i::Int, j::Int, n_alpha::Int) = (j - 1) * n_alpha + i
 
 function raw_sign_word_046(result::A27.SMAbsXResult25)
-    word = UInt16(0)
-    max_iter = min(result.absxmax_count, 8, length(result.absxmax_dot_values))
-    for nominal_iterate in 2:8
-        code = nominal_iterate <= max_iter ? sign_code_043(result.absxmax_dot_values[nominal_iterate]) : UInt16(0)
-        word |= code << (2 * (nominal_iterate - 2))
+    word = UInt32(0)
+    max_iter = min(result.absxmax_count, TABLE_ITERATE_END_046, length(result.absxmax_dot_values))
+    for nominal_iterate in TABLE_ITERATE_START_046:TABLE_ITERATE_END_046
+        code = nominal_iterate <= max_iter ? UInt32(sign_code_043(result.absxmax_dot_values[nominal_iterate])) : UInt32(0)
+        word |= code << (2 * (nominal_iterate - TABLE_ITERATE_START_046))
     end
     return word
 end
@@ -66,12 +69,12 @@ function monotone_sign_adjusted_dots_046(raw_values::AbstractVector{Float64})
 end
 
 function monotone_sign_word_046(result::A27.SMAbsXResult25)
-    word = UInt16(0)
+    word = UInt32(0)
     adjusted = monotone_sign_adjusted_dots_046(result.absxmax_dot_values)
-    max_iter = min(result.absxmax_count, 8, length(adjusted))
-    for nominal_iterate in 2:8
-        code = nominal_iterate <= max_iter ? sign_code_043(adjusted[nominal_iterate]) : UInt16(0)
-        word |= code << (2 * (nominal_iterate - 2))
+    max_iter = min(result.absxmax_count, TABLE_ITERATE_END_046, length(adjusted))
+    for nominal_iterate in TABLE_ITERATE_START_046:TABLE_ITERATE_END_046
+        code = nominal_iterate <= max_iter ? UInt32(sign_code_043(adjusted[nominal_iterate])) : UInt32(0)
+        word |= code << (2 * (nominal_iterate - TABLE_ITERATE_START_046))
     end
     return word
 end
@@ -79,8 +82,8 @@ end
 function build_sign_words_043()
     n_alpha = length(A27.ALPHAS_025)
     n_lambda = length(A27.LAMBDAS_025)
-    raw_sign_words = fill(UInt16(0), n_alpha * n_lambda)
-    monotone_sign_words = fill(UInt16(0), n_alpha * n_lambda)
+    raw_sign_words = fill(UInt32(0), n_alpha * n_lambda)
+    monotone_sign_words = fill(UInt32(0), n_alpha * n_lambda)
 
     for col_idx in eachindex(A27.ALPHAS_025)
         path = A27.column_path_025(col_idx)
@@ -148,6 +151,7 @@ function evaluate_square_local_045(
     dot_grids::Vector{Matrix{Float64}},
     time_grids::Vector{Matrix{Float64}},
     skip::NTuple{4, Int},
+    flip::NTuple{4, Int},
 )
     k_tl = nominal_iterate + skip[1]
     k_tr = nominal_iterate + skip[2]
@@ -157,10 +161,10 @@ function evaluate_square_local_045(
 
     any(k -> k < 1 || k > length(dot_grids) || k + 1 > length(time_grids), ks) && return A27.missing_evaluation_025()
 
-    d_tl = dot_grids[k_tl][j, i]
-    d_tr = dot_grids[k_tr][j, i + 1]
-    d_br = dot_grids[k_br][j + 1, i + 1]
-    d_bl = dot_grids[k_bl][j + 1, i]
+    d_tl = isodd(flip[1]) ? -dot_grids[k_tl][j, i] : dot_grids[k_tl][j, i]
+    d_tr = isodd(flip[2]) ? -dot_grids[k_tr][j, i + 1] : dot_grids[k_tr][j, i + 1]
+    d_br = isodd(flip[3]) ? -dot_grids[k_br][j + 1, i + 1] : dot_grids[k_br][j + 1, i + 1]
+    d_bl = isodd(flip[4]) ? -dot_grids[k_bl][j + 1, i] : dot_grids[k_bl][j + 1, i]
     all(isfinite, (d_tl, d_tr, d_br, d_bl)) || return A27.missing_evaluation_025()
 
     t_tl = time_grids[k_tl][j, i]
@@ -194,6 +198,72 @@ function evaluate_square_local_045(
     )
 end
 
+@inline function apply_scheduled_local_state_046(
+    skip::NTuple{4, Int},
+    flip::NTuple{4, Int},
+    scheduled_skip::Matrix{UInt8},
+    scheduled_flip::Matrix{UInt8},
+    nominal_iterate::Int,
+)
+    return (
+        skip[1] + Int(scheduled_skip[1, nominal_iterate]),
+        skip[2] + Int(scheduled_skip[2, nominal_iterate]),
+        skip[3] + Int(scheduled_skip[3, nominal_iterate]),
+        skip[4] + Int(scheduled_skip[4, nominal_iterate]),
+    ),
+    (
+        (flip[1] + Int(scheduled_flip[1, nominal_iterate])) & 0x1,
+        (flip[2] + Int(scheduled_flip[2, nominal_iterate])) & 0x1,
+        (flip[3] + Int(scheduled_flip[3, nominal_iterate])) & 0x1,
+        (flip[4] + Int(scheduled_flip[4, nominal_iterate])) & 0x1,
+    )
+end
+
+@inline function effective_sign_at_point_046(
+    row_idx::Int,
+    col_idx::Int,
+    nominal_iterate::Int,
+    dot_grids::Vector{Matrix{Float64}},
+    skip_count::Int,
+    flip_parity::Int,
+)
+    effective_iterate = nominal_iterate + skip_count
+    effective_iterate < 1 && return Int8(0)
+    effective_iterate > length(dot_grids) && return Int8(0)
+    value = dot_grids[effective_iterate][row_idx, col_idx]
+    isfinite(value) || return Int8(0)
+    sign = A27.sign_class_025(value)
+    sign == Int8(0) && return Int8(0)
+    return isodd(flip_parity) ? Int8(-sign) : sign
+end
+
+function point_sign_sequence_effective_046(
+    row_idx::Int,
+    col_idx::Int,
+    dot_grids::Vector{Matrix{Float64}};
+    first_iter::Int,
+    last_iter::Int,
+    active_skip::Int,
+    active_flip::Int,
+    scheduled_skip::AbstractVector{UInt8},
+    scheduled_flip::AbstractVector{UInt8},
+)
+    first_iter <= last_iter || return Int8[]
+    seq = Int8[]
+    skip_count = active_skip
+    flip_parity = active_flip
+    for nominal_iterate in first_iter:last_iter
+        if nominal_iterate > first_iter
+            skip_count += Int(scheduled_skip[nominal_iterate])
+            flip_parity = (flip_parity + Int(scheduled_flip[nominal_iterate])) & 0x1
+        end
+        sign = effective_sign_at_point_046(row_idx, col_idx, nominal_iterate, dot_grids, skip_count, flip_parity)
+        sign == Int8(0) && break
+        push!(seq, sign)
+    end
+    return seq
+end
+
 function build_grids_043()
     dot_grids = A27.build_iterate_grids_025(
         result -> result.absxmax_count,
@@ -216,7 +286,7 @@ function point_sign_sequence_046(
     col_idx::Int,
     dot_grids::Vector{Matrix{Float64}};
     first_iter::Int=2,
-    last_iter::Int=12,
+    last_iter::Int=16,
 )
     first_iter <= last_iter || return Int8[]
     last_iter <= length(dot_grids) || return nothing
@@ -241,7 +311,7 @@ function point_sign_sequence_available_046(
     col_idx::Int,
     dot_grids::Vector{Matrix{Float64}};
     first_iter::Int=2,
-    last_iter::Int=12,
+    last_iter::Int=16,
 )
     first_iter <= last_iter || return Int8[]
     last_iter = min(last_iter, length(dot_grids))
@@ -297,26 +367,30 @@ end
     return true
 end
 
-function grazing_kind_symbolic_046(seq_a::Vector{Int8}, seq_b::Vector{Int8}, nominal_iterate::Int)
+function grazing_match_symbolic_046(seq_a::Vector{Int8}, seq_b::Vector{Int8}, nominal_iterate::Int)
     length(seq_a) == length(seq_b) || return nothing
-    max_delete_idx = min(max(0, 8 - nominal_iterate + 1), length(seq_a) - 1)
+    max_delete_idx = min(max(0, 9 - nominal_iterate + 1), length(seq_a) - 1)
     max_delete_idx >= 1 || return nothing
     for delete_idx in 1:max_delete_idx
-        if plus_delete_matches_046(seq_a, seq_b, delete_idx) ||
-           plus_delete_matches_046(seq_b, seq_a, delete_idx)
-            return :blue
+        if plus_delete_matches_046(seq_a, seq_b, delete_idx)
+            return (kind=:blue, mutate_side=:a, delete_idx=delete_idx)
         end
-        if minus_delete_matches_046(seq_a, seq_b, delete_idx) ||
-           minus_delete_matches_046(seq_b, seq_a, delete_idx)
-            return :purple
+        if plus_delete_matches_046(seq_b, seq_a, delete_idx)
+            return (kind=:blue, mutate_side=:b, delete_idx=delete_idx)
+        end
+        if minus_delete_matches_046(seq_a, seq_b, delete_idx)
+            return (kind=:purple, mutate_side=:a, delete_idx=delete_idx)
+        end
+        if minus_delete_matches_046(seq_b, seq_a, delete_idx)
+            return (kind=:purple, mutate_side=:b, delete_idx=delete_idx)
         end
     end
     return nothing
 end
 
-function grazing_kind_returntime_046(evaluation::A27.SquareEvaluation25)
+function grazing_match_returntime_046(evaluation::A27.SquareEvaluation25)
     should_increment, _ = A27.skip_increment_decision_025(evaluation)
-    return should_increment ? :blue : nothing
+    return should_increment ? (kind=:blue, mutate_side=:shorter, delete_idx=1) : nothing
 end
 
 function is_coordinate_singularity_046(seq_a::Vector{Int8}, seq_b::Vector{Int8}; window_len::Int=3)
@@ -329,11 +403,7 @@ function is_coordinate_singularity_046(seq_a::Vector{Int8}, seq_b::Vector{Int8};
     end
     length(diff_idx) == 2 || return false
     diff_idx[2] == diff_idx[1] + 1 || return false
-    idx = diff_idx[1]
-    return seq_a[idx] == seq_a[idx + 1] &&
-           seq_b[idx] == seq_b[idx + 1] &&
-           seq_a[idx] == -seq_b[idx] &&
-           seq_a[idx + 1] == -seq_b[idx + 1]
+    return all(seq_a[idx] == -seq_b[idx] for idx in diff_idx)
 end
 
 @inline function real_contour_difference_count_046(seq_a::Vector{Int8}, seq_b::Vector{Int8}; window_len::Int=2)
@@ -353,14 +423,17 @@ function classify_contour_046(
     nominal_iterate::Int;
     grazing_mode::Symbol=:symbolic,
 )
-    grazing_kind =
-        grazing_mode == :symbolic ? grazing_kind_symbolic_046(seq_a, seq_b, nominal_iterate) :
-        grazing_mode == :returntime ? grazing_kind_returntime_046(evaluation) :
+    grazing_match =
+        grazing_mode == :symbolic ? grazing_match_symbolic_046(seq_a, seq_b, nominal_iterate) :
+        grazing_mode == :returntime ? grazing_match_returntime_046(evaluation) :
         error("Unsupported grazing mode: $(grazing_mode)")
-    !isnothing(grazing_kind) && return grazing_kind
-    is_coordinate_singularity_046(seq_a, seq_b; window_len=3) && return :red
-    real_contour_difference_count_046(seq_a, seq_b; window_len=2) == 1 && return :black
-    return :green
+    grazing_match !== nothing && grazing_match.kind == :blue && return (:blue, grazing_match)
+    is_coordinate_singularity_046(seq_a, seq_b; window_len=3) && return (:red, nothing)
+    grazing_match !== nothing && grazing_match.kind == :purple && return (:purple, grazing_match)
+    # Every remaining mixed square is treated as a real contour. The legacy green
+    # bucket is retained only for compatibility with older saved HTML payloads and
+    # should remain empty in regenerated artifacts.
+    return (:black, nothing)
 end
 
 @inline function edge_pair_code_046(edge_a::Int, edge_b::Int)
@@ -466,6 +539,38 @@ function segment_specs_046(
     return specs
 end
 
+function schedule_grazing_update_046!(
+    scheduled_skip::Matrix{UInt8},
+    scheduled_flip::Matrix{UInt8},
+    evaluation::A27.SquareEvaluation25,
+    short_rep::Int,
+    long_rep::Int,
+    grazing_match,
+    nominal_iterate::Int,
+    classification_iterate_end::Int,
+)
+    grazing_match === nothing && return nothing
+    mutate_rep =
+        grazing_match.mutate_side == :a ? short_rep :
+        grazing_match.mutate_side == :b ? long_rep :
+        grazing_match.mutate_side == :shorter ? short_rep :
+        0
+    mutate_rep == 0 && return nothing
+
+    activation_nominal = max(nominal_iterate + 1, nominal_iterate + grazing_match.delete_idx - 1)
+    activation_nominal <= classification_iterate_end || return nothing
+
+    mutate_sign = evaluation.sign[mutate_rep]
+    for corner in 1:4
+        evaluation.sign[corner] == mutate_sign || continue
+        scheduled_skip[corner, activation_nominal] += UInt8(1)
+        if grazing_match.kind == :purple
+            scheduled_flip[corner, activation_nominal] = xor(scheduled_flip[corner, activation_nominal], UInt8(1))
+        end
+    end
+    return nothing
+end
+
 function collect_sequence_classified_segments_046(
     dot_grids::Vector{Matrix{Float64}},
     time_grids::Vector{Matrix{Float64}},
@@ -473,7 +578,7 @@ function collect_sequence_classified_segments_046(
 )
     n_plot = A27.ATTEMPT025_PLOT_ITERATE_CAP
     plot_iterate_end = min(8, n_plot)
-    classification_iterate_end = min(12, length(dot_grids))
+    classification_iterate_end = min(16, length(dot_grids))
     n_lambda_cells = length(A27.LAMBDAS_025) - 1
     n_alpha_cells = length(A27.ALPHAS_025) - 1
     n_threads = Threads.maxthreadid()
@@ -494,7 +599,8 @@ function collect_sequence_classified_segments_046(
     purple_segment_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     green_cell_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
     green_segment_tls = [zeros(Int, n_plot) for _ in 1:n_threads]
-    zero_skip = (0, 0, 0, 0)
+    scheduled_skip_tls = [zeros(UInt8, 4, classification_iterate_end) for _ in 1:n_threads]
+    scheduled_flip_tls = [zeros(UInt8, 4, classification_iterate_end) for _ in 1:n_threads]
 
     Threads.@threads :dynamic for j in 1:n_lambda_cells
         tid = Threads.threadid()
@@ -514,6 +620,8 @@ function collect_sequence_classified_segments_046(
         purple_segment_local = purple_segment_tls[tid]
         green_cell_local = green_cell_tls[tid]
         green_segment_local = green_segment_tls[tid]
+        scheduled_skip_local = scheduled_skip_tls[tid]
+        scheduled_flip_local = scheduled_flip_tls[tid]
 
         y_tl = Float64(A27.LAMBDAS_025[j])
         y_bl = Float64(A27.LAMBDAS_025[j + 1])
@@ -521,29 +629,53 @@ function collect_sequence_classified_segments_046(
         for i in 1:n_alpha_cells
             x_tl = Float64(A27.ALPHAS_025[i])
             x_tr = Float64(A27.ALPHAS_025[i + 1])
-            pending_red_pairs = UInt8[]
+            fill!(scheduled_skip_local, 0x00)
+            fill!(scheduled_flip_local, 0x00)
+            skip = (0, 0, 0, 0)
+            flip = (0, 0, 0, 0)
             pending_red_nominal = 0
-            for nominal_iterate in 2:plot_iterate_end
-                if pending_red_nominal != 0 && nominal_iterate > pending_red_nominal + 1
-                    empty!(pending_red_pairs)
-                    pending_red_nominal = 0
+            for nominal_iterate in TABLE_ITERATE_START_046:plot_iterate_end
+                skip, flip = apply_scheduled_local_state_046(skip, flip, scheduled_skip_local, scheduled_flip_local, nominal_iterate)
+                if pending_red_nominal != 0
+                    if nominal_iterate == pending_red_nominal + 1
+                        continue
+                    elseif nominal_iterate > pending_red_nominal + 1
+                        pending_red_nominal = 0
+                    end
                 end
 
-                evaluation = evaluate_square_local_045(j, i, nominal_iterate, dot_grids, time_grids, zero_skip)
+                evaluation = evaluate_square_local_045(j, i, nominal_iterate, dot_grids, time_grids, skip, flip)
                 evaluation.status == A27.EVAL_MIXED_025 || continue
 
                 _, short_rep, long_rep = A27.choose_representatives_025(evaluation)
                 short_row, short_col = corner_point_indices_046(j, i, short_rep)
                 long_row, long_col = corner_point_indices_046(j, i, long_rep)
-                short_seq, long_seq = common_point_sign_sequences_046(
+                short_seq = point_sign_sequence_effective_046(
                     short_row,
                     short_col,
+                    dot_grids;
+                    first_iter=nominal_iterate,
+                    last_iter=classification_iterate_end,
+                    active_skip=skip[short_rep],
+                    active_flip=flip[short_rep],
+                    scheduled_skip=@view(scheduled_skip_local[short_rep, :]),
+                    scheduled_flip=@view(scheduled_flip_local[short_rep, :]),
+                )
+                long_seq = point_sign_sequence_effective_046(
                     long_row,
                     long_col,
                     dot_grids;
                     first_iter=nominal_iterate,
                     last_iter=classification_iterate_end,
+                    active_skip=skip[long_rep],
+                    active_flip=flip[long_rep],
+                    scheduled_skip=@view(scheduled_skip_local[long_rep, :]),
+                    scheduled_flip=@view(scheduled_flip_local[long_rep, :]),
                 )
+                n_common = min(length(short_seq), length(long_seq))
+                n_common == 0 && continue
+                n_common == length(short_seq) || resize!(short_seq, n_common)
+                n_common == length(long_seq) || resize!(long_seq, n_common)
                 if isempty(short_seq) || isempty(long_seq)
                     continue
                 end
@@ -561,11 +693,7 @@ function collect_sequence_classified_segments_046(
                 )
                 isempty(specs) && continue
 
-                classification = classify_contour_046(short_seq, long_seq, evaluation, nominal_iterate; grazing_mode)
-                if classification == :black && pending_red_nominal + 1 == nominal_iterate && !isempty(pending_red_pairs)
-                    filter!(spec -> !has_pair_046(pending_red_pairs, spec[1]), specs)
-                    isempty(specs) && continue
-                end
+                classification, grazing_match = classify_contour_046(short_seq, long_seq, evaluation, nominal_iterate; grazing_mode)
 
                 segment_count = length(specs)
                 source_local[nominal_iterate] += 1
@@ -601,15 +729,20 @@ function collect_sequence_classified_segments_046(
                     green_cell_local[nominal_iterate] += 1
                     green_segment_local[nominal_iterate] += segment_count
                 end
+                if classification == :blue || classification == :purple
+                    schedule_grazing_update_046!(
+                        scheduled_skip_local,
+                        scheduled_flip_local,
+                        evaluation,
+                        short_rep,
+                        long_rep,
+                        grazing_match,
+                        nominal_iterate,
+                        classification_iterate_end,
+                    )
+                end
                 if classification == :red
-                    empty!(pending_red_pairs)
-                    @inbounds for spec in specs
-                        push_unique_pair_046!(pending_red_pairs, spec[1])
-                    end
                     pending_red_nominal = nominal_iterate
-                elseif pending_red_nominal + 1 == nominal_iterate
-                    empty!(pending_red_pairs)
-                    pending_red_nominal = 0
                 end
             end
         end
@@ -704,7 +837,7 @@ end
 
 function choose_time_scale_043(time_grids::Vector{Matrix{Float64}})
     max_time = 0.0
-    for nominal_iterate in 2:min(8, length(time_grids))
+    for nominal_iterate in TABLE_ITERATE_START_046:min(TABLE_ITERATE_END_046, length(time_grids))
         grid = time_grids[nominal_iterate]
         @inbounds for value in grid
             isfinite(value) || continue
@@ -722,18 +855,18 @@ function build_time_words_043(time_grids::Vector{Matrix{Float64}})
     n_alpha = length(A27.ALPHAS_025)
     n_lambda = length(A27.LAMBDAS_025)
     time_scale = choose_time_scale_043(time_grids)
-    words = fill(MISSING_TIME_WORD_043, n_alpha * n_lambda * 7)
+    words = fill(MISSING_TIME_WORD_043, n_alpha * n_lambda * TABLE_ITERATE_COUNT_046)
 
-    for nominal_iterate in 2:min(8, length(time_grids))
+    for nominal_iterate in TABLE_ITERATE_START_046:min(TABLE_ITERATE_END_046, length(time_grids))
         grid = time_grids[nominal_iterate]
-        offset = nominal_iterate - 2
+        offset = nominal_iterate - TABLE_ITERATE_START_046
         for col_idx in 1:n_alpha
             for row_idx in 1:n_lambda
                 value = grid[row_idx, col_idx]
                 isfinite(value) || continue
                 quantized = round(Int, value * time_scale)
                 0 <= quantized <= 65534 || continue
-                linear_idx = ((row_idx - 1) * n_alpha + (col_idx - 1)) * 7 + offset + 1
+                linear_idx = ((row_idx - 1) * n_alpha + (col_idx - 1)) * TABLE_ITERATE_COUNT_046 + offset + 1
                 words[linear_idx] = UInt16(quantized)
             end
         end
@@ -774,6 +907,11 @@ function write_html_043(
     symbolic_blue_segments_b64_by_iter::Vector{String},
     symbolic_purple_segments_b64_by_iter::Vector{String},
     symbolic_green_segments_b64_by_iter::Vector{String},
+    returntime_black_segments_b64_by_iter::Vector{String},
+    returntime_red_segments_b64_by_iter::Vector{String},
+    returntime_blue_segments_b64_by_iter::Vector{String},
+    returntime_purple_segments_b64_by_iter::Vector{String},
+    returntime_green_segments_b64_by_iter::Vector{String},
     raw_sign_words_b64::String,
     monotone_sign_words_b64::String,
     skip_words_b64::String,
@@ -855,8 +993,11 @@ function write_html_043(
     .iter-table th { color: var(--muted); font-weight: 600; background: #fbfbfb; position: sticky; top: 0; }
     .iter-row.skip { color: var(--skip); font-weight: 600; }
     .iter-row.normal { color: #111111; }
+    .iter-row.late { color: #a8afb8; }
     .highlight-note { margin-top: 4px; font-size: 10px; color: var(--muted); }
     .compact-meta { margin-bottom: 4px; }
+    .table-stack { display: grid; gap: 8px; }
+    .table-block-title { margin: 0 0 4px 0; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
   </style>
 </head>
 <body>
@@ -865,7 +1006,7 @@ function write_html_043(
       <div id="toolbar">
         <button id="resetView">Reset View</button>
         <button id="clearSelection">Clear Selection</button>
-        <span class="note">Wheel: zoom. Drag: pan. Hover snaps to the nearest sampled parameter point. Click pins a point.</span>
+        <span class="note">Wheel: zoom. Drag: pan. Hover shows the marched square under the cursor. Click pins one square.</span>
       </div>
       <div id="viewerWrap">
         <canvas id="baseCanvas"></canvas>
@@ -873,25 +1014,16 @@ function write_html_043(
       </div>
     </section>
     <aside id="sidebar">
-	      <h1>Attempt-047 Explorer</h1>
-		      <div class="box small">
-		        Self-contained HTML explorer built from the saved attempt-047 `3000 x 3000` sweep.
-		        The contoured monotone sign at iterate `k` is `+` when the raw dot-product sign stays the same
-		        from iterate `k-1` to `k`, and `-` when it flips. Iterate `2` uses raw iterate `1` as its reference.
-		        Old-style skip compression is disabled here: every mixed square at every nominal iterate in `2:8`
-		        is classified independently, colors are determined from the suffix starting at that contour iterate,
-		        and the classification tests only use the saved symbol data through `2:12`. Grazing is detected
-		        only by the symbolic deletion rules in this version.
-		      </div>
+	      <h1>Attempt-046 Explorer</h1>
 	      <h2>Legend</h2>
 	      <div class="box">
 	        <div class="legend-row"><span class="swatch black"></span><span>real contour: the two monotone sign sequences differ in exactly one place</span></div>
-	        <div class="legend-row"><span class="swatch red"></span><span>coordinate singularity: one consecutive same-sign pair flips and the rest matches</span></div>
-	        <div class="legend-row"><span class="swatch blue"></span><span>grazing (`+` deletion): deleting one `+` in `2:8` reconciles the two monotone sign sequences across `2:12`</span></div>
-	        <div class="legend-row"><span class="swatch purple"></span><span>grazing (`-` deletion): deleting one `-` in `2:8` and inverting the suffix reconciles the two monotone sign sequences across `2:12`</span></div>
-		        <div class="legend-row"><span class="swatch green"></span><span>other mixed square: not black, red, blue, or purple under the above tests</span></div>
-	        <div class="legend-row"><span class="swatch cyan"></span><span>selected sampled grid point</span></div>
-	        <div class="legend-row"><span class="swatch" style="background:#bcbcbc;"></span><span>four marched squares around the selected point</span></div>
+	        <div class="legend-row"><span class="swatch red"></span><span>coordinate singularity: two consecutive monotone signs flip and the rest matches</span></div>
+	        <div class="legend-row"><span class="swatch blue"></span><span>grazing (`+` deletion): deleting one `+` in the contour-relative range `k:9` reconciles the suffix, and later nominal iterates inherit that local skipped index on the affected side</span></div>
+	        <div class="legend-row"><span class="swatch purple"></span><span>grazing (`-` deletion): deleting one `-` and inverting the later suffix reconciles the contour-relative suffix, and later nominal iterates inherit both the local skipped index and the persistent suffix inversion on the affected side</span></div>
+	        <div class="legend-row"><span class="swatch green"></span><span>legacy residual class retained for compatibility; regenerated artifacts should leave it empty</span></div>
+	        <div class="legend-row"><span class="swatch cyan"></span><span>selected marched square</span></div>
+	        <div class="legend-row"><span class="swatch" style="background:#d97706;"></span><span>monotone-table row color when no contour is produced at that nominal iterate</span></div>
 	      </div>
       <h2>Contours</h2>
       <div class="box">
@@ -899,6 +1031,7 @@ function write_html_043(
 		          <div class="iter-button-row">
 		            <button id="showAllIterates">Show All</button>
 		            <button id="hideAllIterates">Hide All</button>
+		            <button id="toggleGrazingMode">Grazing: Symbolic</button>
 		          </div>
 		          <div class="iter-button-row">
 		            <button id="toggleBlackContours">Hide Black</button>
@@ -906,8 +1039,8 @@ function write_html_043(
 		            <button id="toggleRedContours">Hide Red</button>
 		          </div>
 		          <div class="iter-button-row">
-		            <button id="toggleGreyContours">Hide Blue</button>
-		            <button id="togglePurpleContours">Hide Purple</button>
+	              <button id="toggleGreyContours">Hide Blue</button>
+	              <button id="togglePurpleContours">Hide Purple</button>
 		          </div>
 		        </div>
         <div id="iterateControls" class="iter-controls"></div>
@@ -915,23 +1048,49 @@ function write_html_043(
       <h2>Hover</h2>
       <div class="box">
         <div id="hoverInfo" class="kv compact-meta"></div>
-	        <table class="iter-table">
-	          <thead>
-	            <tr><th>Iter</th><th>Dot</th><th>Mono</th><th>Time</th><th>Skip</th></tr>
-	          </thead>
-	          <tbody id="hoverTableBody"></tbody>
-	        </table>
       </div>
       <h2>Selected</h2>
       <div class="box">
 	        <div id="selectedInfo" class="kv compact-meta"></div>
-	        <div class="highlight-note">Old-style skip compression is disabled in this version, so the skip column should remain `no`.</div>
-	        <table class="iter-table">
-	          <thead>
-	            <tr><th>Iter</th><th>Dot</th><th>Mono</th><th>Time</th><th>Skip</th></tr>
-	          </thead>
-	          <tbody id="selectedTableBody"></tbody>
-	        </table>
+	        <div class="highlight-note">The skip table shows the effective square-local carried-forward skip state under the currently selected grazing mode.</div>
+          <div class="table-stack">
+            <div>
+              <div class="table-block-title">Raw Dot Sign</div>
+              <table class="iter-table">
+                <thead>
+                  <tr><th>Iter</th><th>TL</th><th>TR</th><th>BR</th><th>BL</th></tr>
+                </thead>
+                <tbody id="selectedDotTableBody"></tbody>
+              </table>
+            </div>
+            <div>
+              <div class="table-block-title">Monotone Sign</div>
+              <table class="iter-table">
+                <thead>
+                  <tr><th>Iter</th><th>TL</th><th>TR</th><th>BR</th><th>BL</th></tr>
+                </thead>
+                <tbody id="selectedMonotoneTableBody"></tbody>
+              </table>
+            </div>
+            <div>
+              <div class="table-block-title">Interval Return Time</div>
+              <table class="iter-table">
+                <thead>
+                  <tr><th>Iter</th><th>TL</th><th>TR</th><th>BR</th><th>BL</th></tr>
+                </thead>
+                <tbody id="selectedTimeTableBody"></tbody>
+              </table>
+            </div>
+            <div>
+              <div class="table-block-title">Effective Skip Flag</div>
+              <table class="iter-table">
+                <thead>
+                  <tr><th>Iter</th><th>TL</th><th>TR</th><th>BR</th><th>BL</th></tr>
+                </thead>
+                <tbody id="selectedSkipTableBody"></tbody>
+              </table>
+            </div>
+          </div>
       </div>
       <h2>View</h2>
       <div class="box">
@@ -998,6 +1157,56 @@ function write_html_043(
             print(io, "',\n")
         end
         print(io, """    };
+	    const RETURNTIME_BLACK_SEGMENTS_B64_BY_ITER = {
+""")
+        for idx in 2:length(returntime_black_segments_b64_by_iter)
+            print(io, "      ")
+            print(io, idx)
+            print(io, ": '")
+            print(io, returntime_black_segments_b64_by_iter[idx])
+            print(io, "',\n")
+        end
+        print(io, """    };
+	    const RETURNTIME_RED_SEGMENTS_B64_BY_ITER = {
+""")
+        for idx in 2:length(returntime_red_segments_b64_by_iter)
+            print(io, "      ")
+            print(io, idx)
+            print(io, ": '")
+            print(io, returntime_red_segments_b64_by_iter[idx])
+            print(io, "',\n")
+        end
+        print(io, """    };
+		    const RETURNTIME_BLUE_SEGMENTS_B64_BY_ITER = {
+		""")
+        for idx in 2:length(returntime_blue_segments_b64_by_iter)
+            print(io, "      ")
+            print(io, idx)
+            print(io, ": '")
+            print(io, returntime_blue_segments_b64_by_iter[idx])
+            print(io, "',\n")
+        end
+        print(io, """    };
+		    const RETURNTIME_PURPLE_SEGMENTS_B64_BY_ITER = {
+		""")
+        for idx in 2:length(returntime_purple_segments_b64_by_iter)
+            print(io, "      ")
+            print(io, idx)
+            print(io, ": '")
+            print(io, returntime_purple_segments_b64_by_iter[idx])
+            print(io, "',\n")
+        end
+        print(io, """    };
+		    const RETURNTIME_GREEN_SEGMENTS_B64_BY_ITER = {
+		""")
+        for idx in 2:length(returntime_green_segments_b64_by_iter)
+            print(io, "      ")
+            print(io, idx)
+            print(io, ": '")
+            print(io, returntime_green_segments_b64_by_iter[idx])
+            print(io, "',\n")
+        end
+        print(io, """    };
 			    const RAW_SIGN_WORDS_B64 = '""")
         print(io, raw_sign_words_b64)
         print(io, """';
@@ -1024,6 +1233,11 @@ function write_html_043(
       return new Uint16Array(bytes.buffer);
     }
 
+    function decodeUint32Array(b64) {
+      const bytes = decodeBase64Bytes(b64);
+      return new Uint32Array(bytes.buffer);
+    }
+
     function decodeFloat32Array(b64) {
       const bytes = decodeBase64Bytes(b64);
       return new Float32Array(bytes.buffer);
@@ -1046,15 +1260,25 @@ function write_html_043(
 		    const symbolicBlueSegmentsByIter = {};
 		    const symbolicPurpleSegmentsByIter = {};
 		    const symbolicGreenSegmentsByIter = {};
+		    const returntimeBlackSegmentsByIter = {};
+		    const returntimeRedSegmentsByIter = {};
+		    const returntimeBlueSegmentsByIter = {};
+		    const returntimePurpleSegmentsByIter = {};
+		    const returntimeGreenSegmentsByIter = {};
 		    for (let nominal = 2; nominal <= 8; nominal += 1) {
 		      symbolicBlackSegmentsByIter[nominal] = SYMBOLIC_BLACK_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(SYMBOLIC_BLACK_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
 		      symbolicRedSegmentsByIter[nominal] = SYMBOLIC_RED_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(SYMBOLIC_RED_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
 		      symbolicBlueSegmentsByIter[nominal] = SYMBOLIC_BLUE_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(SYMBOLIC_BLUE_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
 		      symbolicPurpleSegmentsByIter[nominal] = SYMBOLIC_PURPLE_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(SYMBOLIC_PURPLE_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
 		      symbolicGreenSegmentsByIter[nominal] = SYMBOLIC_GREEN_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(SYMBOLIC_GREEN_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+		      returntimeBlackSegmentsByIter[nominal] = RETURNTIME_BLACK_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(RETURNTIME_BLACK_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+		      returntimeRedSegmentsByIter[nominal] = RETURNTIME_RED_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(RETURNTIME_RED_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+		      returntimeBlueSegmentsByIter[nominal] = RETURNTIME_BLUE_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(RETURNTIME_BLUE_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+		      returntimePurpleSegmentsByIter[nominal] = RETURNTIME_PURPLE_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(RETURNTIME_PURPLE_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
+		      returntimeGreenSegmentsByIter[nominal] = RETURNTIME_GREEN_SEGMENTS_B64_BY_ITER[nominal] ? decodeFloat32Array(RETURNTIME_GREEN_SEGMENTS_B64_BY_ITER[nominal]) : new Float32Array(0);
 		    }
-	    const rawSignWords = decodeUint16Array(RAW_SIGN_WORDS_B64);
-	    const monotoneSignWords = decodeUint16Array(MONOTONE_SIGN_WORDS_B64);
+	    const rawSignWords = decodeUint32Array(RAW_SIGN_WORDS_B64);
+	    const monotoneSignWords = decodeUint32Array(MONOTONE_SIGN_WORDS_B64);
 	    const skipWords = decodeBase64Bytes(SKIP_WORDS_B64);
 	    let timeWords = null;
 
@@ -1064,15 +1288,18 @@ function write_html_043(
     const overlayCtx = overlayCanvas.getContext('2d');
     const viewerWrap = document.getElementById('viewerWrap');
     const hoverInfo = document.getElementById('hoverInfo');
-    const hoverTableBody = document.getElementById('hoverTableBody');
     const selectedInfo = document.getElementById('selectedInfo');
-	    const selectedTableBody = document.getElementById('selectedTableBody');
+	    const selectedDotTableBody = document.getElementById('selectedDotTableBody');
+	    const selectedMonotoneTableBody = document.getElementById('selectedMonotoneTableBody');
+	    const selectedTimeTableBody = document.getElementById('selectedTimeTableBody');
+	    const selectedSkipTableBody = document.getElementById('selectedSkipTableBody');
 	    const viewInfo = document.getElementById('viewInfo');
 	    const iterateControls = document.getElementById('iterateControls');
 	    const resetViewButton = document.getElementById('resetView');
 			    const clearSelectionButton = document.getElementById('clearSelection');
 			    const showAllIteratesButton = document.getElementById('showAllIterates');
 			    const hideAllIteratesButton = document.getElementById('hideAllIterates');
+				    const toggleGrazingModeButton = document.getElementById('toggleGrazingMode');
 				    const toggleBlackContoursButton = document.getElementById('toggleBlackContours');
 				    const toggleGreenContoursButton = document.getElementById('toggleGreenContours');
 				    const toggleRedContoursButton = document.getElementById('toggleRedContours');
@@ -1084,6 +1311,7 @@ function write_html_043(
 			      hover: null,
 			      selected: null,
 			      dragging: null,
+				      grazingMode: 'symbolic',
 				      visibleIterates: new Set([2, 3, 4, 5, 6, 7, 8]),
 				      showBlackContours: true,
 				      showGreenContours: true,
@@ -1093,12 +1321,18 @@ function write_html_043(
 				    };
 
 	    function currentSegmentSets() {
-	      return {
+	      return state.grazingMode === 'symbolic' ? {
 	        black: symbolicBlackSegmentsByIter,
 	        red: symbolicRedSegmentsByIter,
 	        blue: symbolicBlueSegmentsByIter,
 	        purple: symbolicPurpleSegmentsByIter,
 	        green: symbolicGreenSegmentsByIter
+	      } : {
+	        black: returntimeBlackSegmentsByIter,
+	        red: returntimeRedSegmentsByIter,
+	        blue: returntimeBlueSegmentsByIter,
+	        purple: returntimePurpleSegmentsByIter,
+	        green: returntimeGreenSegmentsByIter
 	      };
 	    }
 
@@ -1144,6 +1378,10 @@ function write_html_043(
       return j * CONFIG.nAlpha + i;
     }
 
+    function cellIndex(i, j) {
+      return j * (CONFIG.nAlpha - 1) + i;
+    }
+
     function plotX(alpha) {
       const r = cssRect();
       return r.x + (alpha - state.view.a0) * r.w / (state.view.a1 - state.view.a0);
@@ -1169,26 +1407,44 @@ function write_html_043(
       return Math.max(lo, Math.min(hi, value));
     }
 
-    function sampleNearestPoint(alpha, lambda) {
-      const i = clampInt(Math.round((alpha - CONFIG.alphaMin) / alphaStep()), 0, CONFIG.nAlpha - 1);
-      const j = clampInt(Math.round((lambda - CONFIG.lambdaMin) / lambdaStep()), 0, CONFIG.nLambda - 1);
+    function samplePoint(i, j) {
       const idx = pointIndex(i, j);
-	      return {
-	        i,
-	        j,
-	        idx,
-	        alpha: alphaAt(i),
-	        lambda: lambdaAt(j),
-	        rawSignWord: rawSignWords[idx],
-	        monotoneSignWord: monotoneSignWords[idx],
-	        skipWord: skipWords[idx]
-	      };
-	    }
+      return {
+        i,
+        j,
+        idx,
+        alpha: alphaAt(i),
+        lambda: lambdaAt(j),
+        rawSignWord: rawSignWords[idx],
+        monotoneSignWord: monotoneSignWords[idx],
+        skipWord: skipWords[idx]
+      };
+    }
+
+    function sampleSquareAt(alpha, lambda) {
+      const i = clampInt(Math.floor((alpha - CONFIG.alphaMin) / alphaStep()), 0, CONFIG.nAlpha - 2);
+      const j = clampInt(Math.floor((lambda - CONFIG.lambdaMin) / lambdaStep()), 0, CONFIG.nLambda - 2);
+      return {
+        i,
+        j,
+        idx: cellIndex(i, j),
+        alpha0: alphaAt(i),
+        alpha1: alphaAt(i + 1),
+        lambda0: lambdaAt(j),
+        lambda1: lambdaAt(j + 1),
+        corners: {
+          TL: samplePoint(i, j + 1),
+          TR: samplePoint(i + 1, j + 1),
+          BR: samplePoint(i + 1, j),
+          BL: samplePoint(i, j)
+        }
+      };
+    }
 
     function decodeSignWord(word) {
       const result = [];
-      for (let nominal = 2; nominal <= 8; nominal += 1) {
-        const code = (word >> (2 * (nominal - 2))) & 0x3;
+      for (let nominal = $(TABLE_ITERATE_START_046); nominal <= $(TABLE_ITERATE_END_046); nominal += 1) {
+        const code = (word >>> (2 * (nominal - $(TABLE_ITERATE_START_046)))) & 0x3;
         result.push({ nominal, code });
       }
       return result;
@@ -1202,34 +1458,39 @@ function write_html_043(
       return code === 2 ? 'pos' : code === 1 ? 'neg' : 'missing';
     }
 
-    function setInfo(target, point, emptyText) {
-      if (!point) {
+    function signValueFromCode(code) {
+      return code === 2 ? 1 : code === 1 ? -1 : 0;
+    }
+
+    function pointCode(point, kind, nominalIterate) {
+      const word = kind === 'raw' ? point.rawSignWord : point.monotoneSignWord;
+      return (word >>> (2 * (nominalIterate - $(TABLE_ITERATE_START_046)))) & 0x3;
+    }
+
+    function pointSignValue(point, kind, nominalIterate) {
+      return signValueFromCode(pointCode(point, kind, nominalIterate));
+    }
+
+    function setSquareInfo(target, square, emptyText) {
+      if (!square) {
         target.innerHTML = '<div class="small">' + emptyText + '</div>';
         return;
       }
 	      target.innerHTML = [
-	        ['alpha', point.alpha.toFixed(6)],
-	        ['lambda', point.lambda.toFixed(6)],
-	        ['grid index', '(' + point.i + ', ' + point.j + ')'],
-	        ['flat index', String(point.idx)],
-		        ['raw sign word', '0x' + point.rawSignWord.toString(16).padStart(4, '0')],
-		        ['monotone sign word', '0x' + point.monotoneSignWord.toString(16).padStart(4, '0')]
+	        ['alpha span', square.alpha0.toFixed(6) + ' .. ' + square.alpha1.toFixed(6)],
+	        ['lambda span', square.lambda0.toFixed(6) + ' .. ' + square.lambda1.toFixed(6)],
+	        ['cell index', '(' + square.i + ', ' + square.j + ')'],
+	        ['flat cell', String(square.idx)],
+	        ['TL point', '(' + square.corners.TL.i + ', ' + square.corners.TL.j + ')'],
+	        ['BR point', '(' + square.corners.BR.i + ', ' + square.corners.BR.j + ')']
 	      ].map(function(pair) {
 	        return '<div class="label">' + pair[0] + '</div><div class="mono">' + pair[1] + '</div>';
 	      }).join('');
     }
 
-    function decodeSkipWord(word) {
-      const result = [];
-      for (let nominal = 2; nominal <= 8; nominal += 1) {
-        result.push({ nominal, skip: !!(word & (1 << (nominal - 2))) });
-      }
-      return result;
-    }
-
     function decodeTimeForPoint(pointIdx, nominalIterate) {
       if (!timeWords || timeWords.length === 0) return null;
-      const word = timeWords[pointIdx * 7 + (nominalIterate - 2)];
+      const word = timeWords[pointIdx * $(TABLE_ITERATE_COUNT_046) + (nominalIterate - $(TABLE_ITERATE_START_046))];
       if (word === undefined || word === 0xffff) return null;
       return word / TIME_SCALE;
     }
@@ -1241,31 +1502,328 @@ function write_html_043(
       return value.toFixed(0);
     }
 
-    function setPointTable(target, point, emptyText) {
-      if (!point) {
-        target.innerHTML = '<tr><td colspan="5" class="small">' + emptyText + '</td></tr>';
+    function squareInternalPoints(square) {
+      return [square.corners.BL, square.corners.BR, square.corners.TR, square.corners.TL];
+    }
+
+    function chooseRepresentatives(evaluation) {
+      let negRep = -1;
+      let posRep = -1;
+      for (let idx = 0; idx < 4; idx += 1) {
+        if (evaluation.signs[idx] === -1 && negRep === -1) negRep = idx;
+        else if (evaluation.signs[idx] === 1 && posRep === -1) posRep = idx;
+      }
+      if (negRep === -1 || posRep === -1) return null;
+      if (evaluation.currentTimes[negRep] < evaluation.currentTimes[posRep]) {
+        return { shorterSign: -1, shortRep: negRep, longRep: posRep };
+      }
+      return { shorterSign: 1, shortRep: posRep, longRep: negRep };
+    }
+
+    function evaluateSquareLocal(square, nominalIterate, skip, flip) {
+      const points = squareInternalPoints(square);
+      const signs = [];
+      const currentTimes = [];
+      const nextTimes = [];
+      const effectiveIterates = [];
+      for (let corner = 0; corner < 4; corner += 1) {
+        const effectiveIterate = nominalIterate + skip[corner];
+        if (effectiveIterate < 1 || effectiveIterate > 16 || effectiveIterate + 1 > 16) {
+          return { status: 'missing' };
+        }
+        let sign = pointSignValue(points[corner], 'monotone', effectiveIterate);
+        if (sign === 0) return { status: 'missing' };
+        if (flip[corner] % 2 === 1) sign = -sign;
+        const currentTime = decodeTimeForPoint(points[corner].idx, effectiveIterate);
+        const nextTime = decodeTimeForPoint(points[corner].idx, effectiveIterate + 1);
+        if (currentTime === null || nextTime === null) return { status: 'missing' };
+        signs.push(sign);
+        currentTimes.push(currentTime);
+        nextTimes.push(nextTime);
+        effectiveIterates.push(effectiveIterate);
+      }
+      const allSame = signs.every(function(sign) { return sign === signs[0]; });
+      return {
+        status: allSame ? 'constant' : 'mixed',
+        signs: signs,
+        currentTimes: currentTimes,
+        nextTimes: nextTimes,
+        effectiveIterates: effectiveIterates
+      };
+    }
+
+    function pointSignSequenceEffective(point, firstIter, lastIter, activeSkip, activeFlip, scheduledSkip, scheduledFlip) {
+      const seq = [];
+      let skipCount = activeSkip;
+      let flipParity = activeFlip;
+      for (let nominal = firstIter; nominal <= lastIter; nominal += 1) {
+        if (nominal > firstIter) {
+          skipCount += scheduledSkip[nominal];
+          flipParity = (flipParity + scheduledFlip[nominal]) & 1;
+        }
+        const effectiveIterate = nominal + skipCount;
+        if (effectiveIterate < 1 || effectiveIterate > 16) break;
+        let sign = pointSignValue(point, 'monotone', effectiveIterate);
+        if (sign === 0) break;
+        if (flipParity % 2 === 1) sign = -sign;
+        seq.push(sign);
+      }
+      return seq;
+    }
+
+    function plusDeleteMatches(candidate, other, deleteIdx) {
+      if (candidate[deleteIdx - 1] !== 1) return false;
+      for (let idx = 0; idx < deleteIdx - 1; idx += 1) {
+        if (candidate[idx] !== other[idx]) return false;
+      }
+      for (let idx = deleteIdx - 1; idx < candidate.length - 1; idx += 1) {
+        if (candidate[idx + 1] !== other[idx]) return false;
+      }
+      return true;
+    }
+
+    function minusDeleteMatches(candidate, other, deleteIdx) {
+      if (candidate[deleteIdx - 1] !== -1) return false;
+      for (let idx = 0; idx < deleteIdx - 1; idx += 1) {
+        if (candidate[idx] !== other[idx]) return false;
+      }
+      for (let idx = deleteIdx - 1; idx < candidate.length - 1; idx += 1) {
+        if (-candidate[idx + 1] !== other[idx]) return false;
+      }
+      return true;
+    }
+
+    function grazingMatchSymbolic(seqA, seqB, nominalIterate) {
+      if (seqA.length !== seqB.length) return null;
+      const maxDeleteIdx = Math.min(Math.max(0, 9 - nominalIterate + 1), seqA.length - 1);
+      if (maxDeleteIdx < 1) return null;
+      for (let deleteIdx = 1; deleteIdx <= maxDeleteIdx; deleteIdx += 1) {
+        if (plusDeleteMatches(seqA, seqB, deleteIdx)) return { kind: 'blue', mutateSide: 'a', deleteIdx: deleteIdx };
+        if (plusDeleteMatches(seqB, seqA, deleteIdx)) return { kind: 'blue', mutateSide: 'b', deleteIdx: deleteIdx };
+        if (minusDeleteMatches(seqA, seqB, deleteIdx)) return { kind: 'purple', mutateSide: 'a', deleteIdx: deleteIdx };
+        if (minusDeleteMatches(seqB, seqA, deleteIdx)) return { kind: 'purple', mutateSide: 'b', deleteIdx: deleteIdx };
+      }
+      return null;
+    }
+
+    function grazingMatchReturnTime(evaluation) {
+      const reps = chooseRepresentatives(evaluation);
+      if (!reps) return null;
+      const errSkip = Math.abs(
+        evaluation.currentTimes[reps.shortRep] +
+        evaluation.nextTimes[reps.shortRep] -
+        evaluation.currentTimes[reps.longRep]
+      );
+      const errNoSkip = Math.abs(
+        evaluation.currentTimes[reps.shortRep] -
+        evaluation.currentTimes[reps.longRep]
+      );
+      return errSkip < errNoSkip ? { kind: 'blue', mutateSide: 'shorter', deleteIdx: 1 } : null;
+    }
+
+    function isCoordinateSingularity(seqA, seqB, windowLen) {
+      const n = Math.min(windowLen, seqA.length, seqB.length);
+      if (n !== windowLen) return false;
+      const diffIdx = [];
+      for (let idx = 0; idx < n; idx += 1) {
+        if (seqA[idx] !== seqB[idx]) diffIdx.push(idx);
+      }
+      return diffIdx.length === 2 &&
+        diffIdx[1] === diffIdx[0] + 1 &&
+        seqA[diffIdx[0]] === -seqB[diffIdx[0]] &&
+        seqA[diffIdx[1]] === -seqB[diffIdx[1]];
+    }
+
+    function realContourDifferenceCount(seqA, seqB, windowLen) {
+      const n = Math.min(windowLen, seqA.length, seqB.length);
+      if (n !== windowLen) return Number.MAX_SAFE_INTEGER;
+      let count = 0;
+      for (let idx = 0; idx < n; idx += 1) {
+        if (seqA[idx] !== seqB[idx]) count += 1;
+      }
+      return count;
+    }
+
+    function classifyContour(seqA, seqB, evaluation, nominalIterate, grazingMode) {
+      const grazingMatch = grazingMode === 'symbolic' ?
+        grazingMatchSymbolic(seqA, seqB, nominalIterate) :
+        grazingMatchReturnTime(evaluation);
+      if (grazingMatch && grazingMatch.kind === 'blue') return { classification: 'blue', grazingMatch: grazingMatch };
+      if (isCoordinateSingularity(seqA, seqB, 3)) return { classification: 'red', grazingMatch: null };
+      if (grazingMatch && grazingMatch.kind === 'purple') return { classification: 'purple', grazingMatch: grazingMatch };
+      return { classification: 'black', grazingMatch: null };
+    }
+
+    function scheduleGrazingUpdate(squareState, evaluation, reps, grazingMatch, nominalIterate) {
+      if (!grazingMatch) return;
+      const mutateRep =
+        grazingMatch.mutateSide === 'a' ? reps.shortRep :
+        grazingMatch.mutateSide === 'b' ? reps.longRep :
+        grazingMatch.mutateSide === 'shorter' ? reps.shortRep :
+        -1;
+      if (mutateRep === -1) return;
+      const activation = Math.max(nominalIterate + 1, nominalIterate + grazingMatch.deleteIdx - 1);
+      if (activation > 16) return;
+      const mutateSign = evaluation.signs[mutateRep];
+      for (let corner = 0; corner < 4; corner += 1) {
+        if (evaluation.signs[corner] !== mutateSign) continue;
+        squareState.scheduledSkip[corner][activation] += 1;
+        if (grazingMatch.kind === 'purple') {
+          squareState.scheduledFlip[corner][activation] ^= 1;
+        }
+      }
+    }
+
+    function displayCornerToInternalIndex(label) {
+      return label === 'TL' ? 3 : label === 'TR' ? 2 : label === 'BR' ? 1 : 0;
+    }
+
+    function computeSquareContourTrace(square) {
+      const colors = {};
+      const skipStates = {};
+      const points = squareInternalPoints(square);
+      const squareState = {
+        skip: [0, 0, 0, 0],
+        flip: [0, 0, 0, 0],
+        scheduledSkip: Array.from({ length: 4 }, function() { return new Array(17).fill(0); }),
+        scheduledFlip: Array.from({ length: 4 }, function() { return new Array(17).fill(0); })
+      };
+      let pendingRedNominal = 0;
+
+      for (let nominal = 2; nominal <= 16; nominal += 1) {
+        for (let corner = 0; corner < 4; corner += 1) {
+          squareState.skip[corner] += squareState.scheduledSkip[corner][nominal];
+          squareState.flip[corner] = (squareState.flip[corner] + squareState.scheduledFlip[corner][nominal]) & 1;
+        }
+        skipStates[nominal] = squareState.skip.slice();
+
+        if (nominal > 8) {
+          colors[nominal] = 'orange';
+          continue;
+        }
+
+        if (pendingRedNominal !== 0) {
+          if (nominal === pendingRedNominal + 1) {
+            colors[nominal] = 'orange';
+            continue;
+          } else if (nominal > pendingRedNominal + 1) {
+            pendingRedNominal = 0;
+          }
+        }
+
+        const evaluation = evaluateSquareLocal(square, nominal, squareState.skip, squareState.flip);
+        if (evaluation.status !== 'mixed') {
+          colors[nominal] = 'orange';
+          continue;
+        }
+
+        const reps = chooseRepresentatives(evaluation);
+        if (!reps) {
+          colors[nominal] = 'orange';
+          continue;
+        }
+
+        const seqA = pointSignSequenceEffective(
+          points[reps.shortRep],
+          nominal,
+          16,
+          squareState.skip[reps.shortRep],
+          squareState.flip[reps.shortRep],
+          squareState.scheduledSkip[reps.shortRep],
+          squareState.scheduledFlip[reps.shortRep]
+        );
+        const seqB = pointSignSequenceEffective(
+          points[reps.longRep],
+          nominal,
+          16,
+          squareState.skip[reps.longRep],
+          squareState.flip[reps.longRep],
+          squareState.scheduledSkip[reps.longRep],
+          squareState.scheduledFlip[reps.longRep]
+        );
+        const nCommon = Math.min(seqA.length, seqB.length);
+        if (nCommon === 0) {
+          colors[nominal] = 'orange';
+          continue;
+        }
+        seqA.length = nCommon;
+        seqB.length = nCommon;
+        const result = classifyContour(seqA, seqB, evaluation, nominal, state.grazingMode);
+        colors[nominal] = result.classification;
+        if (result.classification === 'blue' || result.classification === 'purple') {
+          scheduleGrazingUpdate(squareState, evaluation, reps, result.grazingMatch, nominal);
+        }
+        if (result.classification === 'red') pendingRedNominal = nominal;
+      }
+
+      return { colors: colors, skipStates: skipStates };
+    }
+
+    function rowBaseClass(nominalIterate) {
+      const rowClasses = ['iter-row', 'normal'];
+      if (nominalIterate >= 9) rowClasses.push('late');
+      return rowClasses.join(' ');
+    }
+
+    function contourRowStyle(contourColor, nominalIterate) {
+      const backgrounds = {
+        black: '#f3f4f6',
+        red: '#fee2e2',
+        blue: '#dbeafe',
+        purple: '#ede9fe',
+        green: '#dcfce7',
+        orange: '#ffedd5'
+      };
+      const textColor = nominalIterate >= 9 ? '#98a2b3' : '#111111';
+      return ' style="background:' + (backgrounds[contourColor] || backgrounds.orange) + ';color:' + textColor + ';"';
+    }
+
+    function renderSquareTableRows(square, renderer, rowStyleFn) {
+      if (!square) return '<tr><td colspan="5" class="small">No square selected.</td></tr>';
+      const corners = ['TL', 'TR', 'BR', 'BL'];
+      const rows = [];
+      for (let nominal = 2; nominal <= 16; nominal += 1) {
+        const cells = corners.map(function(label) {
+          return '<td>' + renderer(square.corners[label], nominal, label) + '</td>';
+        }).join('');
+        const style = rowStyleFn ? rowStyleFn(nominal) : '';
+        rows.push('<tr class="' + rowBaseClass(nominal) + '"' + style + '><td>' + nominal + '</td>' + cells + '</tr>');
+      }
+      return rows.join('');
+    }
+
+    function updateSelectedTables(square) {
+      if (!square) {
+        const emptyRow = '<tr><td colspan="5" class="small">No square selected.</td></tr>';
+        selectedDotTableBody.innerHTML = emptyRow;
+        selectedMonotoneTableBody.innerHTML = emptyRow;
+        selectedTimeTableBody.innerHTML = emptyRow;
+        selectedSkipTableBody.innerHTML = emptyRow;
         return;
       }
-	      const rawSigns = decodeSignWord(point.rawSignWord);
-	      const monotoneSigns = decodeSignWord(point.monotoneSignWord);
-	      const skips = decodeSkipWord(point.skipWord);
-	      const rows = [];
-	      for (let idx = 0; idx < rawSigns.length; idx += 1) {
-	        const rawEntry = rawSigns[idx];
-	        const monotoneEntry = monotoneSigns[idx];
-	        const skipEntry = skips[idx];
-	        const timeValue = formatTimeValue(decodeTimeForPoint(point.idx, rawEntry.nominal));
-	        rows.push(
-	          '<tr class="iter-row ' + (skipEntry.skip ? 'skip' : 'normal') + '">' +
-	            '<td>' + rawEntry.nominal + '</td>' +
-	            '<td>' + codeText(rawEntry.code) + '</td>' +
-	            '<td>' + codeText(monotoneEntry.code) + '</td>' +
-	            '<td>' + timeValue + '</td>' +
-	            '<td>' + (skipEntry.skip ? 'yes' : 'no') + '</td>' +
-	          '</tr>'
-        );
-      }
-      target.innerHTML = rows.join('');
+
+      const contourTrace = computeSquareContourTrace(square);
+      const contourColors = contourTrace.colors;
+      selectedDotTableBody.innerHTML = renderSquareTableRows(square, function(point, nominal) {
+        return codeText(pointCode(point, 'raw', nominal));
+      });
+      selectedMonotoneTableBody.innerHTML = renderSquareTableRows(
+        square,
+        function(point, nominal) {
+          return codeText(pointCode(point, 'monotone', nominal));
+        },
+        function(nominal) {
+          return contourRowStyle(contourColors[nominal] || 'orange', nominal);
+        }
+      );
+      selectedTimeTableBody.innerHTML = renderSquareTableRows(square, function(point, nominal) {
+        return formatTimeValue(decodeTimeForPoint(point.idx, nominal));
+      });
+      selectedSkipTableBody.innerHTML = renderSquareTableRows(square, function(_point, nominal, label) {
+        const internalIdx = displayCornerToInternalIndex(label);
+        const skipState = contourTrace.skipStates[nominal] || [0, 0, 0, 0];
+        return skipState[internalIdx] > 0 ? 'yes' : 'no';
+      });
     }
 
     function niceTickStep(span, targetTicks) {
@@ -1344,28 +1902,20 @@ function write_html_043(
       baseCtx.stroke();
     }
 
-    function drawSelectedNeighborCells() {
-      if (!state.selected) return;
-      const cellCoords = [
-        [state.selected.i - 1, state.selected.j - 1],
-        [state.selected.i, state.selected.j - 1],
-        [state.selected.i - 1, state.selected.j],
-        [state.selected.i, state.selected.j]
-      ];
-      overlayCtx.save();
-      overlayCtx.fillStyle = 'rgba(170, 170, 170, 0.18)';
-      overlayCtx.strokeStyle = 'rgba(90, 90, 90, 0.95)';
-      overlayCtx.lineWidth = 1.2;
-      for (const [ci, cj] of cellCoords) {
-        if (ci < 0 || cj < 0 || ci >= CONFIG.nAlpha - 1 || cj >= CONFIG.nLambda - 1) continue;
-        const x0 = plotX(alphaAt(ci));
-        const x1 = plotX(alphaAt(ci + 1));
-        const yTop = plotY(lambdaAt(cj + 1));
-        const yBot = plotY(lambdaAt(cj));
-        overlayCtx.fillRect(x0, yTop, x1 - x0, yBot - yTop);
-        overlayCtx.strokeRect(x0, yTop, x1 - x0, yBot - yTop);
-      }
-      overlayCtx.restore();
+    function drawSquareHighlight(ctx, square, strokeStyle, fillStyle, dash) {
+      if (!square) return;
+      const x0 = plotX(square.alpha0);
+      const x1 = plotX(square.alpha1);
+      const yTop = plotY(square.lambda1);
+      const yBot = plotY(square.lambda0);
+      ctx.save();
+      ctx.strokeStyle = strokeStyle;
+      ctx.fillStyle = fillStyle;
+      ctx.lineWidth = 1.5;
+      if (dash) ctx.setLineDash(dash);
+      ctx.fillRect(x0, yTop, x1 - x0, yBot - yTop);
+      ctx.strokeRect(x0, yTop, x1 - x0, yBot - yTop);
+      ctx.restore();
     }
 
     function drawBase() {
@@ -1393,38 +1943,15 @@ function write_html_043(
       updateViewInfo();
     }
 
-    function drawPointMarker(ctx, point, color, radius, dash) {
-      if (!point) return;
-      const x = plotX(point.alpha);
-      const y = plotY(point.lambda);
-      ctx.save();
-      ctx.strokeStyle = color;
-      ctx.fillStyle = color;
-      ctx.lineWidth = 1.5;
-      if (dash) ctx.setLineDash(dash);
-      ctx.beginPath();
-      ctx.arc(x, y, radius, 0, 2 * Math.PI);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(x - radius - 6, y);
-      ctx.lineTo(x + radius + 6, y);
-      ctx.moveTo(x, y - radius - 6);
-      ctx.lineTo(x, y + radius + 6);
-      ctx.stroke();
-      ctx.restore();
-    }
-
     function drawOverlay() {
       const w = viewerWrap.clientWidth;
       const h = viewerWrap.clientHeight;
       overlayCtx.clearRect(0, 0, w, h);
-      drawSelectedNeighborCells();
-      drawPointMarker(overlayCtx, state.hover, '#6b7280', 4, [4, 4]);
-      drawPointMarker(overlayCtx, state.selected, '#0891b2', 6, null);
-      setInfo(hoverInfo, state.hover, 'No point under cursor.');
-      setPointTable(hoverTableBody, state.hover, 'No point under cursor.');
-      setInfo(selectedInfo, state.selected, 'No point selected.');
-      setPointTable(selectedTableBody, state.selected, 'No point selected.');
+      drawSquareHighlight(overlayCtx, state.hover, 'rgba(107, 114, 128, 0.95)', 'rgba(209, 213, 219, 0.14)', [4, 4]);
+      drawSquareHighlight(overlayCtx, state.selected, '#0891b2', 'rgba(14, 165, 233, 0.14)', null);
+      setSquareInfo(hoverInfo, state.hover, 'No square under cursor.');
+      setSquareInfo(selectedInfo, state.selected, 'No square selected.');
+      updateSelectedTables(state.selected);
     }
 
     function updateViewInfo() {
@@ -1451,7 +1978,7 @@ function write_html_043(
 				        ['alpha range', state.view.a0.toFixed(6) + ' .. ' + state.view.a1.toFixed(6)],
 				        ['lambda range', state.view.l0.toFixed(6) + ' .. ' + state.view.l1.toFixed(6)],
 				        ['grid', CONFIG.nAlpha + ' x ' + CONFIG.nLambda],
-				        ['grazing mode', 'symbolic deletion only'],
+				        ['grazing mode', state.grazingMode === 'symbolic' ? 'symbolic deletion' : 'return-time skip'],
 				        ['visible iterates', Array.from(state.visibleIterates).sort(function(a, b) { return a - b; }).join(', ') || '(none)'],
 				        ['black contours', state.showBlackContours ? 'shown' : 'hidden'],
 			        ['green contours', state.showGreenContours ? 'shown' : 'hidden'],
@@ -1525,7 +2052,7 @@ function write_html_043(
         return;
       }
       const data = screenToData(event.clientX, event.clientY);
-      state.hover = data ? sampleNearestPoint(data.alpha, data.lambda) : null;
+      state.hover = data ? sampleSquareAt(data.alpha, data.lambda) : null;
       drawOverlay();
     });
 
@@ -1552,7 +2079,7 @@ function write_html_043(
       state.dragging = null;
       if (moved < 4) {
         const data = screenToData(event.clientX, event.clientY);
-        state.selected = data ? sampleNearestPoint(data.alpha, data.lambda) : null;
+        state.selected = data ? sampleSquareAt(data.alpha, data.lambda) : null;
         drawOverlay();
       }
     });
@@ -1612,6 +2139,11 @@ function write_html_043(
 			      toggleBlackContoursButton.textContent = state.showBlackContours ? 'Hide Black' : 'Show Black';
 			    }
 
+			    function updateGrazingModeButton() {
+			      toggleGrazingModeButton.textContent =
+			        state.grazingMode === 'symbolic' ? 'Grazing: Symbolic' : 'Grazing: Return-Time';
+			    }
+
 		    function updateGreenToggleButton() {
 		      toggleGreenContoursButton.textContent = state.showGreenContours ? 'Hide Green' : 'Show Green';
 		    }
@@ -1631,6 +2163,13 @@ function write_html_043(
 			    toggleBlackContoursButton.addEventListener('click', function() {
 			      state.showBlackContours = !state.showBlackContours;
 			      updateBlackToggleButton();
+			      drawBase();
+			      drawOverlay();
+			    });
+
+			    toggleGrazingModeButton.addEventListener('click', function() {
+			      state.grazingMode = state.grazingMode === 'symbolic' ? 'returntime' : 'symbolic';
+			      updateGrazingModeButton();
 			      drawBase();
 			      drawOverlay();
 			    });
@@ -1665,6 +2204,7 @@ function write_html_043(
 
 			    window.addEventListener('resize', resizeCanvases);
 			    renderIterateControls();
+			    updateGrazingModeButton();
 			    updateBlackToggleButton();
 		    updateGreenToggleButton();
 		    updateRedToggleButton();
@@ -1718,17 +2258,43 @@ function main()
     println("Collected symbolic-mode segments: $(symbolic_total_black) black, $(symbolic_total_red) red, $(symbolic_total_blue) blue, $(symbolic_total_purple) purple, $(symbolic_total_green) green.")
     flush(stdout)
 
+    returntime_black_segments_by_iter,
+    returntime_red_segments_by_iter,
+    returntime_blue_segments_by_iter,
+    returntime_purple_segments_by_iter,
+    returntime_green_segments_by_iter,
+    _,
+    _ =
+        collect_sequence_classified_segments_046(dot_grids, time_grids, :returntime)
+    returntime_total_black = sum(length, returntime_black_segments_by_iter)
+    returntime_total_red = sum(length, returntime_red_segments_by_iter)
+    returntime_total_blue = sum(length, returntime_blue_segments_by_iter)
+    returntime_total_purple = sum(length, returntime_purple_segments_by_iter)
+    returntime_total_green = sum(length, returntime_green_segments_by_iter)
+    println("Collected return-time mode segments: $(returntime_total_black) black, $(returntime_total_red) red, $(returntime_total_blue) blue, $(returntime_total_purple) purple, $(returntime_total_green) green.")
+    flush(stdout)
+
     symbolic_black_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
     symbolic_red_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
     symbolic_blue_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
     symbolic_purple_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
     symbolic_green_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    returntime_black_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    returntime_red_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    returntime_blue_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    returntime_purple_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
+    returntime_green_blobs = [base64_bytes_043(Float32[]) for _ in 1:A27.ATTEMPT025_PLOT_ITERATE_CAP]
     for nominal_iterate in 2:min(8, A27.ATTEMPT025_PLOT_ITERATE_CAP)
         symbolic_black_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(symbolic_black_segments_by_iter[nominal_iterate]))
         symbolic_red_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(symbolic_red_segments_by_iter[nominal_iterate]))
         symbolic_blue_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(symbolic_blue_segments_by_iter[nominal_iterate]))
         symbolic_purple_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(symbolic_purple_segments_by_iter[nominal_iterate]))
         symbolic_green_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(symbolic_green_segments_by_iter[nominal_iterate]))
+        returntime_black_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(returntime_black_segments_by_iter[nominal_iterate]))
+        returntime_red_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(returntime_red_segments_by_iter[nominal_iterate]))
+        returntime_blue_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(returntime_blue_segments_by_iter[nominal_iterate]))
+        returntime_purple_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(returntime_purple_segments_by_iter[nominal_iterate]))
+        returntime_green_blobs[nominal_iterate] = base64_bytes_043(flatten_segments_043(returntime_green_segments_by_iter[nominal_iterate]))
     end
     raw_sign_blob = base64_bytes_043(raw_sign_words)
     monotone_sign_blob = base64_bytes_043(monotone_sign_words)
@@ -1743,6 +2309,11 @@ function main()
         symbolic_blue_blobs,
         symbolic_purple_blobs,
         symbolic_green_blobs,
+        returntime_black_blobs,
+        returntime_red_blobs,
+        returntime_blue_blobs,
+        returntime_purple_blobs,
+        returntime_green_blobs,
         raw_sign_blob,
         monotone_sign_blob,
         skip_blob,
