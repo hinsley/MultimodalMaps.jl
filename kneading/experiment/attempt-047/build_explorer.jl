@@ -1070,11 +1070,8 @@ function write_html_043(
       border: 1px solid var(--border); background: white; color: var(--ink);
       padding: 6px 10px; border-radius: 6px; cursor: pointer;
     }
-    .panel-stack { display: grid; gap: 8px; }
-    .map-panel { border: 1px solid var(--border); border-radius: 8px; padding: 6px; background: #fbfbfb; position: relative; }
-    .map-panel-header { display: flex; justify-content: space-between; gap: 6px; align-items: baseline; margin-bottom: 4px; }
-    .map-panel-title { font-size: 11px; font-weight: 600; }
-    .map-panel-meta { font-size: 10px; color: var(--muted); }
+    .panel-stack { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .map-panel { min-width: 0; }
     .map-canvas { width: 100%; display: block; background: white; border: 1px solid var(--border); border-radius: 4px; }
     .returnmap-note { margin-bottom: 6px; }
   </style>
@@ -1207,7 +1204,6 @@ function write_html_043(
         <div class="action-row">
           <button id="recomputeReturnMaps">Recompute Selected Square</button>
           <button id="redrawReturnMaps">Redraw Panels</button>
-          <button id="toggleReturnMaps">Hide Return Maps</button>
         </div>
         <div id="returnMapPanels" class="panel-stack"></div>
       </div>
@@ -1329,7 +1325,6 @@ function write_html_043(
             const returnMapStatus = document.getElementById('returnMapStatus');
             const recomputeReturnMapsButton = document.getElementById('recomputeReturnMaps');
             const redrawReturnMapsButton = document.getElementById('redrawReturnMaps');
-            const toggleReturnMapsButton = document.getElementById('toggleReturnMaps');
             const returnMapPanels = document.getElementById('returnMapPanels');
             const returnControlIds = [
               'returnDt', 'returnTMax', 'returnEps0', 'returnMaxMaxima',
@@ -1351,7 +1346,6 @@ function write_html_043(
 				      showRedContours: true,
 				      showBlueContours: true,
 				      showPurpleContours: true,
-              showReturnMaps: true,
               returnMapWorker: null,
               returnMapWorkerUrl: null,
               returnMapRequestId: 0,
@@ -1439,11 +1433,6 @@ function write_html_043(
 
     function clearReturnMapPanels(message) {
       returnMapPanels.innerHTML = '<div class="small">' + message + '</div>';
-    }
-
-    function updateReturnMapVisibility() {
-      returnMapPanels.style.display = state.showReturnMaps ? 'grid' : 'none';
-      toggleReturnMapsButton.textContent = state.showReturnMaps ? 'Hide Return Maps' : 'Show Return Maps';
     }
 
     function updateLegendForGrazingMode() {
@@ -1650,8 +1639,8 @@ function write_html_043(
       return [
         { label: 'TL', alpha: square.corners.TL.alpha, lambda: square.corners.TL.lambda },
         { label: 'TR', alpha: square.corners.TR.alpha, lambda: square.corners.TR.lambda },
-        { label: 'BR', alpha: square.corners.BR.alpha, lambda: square.corners.BR.lambda },
-        { label: 'BL', alpha: square.corners.BL.alpha, lambda: square.corners.BL.lambda }
+        { label: 'BL', alpha: square.corners.BL.alpha, lambda: square.corners.BL.lambda },
+        { label: 'BR', alpha: square.corners.BR.alpha, lambda: square.corners.BR.lambda }
       ];
     }
 
@@ -1777,14 +1766,6 @@ function write_html_043(
       }
       ctx.restore();
 
-      ctx.fillStyle = '#111111';
-      ctx.font = '10px Menlo, Consolas, monospace';
-      ctx.fillText('|x_n|', plotLeft + plotWidth / 2 - 16, height - 8);
-      ctx.save();
-      ctx.translate(12, plotTop + plotHeight / 2 + 16);
-      ctx.rotate(-Math.PI / 2);
-      ctx.fillText('|x_{n+1}|', 0, 0);
-      ctx.restore();
     }
 
     function drawReturnMapPanels(results, plotSettings) {
@@ -1794,21 +1775,11 @@ function write_html_043(
       }
       const bounds = computeReturnMapBounds(results, plotSettings);
       returnMapPanels.innerHTML = '';
-      const width = Math.max(280, returnMapPanels.clientWidth - 4);
+      const panelGap = 8;
+      const width = Math.max(140, Math.floor((Math.max(0, returnMapPanels.clientWidth) - panelGap) / 2));
       results.forEach(function(result) {
         const panel = document.createElement('div');
         panel.className = 'map-panel';
-        const header = document.createElement('div');
-        header.className = 'map-panel-header';
-        const title = document.createElement('div');
-        title.className = 'map-panel-title';
-        title.textContent = result.label + ' corner  α=' + result.alpha.toFixed(6) + '  λ=' + result.lambda.toFixed(6);
-        const meta = document.createElement('div');
-        meta.className = 'map-panel-meta';
-        meta.textContent = result.status + ' • ' + result.absxValues.length + ' maxima • t=' + result.tFinal.toFixed(2);
-        header.appendChild(title);
-        header.appendChild(meta);
-        panel.appendChild(header);
         const drawing = makePanelCanvas(width, plotSettings.panelHeight);
         drawReturnMapPanel(drawing.ctx, width, plotSettings.panelHeight, result, bounds, plotSettings);
         panel.appendChild(drawing.canvas);
@@ -2743,11 +2714,6 @@ function write_html_043(
           refreshReturnMapPanels();
         });
 
-        toggleReturnMapsButton.addEventListener('click', function() {
-          state.showReturnMaps = !state.showReturnMaps;
-          updateReturnMapVisibility();
-        });
-
         returnControlIds.forEach(function(id) {
           const input = document.getElementById(id);
           if (!input) return;
@@ -2761,11 +2727,10 @@ function write_html_043(
 			    updateGrazingModeButton();
 			    updateBlackToggleButton();
 		    updateGreenToggleButton();
-		    updateRedToggleButton();
-		    updateBlueToggleButton();
-		    updatePurpleToggleButton();
+        updateRedToggleButton();
+        updateBlueToggleButton();
+        updatePurpleToggleButton();
         updateLegendForGrazingMode();
-        updateReturnMapVisibility();
         clearReturnMapPanels('No return-map data yet.');
 		    decodeGzipUint16Array(TIME_WORDS_GZ_B64)
       .then(function(words) {
