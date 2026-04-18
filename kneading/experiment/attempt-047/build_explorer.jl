@@ -1017,7 +1017,7 @@ function write_html_043(
     }
     #toolbar .note { color: var(--muted); font-size: 12px; }
     #viewerWrap { position: relative; flex: 1 1 auto; min-height: 0; background: white; }
-    canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    #viewerWrap > canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
     #sidebar {
       width: 430px; max-width: 44vw; border-left: 1px solid var(--border);
       background: var(--panel); padding: 8px 9px; overflow: auto;
@@ -1071,7 +1071,7 @@ function write_html_043(
       padding: 6px 10px; border-radius: 6px; cursor: pointer;
     }
     .panel-stack { display: grid; gap: 8px; }
-    .map-panel { border: 1px solid var(--border); border-radius: 8px; padding: 6px; background: #fbfbfb; }
+    .map-panel { border: 1px solid var(--border); border-radius: 8px; padding: 6px; background: #fbfbfb; position: relative; }
     .map-panel-header { display: flex; justify-content: space-between; gap: 6px; align-items: baseline; margin-bottom: 4px; }
     .map-panel-title { font-size: 11px; font-weight: 600; }
     .map-panel-meta { font-size: 10px; color: var(--muted); }
@@ -1098,8 +1098,8 @@ function write_html_043(
 	      <div class="box">
 	        <div class="legend-row"><span class="swatch black"></span><span>real contour: the two monotone sign sequences differ in exactly one place</span></div>
 	        <div class="legend-row"><span class="swatch red"></span><span>coordinate singularity: two consecutive monotone signs flip and the rest matches</span></div>
-	        <div class="legend-row"><span class="swatch blue"></span><span>grazing (`+` deletion): deleting one `+` in the contour-relative range `k:9` reconciles the suffix, and later nominal iterates inherit that local skipped index on the affected side</span></div>
-	        <div class="legend-row"><span class="swatch purple"></span><span>grazing (`-` deletion): deleting one `-` and inverting the later suffix reconciles the contour-relative suffix, and later nominal iterates inherit both the local skipped index and the persistent suffix inversion on the affected side</span></div>
+	        <div id="blueLegendRow" class="legend-row"><span class="swatch blue"></span><span id="blueLegendText">grazing (`+` deletion): deleting one `+` in the contour-relative range `k:9` reconciles the suffix, and later nominal iterates inherit that local skipped index on the affected side</span></div>
+	        <div id="purpleLegendRow" class="legend-row"><span class="swatch purple"></span><span id="purpleLegendText">grazing (`-` deletion): deleting one `-` and inverting the later suffix reconciles the contour-relative suffix, and later nominal iterates inherit both the local skipped index and the persistent suffix inversion on the affected side</span></div>
 	        <div class="legend-row"><span class="swatch green"></span><span>legacy residual class retained for compatibility; regenerated artifacts should leave it empty</span></div>
 	        <div class="legend-row"><span class="swatch cyan"></span><span>selected marched square</span></div>
 	        <div class="legend-row"><span class="swatch" style="background:#d97706;"></span><span>monotone-table row color when no contour is produced at that nominal iterate</span></div>
@@ -1184,11 +1184,10 @@ function write_html_043(
         </div>
         <div class="control-grid">
           <div class="control-item"><label for="returnDt">RK4 dt</label><input id="returnDt" type="number" step="0.001" value="0.02"></div>
-          <div class="control-item"><label for="returnTMax">Integration T max</label><input id="returnTMax" type="number" step="1" value="400"></div>
+          <div class="control-item"><label for="returnTMax">Integration T max</label><input id="returnTMax" type="number" step="1" value="10000"></div>
           <div class="control-item"><label for="returnEps0">Initial eps0</label><input id="returnEps0" type="number" step="1e-8" value="1e-7"></div>
           <div class="control-item"><label for="returnMaxMaxima">Max |x|-maxima</label><input id="returnMaxMaxima" type="number" step="1" value="4096"></div>
-          <div class="control-item"><label for="returnTransientMaxima">Transient maxima skipped</label><input id="returnTransientMaxima" type="number" step="1" value="128"></div>
-          <div class="control-item"><label for="returnCobwebIterates">Cobweb iterates</label><input id="returnCobwebIterates" type="number" step="1" value="16"></div>
+          <div class="control-item"><label for="returnCobwebIterates">Cobweb iterates</label><input id="returnCobwebIterates" type="number" step="1" value="24"></div>
           <div class="control-item"><label for="returnScatterCap">Scatter pair cap</label><input id="returnScatterCap" type="number" step="1" value="5000"></div>
           <div class="control-item"><label for="returnMaxState">Abort state radius</label><input id="returnMaxState" type="number" step="1" value="200"></div>
           <div class="control-item"><label for="returnPanelHeight">Panel height</label><input id="returnPanelHeight" type="number" step="10" value="180"></div>
@@ -1208,6 +1207,7 @@ function write_html_043(
         <div class="action-row">
           <button id="recomputeReturnMaps">Recompute Selected Square</button>
           <button id="redrawReturnMaps">Redraw Panels</button>
+          <button id="toggleReturnMaps">Hide Return Maps</button>
         </div>
         <div id="returnMapPanels" class="panel-stack"></div>
       </div>
@@ -1322,13 +1322,17 @@ function write_html_043(
 				    const toggleRedContoursButton = document.getElementById('toggleRedContours');
 				    const toggleBlueContoursButton = document.getElementById('toggleGreyContours');
 				    const togglePurpleContoursButton = document.getElementById('togglePurpleContours');
+            const blueLegendRow = document.getElementById('blueLegendRow');
+            const blueLegendText = document.getElementById('blueLegendText');
+            const purpleLegendRow = document.getElementById('purpleLegendRow');
             const returnMapProgress = document.getElementById('returnMapProgress');
             const returnMapStatus = document.getElementById('returnMapStatus');
             const recomputeReturnMapsButton = document.getElementById('recomputeReturnMaps');
             const redrawReturnMapsButton = document.getElementById('redrawReturnMaps');
+            const toggleReturnMapsButton = document.getElementById('toggleReturnMaps');
             const returnMapPanels = document.getElementById('returnMapPanels');
             const returnControlIds = [
-              'returnDt', 'returnTMax', 'returnEps0', 'returnMaxMaxima', 'returnTransientMaxima',
+              'returnDt', 'returnTMax', 'returnEps0', 'returnMaxMaxima',
               'returnCobwebIterates', 'returnScatterCap', 'returnMaxState', 'returnPanelHeight',
               'returnPointRadius', 'returnScatterAlpha', 'returnCobwebWidth', 'returnDiagWidth',
               'returnAxisPadding', 'returnScatterColor', 'returnCobwebColor', 'returnDiagColor',
@@ -1347,6 +1351,7 @@ function write_html_043(
 				      showRedContours: true,
 				      showBlueContours: true,
 				      showPurpleContours: true,
+              showReturnMaps: true,
               returnMapWorker: null,
               returnMapWorkerUrl: null,
               returnMapRequestId: 0,
@@ -1398,11 +1403,10 @@ function write_html_043(
       return {
         integration: {
           dt: Math.max(1e-5, readNumberInput('returnDt', 0.02)),
-          tMax: Math.max(1.0, readNumberInput('returnTMax', 400.0)),
+          tMax: Math.max(1.0, readNumberInput('returnTMax', 10000.0)),
           eps0: Math.max(1e-12, readNumberInput('returnEps0', 1e-7)),
           maxMaxima: Math.max(32, Math.round(readNumberInput('returnMaxMaxima', 4096))),
-          transientMaxima: Math.max(0, Math.round(readNumberInput('returnTransientMaxima', 128))),
-          cobwebIterates: Math.max(1, Math.round(readNumberInput('returnCobwebIterates', 16))),
+          cobwebIterates: Math.max(1, Math.round(readNumberInput('returnCobwebIterates', 24))),
           maxState: Math.max(1.0, readNumberInput('returnMaxState', 200.0))
         },
         plot: {
@@ -1435,6 +1439,21 @@ function write_html_043(
 
     function clearReturnMapPanels(message) {
       returnMapPanels.innerHTML = '<div class="small">' + message + '</div>';
+    }
+
+    function updateReturnMapVisibility() {
+      returnMapPanels.style.display = state.showReturnMaps ? 'grid' : 'none';
+      toggleReturnMapsButton.textContent = state.showReturnMaps ? 'Hide Return Maps' : 'Show Return Maps';
+    }
+
+    function updateLegendForGrazingMode() {
+      if (state.grazingMode === 'symbolic') {
+        blueLegendText.textContent = 'grazing (`+` deletion): deleting one `+` in the contour-relative range `k:9` reconciles the suffix, and later nominal iterates inherit that local skipped index on the affected side';
+        purpleLegendRow.style.display = '';
+      } else {
+        blueLegendText.textContent = 'grazing (return-time skip): the shorter-return-time side locally advances by one iterate when that better reconciles the return-time ordering, and later nominal iterates inherit that local skipped index on the affected side';
+        purpleLegendRow.style.display = 'none';
+      }
     }
 
     function createReturnMapWorkerSource() {
@@ -1701,18 +1720,25 @@ function write_html_043(
       ctx.fillRect(0, 0, width, height);
 
       const margin = { left: 42, right: 14, top: 12, bottom: 28 };
-      const plotWidth = Math.max(20, width - margin.left - margin.right);
-      const plotHeight = Math.max(20, height - margin.top - margin.bottom);
+      const availWidth = Math.max(20, width - margin.left - margin.right);
+      const availHeight = Math.max(20, height - margin.top - margin.bottom);
+      const xSpan = Math.max(bounds.xMax - bounds.xMin, 1e-12);
+      const ySpan = Math.max(bounds.yMax - bounds.yMin, 1e-12);
+      const pixelsPerUnit = Math.max(1e-12, Math.min(availWidth / xSpan, availHeight / ySpan));
+      const plotWidth = Math.max(20, xSpan * pixelsPerUnit);
+      const plotHeight = Math.max(20, ySpan * pixelsPerUnit);
+      const plotLeft = margin.left + 0.5 * (availWidth - plotWidth);
+      const plotTop = margin.top + 0.5 * (availHeight - plotHeight);
       const xScale = function(value) {
-        return margin.left + (value - bounds.xMin) * plotWidth / Math.max(bounds.xMax - bounds.xMin, 1e-12);
+        return plotLeft + (value - bounds.xMin) * pixelsPerUnit;
       };
       const yScale = function(value) {
-        return margin.top + plotHeight - (value - bounds.yMin) * plotHeight / Math.max(bounds.yMax - bounds.yMin, 1e-12);
+        return plotTop + plotHeight - (value - bounds.yMin) * pixelsPerUnit;
       };
 
       ctx.strokeStyle = '#cbd5e1';
       ctx.lineWidth = 1;
-      ctx.strokeRect(margin.left, margin.top, plotWidth, plotHeight);
+      ctx.strokeRect(plotLeft, plotTop, plotWidth, plotHeight);
 
       ctx.strokeStyle = plotSettings.diagColor;
       ctx.lineWidth = plotSettings.diagWidth;
@@ -1721,8 +1747,12 @@ function write_html_043(
       ctx.lineTo(xScale(bounds.xMax), yScale(bounds.xMax));
       ctx.stroke();
 
-      const transient = Math.min(plotSettings.transientMaxima || 0, Math.max(0, result.absxValues.length - 1));
-      const postTransient = result.absxValues.slice(transient);
+      const postTransient = result.absxValues.slice();
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(plotLeft, plotTop, plotWidth, plotHeight);
+      ctx.clip();
+
       const scatterPairs = samplePairs(postTransient, plotSettings.scatterCap);
       ctx.fillStyle = hexToRgba(plotSettings.scatterColor, plotSettings.scatterAlpha);
       scatterPairs.forEach(function(pair) {
@@ -1745,12 +1775,13 @@ function write_html_043(
         }
         ctx.stroke();
       }
+      ctx.restore();
 
       ctx.fillStyle = '#111111';
       ctx.font = '10px Menlo, Consolas, monospace';
-      ctx.fillText('|x_n|', margin.left + plotWidth / 2 - 16, height - 8);
+      ctx.fillText('|x_n|', plotLeft + plotWidth / 2 - 16, height - 8);
       ctx.save();
-      ctx.translate(12, margin.top + plotHeight / 2 + 16);
+      ctx.translate(12, plotTop + plotHeight / 2 + 16);
       ctx.rotate(-Math.PI / 2);
       ctx.fillText('|x_{n+1}|', 0, 0);
       ctx.restore();
@@ -1771,7 +1802,7 @@ function write_html_043(
         header.className = 'map-panel-header';
         const title = document.createElement('div');
         title.className = 'map-panel-title';
-        title.textContent = result.label + '  α=' + result.alpha.toFixed(6) + '  λ=' + result.lambda.toFixed(6);
+        title.textContent = result.label + ' corner  α=' + result.alpha.toFixed(6) + '  λ=' + result.lambda.toFixed(6);
         const meta = document.createElement('div');
         meta.className = 'map-panel-meta';
         meta.textContent = result.status + ' • ' + result.absxValues.length + ' maxima • t=' + result.tFinal.toFixed(2);
@@ -2643,6 +2674,7 @@ function write_html_043(
 			    function updateGrazingModeButton() {
 			      toggleGrazingModeButton.textContent =
 			        state.grazingMode === 'symbolic' ? 'Grazing: Symbolic' : 'Grazing: Return-Time';
+            updateLegendForGrazingMode();
 			    }
 
 		    function updateGreenToggleButton() {
@@ -2711,6 +2743,11 @@ function write_html_043(
           refreshReturnMapPanels();
         });
 
+        toggleReturnMapsButton.addEventListener('click', function() {
+          state.showReturnMaps = !state.showReturnMaps;
+          updateReturnMapVisibility();
+        });
+
         returnControlIds.forEach(function(id) {
           const input = document.getElementById(id);
           if (!input) return;
@@ -2727,6 +2764,8 @@ function write_html_043(
 		    updateRedToggleButton();
 		    updateBlueToggleButton();
 		    updatePurpleToggleButton();
+        updateLegendForGrazingMode();
+        updateReturnMapVisibility();
         clearReturnMapPanels('No return-map data yet.');
 		    decodeGzipUint16Array(TIME_WORDS_GZ_B64)
       .then(function(words) {
