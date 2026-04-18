@@ -22,6 +22,8 @@ const OUTPUT_TAG_043 = get(
     ),
 )
 const HTML_PATH_043 = joinpath(ATTEMPT043_ROOT, "$(OUTPUT_TAG_043).html")
+const DATA_SCRIPT_PATH_043 = joinpath(ATTEMPT043_ROOT, "$(OUTPUT_TAG_043)_data.js")
+const DATA_SCRIPT_NAME_043 = basename(DATA_SCRIPT_PATH_043)
 const STATS_PATH_043 = joinpath(ATTEMPT043_ROOT, "$(OUTPUT_TAG_043)_iterate_stats.tsv")
 const MISSING_TIME_WORD_043 = UInt16(0xffff)
 const TABLE_ITERATE_START_046 = 2
@@ -900,6 +902,64 @@ function write_iterate_stats_043(path::String, stats)
     end
 end
 
+function write_segment_map_043(io::IO, name::String, blobs::Vector{String})
+    println(io, "  $(name): {")
+    for idx in 2:length(blobs)
+        println(io, "    $(idx): '", blobs[idx], "',")
+    end
+    println(io, "  },")
+end
+
+function write_data_script_043(
+    path::String,
+    symbolic_black_segments_b64_by_iter::Vector{String},
+    symbolic_red_segments_b64_by_iter::Vector{String},
+    symbolic_blue_segments_b64_by_iter::Vector{String},
+    symbolic_purple_segments_b64_by_iter::Vector{String},
+    symbolic_green_segments_b64_by_iter::Vector{String},
+    returntime_black_segments_b64_by_iter::Vector{String},
+    returntime_red_segments_b64_by_iter::Vector{String},
+    returntime_blue_segments_b64_by_iter::Vector{String},
+    returntime_purple_segments_b64_by_iter::Vector{String},
+    returntime_green_segments_b64_by_iter::Vector{String},
+    raw_sign_words_b64::String,
+    monotone_sign_words_b64::String,
+    skip_words_b64::String,
+    time_words_gz_b64::String,
+    time_scale::Int,
+)
+    open(path, "w") do io
+        println(io, "window.EXPLORER_SCAN_DATA_043 = {")
+        println(io, "  config: {")
+        println(io, "    nAlpha: ", length(A27.ALPHAS_025), ",")
+        println(io, "    nLambda: ", length(A27.LAMBDAS_025), ",")
+        println(io, "    alphaMin: ", A27.ATTEMPT025_ALPHA_MIN, ",")
+        println(io, "    alphaMax: ", A27.ATTEMPT025_ALPHA_MAX, ",")
+        println(io, "    lambdaMin: ", A27.ATTEMPT025_LAMBDA_MIN, ",")
+        println(io, "    lambdaMax: ", A27.ATTEMPT025_LAMBDA_MAX, ",")
+        println(io, "    tableIterateStart: ", TABLE_ITERATE_START_046, ",")
+        println(io, "    tableIterateEnd: ", TABLE_ITERATE_END_046, ",")
+        println(io, "    plotIterateEnd: ", min(8, A27.ATTEMPT025_PLOT_ITERATE_CAP))
+        println(io, "  },")
+        write_segment_map_043(io, "symbolicBlackSegmentsByIter", symbolic_black_segments_b64_by_iter)
+        write_segment_map_043(io, "symbolicRedSegmentsByIter", symbolic_red_segments_b64_by_iter)
+        write_segment_map_043(io, "symbolicBlueSegmentsByIter", symbolic_blue_segments_b64_by_iter)
+        write_segment_map_043(io, "symbolicPurpleSegmentsByIter", symbolic_purple_segments_b64_by_iter)
+        write_segment_map_043(io, "symbolicGreenSegmentsByIter", symbolic_green_segments_b64_by_iter)
+        write_segment_map_043(io, "returntimeBlackSegmentsByIter", returntime_black_segments_b64_by_iter)
+        write_segment_map_043(io, "returntimeRedSegmentsByIter", returntime_red_segments_b64_by_iter)
+        write_segment_map_043(io, "returntimeBlueSegmentsByIter", returntime_blue_segments_b64_by_iter)
+        write_segment_map_043(io, "returntimePurpleSegmentsByIter", returntime_purple_segments_b64_by_iter)
+        write_segment_map_043(io, "returntimeGreenSegmentsByIter", returntime_green_segments_b64_by_iter)
+        println(io, "  rawSignWordsB64: '", raw_sign_words_b64, "',")
+        println(io, "  monotoneSignWordsB64: '", monotone_sign_words_b64, "',")
+        println(io, "  skipWordsB64: '", skip_words_b64, "',")
+        println(io, "  timeWordsGzB64: '", time_words_gz_b64, "',")
+        println(io, "  timeScale: ", time_scale)
+        println(io, "};")
+    end
+end
+
 function write_html_043(
     path::String,
     symbolic_black_segments_b64_by_iter::Vector{String},
@@ -959,7 +1019,7 @@ function write_html_043(
     #viewerWrap { position: relative; flex: 1 1 auto; min-height: 0; background: white; }
     canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
     #sidebar {
-      width: 344px; max-width: 38vw; border-left: 1px solid var(--border);
+      width: 430px; max-width: 44vw; border-left: 1px solid var(--border);
       background: var(--panel); padding: 8px 9px; overflow: auto;
     }
     h1, h2 { margin: 0 0 6px 0; font-size: 14px; }
@@ -998,6 +1058,25 @@ function write_html_043(
     .compact-meta { margin-bottom: 4px; }
     .table-stack { display: grid; gap: 8px; }
     .table-block-title { margin: 0 0 4px 0; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+    .control-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+    .control-item { display: grid; gap: 2px; }
+    .control-item label { font-size: 10px; color: var(--muted); }
+    .control-item input { width: 100%; border: 1px solid var(--border); border-radius: 6px; padding: 4px 6px; font: inherit; background: white; color: var(--ink); }
+    .control-item input[type="color"] { padding: 2px; min-height: 28px; }
+    .progress-wrap { display: grid; gap: 4px; margin-bottom: 8px; }
+    .progress-wrap progress { width: 100%; height: 12px; }
+    .action-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+    .action-row button {
+      border: 1px solid var(--border); background: white; color: var(--ink);
+      padding: 6px 10px; border-radius: 6px; cursor: pointer;
+    }
+    .panel-stack { display: grid; gap: 8px; }
+    .map-panel { border: 1px solid var(--border); border-radius: 8px; padding: 6px; background: #fbfbfb; }
+    .map-panel-header { display: flex; justify-content: space-between; gap: 6px; align-items: baseline; margin-bottom: 4px; }
+    .map-panel-title { font-size: 11px; font-weight: 600; }
+    .map-panel-meta { font-size: 10px; color: var(--muted); }
+    .map-canvas { width: 100%; display: block; background: white; border: 1px solid var(--border); border-radius: 4px; }
+    .returnmap-note { margin-bottom: 6px; }
   </style>
 </head>
 <body>
@@ -1014,7 +1093,7 @@ function write_html_043(
       </div>
     </section>
     <aside id="sidebar">
-	      <h1>Attempt-046 Explorer</h1>
+	      <h1>Attempt-047 Explorer</h1>
 	      <h2>Legend</h2>
 	      <div class="box">
 	        <div class="legend-row"><span class="swatch black"></span><span>real contour: the two monotone sign sequences differ in exactly one place</span></div>
@@ -1096,130 +1175,68 @@ function write_html_043(
       <div class="box">
         <div id="viewInfo" class="kv"></div>
       </div>
+      <h2>Return Maps</h2>
+      <div class="box">
+        <div class="small returnmap-note">Selecting a marched square launches a browser worker that recomputes four return-map trajectories from scratch, one for each corner parameter.</div>
+        <div class="progress-wrap">
+          <progress id="returnMapProgress" max="1" value="0"></progress>
+          <div id="returnMapStatus" class="small">Select a square to compute return maps.</div>
+        </div>
+        <div class="control-grid">
+          <div class="control-item"><label for="returnDt">RK4 dt</label><input id="returnDt" type="number" step="0.001" value="0.02"></div>
+          <div class="control-item"><label for="returnTMax">Integration T max</label><input id="returnTMax" type="number" step="1" value="400"></div>
+          <div class="control-item"><label for="returnEps0">Initial eps0</label><input id="returnEps0" type="number" step="1e-8" value="1e-7"></div>
+          <div class="control-item"><label for="returnMaxMaxima">Max |x|-maxima</label><input id="returnMaxMaxima" type="number" step="1" value="4096"></div>
+          <div class="control-item"><label for="returnTransientMaxima">Transient maxima skipped</label><input id="returnTransientMaxima" type="number" step="1" value="128"></div>
+          <div class="control-item"><label for="returnCobwebIterates">Cobweb iterates</label><input id="returnCobwebIterates" type="number" step="1" value="16"></div>
+          <div class="control-item"><label for="returnScatterCap">Scatter pair cap</label><input id="returnScatterCap" type="number" step="1" value="5000"></div>
+          <div class="control-item"><label for="returnMaxState">Abort state radius</label><input id="returnMaxState" type="number" step="1" value="200"></div>
+          <div class="control-item"><label for="returnPanelHeight">Panel height</label><input id="returnPanelHeight" type="number" step="10" value="180"></div>
+          <div class="control-item"><label for="returnPointRadius">Scatter point radius</label><input id="returnPointRadius" type="number" step="0.25" value="1.25"></div>
+          <div class="control-item"><label for="returnScatterAlpha">Scatter alpha</label><input id="returnScatterAlpha" type="number" min="0" max="1" step="0.05" value="0.22"></div>
+          <div class="control-item"><label for="returnCobwebWidth">Cobweb line width</label><input id="returnCobwebWidth" type="number" step="0.25" value="1.2"></div>
+          <div class="control-item"><label for="returnDiagWidth">Diagonal line width</label><input id="returnDiagWidth" type="number" step="0.25" value="1.0"></div>
+          <div class="control-item"><label for="returnAxisPadding">Axis padding fraction</label><input id="returnAxisPadding" type="number" step="0.01" value="0.05"></div>
+          <div class="control-item"><label for="returnScatterColor">Scatter color</label><input id="returnScatterColor" type="color" value="#111827"></div>
+          <div class="control-item"><label for="returnCobwebColor">Cobweb color</label><input id="returnCobwebColor" type="color" value="#c2410c"></div>
+          <div class="control-item"><label for="returnDiagColor">Diagonal color</label><input id="returnDiagColor" type="color" value="#64748b"></div>
+          <div class="control-item"><label for="returnXMin">X min override</label><input id="returnXMin" type="number" step="0.001" placeholder="auto"></div>
+          <div class="control-item"><label for="returnXMax">X max override</label><input id="returnXMax" type="number" step="0.001" placeholder="auto"></div>
+          <div class="control-item"><label for="returnYMin">Y min override</label><input id="returnYMin" type="number" step="0.001" placeholder="auto"></div>
+          <div class="control-item"><label for="returnYMax">Y max override</label><input id="returnYMax" type="number" step="0.001" placeholder="auto"></div>
+        </div>
+        <div class="action-row">
+          <button id="recomputeReturnMaps">Recompute Selected Square</button>
+          <button id="redrawReturnMaps">Redraw Panels</button>
+        </div>
+        <div id="returnMapPanels" class="panel-stack"></div>
+      </div>
     </aside>
   </div>
+  <script src="$(DATA_SCRIPT_NAME_043)"></script>
   <script>
-    const CONFIG = {
-      nAlpha: $(n_alpha),
-      nLambda: $(n_lambda),
-      alphaMin: $(alpha_min),
-      alphaMax: $(alpha_max),
-      lambdaMin: $(lambda_min),
-      lambdaMax: $(lambda_max)
-    };
-	    const SYMBOLIC_BLACK_SEGMENTS_B64_BY_ITER = {
-""")
-        for idx in 2:length(symbolic_black_segments_b64_by_iter)
-            print(io, "      ")
-            print(io, idx)
-            print(io, ": '")
-            print(io, symbolic_black_segments_b64_by_iter[idx])
-            print(io, "',\n")
-        end
-        print(io, """    };
-	    const SYMBOLIC_RED_SEGMENTS_B64_BY_ITER = {
-""")
-        for idx in 2:length(symbolic_red_segments_b64_by_iter)
-            print(io, "      ")
-            print(io, idx)
-            print(io, ": '")
-            print(io, symbolic_red_segments_b64_by_iter[idx])
-            print(io, "',\n")
-        end
-        print(io, """    };
-		    const SYMBOLIC_BLUE_SEGMENTS_B64_BY_ITER = {
-		""")
-        for idx in 2:length(symbolic_blue_segments_b64_by_iter)
-            print(io, "      ")
-            print(io, idx)
-            print(io, ": '")
-            print(io, symbolic_blue_segments_b64_by_iter[idx])
-            print(io, "',\n")
-        end
-        print(io, """    };
-		    const SYMBOLIC_PURPLE_SEGMENTS_B64_BY_ITER = {
-		""")
-        for idx in 2:length(symbolic_purple_segments_b64_by_iter)
-            print(io, "      ")
-            print(io, idx)
-            print(io, ": '")
-            print(io, symbolic_purple_segments_b64_by_iter[idx])
-            print(io, "',\n")
-        end
-        print(io, """    };
-		    const SYMBOLIC_GREEN_SEGMENTS_B64_BY_ITER = {
-		""")
-        for idx in 2:length(symbolic_green_segments_b64_by_iter)
-            print(io, "      ")
-            print(io, idx)
-            print(io, ": '")
-            print(io, symbolic_green_segments_b64_by_iter[idx])
-            print(io, "',\n")
-        end
-        print(io, """    };
-	    const RETURNTIME_BLACK_SEGMENTS_B64_BY_ITER = {
-""")
-        for idx in 2:length(returntime_black_segments_b64_by_iter)
-            print(io, "      ")
-            print(io, idx)
-            print(io, ": '")
-            print(io, returntime_black_segments_b64_by_iter[idx])
-            print(io, "',\n")
-        end
-        print(io, """    };
-	    const RETURNTIME_RED_SEGMENTS_B64_BY_ITER = {
-""")
-        for idx in 2:length(returntime_red_segments_b64_by_iter)
-            print(io, "      ")
-            print(io, idx)
-            print(io, ": '")
-            print(io, returntime_red_segments_b64_by_iter[idx])
-            print(io, "',\n")
-        end
-        print(io, """    };
-		    const RETURNTIME_BLUE_SEGMENTS_B64_BY_ITER = {
-		""")
-        for idx in 2:length(returntime_blue_segments_b64_by_iter)
-            print(io, "      ")
-            print(io, idx)
-            print(io, ": '")
-            print(io, returntime_blue_segments_b64_by_iter[idx])
-            print(io, "',\n")
-        end
-        print(io, """    };
-		    const RETURNTIME_PURPLE_SEGMENTS_B64_BY_ITER = {
-		""")
-        for idx in 2:length(returntime_purple_segments_b64_by_iter)
-            print(io, "      ")
-            print(io, idx)
-            print(io, ": '")
-            print(io, returntime_purple_segments_b64_by_iter[idx])
-            print(io, "',\n")
-        end
-        print(io, """    };
-		    const RETURNTIME_GREEN_SEGMENTS_B64_BY_ITER = {
-		""")
-        for idx in 2:length(returntime_green_segments_b64_by_iter)
-            print(io, "      ")
-            print(io, idx)
-            print(io, ": '")
-            print(io, returntime_green_segments_b64_by_iter[idx])
-            print(io, "',\n")
-        end
-        print(io, """    };
-			    const RAW_SIGN_WORDS_B64 = '""")
-        print(io, raw_sign_words_b64)
-        print(io, """';
-	    const MONOTONE_SIGN_WORDS_B64 = '""")
-        print(io, monotone_sign_words_b64)
-        print(io, """';
-	    const SKIP_WORDS_B64 = '""")
-        print(io, skip_words_b64)
-        print(io, """';
-    const TIME_WORDS_GZ_B64 = '""")
-        print(io, time_words_gz_b64)
-        print(io, """';
-    const TIME_SCALE = $(time_scale);
+    const scanData = window.EXPLORER_SCAN_DATA_043;
+    if (!scanData) {
+      document.body.innerHTML = '<pre style="padding:16px;font:12px Menlo,Consolas,monospace;">Missing external scan data file. Place ' + $(repr(DATA_SCRIPT_NAME_043)) + ' next to this HTML file.</pre>';
+      throw new Error('Missing external scan data file: $(DATA_SCRIPT_NAME_043)');
+    }
+
+    const CONFIG = scanData.config;
+    const SYMBOLIC_BLACK_SEGMENTS_B64_BY_ITER = scanData.symbolicBlackSegmentsByIter;
+    const SYMBOLIC_RED_SEGMENTS_B64_BY_ITER = scanData.symbolicRedSegmentsByIter;
+    const SYMBOLIC_BLUE_SEGMENTS_B64_BY_ITER = scanData.symbolicBlueSegmentsByIter;
+    const SYMBOLIC_PURPLE_SEGMENTS_B64_BY_ITER = scanData.symbolicPurpleSegmentsByIter;
+    const SYMBOLIC_GREEN_SEGMENTS_B64_BY_ITER = scanData.symbolicGreenSegmentsByIter;
+    const RETURNTIME_BLACK_SEGMENTS_B64_BY_ITER = scanData.returntimeBlackSegmentsByIter;
+    const RETURNTIME_RED_SEGMENTS_B64_BY_ITER = scanData.returntimeRedSegmentsByIter;
+    const RETURNTIME_BLUE_SEGMENTS_B64_BY_ITER = scanData.returntimeBlueSegmentsByIter;
+    const RETURNTIME_PURPLE_SEGMENTS_B64_BY_ITER = scanData.returntimePurpleSegmentsByIter;
+    const RETURNTIME_GREEN_SEGMENTS_B64_BY_ITER = scanData.returntimeGreenSegmentsByIter;
+    const RAW_SIGN_WORDS_B64 = scanData.rawSignWordsB64;
+    const MONOTONE_SIGN_WORDS_B64 = scanData.monotoneSignWordsB64;
+    const SKIP_WORDS_B64 = scanData.skipWordsB64;
+    const TIME_WORDS_GZ_B64 = scanData.timeWordsGzB64;
+    const TIME_SCALE = scanData.timeScale;
 
     function decodeBase64Bytes(b64) {
       const raw = atob(b64);
@@ -1292,10 +1309,10 @@ function write_html_043(
 	    const selectedDotTableBody = document.getElementById('selectedDotTableBody');
 	    const selectedMonotoneTableBody = document.getElementById('selectedMonotoneTableBody');
 	    const selectedTimeTableBody = document.getElementById('selectedTimeTableBody');
-	    const selectedSkipTableBody = document.getElementById('selectedSkipTableBody');
-	    const viewInfo = document.getElementById('viewInfo');
-	    const iterateControls = document.getElementById('iterateControls');
-	    const resetViewButton = document.getElementById('resetView');
+    const selectedSkipTableBody = document.getElementById('selectedSkipTableBody');
+    const viewInfo = document.getElementById('viewInfo');
+    const iterateControls = document.getElementById('iterateControls');
+    const resetViewButton = document.getElementById('resetView');
 			    const clearSelectionButton = document.getElementById('clearSelection');
 			    const showAllIteratesButton = document.getElementById('showAllIterates');
 			    const hideAllIteratesButton = document.getElementById('hideAllIterates');
@@ -1305,6 +1322,18 @@ function write_html_043(
 				    const toggleRedContoursButton = document.getElementById('toggleRedContours');
 				    const toggleBlueContoursButton = document.getElementById('toggleGreyContours');
 				    const togglePurpleContoursButton = document.getElementById('togglePurpleContours');
+            const returnMapProgress = document.getElementById('returnMapProgress');
+            const returnMapStatus = document.getElementById('returnMapStatus');
+            const recomputeReturnMapsButton = document.getElementById('recomputeReturnMaps');
+            const redrawReturnMapsButton = document.getElementById('redrawReturnMaps');
+            const returnMapPanels = document.getElementById('returnMapPanels');
+            const returnControlIds = [
+              'returnDt', 'returnTMax', 'returnEps0', 'returnMaxMaxima', 'returnTransientMaxima',
+              'returnCobwebIterates', 'returnScatterCap', 'returnMaxState', 'returnPanelHeight',
+              'returnPointRadius', 'returnScatterAlpha', 'returnCobwebWidth', 'returnDiagWidth',
+              'returnAxisPadding', 'returnScatterColor', 'returnCobwebColor', 'returnDiagColor',
+              'returnXMin', 'returnXMax', 'returnYMin', 'returnYMax'
+            ];
 
 			    const state = {
 			      view: { a0: CONFIG.alphaMin, a1: CONFIG.alphaMax, l0: CONFIG.lambdaMin, l1: CONFIG.lambdaMax },
@@ -1317,7 +1346,12 @@ function write_html_043(
 				      showGreenContours: true,
 				      showRedContours: true,
 				      showBlueContours: true,
-				      showPurpleContours: true
+				      showPurpleContours: true,
+              returnMapWorker: null,
+              returnMapWorkerUrl: null,
+              returnMapRequestId: 0,
+              returnMapResults: null,
+              returnMapSettings: null
 				    };
 
 	    function currentSegmentSets() {
@@ -1335,6 +1369,470 @@ function write_html_043(
 	        green: returntimeGreenSegmentsByIter
 	      };
 	    }
+
+    function hexToRgba(hex, alpha) {
+      const clean = String(hex || '#000000').replace('#', '');
+      const normalized = clean.length === 3 ? clean.split('').map(function(ch) { return ch + ch; }).join('') : clean;
+      const value = parseInt(normalized, 16);
+      const r = (value >> 16) & 0xff;
+      const g = (value >> 8) & 0xff;
+      const b = value & 0xff;
+      return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+    }
+
+    function parseOptionalNumber(value) {
+      if (value === null || value === undefined) return null;
+      const trimmed = String(value).trim();
+      if (trimmed === '') return null;
+      const parsed = Number(trimmed);
+      return Number.isFinite(parsed) ? parsed : null;
+    }
+
+    function readNumberInput(id, fallback) {
+      const input = document.getElementById(id);
+      const parsed = Number(input.value);
+      return Number.isFinite(parsed) ? parsed : fallback;
+    }
+
+    function currentReturnMapSettings() {
+      return {
+        integration: {
+          dt: Math.max(1e-5, readNumberInput('returnDt', 0.02)),
+          tMax: Math.max(1.0, readNumberInput('returnTMax', 400.0)),
+          eps0: Math.max(1e-12, readNumberInput('returnEps0', 1e-7)),
+          maxMaxima: Math.max(32, Math.round(readNumberInput('returnMaxMaxima', 4096))),
+          transientMaxima: Math.max(0, Math.round(readNumberInput('returnTransientMaxima', 128))),
+          cobwebIterates: Math.max(1, Math.round(readNumberInput('returnCobwebIterates', 16))),
+          maxState: Math.max(1.0, readNumberInput('returnMaxState', 200.0))
+        },
+        plot: {
+          scatterCap: Math.max(32, Math.round(readNumberInput('returnScatterCap', 5000))),
+          panelHeight: Math.max(120, Math.round(readNumberInput('returnPanelHeight', 180))),
+          pointRadius: Math.max(0.25, readNumberInput('returnPointRadius', 1.25)),
+          scatterAlpha: Math.max(0.0, Math.min(1.0, readNumberInput('returnScatterAlpha', 0.22))),
+          cobwebWidth: Math.max(0.25, readNumberInput('returnCobwebWidth', 1.2)),
+          diagWidth: Math.max(0.25, readNumberInput('returnDiagWidth', 1.0)),
+          axisPadding: Math.max(0.0, readNumberInput('returnAxisPadding', 0.05)),
+          scatterColor: document.getElementById('returnScatterColor').value || '#111827',
+          cobwebColor: document.getElementById('returnCobwebColor').value || '#c2410c',
+          diagColor: document.getElementById('returnDiagColor').value || '#64748b',
+          xMin: parseOptionalNumber(document.getElementById('returnXMin').value),
+          xMax: parseOptionalNumber(document.getElementById('returnXMax').value),
+          yMin: parseOptionalNumber(document.getElementById('returnYMin').value),
+          yMax: parseOptionalNumber(document.getElementById('returnYMax').value)
+        }
+      };
+    }
+
+    function setReturnMapStatus(text, progress) {
+      returnMapStatus.textContent = text;
+      if (progress === null || progress === undefined) {
+        returnMapProgress.removeAttribute('value');
+      } else {
+        returnMapProgress.value = Math.max(0, Math.min(1, progress));
+      }
+    }
+
+    function clearReturnMapPanels(message) {
+      returnMapPanels.innerHTML = '<div class="small">' + message + '</div>';
+    }
+
+    function createReturnMapWorkerSource() {
+      return `
+        function unstableSideInitialCondition(lambda, eps0) {
+          const mu = 0.5 * (-lambda + Math.sqrt(lambda * lambda + 4.0));
+          const norm = Math.hypot(1.0, mu);
+          return { x: eps0 / norm, y: eps0 * mu / norm, z: 0.0 };
+        }
+
+        function shimizuMoriokaDeriv(state, alpha, lambda) {
+          return {
+            x: state.y,
+            y: state.x - lambda * state.y - state.x * state.z,
+            z: -alpha * (state.z - state.x * state.x)
+          };
+        }
+
+        function rk4Step(state, dt, alpha, lambda) {
+          const k1 = shimizuMoriokaDeriv(state, alpha, lambda);
+          const s2 = { x: state.x + 0.5 * dt * k1.x, y: state.y + 0.5 * dt * k1.y, z: state.z + 0.5 * dt * k1.z };
+          const k2 = shimizuMoriokaDeriv(s2, alpha, lambda);
+          const s3 = { x: state.x + 0.5 * dt * k2.x, y: state.y + 0.5 * dt * k2.y, z: state.z + 0.5 * dt * k2.z };
+          const k3 = shimizuMoriokaDeriv(s3, alpha, lambda);
+          const s4 = { x: state.x + dt * k3.x, y: state.y + dt * k3.y, z: state.z + dt * k3.z };
+          const k4 = shimizuMoriokaDeriv(s4, alpha, lambda);
+          return {
+            x: state.x + (dt / 6.0) * (k1.x + 2.0 * k2.x + 2.0 * k3.x + k4.x),
+            y: state.y + (dt / 6.0) * (k1.y + 2.0 * k2.y + 2.0 * k3.y + k4.y),
+            z: state.z + (dt / 6.0) * (k1.z + 2.0 * k2.z + 2.0 * k3.z + k4.z)
+          };
+        }
+
+        function absxProxy(state) {
+          return state.x * state.y;
+        }
+
+        function absxVertexValue(state) {
+          return state.x * state.x;
+        }
+
+        function crossingTheta(prevValue, currValue) {
+          const denom = currValue - prevValue;
+          if (Math.abs(denom) < 1e-14) return 0.5;
+          return Math.max(0.0, Math.min(1.0, -prevValue / denom));
+        }
+
+        function quadraticVertexTime(t0, z0, t1, z1, t2, z2) {
+          const denom = (t0 - t1) * (t0 - t2) * (t1 - t2);
+          if (Math.abs(denom) < 1e-14) return null;
+          const a = (t2 * (z1 - z0) + t1 * (z0 - z2) + t0 * (z2 - z1)) / denom;
+          const b = (t2 * t2 * (z0 - z1) + t1 * t1 * (z2 - z0) + t0 * t0 * (z1 - z2)) / denom;
+          if (Math.abs(a) < 1e-14) return null;
+          const tVertex = -b / (2.0 * a);
+          return (tVertex >= Math.min(t0, t2) && tVertex <= Math.max(t0, t2)) ? tVertex : null;
+        }
+
+        function lerpState(a, b, theta) {
+          return {
+            x: (1.0 - theta) * a.x + theta * b.x,
+            y: (1.0 - theta) * a.y + theta * b.y,
+            z: (1.0 - theta) * a.z + theta * b.z
+          };
+        }
+
+        function runOrbit(job, settings, requestId, cornerIndex, totalCorners) {
+          const dt = settings.dt;
+          const tMax = settings.tMax;
+          const maxSteps = Math.max(1, Math.ceil(tMax / dt));
+          const progressEvery = Math.max(25, Math.floor(maxSteps / 200));
+          let state = unstableSideInitialCondition(job.lambda, settings.eps0);
+          let prev = state;
+          let prevT = 0.0;
+          let prevProxy = absxProxy(prev);
+          let prevprev = prev;
+          let prevprevT = 0.0;
+          let havePrevPrev = false;
+          let t = 0.0;
+          let status = 'ok';
+          const absxValues = [];
+          const hitTimes = [];
+
+          for (let step = 0; step < maxSteps && t < tMax && absxValues.length < settings.maxMaxima; step += 1) {
+            const curr = rk4Step(state, dt, job.alpha, job.lambda);
+            const tCurr = t + dt;
+            if (![curr.x, curr.y, curr.z].every(Number.isFinite)) {
+              status = 'nonfinite';
+              break;
+            }
+            if (Math.max(Math.abs(curr.x), Math.abs(curr.y), Math.abs(curr.z)) > settings.maxState) {
+              status = 'blowup';
+              break;
+            }
+
+            const currProxy = absxProxy(curr);
+            if (prevProxy >= 0.0 && currProxy < 0.0) {
+              let theta = crossingTheta(prevProxy, currProxy);
+              if (havePrevPrev) {
+                const tVertex = quadraticVertexTime(
+                  prevprevT, absxVertexValue(prevprev),
+                  prevT, absxVertexValue(prev),
+                  tCurr, absxVertexValue(curr)
+                );
+                if (tVertex !== null) {
+                  theta = Math.max(0.0, Math.min(1.0, (tVertex - prevT) / (tCurr - prevT)));
+                }
+              }
+              const hit = lerpState(prev, curr, theta);
+              absxValues.push(Math.abs(hit.x));
+              hitTimes.push(prevT + theta * (tCurr - prevT));
+            }
+
+            if (step % progressEvery === 0) {
+              const localProgress = Math.max(
+                Math.min(1.0, tCurr / Math.max(tMax, 1e-9)),
+                Math.min(1.0, absxValues.length / Math.max(settings.maxMaxima, 1))
+              );
+              self.postMessage({
+                type: 'progress',
+                requestId,
+                progress: (cornerIndex + localProgress) / totalCorners,
+                label: job.label,
+                cornerIndex,
+                maxima: absxValues.length,
+                t: tCurr
+              });
+            }
+
+            havePrevPrev = true;
+            prevprev = prev;
+            prevprevT = prevT;
+            prev = curr;
+            prevT = tCurr;
+            prevProxy = currProxy;
+            state = curr;
+            t = tCurr;
+          }
+
+          if (status === 'ok') {
+            if (absxValues.length >= settings.maxMaxima) status = 'maxima_cap';
+            else if (t >= tMax) status = 'tmax';
+          }
+
+          return {
+            label: job.label,
+            alpha: job.alpha,
+            lambda: job.lambda,
+            absxValues,
+            hitTimes,
+            status,
+            steps: Math.ceil(t / dt),
+            tFinal: t
+          };
+        }
+
+        self.onmessage = function(event) {
+          const { requestId, corners, settings } = event.data;
+          try {
+            const results = [];
+            for (let idx = 0; idx < corners.length; idx += 1) {
+              const result = runOrbit(corners[idx], settings, requestId, idx, corners.length);
+              results.push(result);
+            }
+            self.postMessage({ type: 'done', requestId, results });
+          } catch (error) {
+            self.postMessage({
+              type: 'error',
+              requestId,
+              message: error && error.stack ? error.stack : String(error)
+            });
+          }
+        };
+      `;
+    }
+
+    function ensureReturnMapWorkerUrl() {
+      if (!state.returnMapWorkerUrl) {
+        state.returnMapWorkerUrl = URL.createObjectURL(
+          new Blob([createReturnMapWorkerSource()], { type: 'application/javascript' })
+        );
+      }
+      return state.returnMapWorkerUrl;
+    }
+
+    function terminateReturnMapWorker() {
+      if (state.returnMapWorker) {
+        state.returnMapWorker.terminate();
+        state.returnMapWorker = null;
+      }
+    }
+
+    function currentSelectedCornerJobs(square) {
+      if (!square) return [];
+      return [
+        { label: 'TL', alpha: square.corners.TL.alpha, lambda: square.corners.TL.lambda },
+        { label: 'TR', alpha: square.corners.TR.alpha, lambda: square.corners.TR.lambda },
+        { label: 'BR', alpha: square.corners.BR.alpha, lambda: square.corners.BR.lambda },
+        { label: 'BL', alpha: square.corners.BL.alpha, lambda: square.corners.BL.lambda }
+      ];
+    }
+
+    function samplePairs(values, cap) {
+      if (values.length <= 1) return [];
+      const pairCount = values.length - 1;
+      if (pairCount <= cap) {
+        const pairs = [];
+        for (let idx = 0; idx < pairCount; idx += 1) pairs.push([values[idx], values[idx + 1]]);
+        return pairs;
+      }
+      const pairs = [];
+      for (let sampleIdx = 0; sampleIdx < cap; sampleIdx += 1) {
+        const idx = Math.min(pairCount - 1, Math.floor(sampleIdx * pairCount / cap));
+        pairs.push([values[idx], values[idx + 1]]);
+      }
+      return pairs;
+    }
+
+    function computeReturnMapBounds(results, plotSettings) {
+      let autoMin = Infinity;
+      let autoMax = -Infinity;
+      results.forEach(function(result) {
+        result.absxValues.forEach(function(value) {
+          if (Number.isFinite(value)) {
+            autoMin = Math.min(autoMin, value);
+            autoMax = Math.max(autoMax, value);
+          }
+        });
+      });
+      if (!Number.isFinite(autoMin) || !Number.isFinite(autoMax)) {
+        autoMin = 0.0;
+        autoMax = 1.0;
+      }
+      if (Math.abs(autoMax - autoMin) < 1e-9) {
+        autoMin = Math.max(0.0, autoMin - 0.5);
+        autoMax = autoMax + 0.5;
+      }
+      const span = autoMax - autoMin;
+      const paddedMin = Math.max(0.0, autoMin - span * plotSettings.axisPadding);
+      const paddedMax = autoMax + span * plotSettings.axisPadding;
+      return {
+        xMin: plotSettings.xMin !== null ? plotSettings.xMin : paddedMin,
+        xMax: plotSettings.xMax !== null ? plotSettings.xMax : paddedMax,
+        yMin: plotSettings.yMin !== null ? plotSettings.yMin : paddedMin,
+        yMax: plotSettings.yMax !== null ? plotSettings.yMax : paddedMax
+      };
+    }
+
+    function makePanelCanvas(width, height) {
+      const canvas = document.createElement('canvas');
+      canvas.className = 'map-canvas';
+      canvas.style.height = height + 'px';
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.max(1, Math.floor(width * dpr));
+      canvas.height = Math.max(1, Math.floor(height * dpr));
+      canvas.style.width = width + 'px';
+      const ctx = canvas.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      return { canvas, ctx };
+    }
+
+    function drawReturnMapPanel(ctx, width, height, result, bounds, plotSettings) {
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, width, height);
+
+      const margin = { left: 42, right: 14, top: 12, bottom: 28 };
+      const plotWidth = Math.max(20, width - margin.left - margin.right);
+      const plotHeight = Math.max(20, height - margin.top - margin.bottom);
+      const xScale = function(value) {
+        return margin.left + (value - bounds.xMin) * plotWidth / Math.max(bounds.xMax - bounds.xMin, 1e-12);
+      };
+      const yScale = function(value) {
+        return margin.top + plotHeight - (value - bounds.yMin) * plotHeight / Math.max(bounds.yMax - bounds.yMin, 1e-12);
+      };
+
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(margin.left, margin.top, plotWidth, plotHeight);
+
+      ctx.strokeStyle = plotSettings.diagColor;
+      ctx.lineWidth = plotSettings.diagWidth;
+      ctx.beginPath();
+      ctx.moveTo(xScale(bounds.xMin), yScale(bounds.xMin));
+      ctx.lineTo(xScale(bounds.xMax), yScale(bounds.xMax));
+      ctx.stroke();
+
+      const transient = Math.min(plotSettings.transientMaxima || 0, Math.max(0, result.absxValues.length - 1));
+      const postTransient = result.absxValues.slice(transient);
+      const scatterPairs = samplePairs(postTransient, plotSettings.scatterCap);
+      ctx.fillStyle = hexToRgba(plotSettings.scatterColor, plotSettings.scatterAlpha);
+      scatterPairs.forEach(function(pair) {
+        ctx.beginPath();
+        ctx.arc(xScale(pair[0]), yScale(pair[1]), plotSettings.pointRadius, 0, 2 * Math.PI);
+        ctx.fill();
+      });
+
+      const cobwebCount = Math.min(plotSettings.cobwebIterates, Math.max(0, postTransient.length - 1));
+      if (cobwebCount > 0) {
+        ctx.strokeStyle = plotSettings.cobwebColor;
+        ctx.lineWidth = plotSettings.cobwebWidth;
+        ctx.beginPath();
+        for (let idx = 0; idx < cobwebCount; idx += 1) {
+          const x0 = postTransient[idx];
+          const y1 = postTransient[idx + 1];
+          ctx.moveTo(xScale(x0), yScale(x0));
+          ctx.lineTo(xScale(x0), yScale(y1));
+          ctx.lineTo(xScale(y1), yScale(y1));
+        }
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = '#111111';
+      ctx.font = '10px Menlo, Consolas, monospace';
+      ctx.fillText('|x_n|', margin.left + plotWidth / 2 - 16, height - 8);
+      ctx.save();
+      ctx.translate(12, margin.top + plotHeight / 2 + 16);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText('|x_{n+1}|', 0, 0);
+      ctx.restore();
+    }
+
+    function drawReturnMapPanels(results, plotSettings) {
+      if (!results || !results.length) {
+        clearReturnMapPanels('No return-map data yet.');
+        return;
+      }
+      const bounds = computeReturnMapBounds(results, plotSettings);
+      returnMapPanels.innerHTML = '';
+      const width = Math.max(280, returnMapPanels.clientWidth - 4);
+      results.forEach(function(result) {
+        const panel = document.createElement('div');
+        panel.className = 'map-panel';
+        const header = document.createElement('div');
+        header.className = 'map-panel-header';
+        const title = document.createElement('div');
+        title.className = 'map-panel-title';
+        title.textContent = result.label + '  α=' + result.alpha.toFixed(6) + '  λ=' + result.lambda.toFixed(6);
+        const meta = document.createElement('div');
+        meta.className = 'map-panel-meta';
+        meta.textContent = result.status + ' • ' + result.absxValues.length + ' maxima • t=' + result.tFinal.toFixed(2);
+        header.appendChild(title);
+        header.appendChild(meta);
+        panel.appendChild(header);
+        const drawing = makePanelCanvas(width, plotSettings.panelHeight);
+        drawReturnMapPanel(drawing.ctx, width, plotSettings.panelHeight, result, bounds, plotSettings);
+        panel.appendChild(drawing.canvas);
+        returnMapPanels.appendChild(panel);
+      });
+    }
+
+    function refreshReturnMapPanels() {
+      if (!state.returnMapResults) return;
+      state.returnMapSettings = currentReturnMapSettings();
+      drawReturnMapPanels(state.returnMapResults, Object.assign({}, state.returnMapSettings.plot, state.returnMapSettings.integration));
+    }
+
+    function startReturnMapComputation(square) {
+      terminateReturnMapWorker();
+      state.returnMapResults = null;
+      if (!square) {
+        setReturnMapStatus('Select a square to compute return maps.', 0);
+        clearReturnMapPanels('No return-map data yet.');
+        return;
+      }
+
+      const settings = currentReturnMapSettings();
+      state.returnMapSettings = settings;
+      const requestId = ++state.returnMapRequestId;
+      const worker = new Worker(ensureReturnMapWorkerUrl());
+      state.returnMapWorker = worker;
+      setReturnMapStatus('Starting return-map recomputation for selected square.', 0);
+      clearReturnMapPanels('Recomputing return maps...');
+      worker.onmessage = function(event) {
+        const message = event.data;
+        if (!message || message.requestId !== requestId) return;
+        if (message.type === 'progress') {
+          setReturnMapStatus(
+            'Computing ' + message.label + ' corner • t=' + message.t.toFixed(2) + ' • maxima=' + message.maxima,
+            message.progress
+          );
+        } else if (message.type === 'done') {
+          terminateReturnMapWorker();
+          state.returnMapResults = message.results;
+          drawReturnMapPanels(message.results, Object.assign({}, settings.plot, settings.integration));
+          setReturnMapStatus('Return maps ready for selected square.', 1);
+        } else if (message.type === 'error') {
+          terminateReturnMapWorker();
+          setReturnMapStatus('Return-map worker failed.', 0);
+          clearReturnMapPanels(message.message);
+          console.error(message.message);
+        }
+      };
+      worker.postMessage({
+        requestId,
+        corners: currentSelectedCornerJobs(square),
+        settings: settings.integration
+      });
+    }
 
     function cssRect() {
       const w = viewerWrap.clientWidth;
@@ -1356,6 +1854,7 @@ function write_html_043(
       overlayCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
       drawBase();
       drawOverlay();
+      refreshReturnMapPanels();
     }
 
     function alphaStep() {
@@ -2081,6 +2580,7 @@ function write_html_043(
         const data = screenToData(event.clientX, event.clientY);
         state.selected = data ? sampleSquareAt(data.alpha, data.lambda) : null;
         drawOverlay();
+        startReturnMapComputation(state.selected);
       }
     });
 
@@ -2099,6 +2599,7 @@ function write_html_043(
     clearSelectionButton.addEventListener('click', function() {
       state.selected = null;
       drawOverlay();
+      startReturnMapComputation(null);
     });
 
     function renderIterateControls() {
@@ -2202,6 +2703,22 @@ function write_html_043(
 		      drawOverlay();
 		    });
 
+        recomputeReturnMapsButton.addEventListener('click', function() {
+          startReturnMapComputation(state.selected);
+        });
+
+        redrawReturnMapsButton.addEventListener('click', function() {
+          refreshReturnMapPanels();
+        });
+
+        returnControlIds.forEach(function(id) {
+          const input = document.getElementById(id);
+          if (!input) return;
+          input.addEventListener('input', function() {
+            if (state.returnMapResults) refreshReturnMapPanels();
+          });
+        });
+
 			    window.addEventListener('resize', resizeCanvases);
 			    renderIterateControls();
 			    updateGrazingModeButton();
@@ -2210,6 +2727,7 @@ function write_html_043(
 		    updateRedToggleButton();
 		    updateBlueToggleButton();
 		    updatePurpleToggleButton();
+        clearReturnMapPanels('No return-map data yet.');
 		    decodeGzipUint16Array(TIME_WORDS_GZ_B64)
       .then(function(words) {
         timeWords = words;
@@ -2302,6 +2820,24 @@ function main()
     time_blob = base64_gzip_bytes_043(time_words)
 
     write_iterate_stats_043(STATS_PATH_043, iterate_stats)
+    write_data_script_043(
+        DATA_SCRIPT_PATH_043,
+        symbolic_black_blobs,
+        symbolic_red_blobs,
+        symbolic_blue_blobs,
+        symbolic_purple_blobs,
+        symbolic_green_blobs,
+        returntime_black_blobs,
+        returntime_red_blobs,
+        returntime_blue_blobs,
+        returntime_purple_blobs,
+        returntime_green_blobs,
+        raw_sign_blob,
+        monotone_sign_blob,
+        skip_blob,
+        time_blob,
+        time_scale,
+    )
     write_html_043(
         HTML_PATH_043,
         symbolic_black_blobs,
@@ -2322,6 +2858,7 @@ function main()
     )
 
     println("Saved iterate stats to $(STATS_PATH_043)")
+    println("Saved external scan data to $(DATA_SCRIPT_PATH_043)")
     println("Saved explorer HTML to $(HTML_PATH_043)")
 end
 
