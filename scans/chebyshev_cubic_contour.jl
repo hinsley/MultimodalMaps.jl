@@ -41,7 +41,7 @@ u_vals = range(-2.0, stop=2.0, length=grid_length)
 v_vals = range(-2.0, stop=2.0, length=grid_length)
 
 iterates = env_int("CHEBYSHEV_ITERATES", 20)
-contour_linewidth = 1.0
+contour_linewidth = 2.0
 frameless = false
 compute_seconds = 0.0
 axis_ticks = frameless ? nothing : collect(-2.0:0.5:2.0)
