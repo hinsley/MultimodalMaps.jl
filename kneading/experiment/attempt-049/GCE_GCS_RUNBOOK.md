@@ -311,3 +311,74 @@ The plotting defaults are intentionally different from `attempt-048`:
 - `ATTEMPT049_TICK_LABEL_SIZE=24`
 
 These can be overridden for plot-only replay without recomputing trajectories.
+
+## Final notes from the completed attempt-049 run
+
+Attempt-049 completed the intended `1000 x 1000`, 12-symbol sweep on the GCE
+VM and uploaded the final artifacts to:
+
+```text
+gs://carter-kneading-attempt048/attempt-049
+```
+
+Observed run facts:
+
+- The VM used 24 visible Julia threads because quota forced the smaller
+  machine size.
+- The VM was configured with a `7h` max run duration and termination action
+  `STOP`.
+- The solve phase completed all `1000` checkpointed columns in roughly an
+  hour.
+- Final successful point count was `892665 / 1000000`.
+- Final local retrieval produced `1041` files: `1000` checkpoint TSV columns,
+  `13` PNGs, and the merged/log/legend TSV artifacts.
+- The merged results TSV has `1000001` lines and is about `157M`.
+
+Post-processing issue encountered:
+
+- The first post-processing pass failed after all columns had completed because
+  `contours.jl` incorrectly read raw-column `gamma_encoding` from `fields[12]`.
+- Raw column files have `10` fields; `gamma_encoding` is `fields[7]`.
+- Commit `4c2a3b4` fixed this indexing bug.
+- Restarting the runner after that fix skipped all completed columns and only
+  reran merge/plot/upload, confirming the checkpoint model works for this
+  failure mode.
+
+Cloud/result handling:
+
+- After verifying final GCS artifacts, the VM was stopped to halt compute
+  charges.
+- A reusable boot image was created:
+
+```text
+attempt049-ready-20260429
+```
+
+- That image is separate from the result archive and can be used later for a
+  new x86 VM, including a larger 96-vCPU VM, as long as GCS scopes/IAM are set
+  correctly.
+- The full retrieved `gcs_results` directory was packaged and uploaded to
+  TGLFS with no password.
+- TGLFS UFID:
+
+```text
+0fc24d9c3741c4febcfd1a623b66ad45e0a4c23eb51f24cb2e1ffa759a8be2f0
+```
+
+- Final TGLFS file-card name:
+
+```text
+MultimodalMaps.jl_kneading_experiment_attempt-049_grid1000_seq12_prefixes_remap40_newmodel_gcs_results.tar.gz
+```
+
+Practical lessons:
+
+- Keep GCS as the authoritative handoff point before stopping the VM.
+- Expect append-only logs to contain old failure text; use the newest
+  timestamped run block and process state to interpret them.
+- For future attempts, test post-processing on a tiny synthetic/raw-column TSV
+  before launching a large scan, because the solve can succeed while merge or
+  plotting still fails.
+- Prefer clearly contextual artifact names that include repo, experiment area,
+  attempt number, grid/sequence setup, and whether the archive is raw GCS
+  results.
