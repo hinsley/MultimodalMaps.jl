@@ -23,3 +23,6 @@ kneading/experiment/attempt-048/run_grid500_seq7_prefixes_remap40_newmodel.sh
 
 The default output tag is `grid500_seq7_prefixes_remap40_newmodel`, so this
 does not overwrite `attempt-016` artifacts.
+
+For Google Compute Engine / optional Google Cloud Storage usage, see
+`GCE_GCS_RUNBOOK.md`.
