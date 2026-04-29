@@ -12,7 +12,7 @@ const FILTER_RESULTS_PATH = get(
     joinpath(ATTEMPT49_FILTER_ROOT, "gcs_results", "grid1000_seq12_prefixes_remap40_newmodel_results.tsv"),
 )
 const FILTER_OUTPUT_DIR = get(ENV, "ATTEMPT049_FILTER_OUTPUT_DIR", dirname(FILTER_RESULTS_PATH))
-const FILTER_OUTPUT_TAG = get(ENV, "ATTEMPT049_FILTER_OUTPUT_TAG", "grid1000_seq12_filtered_ttail00000")
+const FILTER_OUTPUT_TAG = get(ENV, "ATTEMPT049_FILTER_OUTPUT_TAG", "grid1000_seq12_prefixcompatible")
 const FILTER_T_ZERO_TAIL_START = 2
 const FILTER_T_ZERO_TAIL_STOP = 6
 
@@ -31,10 +31,29 @@ function has_zero_tail_2_to_6(seq::Vector{Int})
     return all(seq[idx] == 0 for idx in FILTER_T_ZERO_TAIL_START:FILTER_T_ZERO_TAIL_STOP)
 end
 
+function sequences_are_prefix_compatible(seqs::NTuple{4, Vector{Int}})
+    nonempty = [seq for seq in seqs if !isempty(seq)]
+    isempty(nonempty) && return true
+    min_length = minimum(length.(nonempty))
+    min_length == 0 && return true
+
+    reference = nonempty[1]
+    for seq in nonempty[2:end]
+        for idx in 1:min_length
+            if seq[idx] != reference[idx]
+                return false
+            end
+        end
+    end
+    return true
+end
+
 function build_filtered_full_grids(results_path::String)
     T_grid = fill(0, length(DELTA_CAS_010), length(DELTA_XS_010))
     gamma_grid = fill(0, length(DELTA_CAS_010), length(DELTA_XS_010))
     suppress_T_grid = falses(length(DELTA_CAS_010), length(DELTA_XS_010))
+    T_sequences = [Int[] for _ in 1:length(DELTA_CAS_010), _ in 1:length(DELTA_XS_010)]
+    gamma_sequences = [Int[] for _ in 1:length(DELTA_CAS_010), _ in 1:length(DELTA_XS_010)]
     filled = falses(length(DELTA_CAS_010), length(DELTA_XS_010))
     ok_count = 0
     error_count = 0
@@ -43,7 +62,7 @@ function build_filtered_full_grids(results_path::String)
 
     open(results_path, "r") do io
         lookup = header_lookup(readline(io))
-        required = ("delta_x", "delta_ca", "T_category_id", "gamma_category_id", "T_scs", "status")
+        required = ("delta_x", "delta_ca", "T_category_id", "gamma_category_id", "T_scs", "gamma_scs", "status")
         for name in required
             haskey(lookup, name) || error("Missing required TSV column: $(name)")
         end
@@ -75,18 +94,21 @@ function build_filtered_full_grids(results_path::String)
 
             suppress_T_grid[ca_idx, x_idx] = has_zero_tail_2_to_6(T_scs)
             suppress_points += suppress_T_grid[ca_idx, x_idx] ? 1 : 0
+            T_sequences[ca_idx, x_idx] = length(T_scs) >= 2 ? T_scs[2:end] : Int[]
+            gamma_sequences[ca_idx, x_idx] = parse_sequence_field(fields[lookup["gamma_scs"]])
         end
     end
 
     all(filled) || error("One or more contour grid entries were not filled.")
-    return T_grid, gamma_grid, suppress_T_grid, ok_count, error_count, suppress_points, length(T_tail_lookup)
+    return T_grid, gamma_grid, suppress_T_grid, T_sequences, gamma_sequences, ok_count, error_count, suppress_points, length(T_tail_lookup)
 end
 
-function categorical_marching_squares_filtered(
+function categorical_marching_squares_prefix_compatible(
     grid::Matrix{Int},
     x_values::Vector{Float64},
     y_values::Vector{Float64},
-    suppress_grid::BitMatrix,
+    sequences::Matrix{Vector{Int}},
+    suppress_grid::Union{Nothing, BitMatrix}=nothing,
 )
     xs = Float32[]
     ys = Float32[]
@@ -100,10 +122,20 @@ function categorical_marching_squares_filtered(
         x0 = x_values[x_idx]
         x1 = x_values[x_idx + 1]
         for y_idx in 1:(length(y_values) - 1)
-            if suppress_grid[x_idx, y_idx] &&
+            if !isnothing(suppress_grid) &&
+               suppress_grid[x_idx, y_idx] &&
                suppress_grid[x_idx + 1, y_idx] &&
                suppress_grid[x_idx + 1, y_idx + 1] &&
                suppress_grid[x_idx, y_idx + 1]
+                continue
+            end
+
+            if sequences_are_prefix_compatible((
+                sequences[x_idx, y_idx],
+                sequences[x_idx + 1, y_idx],
+                sequences[x_idx + 1, y_idx + 1],
+                sequences[x_idx, y_idx + 1],
+            ))
                 continue
             end
 
@@ -155,7 +187,14 @@ function categorical_marching_squares_filtered(
     return xs, ys
 end
 
-function save_filtered_contour_plot(path::String, T_grid::Matrix{Int}, gamma_grid::Matrix{Int}, suppress_T_grid::BitMatrix)
+function save_filtered_contour_plot(
+    path::String,
+    T_grid::Matrix{Int},
+    gamma_grid::Matrix{Int},
+    suppress_T_grid::BitMatrix,
+    T_sequences::Matrix{Vector{Int}},
+    gamma_sequences::Matrix{Vector{Int}},
+)
     fig = Figure(size=(PLOT_WIDTH, PLOT_HEIGHT))
     ax = Axis(
         fig[1, 1],
@@ -169,8 +208,8 @@ function save_filtered_contour_plot(path::String, T_grid::Matrix{Int}, gamma_gri
         yticklabelsize=TICK_LABEL_SIZE,
     )
 
-    T_xs, T_ys = categorical_marching_squares_filtered(T_grid, DELTA_CAS_010, DELTA_XS_010, suppress_T_grid)
-    gamma_xs, gamma_ys = categorical_marching_squares(gamma_grid, DELTA_CAS_010, DELTA_XS_010)
+    T_xs, T_ys = categorical_marching_squares_prefix_compatible(T_grid, DELTA_CAS_010, DELTA_XS_010, T_sequences, suppress_T_grid)
+    gamma_xs, gamma_ys = categorical_marching_squares_prefix_compatible(gamma_grid, DELTA_CAS_010, DELTA_XS_010, gamma_sequences)
 
     lines!(ax, T_xs, T_ys; color=T_COLOR, linewidth=LINEWIDTH)
     lines!(ax, gamma_xs, gamma_ys; color=GAMMA_COLOR, linewidth=LINEWIDTH)
@@ -189,11 +228,12 @@ function main()
     println("Output plot: $(plot_path)")
     println("Red categories ignore T symbol 1.")
     println("Suppressing red marched squares whose four T SSCS corners have symbols 2:6 all equal to 0.")
+    println("Suppressing red and blue marched squares whose corner SSCSs are prefix-compatible.")
     flush(stdout)
 
-    T_grid, gamma_grid, suppress_T_grid, ok_count, error_count, suppress_points, T_tail_unique =
+    T_grid, gamma_grid, suppress_T_grid, T_sequences, gamma_sequences, ok_count, error_count, suppress_points, T_tail_unique =
         build_filtered_full_grids(FILTER_RESULTS_PATH)
-    save_filtered_contour_plot(plot_path, T_grid, gamma_grid, suppress_T_grid)
+    save_filtered_contour_plot(plot_path, T_grid, gamma_grid, suppress_T_grid, T_sequences, gamma_sequences)
 
     open(summary_path, "w") do io
         println(io, "results_path\t$(FILTER_RESULTS_PATH)")
@@ -202,6 +242,7 @@ function main()
         println(io, "error_count\t$(error_count)")
         println(io, "red_category_rule\tT_scs[2:end]")
         println(io, "suppressed_T_rule\tall T_scs[2:6] == 0")
+        println(io, "prefix_compatibility_rule\tomit contours where all nonempty corner SSCSs match after truncation to the shortest corner sequence length")
         println(io, "suppressed_T_points\t$(suppress_points)")
         println(io, "T_tail_unique\t$(T_tail_unique)")
     end
