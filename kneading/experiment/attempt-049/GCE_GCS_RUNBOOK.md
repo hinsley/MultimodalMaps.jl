@@ -1,4 +1,4 @@
-# GCE/GCS runbook for attempt-048
+# GCE/GCS runbook for attempt-049
 
 This attempt is ready to run on Google Cloud, but the compute service is
 **Google Compute Engine (GCE)**, not Google Cloud Storage (GCS).
@@ -12,7 +12,9 @@ script in the same checkout/disk and completed columns are skipped.
 
 ## Recommended VM
 
-Start with a Spot `c3-standard-88` in `us-central1` if quota/capacity allow it.
+Start with a Spot C4/C3 VM in `us-central1` if quota/capacity allow it.
+The previous successful run used a 24-vCPU VM after quota reductions, which is
+good enough; larger machines should mainly reduce wall-clock time.
 
 Fallbacks:
 
@@ -97,24 +99,24 @@ gcloud storage buckets add-iam-policy-binding gs://YOUR_BUCKET_NAME \
 rm -f ~/.config/gcloud/access_tokens.db ~/.config/gcloud/credentials.db
 
 # Must succeed before launching the scan.
-date -Is > /tmp/attempt048_gcs_test.txt
-gcloud storage cp /tmp/attempt048_gcs_test.txt \
-  gs://YOUR_BUCKET_NAME/attempt-048/setup_test.txt
+date -Is > /tmp/attempt049_gcs_test.txt
+gcloud storage cp /tmp/attempt049_gcs_test.txt \
+  gs://YOUR_BUCKET_NAME/attempt-049/setup_test.txt
 ```
 
 If a first launch fails before any columns are written, inspect the appended
 log and restart after fixing the setup issue:
 
 ```bash
-tail -220 kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel.log
-tmux kill-session -t attempt048 2>/dev/null || true
-tmux new -d -s attempt048 \
-  'ATTEMPT048_GCS_URI=gs://YOUR_BUCKET_NAME/attempt-048 kneading/experiment/attempt-048/run_grid500_seq7_prefixes_remap40_newmodel.sh'
+tail -220 kneading/experiment/attempt-049/grid1000_seq12_prefixes_remap40_newmodel.log
+tmux kill-session -t attempt049 2>/dev/null || true
+tmux new -d -s attempt049 \
+  'ATTEMPT049_GCS_URI=gs://YOUR_BUCKET_NAME/attempt-049 kneading/experiment/attempt-049/run_grid1000_seq12_prefixes_remap40_newmodel.sh'
 ```
 
 The log is append-only by design, so old failure text can remain above the
 current run. Identify the current run by the newest timestamped
-`Running attempt-048 full scan` block.
+`Running attempt-049 full scan` block.
 
 For the first VM, the service account was:
 
@@ -122,10 +124,10 @@ For the first VM, the service account was:
 82681361968-compute@developer.gserviceaccount.com
 ```
 
-and the working bucket prefix was:
+and the intended working bucket prefix for this attempt is:
 
 ```text
-gs://carter-kneading-attempt048/attempt-048
+gs://carter-kneading-attempt048/attempt-049
 ```
 
 ## Prepared image workflow
@@ -139,13 +141,13 @@ gcloud compute instances stop VM_NAME \
   --zone=us-central1-c \
   --project=codex-bigcomputations
 
-gcloud compute images create attempt048-ready-image \
+gcloud compute images create attempt049-ready-image \
   --source-disk VM_DISK_NAME \
   --source-disk-zone=us-central1-c \
   --project=codex-bigcomputations
 ```
 
-Future VMs can be created from `attempt048-ready-image` and should be ready to
+Future VMs can be created from `attempt049-ready-image` and should be ready to
 run without repeating dependency setup. Still verify GCS upload on the new VM,
 because service-account scopes/IAM are VM/project settings, not just files on
 disk.
@@ -155,9 +157,9 @@ disk.
 Use `tmux` so the job survives SSH disconnects:
 
 ```bash
-tmux new -s attempt048
+tmux new -s attempt049
 cd ~/MultimodalMaps.jl
-kneading/experiment/attempt-048/run_grid500_seq7_prefixes_remap40_newmodel.sh
+kneading/experiment/attempt-049/run_grid1000_seq12_prefixes_remap40_newmodel.sh
 ```
 
 The runner defaults `JULIA_NUM_THREADS` to all visible CPUs via `nproc`, sets
@@ -167,33 +169,33 @@ flushes filesystem buffers on shutdown signals.
 To override core count:
 
 ```bash
-JULIA_NUM_THREADS=44 kneading/experiment/attempt-048/run_grid500_seq7_prefixes_remap40_newmodel.sh
+JULIA_NUM_THREADS=44 kneading/experiment/attempt-049/run_grid1000_seq12_prefixes_remap40_newmodel.sh
 ```
 
 To resume after preemption or manual stop, run the same command again. The
 checkpoint directory is:
 
 ```text
-kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/
+kneading/experiment/attempt-049/grid1000_seq12_prefixes_remap40_newmodel_columns/
 ```
 
 ## GCS-backed run
 
 If you want the VM to automatically upload both the resumable checkpoint data
-and the generated kneading diagram figures, set `ATTEMPT048_GCS_URI` when you
+and the generated kneading diagram figures, set `ATTEMPT049_GCS_URI` when you
 start the runner:
 
 ```bash
-ATTEMPT048_GCS_URI=gs://YOUR_BUCKET_NAME/attempt-048 \
-  kneading/experiment/attempt-048/run_grid500_seq7_prefixes_remap40_newmodel.sh
+ATTEMPT049_GCS_URI=gs://YOUR_BUCKET_NAME/attempt-049 \
+  kneading/experiment/attempt-049/run_grid1000_seq12_prefixes_remap40_newmodel.sh
 ```
 
-With `ATTEMPT048_GCS_URI` set, the runner does three things:
+With `ATTEMPT049_GCS_URI` set, the runner does three things:
 
 - syncs the column checkpoint directory on shutdown or failure
 - uploads the log on shutdown or failure
 - after a successful run, uploads the merged TSVs, legends, and all generated
-  kneading diagram PNGs matching `grid500_seq7_prefixes_remap40_newmodel*`
+  kneading diagram PNGs matching `grid1000_seq12_prefixes_remap40_newmodel*`
 
 This means a complete run on the VM can generate the figures and leave both
 the raw SSCS data and the PNGs retrievable from GCS after the VM is stopped or
@@ -212,19 +214,19 @@ During a long run, periodically copy checkpointed columns and logs:
 
 ```bash
 gcloud storage rsync -r \
-  kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns \
-  gs://YOUR_BUCKET_NAME/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns
+  kneading/experiment/attempt-049/grid1000_seq12_prefixes_remap40_newmodel_columns \
+  gs://YOUR_BUCKET_NAME/attempt-049/grid1000_seq12_prefixes_remap40_newmodel_columns
 
 gcloud storage cp \
-  kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel.log \
-  gs://YOUR_BUCKET_NAME/attempt-048/
+  kneading/experiment/attempt-049/grid1000_seq12_prefixes_remap40_newmodel.log \
+  gs://YOUR_BUCKET_NAME/attempt-049/
 ```
 
 After completion, copy the merged data and plots:
 
 ```bash
-gcloud storage cp kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel* \
-  gs://YOUR_BUCKET_NAME/attempt-048/
+gcloud storage cp kneading/experiment/attempt-049/grid1000_seq12_prefixes_remap40_newmodel* \
+  gs://YOUR_BUCKET_NAME/attempt-049/
 ```
 
 The TSV/PNG/log artifacts are small enough that GCS cost should be negligible
@@ -236,19 +238,19 @@ If you used the GCS-backed runner or manual GCS backup, download the completed
 data and figures from your local machine with:
 
 ```bash
-mkdir -p attempt-048-results
+mkdir -p attempt-049-results
 gcloud storage cp -r \
-  gs://YOUR_BUCKET_NAME/attempt-048/grid500_seq7_prefixes_remap40_newmodel* \
-  attempt-048-results/
+  gs://YOUR_BUCKET_NAME/attempt-049/grid1000_seq12_prefixes_remap40_newmodel* \
+  attempt-049-results/
 ```
 
 If you did not use GCS, copy directly from the VM before deleting it:
 
 ```bash
-mkdir -p attempt-048-results
+mkdir -p attempt-049-results
 gcloud compute scp --recurse \
-  VM_NAME:~/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel* \
-  attempt-048-results/ \
+  VM_NAME:~/MultimodalMaps.jl/kneading/experiment/attempt-049/grid1000_seq12_prefixes_remap40_newmodel* \
+  attempt-049-results/ \
   --zone=YOUR_ZONE
 ```
 
@@ -267,10 +269,10 @@ If the completed results TSV is local but you only want to replay plots without
 resolving ODEs again, use:
 
 ```bash
-ATTEMPT048_PLOT_ONLY_RESULTS=kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_results.tsv \
-ATTEMPT048_OUTPUT_TAG=grid500_seq7_prefixes_remap40_newmodel_replot \
-ATTEMPT048_GCS_URI=gs://YOUR_BUCKET_NAME/attempt-048 \
-  kneading/experiment/attempt-048/run_grid500_seq7_prefixes_remap40_newmodel.sh
+ATTEMPT049_PLOT_ONLY_RESULTS=kneading/experiment/attempt-049/grid1000_seq12_prefixes_remap40_newmodel_results.tsv \
+ATTEMPT049_OUTPUT_TAG=grid1000_seq12_prefixes_remap40_newmodel_replot \
+ATTEMPT049_GCS_URI=gs://YOUR_BUCKET_NAME/attempt-049 \
+  kneading/experiment/attempt-049/run_grid1000_seq12_prefixes_remap40_newmodel.sh
 ```
 
 This generates a new set of PNGs/legends under the `_replot` tag and uploads
@@ -280,35 +282,32 @@ them to GCS. It does not recompute trajectories.
 
 The run should produce:
 
-- `grid500_seq7_prefixes_remap40_newmodel_results.tsv`
-- `grid500_seq7_prefixes_remap40_newmodel_contours.png`
-- `grid500_seq7_prefixes_remap40_newmodel_prefix01_contours.png`
-- `grid500_seq7_prefixes_remap40_newmodel_prefix02_contours.png`
-- `grid500_seq7_prefixes_remap40_newmodel_prefix03_contours.png`
-- `grid500_seq7_prefixes_remap40_newmodel_prefix04_contours.png`
-- `grid500_seq7_prefixes_remap40_newmodel_prefix05_contours.png`
-- `grid500_seq7_prefixes_remap40_newmodel_prefix06_contours.png`
-- `grid500_seq7_prefixes_remap40_newmodel_prefix07_contours.png`
+- `grid1000_seq12_prefixes_remap40_newmodel_results.tsv`
+- `grid1000_seq12_prefixes_remap40_newmodel_contours.png`
+- `grid1000_seq12_prefixes_remap40_newmodel_prefix01_contours.png`
+- `grid1000_seq12_prefixes_remap40_newmodel_prefix02_contours.png`
+- `grid1000_seq12_prefixes_remap40_newmodel_prefix03_contours.png`
+- `grid1000_seq12_prefixes_remap40_newmodel_prefix04_contours.png`
+- `grid1000_seq12_prefixes_remap40_newmodel_prefix05_contours.png`
+- `grid1000_seq12_prefixes_remap40_newmodel_prefix06_contours.png`
+- `grid1000_seq12_prefixes_remap40_newmodel_prefix07_contours.png`
+- `grid1000_seq12_prefixes_remap40_newmodel_prefix08_contours.png`
+- `grid1000_seq12_prefixes_remap40_newmodel_prefix09_contours.png`
+- `grid1000_seq12_prefixes_remap40_newmodel_prefix10_contours.png`
+- `grid1000_seq12_prefixes_remap40_newmodel_prefix11_contours.png`
+- `grid1000_seq12_prefixes_remap40_newmodel_prefix12_contours.png`
 - matching `T` and `gamma` legend TSVs
 
-## Final notes from the completed attempt-048 run
+## Attempt-049 plot defaults
 
-The first cloud run finished successfully and provided the practical template
-for future sweeps:
+The plotting defaults are intentionally different from `attempt-048`:
 
-- The VM was stopped after results were verified in GCS. Stopping halts
-  CPU/RAM charges, but the persistent disk still costs a small amount while it
-  exists.
-- The final artifacts were retrievable from GCS after the VM was stopped, so
-  future runs should use GCS as the handoff boundary before shutting compute
-  down.
-- The `500 x 500`, 7-symbol run completed much faster than expected on the
-  24-vCPU VM; the solve phase was on the order of tens of minutes rather than
-  many hours.
-- A `1000 x 1000`, 12-symbol follow-up should use the same checkpointed column
-  model and GCS upload path, but expect materially larger TSV/PNG output and a
-  longer plotting/upload tail.
-- The safest operating sequence is: prepare code locally, push to `main`,
-  start the stopped VM only after explicit confirmation, pull the latest commit
-  on the VM, launch in `tmux`, verify checkpoint progress, verify final GCS
-  artifacts, then stop the VM.
+- `ATTEMPT049_CONTOUR_LINEWIDTH=0.35`
+- `ATTEMPT049_PLOT_WIDTH=1600`
+- `ATTEMPT049_PLOT_HEIGHT=1200`
+- `ATTEMPT049_PLOT_PX_PER_UNIT=2.0`
+- `ATTEMPT049_AXIS_LABEL_SIZE=34`
+- `ATTEMPT049_AXIS_TITLE_SIZE=40`
+- `ATTEMPT049_TICK_LABEL_SIZE=24`
+
+These can be overridden for plot-only replay without recomputing trajectories.
