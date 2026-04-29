@@ -70,7 +70,29 @@ checkpoint directory is:
 kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/
 ```
 
-## Optional GCS backup
+## GCS-backed run
+
+If you want the VM to automatically upload both the resumable checkpoint data
+and the generated kneading diagram figures, set `ATTEMPT048_GCS_URI` when you
+start the runner:
+
+```bash
+ATTEMPT048_GCS_URI=gs://YOUR_BUCKET_NAME/attempt-048 \
+  kneading/experiment/attempt-048/run_grid500_seq7_prefixes_remap40_newmodel.sh
+```
+
+With `ATTEMPT048_GCS_URI` set, the runner does three things:
+
+- syncs the column checkpoint directory on shutdown or failure
+- uploads the log on shutdown or failure
+- after a successful run, uploads the merged TSVs, legends, and all generated
+  kneading diagram PNGs matching `grid500_seq7_prefixes_remap40_newmodel*`
+
+This means a complete run on the VM can generate the figures and leave both
+the raw SSCS data and the PNGs retrievable from GCS after the VM is stopped or
+deleted.
+
+## Optional manual GCS backup
 
 Create a bucket in the same region as the VM, for example `us-central1`, to
 avoid unnecessary cross-region transfer:
@@ -103,8 +125,8 @@ for this use. The main cost is GCE VM uptime.
 
 ## Retrieve results
 
-If you used GCS backup, download the completed artifacts from your local
-machine with:
+If you used the GCS-backed runner or manual GCS backup, download the completed
+data and figures from your local machine with:
 
 ```bash
 mkdir -p attempt-048-results
@@ -126,6 +148,26 @@ gcloud compute scp --recurse \
 If the VM was preempted but the persistent disk remains, recreate or restart a
 VM with that disk attached, then use the direct `gcloud compute scp` command
 above or upload to GCS from the recovered VM.
+
+## Rebuild figures from saved data
+
+If the sweep data are complete but the figure-generation step was interrupted,
+rerun the same command on the VM. Completed columns are skipped, then the
+script rebuilds the merged TSV, legends, and all prefix contour figures from
+the checkpointed columns before uploading final artifacts to GCS.
+
+If the completed results TSV is local but you only want to replay plots without
+resolving ODEs again, use:
+
+```bash
+ATTEMPT048_PLOT_ONLY_RESULTS=kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_results.tsv \
+ATTEMPT048_OUTPUT_TAG=grid500_seq7_prefixes_remap40_newmodel_replot \
+ATTEMPT048_GCS_URI=gs://YOUR_BUCKET_NAME/attempt-048 \
+  kneading/experiment/attempt-048/run_grid500_seq7_prefixes_remap40_newmodel.sh
+```
+
+This generates a new set of PNGs/legends under the `_replot` tag and uploads
+them to GCS. It does not recompute trajectories.
 
 ## Expected outputs
 
