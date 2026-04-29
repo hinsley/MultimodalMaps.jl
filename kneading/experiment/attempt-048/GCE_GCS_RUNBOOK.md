@@ -60,6 +60,15 @@ The first live setup exposed a few issues that should be avoided next time:
 - After setup is complete and before starting the scan, create a custom image
   from the prepared boot disk. That avoids paying again for Julia install,
   package download, and precompile time on future fresh VMs.
+- Detached `tmux` commands may not load the same shell startup files as an
+  interactive SSH session. The runner now prepends `~/.juliaup/bin` to `PATH`
+  when present so Julia is found without manually exporting `PATH`.
+- Minimal Debian images may not have `/usr/bin/time`. The runner now uses it
+  when available and falls back to shell `time` otherwise.
+- Headless VMs can report GLMakie/OpenGL and
+  `DynamicalSystemsVisualizations` precompile failures during
+  `Pkg.instantiate()`. For this attempt those were nonfatal because the scan
+  uses CairoMakie and then successfully entered `contours.jl`.
 
 Concrete commands from the first setup:
 
@@ -92,6 +101,20 @@ date -Is > /tmp/attempt048_gcs_test.txt
 gcloud storage cp /tmp/attempt048_gcs_test.txt \
   gs://YOUR_BUCKET_NAME/attempt-048/setup_test.txt
 ```
+
+If a first launch fails before any columns are written, inspect the appended
+log and restart after fixing the setup issue:
+
+```bash
+tail -220 kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel.log
+tmux kill-session -t attempt048 2>/dev/null || true
+tmux new -d -s attempt048 \
+  'ATTEMPT048_GCS_URI=gs://YOUR_BUCKET_NAME/attempt-048 kneading/experiment/attempt-048/run_grid500_seq7_prefixes_remap40_newmodel.sh'
+```
+
+The log is append-only by design, so old failure text can remain above the
+current run. Identify the current run by the newest timestamped
+`Running attempt-048 full scan` block.
 
 For the first VM, the service account was:
 
