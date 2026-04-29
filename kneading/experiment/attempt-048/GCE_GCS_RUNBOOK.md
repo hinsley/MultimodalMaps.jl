@@ -43,6 +43,90 @@ but running it explicitly makes dependency failures happen before the long job.
 julia --startup-file=no --project=. -e 'using Pkg; Pkg.instantiate()'
 ```
 
+## Lessons from the first GCE setup
+
+The first live setup exposed a few issues that should be avoided next time:
+
+- A default `10 GB` boot disk is too small. Julia packages/artifacts plus this
+  repository filled the disk during setup. Start with at least `50 GB`.
+- Pick VM access scopes that allow writing to GCS. `devstorage.read_only` lets
+  the VM list/read the bucket but prevents final artifact upload.
+- Give the VM service account object-write permission on the bucket, for
+  example `roles/storage.objectAdmin` on the attempt bucket.
+- If VM scopes are changed after boot, clear cached gcloud tokens on the VM or
+  restart with a fresh token. A stale token can keep reporting
+  `Provided scope(s) are not authorized` even after the VM scope is fixed.
+- Run one tiny GCS upload test before starting the expensive scan.
+- After setup is complete and before starting the scan, create a custom image
+  from the prepared boot disk. That avoids paying again for Julia install,
+  package download, and precompile time on future fresh VMs.
+
+Concrete commands from the first setup:
+
+```bash
+# Resize an accidentally small boot disk from the local machine.
+gcloud compute disks resize VM_DISK_NAME \
+  --zone=us-central1-c \
+  --project=codex-bigcomputations \
+  --size=50GB \
+  --quiet
+
+# Grow the Linux partition/filesystem on the VM.
+sudo apt-get update
+sudo apt-get install -y cloud-guest-utils
+sudo growpart /dev/nvme0n1 1
+sudo resize2fs /dev/nvme0n1p1
+df -h /
+
+# Allow the default VM service account to write attempt artifacts.
+gcloud storage buckets add-iam-policy-binding gs://YOUR_BUCKET_NAME \
+  --member=serviceAccount:VM_SERVICE_ACCOUNT_EMAIL \
+  --role=roles/storage.objectAdmin
+
+# If scopes were changed after the VM was already running, clear cached tokens
+# before retesting GCS upload.
+rm -f ~/.config/gcloud/access_tokens.db ~/.config/gcloud/credentials.db
+
+# Must succeed before launching the scan.
+date -Is > /tmp/attempt048_gcs_test.txt
+gcloud storage cp /tmp/attempt048_gcs_test.txt \
+  gs://YOUR_BUCKET_NAME/attempt-048/setup_test.txt
+```
+
+For the first VM, the service account was:
+
+```text
+82681361968-compute@developer.gserviceaccount.com
+```
+
+and the working bucket prefix was:
+
+```text
+gs://carter-kneading-attempt048/attempt-048
+```
+
+## Prepared image workflow
+
+Once a VM has Julia, the repository, instantiated packages, a large enough disk,
+and verified GCS upload access, save it as a custom image before starting the
+long scan:
+
+```bash
+gcloud compute instances stop VM_NAME \
+  --zone=us-central1-c \
+  --project=codex-bigcomputations
+
+gcloud compute images create attempt048-ready-image \
+  --source-disk VM_DISK_NAME \
+  --source-disk-zone=us-central1-c \
+  --project=codex-bigcomputations
+```
+
+Future VMs can be created from `attempt048-ready-image` and should be ready to
+run without repeating dependency setup. Still verify GCS upload on the new VM,
+because service-account scopes/IAM are VM/project settings, not just files on
+disk.
+
 ## Run
 
 Use `tmux` so the job survives SSH disconnects:

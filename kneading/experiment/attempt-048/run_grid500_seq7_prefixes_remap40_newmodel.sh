@@ -4,6 +4,10 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../../.." && pwd)"
 
+if [[ -d "${HOME}/.juliaup/bin" ]]; then
+    export PATH="${HOME}/.juliaup/bin:${PATH}"
+fi
+
 detect_cpu_threads() {
     if command -v nproc >/dev/null 2>&1; then
         nproc
@@ -111,5 +115,10 @@ if [[ "${ATTEMPT048_INSTANTIATE}" == "1" ]]; then
     julia --startup-file=no --project=. -e 'using Pkg; Pkg.instantiate()' 2>&1 | tee -a "${LOG_PATH}"
 fi
 
-/usr/bin/time -p julia --startup-file=no --project=. kneading/experiment/attempt-048/contours.jl 2>&1 | tee -a "${LOG_PATH}"
+if [[ -x /usr/bin/time ]]; then
+    /usr/bin/time -p julia --startup-file=no --project=. kneading/experiment/attempt-048/contours.jl 2>&1 | tee -a "${LOG_PATH}"
+else
+    echo "/usr/bin/time is not available; using shell timing fallback." | tee -a "${LOG_PATH}"
+    time julia --startup-file=no --project=. kneading/experiment/attempt-048/contours.jl 2>&1 | tee -a "${LOG_PATH}"
+fi
 upload_gcs_final_artifacts
