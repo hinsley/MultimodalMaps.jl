@@ -268,7 +268,7 @@ function collect_legends()
         end
 
         T_encoding = parse(BigInt, fields[6])
-        gamma_encoding = parse(BigInt, fields[12])
+        gamma_encoding = parse(BigInt, fields[7])
         T_counts[T_encoding] = get(T_counts, T_encoding, 0) + 1
         gamma_counts[gamma_encoding] = get(gamma_counts, gamma_encoding, 0) + 1
 
@@ -310,7 +310,7 @@ function build_category_grids(T_lookup::Dict{BigInt, Int}, gamma_lookup::Dict{Bi
 
         if status == "ok"
             T_grid[x_idx, y_idx] = T_lookup[parse(BigInt, fields[6])]
-            gamma_grid[x_idx, y_idx] = gamma_lookup[parse(BigInt, fields[12])]
+            gamma_grid[x_idx, y_idx] = gamma_lookup[parse(BigInt, fields[7])]
         end
     end
 
@@ -328,7 +328,7 @@ function write_final_results(path::String, T_lookup::Dict{BigInt, Int}, gamma_lo
             status = fields[10]
             if status == "ok"
                 T_encoding = parse(BigInt, fields[6])
-                gamma_encoding = parse(BigInt, fields[12])
+                gamma_encoding = parse(BigInt, fields[7])
                 T_category_id = T_lookup[T_encoding]
                 gamma_category_id = gamma_lookup[gamma_encoding]
                 println(
@@ -342,7 +342,7 @@ function write_final_results(path::String, T_lookup::Dict{BigInt, Int}, gamma_lo
                         string(T_category_id),
                         fields[6],
                         string(gamma_category_id),
-                        fields[12],
+                        fields[7],
                         fields[8],
                         fields[9],
                         status,
