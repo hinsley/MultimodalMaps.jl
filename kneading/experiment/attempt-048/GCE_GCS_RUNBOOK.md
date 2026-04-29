@@ -101,6 +101,32 @@ gcloud storage cp kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_
 The TSV/PNG/log artifacts are small enough that GCS cost should be negligible
 for this use. The main cost is GCE VM uptime.
 
+## Retrieve results
+
+If you used GCS backup, download the completed artifacts from your local
+machine with:
+
+```bash
+mkdir -p attempt-048-results
+gcloud storage cp -r \
+  gs://YOUR_BUCKET_NAME/attempt-048/grid500_seq7_prefixes_remap40_newmodel* \
+  attempt-048-results/
+```
+
+If you did not use GCS, copy directly from the VM before deleting it:
+
+```bash
+mkdir -p attempt-048-results
+gcloud compute scp --recurse \
+  VM_NAME:~/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel* \
+  attempt-048-results/ \
+  --zone=YOUR_ZONE
+```
+
+If the VM was preempted but the persistent disk remains, recreate or restart a
+VM with that disk attached, then use the direct `gcloud compute scp` command
+above or upload to GCS from the recovered VM.
+
 ## Expected outputs
 
 The run should produce:
