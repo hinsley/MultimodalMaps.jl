@@ -12,17 +12,23 @@ const FILTER_RESULTS_PATH = get(
     joinpath(ATTEMPT49_FILTER_ROOT, "gcs_results", "grid1000_seq12_prefixes_remap40_newmodel_results.tsv"),
 )
 const FILTER_OUTPUT_DIR = get(ENV, "ATTEMPT049_FILTER_OUTPUT_DIR", dirname(FILTER_RESULTS_PATH))
-const FILTER_OUTPUT_TAG = get(ENV, "ATTEMPT049_FILTER_OUTPUT_TAG", "grid1000_seq12_filtered_tprefix100000")
-const FILTER_T_PREFIX = [1, 0, 0, 0, 0, 0]
+const FILTER_OUTPUT_TAG = get(ENV, "ATTEMPT049_FILTER_OUTPUT_TAG", "grid1000_seq12_filtered_ttail00000")
+const FILTER_T_ZERO_TAIL_START = 2
+const FILTER_T_ZERO_TAIL_STOP = 6
 
 function header_lookup(header::AbstractString)
     names = split(header, '\t'; keepempty=true)
     return Dict(name => idx for (idx, name) in pairs(names))
 end
 
-function starts_with_filter_prefix(seq::Vector{Int})
-    length(seq) >= length(FILTER_T_PREFIX) || return false
-    return all(seq[idx] == FILTER_T_PREFIX[idx] for idx in eachindex(FILTER_T_PREFIX))
+function T_tail_encoding(seq::Vector{Int})
+    tail = length(seq) >= 2 ? seq[2:end] : Int[]
+    return encode_sequence(tail)
+end
+
+function has_zero_tail_2_to_6(seq::Vector{Int})
+    length(seq) >= FILTER_T_ZERO_TAIL_STOP || return false
+    return all(seq[idx] == 0 for idx in FILTER_T_ZERO_TAIL_START:FILTER_T_ZERO_TAIL_STOP)
 end
 
 function build_filtered_full_grids(results_path::String)
@@ -33,6 +39,7 @@ function build_filtered_full_grids(results_path::String)
     ok_count = 0
     error_count = 0
     suppress_points = 0
+    T_tail_lookup = Dict{BigInt, Int}()
 
     open(results_path, "r") do io
         lookup = header_lookup(readline(io))
@@ -59,17 +66,20 @@ function build_filtered_full_grids(results_path::String)
             end
 
             ok_count += 1
-            T_grid[ca_idx, x_idx] = parse(Int, fields[lookup["T_category_id"]])
+            T_scs = parse_sequence_field(fields[lookup["T_scs"]])
+            T_tail = T_tail_encoding(T_scs)
+            T_grid[ca_idx, x_idx] = get!(T_tail_lookup, T_tail) do
+                length(T_tail_lookup) + 1
+            end
             gamma_grid[ca_idx, x_idx] = parse(Int, fields[lookup["gamma_category_id"]])
 
-            T_scs = parse_sequence_field(fields[lookup["T_scs"]])
-            suppress_T_grid[ca_idx, x_idx] = starts_with_filter_prefix(T_scs)
+            suppress_T_grid[ca_idx, x_idx] = has_zero_tail_2_to_6(T_scs)
             suppress_points += suppress_T_grid[ca_idx, x_idx] ? 1 : 0
         end
     end
 
     all(filled) || error("One or more contour grid entries were not filled.")
-    return T_grid, gamma_grid, suppress_T_grid, ok_count, error_count, suppress_points
+    return T_grid, gamma_grid, suppress_T_grid, ok_count, error_count, suppress_points, length(T_tail_lookup)
 end
 
 function categorical_marching_squares_filtered(
@@ -177,10 +187,11 @@ function main()
     println("Running attempt-049 filtered full-contour replay.")
     println("Results source: $(FILTER_RESULTS_PATH)")
     println("Output plot: $(plot_path)")
-    println("Suppressing red marched squares whose four T SSCS corners start with $(FILTER_T_PREFIX)")
+    println("Red categories ignore T symbol 1.")
+    println("Suppressing red marched squares whose four T SSCS corners have symbols 2:6 all equal to 0.")
     flush(stdout)
 
-    T_grid, gamma_grid, suppress_T_grid, ok_count, error_count, suppress_points =
+    T_grid, gamma_grid, suppress_T_grid, ok_count, error_count, suppress_points, T_tail_unique =
         build_filtered_full_grids(FILTER_RESULTS_PATH)
     save_filtered_contour_plot(plot_path, T_grid, gamma_grid, suppress_T_grid)
 
@@ -189,13 +200,16 @@ function main()
         println(io, "plot_path\t$(plot_path)")
         println(io, "ok_count\t$(ok_count)")
         println(io, "error_count\t$(error_count)")
-        println(io, "suppressed_T_prefix\t$(join(FILTER_T_PREFIX, ","))")
+        println(io, "red_category_rule\tT_scs[2:end]")
+        println(io, "suppressed_T_rule\tall T_scs[2:6] == 0")
         println(io, "suppressed_T_points\t$(suppress_points)")
+        println(io, "T_tail_unique\t$(T_tail_unique)")
     end
 
     println("Successful rows: $(ok_count)")
     println("Error rows: $(error_count)")
-    println("T grid points with suppressed prefix: $(suppress_points)")
+    println("T grid points with suppressed symbols 2:6 all zero: $(suppress_points)")
+    println("Unique red categories after dropping symbol 1: $(T_tail_unique)")
     println("Saved plot to $(plot_path)")
     println("Saved summary to $(summary_path)")
 end
