@@ -37,7 +37,7 @@ Red contours also suppress any marched square whose four corners all have
 symbols 2 through 6 equal to zero:
 
 ```text
-T_scs[2:6] == [0, 0, 0, 0, 0]
+T_scs[2:12] == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ```
 
 This removes the large late-symbol truncation artifacts around the regions
