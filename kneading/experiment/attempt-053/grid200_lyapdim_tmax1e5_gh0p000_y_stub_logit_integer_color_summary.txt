@@ -1,0 +1,27 @@
+output_tag	grid200_lyapdim_tmax1e5_gh0p000_y_stub_logit_integer_color
+generated_at	2026-05-01T10:41:22.699
+grid	200x200
+delta_ca_range	-45.0	-20.0
+delta_x_range	-1.5	-0.5
+g_h	0.0
+y_stubbed	true
+active_state_order	x	n	h	Ca	V
+tau_y	20000.0
+lyap_ttr	5000.0
+lyap_tmax	100000.0
+lyap_dt	10.0
+lyap_min_time	30000.0
+lyap_check_interval	5000.0
+lyap_conv_atol	0.0001
+lyap_conv_rtol	0.01
+lyap_dim_conv_atol	0.005
+lyap_stable_checks	3
+dimension_color_mode	logit_integer
+dimension_color_logit_atan_scale	3.0
+ok_count	40000
+converged_count	10382
+dimension_min	0.0
+dimension_max	2.04824864675
+dimension_mean	1.3302554545043892
+plot_path	/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-053/grid200_lyapdim_tmax1e5_gh0p000_y_stub_logit_integer_color_dimension.png
+results_path	/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-053/grid200_lyapdim_tmax1e5_gh0p000_y_stub_results.tsv

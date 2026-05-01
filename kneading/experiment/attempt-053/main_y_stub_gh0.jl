@@ -58,6 +58,8 @@ const AXIS_TITLE_SIZE_053 = env_int_053("ATTEMPT053_AXIS_TITLE_SIZE", 38)
 const TICK_LABEL_SIZE_053 = env_int_053("ATTEMPT053_TICK_LABEL_SIZE", 24)
 const DELTA_CA_TICK_STEP_053 = env_float_053("ATTEMPT053_DELTA_CA_TICK_STEP", 5.0)
 const DELTA_X_TICK_STEP_053 = env_float_053("ATTEMPT053_DELTA_X_TICK_STEP", 0.1)
+const DIM_COLOR_MODE_053 = get(ENV, "ATTEMPT053_DIM_COLOR_MODE", "linear")
+const DIM_COLOR_LOGIT_ATAN_SCALE_053 = env_float_053("ATTEMPT053_DIM_COLOR_LOGIT_ATAN_SCALE", 3.0)
 
 struct LyapResult053
     delta_x::Float64
@@ -351,6 +353,11 @@ function dimension_color_053(dim::Float64)
     ]
     level = clamp(floor(Int, dim), 0, length(bases) - 1)
     frac = clamp(dim - level, 0.0, 1.0)
+    if DIM_COLOR_MODE_053 == "logit_integer" && level >= 2
+        frac = clamp(frac, eps(Float64), 1.0 - eps(Float64))
+        logit_frac = log(frac / (1.0 - frac))
+        frac = clamp(0.5 + atan(logit_frac / DIM_COLOR_LOGIT_ATAN_SCALE_053) / pi, 0.0, 1.0)
+    end
     strength = 0.18 + 0.82 * frac
     base = bases[level + 1]
     rgb = RGBf((1 - strength) + strength * base.r, (1 - strength) + strength * base.g, (1 - strength) + strength * base.b)
@@ -434,6 +441,8 @@ function plot_dimension_053(results_path::String=RESULTS_PATH_053)
         println(io, "lyap_conv_rtol\t$(LYAP_CONV_RTOL_053)")
         println(io, "lyap_dim_conv_atol\t$(LYAP_DIM_CONV_ATOL_053)")
         println(io, "lyap_stable_checks\t$(LYAP_STABLE_CHECKS_053)")
+        println(io, "dimension_color_mode\t$(DIM_COLOR_MODE_053)")
+        println(io, "dimension_color_logit_atan_scale\t$(DIM_COLOR_LOGIT_ATAN_SCALE_053)")
         println(io, "ok_count\t$(ok_count)")
         println(io, "converged_count\t$(converged_count)")
         println(io, "dimension_min\t$(isempty(dims) ? NaN : minimum(dims))")
