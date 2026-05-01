@@ -1,8 +1,8 @@
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.12.5"
+julia_version = "1.12.3"
 manifest_format = "2.0"
-project_hash = "9892f1584a5b1278694f2472beef64a5aa93ebc9"
+project_hash = "e0729d24880a70e3edf9599afca7ef90c59f2cb0"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "8b2b045b22740e4be20654175cc38291d48539db"
@@ -450,9 +450,9 @@ weakdeps = ["SparseArrays"]
 
 [[deps.ChaosTools]]
 deps = ["Combinatorics", "DSP", "DataStructures", "Distances", "Distributions", "DynamicalSystemsBase", "IntervalRootFinding", "LinearAlgebra", "LombScargle", "Neighborhood", "Optim", "ProgressMeter", "Random", "Reexport", "Roots", "SpecialFunctions", "Statistics", "StatsBase"]
-git-tree-sha1 = "7702bf0087ae9d1a50c8bb2e72e14bd8a7d57892"
+git-tree-sha1 = "12f9540406976e23eb2d7396d5bbe6e0e7be7874"
 uuid = "608a59af-f2a3-5ad4-90b4-758bdf3122a7"
-version = "3.5.2"
+version = "3.5.4"
 
 [[deps.ChunkSplitters]]
 git-tree-sha1 = "63a3903063d035260f0f6eab00f517471c5dc784"
@@ -2116,7 +2116,7 @@ version = "0.3.7"
 
 [[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
-version = "2025.11.4"
+version = "2025.5.20"
 
 [[deps.MuladdMacro]]
 git-tree-sha1 = "cac9cc5499c25554cba55cd3c30543cff5ca4fab"
@@ -2124,7 +2124,7 @@ uuid = "46d2c3a1-f734-5fdb-9937-b9b9aeba4221"
 version = "0.2.4"
 
 [[deps.MultimodalMaps]]
-deps = ["Arpack", "CairoMakie", "Clustering", "Colors", "Combinatorics", "DataStructures", "DiffEqGPU", "DifferentialEquations", "DynamicalSystems", "ForwardDiff", "GLMakie", "GenericLinearAlgebra", "Interpolations", "Metal", "OrdinaryDiffEq", "Peaks", "PlotlyJS", "Plots", "PolynomialRoots", "ProgressMeter", "Roots", "SciMLBase", "StaticArrays"]
+deps = ["Arpack", "CairoMakie", "Clustering", "Colors", "Combinatorics", "DataStructures", "DiffEqGPU", "DifferentialEquations", "DynamicalSystems", "ForwardDiff", "GLMakie", "GenericLinearAlgebra", "Interpolations", "Metal", "OrdinaryDiffEq", "Peaks", "PlotlyJS", "Plots", "PolynomialRoots", "ProgressMeter", "Roots", "SciMLBase", "SciMLSensitivity", "StaticArrays"]
 path = "."
 uuid = "44c66d49-f3d1-415d-9436-9a651fc58ffb"
 version = "0.1.0"

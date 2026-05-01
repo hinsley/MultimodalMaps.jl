@@ -1,0 +1,39 @@
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+Running attempt-052 Lyapunov dimension scan.
+Grid: 10 Delta Ca x 10 Delta x
+Delta Ca range: [-45.000000, -20.000000]
+Delta x range: [-1.500000, -0.500000]
+g_h=0.001, tau_y=20000
+Lyapunov: Ttr=5000.000, Tmax=100000.000, dt=10.000, min_time=30000.000, check_interval=5000.000
+Threads: 10
+Saved column 1/10 (Delta Ca=-45.000000) with 10/10 ok, 10 converged
+Column 1 runtime: 5.84 s
+Saved column 2/10 (Delta Ca=-42.222222) with 10/10 ok, 10 converged
+Column 2 runtime: 6.29 s
+Saved column 4/10 (Delta Ca=-36.666667) with 10/10 ok, 10 converged
+Column 4 runtime: 7.04 s
+Saved column 3/10 (Delta Ca=-39.444444) with 10/10 ok, 10 converged
+Column 3 runtime: 7.06 s
+Saved column 5/10 (Delta Ca=-33.888889) with 10/10 ok, 10 converged
+Column 5 runtime: 7.24 s
+Saved column 6/10 (Delta Ca=-31.111111) with 10/10 ok, 10 converged
+Column 6 runtime: 7.28 s
+Saved column 10/10 (Delta Ca=-20.000000) with 10/10 ok, 10 converged
+Column 10 runtime: 7.33 s
+Saved column 7/10 (Delta Ca=-28.333333) with 10/10 ok, 10 converged
+Column 7 runtime: 7.39 s
+Saved column 9/10 (Delta Ca=-22.777778) with 10/10 ok, 10 converged
+Column 9 runtime: 7.40 s
+Saved column 8/10 (Delta Ca=-25.555556) with 10/10 ok, 10 converged
+Column 8 runtime: 7.41 s
+Saved plot to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-052/local10x10_lyapdim_tmax1e5_gh0p001_dimension.png
+Saved summary to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-052/local10x10_lyapdim_tmax1e5_gh0p001_summary.txt
+ok_count=100
+converged_count=100
+dimension range: 0.000000 to 3.030034
+scan_runtime_seconds=8.045
+merge_runtime_seconds=0.001
+plot_runtime_seconds=8.524
+real 24.00
+user 29.09
+sys 22.42

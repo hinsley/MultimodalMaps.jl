@@ -7,6 +7,7 @@ description = "Symbolic scans of multimodal maps of an interval"
 [deps]
 Arpack = "7d9fca2a-8960-54d3-9f78-7d1dccf2cb97"
 CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
+ChaosTools = "608a59af-f2a3-5ad4-90b4-758bdf3122a7"
 Clustering = "aaaa29a8-35af-508c-8bc3-b662a17a0fe5"
 Colors = "5ae59095-9a9b-59fe-a467-6f913c188581"
 Combinatorics = "861a8166-3701-5b0c-9a16-15d98fcdc6aa"
@@ -31,6 +32,7 @@ SciMLSensitivity = "1ed8b502-d754-442c-8d5d-10ac956f44a1"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
 [compat]
+ChaosTools = "3.5.4"
 GenericLinearAlgebra = "0.3.19"
 Interpolations = "0.16.2"
 Roots = "2.2.13"
