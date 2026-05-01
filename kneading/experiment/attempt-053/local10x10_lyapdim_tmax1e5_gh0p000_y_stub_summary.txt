@@ -1,0 +1,28 @@
+output_tag	local10x10_lyapdim_tmax1e5_gh0p000_y_stub
+generated_at	2026-05-01T01:20:11.676
+grid	10x10
+delta_ca_range	-45.0	-20.0
+delta_x_range	-1.5	-0.5
+g_h	0.0
+y_stubbed	true
+active_state_order	x	n	h	Ca	V
+tau_y	20000.0
+lyap_ttr	5000.0
+lyap_tmax	100000.0
+lyap_dt	10.0
+lyap_min_time	30000.0
+lyap_check_interval	5000.0
+lyap_conv_atol	0.0001
+lyap_conv_rtol	0.01
+lyap_dim_conv_atol	0.005
+lyap_stable_checks	3
+ok_count	100
+converged_count	23
+dimension_min	0.0
+dimension_max	2.04163291859
+dimension_mean	1.2259853373299001
+plot_path	/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-053/local10x10_lyapdim_tmax1e5_gh0p000_y_stub_dimension.png
+results_path	/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-053/local10x10_lyapdim_tmax1e5_gh0p000_y_stub_results.tsv
+scan_runtime_seconds	12.41061075
+merge_runtime_seconds	0.000425041
+plot_runtime_seconds	10.092709792
