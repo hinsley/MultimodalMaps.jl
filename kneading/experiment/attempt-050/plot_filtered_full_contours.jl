@@ -19,6 +19,7 @@ const FILTER_T_RGB = (0.86, 0.16, 0.12)
 const FILTER_GAMMA_RGB = (0.12, 0.28, 0.88)
 const FILTER_LINEWIDTH = parse(Float64, get(ENV, "ATTEMPT050_FILTER_LINEWIDTH", "0.35"))
 const FILTER_ALPHA_EXPONENT = parse(Float64, get(ENV, "ATTEMPT050_FILTER_ALPHA_EXPONENT", "0.3"))
+const FILTER_TRANSPARENT_BACKGROUND = lowercase(get(ENV, "ATTEMPT050_FILTER_TRANSPARENT_BACKGROUND", "false")) in ("1", "true", "yes")
 
 function header_lookup(header::AbstractString)
     names = split(header, '\t'; keepempty=true)
@@ -225,12 +226,14 @@ function save_filtered_contour_plot(
     T_sequences::Matrix{Vector{Int}},
     gamma_sequences::Matrix{Vector{Int}},
 )
-    fig = Figure(size=(PLOT_WIDTH, PLOT_HEIGHT))
+    background = FILTER_TRANSPARENT_BACKGROUND ? RGBAf(1, 1, 1, 0) : RGBAf(1, 1, 1, 1)
+    fig = Figure(size=(PLOT_WIDTH, PLOT_HEIGHT), backgroundcolor=background)
     ax = Axis(
         fig[1, 1],
         title="SSCS changes (t ≤ 1e5)",
         xlabel="ΔCa",
         ylabel="Δx",
+        backgroundcolor=background,
         titlesize=AXIS_TITLE_SIZE,
         xlabelsize=AXIS_LABEL_SIZE,
         ylabelsize=AXIS_LABEL_SIZE,
