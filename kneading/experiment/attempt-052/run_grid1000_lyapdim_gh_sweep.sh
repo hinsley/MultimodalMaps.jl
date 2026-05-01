@@ -43,6 +43,13 @@ export ATTEMPT052_PLOT_WIDTH="${ATTEMPT052_PLOT_WIDTH:-1800}"
 export ATTEMPT052_PLOT_HEIGHT="${ATTEMPT052_PLOT_HEIGHT:-1300}"
 export ATTEMPT052_PLOT_PX_PER_UNIT="${ATTEMPT052_PLOT_PX_PER_UNIT:-2.0}"
 export ATTEMPT052_GCS_URI="${ATTEMPT052_GCS_URI:-}"
+if [[ -z "${ATTEMPT052_TAG_GRID_LABEL:-}" ]]; then
+    if [[ "${ATTEMPT052_NX}" == "${ATTEMPT052_NY}" ]]; then
+        export ATTEMPT052_TAG_GRID_LABEL="grid${ATTEMPT052_NX}"
+    else
+        export ATTEMPT052_TAG_GRID_LABEL="grid${ATTEMPT052_NY}x${ATTEMPT052_NX}"
+    fi
+fi
 
 GH_VALUES=("0.0" "1.0e-3" "1.0e-2")
 GH_LABELS=("gh0p000" "gh0p001" "gh0p01")
@@ -128,7 +135,7 @@ for idx in "${!GH_VALUES[@]}"; do
     gh_label="${GH_LABELS[$idx]}"
 
     export ATTEMPT052_G_H="${gh_value}"
-    export ATTEMPT052_OUTPUT_TAG="grid1000_lyapdim_tmax1e5_${gh_label}"
+    export ATTEMPT052_OUTPUT_TAG="${ATTEMPT052_TAG_GRID_LABEL}_lyapdim_tmax1e5_${gh_label}"
     CURRENT_OUTPUT_TAG="${ATTEMPT052_OUTPUT_TAG}"
     CURRENT_LOG_PATH="${SCRIPT_DIR}/${ATTEMPT052_OUTPUT_TAG}.log"
     CURRENT_COLUMN_DIR="${SCRIPT_DIR}/${ATTEMPT052_OUTPUT_TAG}_columns"
