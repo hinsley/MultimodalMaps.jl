@@ -36,9 +36,10 @@ const LYAP_TTR_052 = env_float("ATTEMPT052_LYAP_TTR", 5.0e3)
 const LYAP_DT_052 = env_float("ATTEMPT052_LYAP_DT", 10.0)
 const LYAP_MIN_TIME_052 = env_float("ATTEMPT052_LYAP_MIN_TIME", 3.0e4)
 const LYAP_CHECK_INTERVAL_052 = env_float("ATTEMPT052_LYAP_CHECK_INTERVAL", 5.0e3)
-const LYAP_CONV_ATOL_052 = env_float("ATTEMPT052_LYAP_CONV_ATOL", 5.0e-4)
-const LYAP_CONV_RTOL_052 = env_float("ATTEMPT052_LYAP_CONV_RTOL", 2.0e-2)
-const LYAP_STABLE_CHECKS_052 = env_int("ATTEMPT052_LYAP_STABLE_CHECKS", 1)
+const LYAP_CONV_ATOL_052 = env_float("ATTEMPT052_LYAP_CONV_ATOL", 1.0e-4)
+const LYAP_CONV_RTOL_052 = env_float("ATTEMPT052_LYAP_CONV_RTOL", 1.0e-2)
+const LYAP_DIM_CONV_ATOL_052 = env_float("ATTEMPT052_LYAP_DIM_CONV_ATOL", 5.0e-3)
+const LYAP_STABLE_CHECKS_052 = env_int("ATTEMPT052_LYAP_STABLE_CHECKS", 3)
 const LYAP_ABSTOL_052 = env_float("ATTEMPT052_LYAP_ABSTOL", 1.0e-8)
 const LYAP_RELTOL_052 = env_float("ATTEMPT052_LYAP_RELTOL", 1.0e-8)
 const LYAP_ALG_052 = Tsit5()
@@ -68,6 +69,8 @@ struct LyapResult052
     transient_time::Float64
     converged::Bool
     checks::Int
+    spectrum_delta_last::Float64
+    dimension_delta_last::Float64
     runtime::Float64
     status::String
     error::String
@@ -149,9 +152,12 @@ function lyapunov_dimension_052(delta_x::Float64, delta_ca::Float64)::LyapResult
 
         λsum = zeros(Float64, k)
         previous_λ = nothing
+        previous_dim = NaN
         stable_checks = 0
         checks = 0
         converged = false
+        spectrum_delta_last = NaN
+        dimension_delta_last = NaN
         t0 = current_time(tands)
         next_check = LYAP_CHECK_INTERVAL_052
 
@@ -165,11 +171,13 @@ function lyapunov_dimension_052(delta_x::Float64, delta_ca::Float64)::LyapResult
             if elapsed >= next_check - eps(Float64) || elapsed >= LYAP_TMAX_052 - eps(Float64)
                 checks += 1
                 λnow = sort(λsum ./ elapsed; rev=true)
+                dim_now = kaplan_yorke_dimension_052(λnow)
                 if elapsed >= LYAP_MIN_TIME_052 && !isnothing(previous_λ)
                     scale = max(maximum(abs.(λnow)), maximum(abs.(previous_λ)), 1.0e-12)
-                    delta = maximum(abs.(λnow .- previous_λ))
-                    tol = max(LYAP_CONV_ATOL_052, LYAP_CONV_RTOL_052 * scale)
-                    if delta <= tol
+                    spectrum_delta_last = maximum(abs.(λnow .- previous_λ))
+                    dimension_delta_last = abs(dim_now - previous_dim)
+                    spectrum_tol = max(LYAP_CONV_ATOL_052, LYAP_CONV_RTOL_052 * scale)
+                    if spectrum_delta_last <= spectrum_tol && dimension_delta_last <= LYAP_DIM_CONV_ATOL_052
                         stable_checks += 1
                     else
                         stable_checks = 0
@@ -180,6 +188,7 @@ function lyapunov_dimension_052(delta_x::Float64, delta_ca::Float64)::LyapResult
                     end
                 end
                 previous_λ = λnow
+                previous_dim = dim_now
                 next_check += LYAP_CHECK_INTERVAL_052
             end
         end
@@ -187,7 +196,21 @@ function lyapunov_dimension_052(delta_x::Float64, delta_ca::Float64)::LyapResult
         elapsed = current_time(tands) - t0
         λ = sort(λsum ./ elapsed; rev=true)
         dim = kaplan_yorke_dimension_052(λ)
-        raw_result = LyapResult052(delta_x, delta_ca, dim, λ, elapsed, LYAP_TTR_052, converged, checks, 0.0, "ok", "")
+        raw_result = LyapResult052(
+            delta_x,
+            delta_ca,
+            dim,
+            λ,
+            elapsed,
+            LYAP_TTR_052,
+            converged,
+            checks,
+            spectrum_delta_last,
+            dimension_delta_last,
+            0.0,
+            "ok",
+            "",
+        )
     end
 
     return LyapResult052(
@@ -199,6 +222,8 @@ function lyapunov_dimension_052(delta_x::Float64, delta_ca::Float64)::LyapResult
         raw_result.transient_time,
         raw_result.converged,
         raw_result.checks,
+        raw_result.spectrum_delta_last,
+        raw_result.dimension_delta_last,
         runtime,
         raw_result.status,
         raw_result.error,
@@ -209,7 +234,7 @@ function lyapunov_dimension_safe_052(delta_x::Float64, delta_ca::Float64)::LyapR
     try
         return lyapunov_dimension_052(delta_x, delta_ca)
     catch err
-        return LyapResult052(delta_x, delta_ca, NaN, Float64[], 0.0, LYAP_TTR_052, false, 0, 0.0, "error", sprint(showerror, err))
+        return LyapResult052(delta_x, delta_ca, NaN, Float64[], 0.0, LYAP_TTR_052, false, 0, NaN, NaN, 0.0, "error", sprint(showerror, err))
     end
 end
 
@@ -229,7 +254,7 @@ function write_column_052(col_idx::Int, delta_ca::Float64)
 
     temp_path = path * ".tmp"
     open(temp_path, "w") do io
-        println(io, "delta_x\tdelta_ca\tlyap_dim\tlambda1\tlambda2\tlambda3\tlambda4\tlambda5\tlambda6\tintegrated_time\ttransient_time\tconverged\tchecks\truntime_seconds\tstatus\terror")
+        println(io, "delta_x\tdelta_ca\tlyap_dim\tlambda1\tlambda2\tlambda3\tlambda4\tlambda5\tlambda6\tintegrated_time\ttransient_time\tconverged\tchecks\tspectrum_delta_last\tdimension_delta_last\truntime_seconds\tstatus\terror")
         column_runtime = @elapsed begin
             ok_count = 0
             converged_count = 0
@@ -241,6 +266,7 @@ function write_column_052(col_idx::Int, delta_ca::Float64)
                 for i in 1:min(6, length(result.lambda))
                     λ[i] = result.lambda[i]
                 end
+                error_text = isempty(result.error) ? "none" : replace(result.error, '\t' => ' ', '\n' => ' ')
                 println(io, join((
                     @sprintf("%.9f", result.delta_x),
                     @sprintf("%.9f", result.delta_ca),
@@ -255,9 +281,11 @@ function write_column_052(col_idx::Int, delta_ca::Float64)
                     @sprintf("%.6f", result.transient_time),
                     result.converged ? "true" : "false",
                     string(result.checks),
+                    @sprintf("%.12g", result.spectrum_delta_last),
+                    @sprintf("%.12g", result.dimension_delta_last),
                     @sprintf("%.6f", result.runtime),
                     result.status,
-                    replace(result.error, '\t' => ' ', '\n' => ' '),
+                    error_text,
                 ), '\t'))
             end
             @printf(
@@ -422,6 +450,10 @@ function plot_dimension_052(results_path::String=RESULTS_PATH_052)
         println(io, "lyap_dt\t$(LYAP_DT_052)")
         println(io, "lyap_min_time\t$(LYAP_MIN_TIME_052)")
         println(io, "lyap_check_interval\t$(LYAP_CHECK_INTERVAL_052)")
+        println(io, "lyap_conv_atol\t$(LYAP_CONV_ATOL_052)")
+        println(io, "lyap_conv_rtol\t$(LYAP_CONV_RTOL_052)")
+        println(io, "lyap_dim_conv_atol\t$(LYAP_DIM_CONV_ATOL_052)")
+        println(io, "lyap_stable_checks\t$(LYAP_STABLE_CHECKS_052)")
         println(io, "ok_count\t$(ok_count)")
         println(io, "converged_count\t$(converged_count)")
         println(io, "dimension_min\t$(isempty(dims) ? NaN : minimum(dims))")

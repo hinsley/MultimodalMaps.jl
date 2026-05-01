@@ -17,8 +17,11 @@ Defaults:
 The plotted scalar is the Kaplan-Yorke Lyapunov dimension computed from the
 full six-exponent spectrum. A point integrates for up to `1e5` measurement time
 after a transient. The default early-stop criterion starts at `3e4` measurement
-time and accepts convergence if the spectrum changes by less than
-`max(5e-4, 0.02 * spectrum_scale)` between check windows.
+time and accepts convergence only after three consecutive stable check windows.
+A stable window must satisfy both:
+
+- spectrum change `<= max(1e-4, 0.01 * spectrum_scale)`
+- Kaplan-Yorke dimension change `<= 0.005`
 
 Color convention:
 
