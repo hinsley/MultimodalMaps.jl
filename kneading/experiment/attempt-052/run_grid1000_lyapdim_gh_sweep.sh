@@ -152,8 +152,14 @@ for idx in "${!GH_VALUES[@]}"; do
         fi
     } | tee -a "${CURRENT_LOG_PATH}"
 
-    /usr/bin/time -p "${JULIA_CMD[@]}" --startup-file=no --project=. \
-        kneading/experiment/attempt-052/main.jl 2>&1 | tee -a "${CURRENT_LOG_PATH}"
+    if [[ -x /usr/bin/time ]]; then
+        /usr/bin/time -p "${JULIA_CMD[@]}" --startup-file=no --project=. \
+            kneading/experiment/attempt-052/main.jl 2>&1 | tee -a "${CURRENT_LOG_PATH}"
+    else
+        echo "/usr/bin/time is not available; using shell timing fallback." | tee -a "${CURRENT_LOG_PATH}"
+        time "${JULIA_CMD[@]}" --startup-file=no --project=. \
+            kneading/experiment/attempt-052/main.jl 2>&1 | tee -a "${CURRENT_LOG_PATH}"
+    fi
 
     upload_gcs_final_artifacts "${ATTEMPT052_OUTPUT_TAG}"
 done
