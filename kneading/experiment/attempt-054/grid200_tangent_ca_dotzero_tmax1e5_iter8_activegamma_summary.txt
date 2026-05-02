@@ -1,4 +1,4 @@
-output_tag	grid200_tangent_ca_sign_tmax1e5_iter8
+output_tag	grid200_tangent_ca_dotzero_tmax1e5_iter8_activegamma
 grid_delta_ca	200
 grid_delta_x	200
 delta_ca_min	-45.0
@@ -11,4 +11,4 @@ reorth_every_step	true
 total_points	40000
 successful_points	40000
 error_points	0
-elapsed_seconds	562.892774105072
+elapsed_seconds	689.2035338878632

@@ -1,4 +1,4 @@
-# Attempt 054: Tangent Ca-Minimum Sign Contours
+# Attempt 054: Tangent Ca-Minimum Zero Contours
 
 This attempt replaces SSCS coding with a tangent-direction diagnostic.
 
@@ -14,8 +14,9 @@ Each trajectory is augmented with one tangent vector. The tangent vector is
 evolved by the variational equation using a ForwardDiff Jacobian-vector product
 and is projected/renormalized against the flow after accepted solver steps and
 at detected calcium minima. At each local minimum of the actual calcium
-coordinate, the code records the sign of the tangent vector's calcium
-component. Contours are drawn where that sign changes for a fixed calcium-map
+coordinate, the code records the tangent vector's calcium component,
+equivalently its dot product with the `partial Ca` basis vector. Contours are
+drawn as zero-level contours of that scalar field for each fixed calcium-map
 iterate.
 
 Default test settings:
@@ -26,7 +27,8 @@ Default test settings:
 - Iterates: first `8` calcium minima.
 - Red contours: `T0` trajectory.
 - Blue contours: `Gamma_SD^-` trajectory, with the initial tangent taken from
-  the upper saddle's weakest real stable eigendirection.
+  the upper saddle's weakest real stable eigendirection after excluding the
+  passive decoupled `y` direction that occurs at `g_h = 0`.
 
 Run a smoke test:
 

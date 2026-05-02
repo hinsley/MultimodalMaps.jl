@@ -32,7 +32,7 @@ using LinearAlgebra
 using Printf
 using StaticArrays
 
-const OUTPUT_TAG_054 = get(ENV, "ATTEMPT054_OUTPUT_TAG", "grid200_tangent_ca_sign_tmax1e5_iter8")
+const OUTPUT_TAG_054 = get(ENV, "ATTEMPT054_OUTPUT_TAG", "grid200_tangent_ca_dotzero_tmax1e5_iter8_activegamma")
 const SWEEP_DIR_054 = joinpath(ATTEMPT54_ROOT, "$(OUTPUT_TAG_054)_columns")
 const TANGENT_TMAX_054 = parse(Float64, get(ENV, "ATTEMPT054_TMAX", "1.0e5"))
 const TANGENT_TSPAN_054 = (0.0, TANGENT_TMAX_054)
@@ -204,12 +204,35 @@ function upper_saddle_weak_stable_tangent_054(p)::SVector{6, Float64}
     real_stable = findall(i -> real(vals[i]) < 0 && abs(imag(vals[i])) < 1.0e-8, eachindex(vals))
     candidates = isempty(real_stable) ? findall(i -> real(vals[i]) < 0, eachindex(vals)) : real_stable
     isempty(candidates) && error("Could not find a stable eigendirection at the upper saddle.")
-    weak_idx = candidates[argmax(real.(vals[candidates]))]
+
+    # At g_h = 0 the y equation is passively decoupled; the formal weakest
+    # stable eigenvector is often pure y and carries no Ca information. Exclude
+    # that trivial direction by requiring non-negligible projection onto the
+    # active (x,n,h,Ca,V) coordinates.
+    active_indices = (1, 3, 4, 5, 6)
+    ordered = sort(candidates; by=i -> real(vals[i]), rev=true)
+    weak_idx = nothing
+    for idx in ordered
+        active_norm = norm(real.(vecs[collect(active_indices), idx]))
+        if active_norm > 1.0e-8
+            weak_idx = idx
+            break
+        end
+    end
+    isnothing(weak_idx) && error("Stable eigendirections at the upper saddle are all passive-y to tolerance.")
+
     raw_vec = real.(vecs[:, weak_idx])
     tangent = SVector{6, Float64}(Tuple(Float64.(raw_vec)))
     tangent_norm = norm(tangent)
     tangent_norm > 0 || error("Weak stable eigenvector has zero norm.")
-    return tangent / tangent_norm
+    tangent = tangent / tangent_norm
+
+    active_values = abs.(collect(tangent)[collect(active_indices)])
+    orient_component = active_indices[argmax(active_values)]
+    if tangent[orient_component] < 0
+        tangent = -tangent
+    end
+    return tangent
 end
 
 initial_T_tangent_054(p, T0::SVector{6, Float64}) =
@@ -449,6 +472,8 @@ sign_category_054(sign_value::Int) = sign_value < 0 ? 1 : (sign_value == 0 ? 2 :
 function build_iterate_grids_054()
     T_grids = [fill(0, length(DELTA_CAS_010), length(DELTA_XS_010)) for _ in 1:MAX_ITER_054]
     gamma_grids = [fill(0, length(DELTA_CAS_010), length(DELTA_XS_010)) for _ in 1:MAX_ITER_054]
+    T_scalar_grids = [fill(NaN, length(DELTA_CAS_010), length(DELTA_XS_010)) for _ in 1:MAX_ITER_054]
+    gamma_scalar_grids = [fill(NaN, length(DELTA_CAS_010), length(DELTA_XS_010)) for _ in 1:MAX_ITER_054]
     filled = falses(length(DELTA_CAS_010), length(DELTA_XS_010))
     error_count = 0
 
@@ -465,6 +490,8 @@ function build_iterate_grids_054()
         end
         T_signs = parse_int_vector_054(fields[6])
         gamma_signs = parse_int_vector_054(fields[7])
+        T_ca = parse_float_vector_054(fields[10])
+        gamma_ca = parse_float_vector_054(fields[11])
         for k in 1:MAX_ITER_054
             if length(T_signs) >= k
                 T_grids[k][x_idx, y_idx] = sign_category_054(T_signs[k])
@@ -472,11 +499,17 @@ function build_iterate_grids_054()
             if length(gamma_signs) >= k
                 gamma_grids[k][x_idx, y_idx] = sign_category_054(gamma_signs[k])
             end
+            if length(T_ca) >= k
+                T_scalar_grids[k][x_idx, y_idx] = T_ca[k]
+            end
+            if length(gamma_ca) >= k
+                gamma_scalar_grids[k][x_idx, y_idx] = gamma_ca[k]
+            end
         end
     end
 
     all(filled) || error("One or more tangent-sign grid entries were not filled.")
-    return T_grids, gamma_grids, error_count
+    return T_grids, gamma_grids, T_scalar_grids, gamma_scalar_grids, error_count
 end
 
 function edge_point_054(edge::Int, x0::Float64, x1::Float64, y0::Float64, y1::Float64)
@@ -594,16 +627,88 @@ function categorical_marching_squares_054(grid::Matrix{Int}, x_values::Vector{Fl
     return xs, ys
 end
 
+function parse_float_vector_054(field::AbstractString)
+    return isempty(field) ? Float64[] : parse.(Float64, split(field, ","))
+end
+
+function zero_cross_point_054(
+    v0::Float64,
+    v1::Float64,
+    x0::Float64,
+    y0::Float64,
+    x1::Float64,
+    y1::Float64,
+)
+    denom = v0 - v1
+    alpha = abs(denom) <= eps(Float64) ? 0.5 : clamp(v0 / denom, 0.0, 1.0)
+    return x0 + alpha * (x1 - x0), y0 + alpha * (y1 - y0)
+end
+
+function scalar_zero_marching_squares_054(grid::Matrix{Float64}, x_values::Vector{Float64}, y_values::Vector{Float64})
+    xs = Float32[]
+    ys = Float32[]
+    sizehint!(xs, 3 * (length(x_values) - 1) * (length(y_values) - 1))
+    sizehint!(ys, 3 * (length(x_values) - 1) * (length(y_values) - 1))
+
+    for x_idx in 1:(length(x_values) - 1)
+        x0 = x_values[x_idx]
+        x1 = x_values[x_idx + 1]
+        for y_idx in 1:(length(y_values) - 1)
+            y0 = y_values[y_idx]
+            y1 = y_values[y_idx + 1]
+            values = (
+                grid[x_idx, y_idx],
+                grid[x_idx + 1, y_idx],
+                grid[x_idx + 1, y_idx + 1],
+                grid[x_idx, y_idx + 1],
+            )
+            any(!isfinite, values) && continue
+            if all(>(0.0), values) || all(<(0.0), values)
+                continue
+            end
+
+            corners = ((x0, y0), (x1, y0), (x1, y1), (x0, y1))
+            edge_pairs = ((1, 2), (2, 3), (3, 4), (4, 1))
+            points = Tuple{Float64, Float64}[]
+            for (a, b) in edge_pairs
+                va = values[a]
+                vb = values[b]
+                if va == 0.0 && vb == 0.0
+                    push!(points, corners[a], corners[b])
+                elseif va == 0.0
+                    push!(points, corners[a])
+                elseif vb == 0.0
+                    push!(points, corners[b])
+                elseif signbit(va) != signbit(vb)
+                    push!(points, zero_cross_point_054(va, vb, corners[a][1], corners[a][2], corners[b][1], corners[b][2]))
+                end
+            end
+
+            unique!(points)
+            if length(points) == 2
+                push!(xs, Float32(points[1][1]), Float32(points[2][1]), NaN32)
+                push!(ys, Float32(points[1][2]), Float32(points[2][2]), NaN32)
+            elseif length(points) == 4
+                push!(xs, Float32(points[1][1]), Float32(points[2][1]), NaN32)
+                push!(ys, Float32(points[1][2]), Float32(points[2][2]), NaN32)
+                push!(xs, Float32(points[3][1]), Float32(points[4][1]), NaN32)
+                push!(ys, Float32(points[3][2]), Float32(points[4][2]), NaN32)
+            end
+        end
+    end
+    return xs, ys
+end
+
 function iterate_color_054(base::RGBAf, k::Int)
     alpha_scale = k == 1 ? 1.0 : (1.0 / (k ^ 0.3))
     return RGBAf(red(base), green(base), blue(base), alpha(base) * alpha_scale)
 end
 
-function save_tangent_contour_plot_054(path::String, T_grids::Vector{Matrix{Int}}, gamma_grids::Vector{Matrix{Int}})
+function save_tangent_contour_plot_054(path::String, T_scalar_grids::Vector{Matrix{Float64}}, gamma_scalar_grids::Vector{Matrix{Float64}})
     fig = Figure(size=(PLOT_WIDTH_054, PLOT_HEIGHT_054))
     ax = Axis(
         fig[1, 1],
-        title="Ca-min tangent sign changes (8 iterates)",
+        title="Ca-min tangent-Ca zero contours (8 iterates)",
         xlabel="Delta Ca",
         ylabel="Delta x",
         titlesize=40,
@@ -614,8 +719,8 @@ function save_tangent_contour_plot_054(path::String, T_grids::Vector{Matrix{Int}
     )
 
     for k in 1:MAX_ITER_054
-        T_xs, T_ys = categorical_marching_squares_054(T_grids[k], DELTA_CAS_010, DELTA_XS_010)
-        gamma_xs, gamma_ys = categorical_marching_squares_054(gamma_grids[k], DELTA_CAS_010, DELTA_XS_010)
+        T_xs, T_ys = scalar_zero_marching_squares_054(T_scalar_grids[k], DELTA_CAS_010, DELTA_XS_010)
+        gamma_xs, gamma_ys = scalar_zero_marching_squares_054(gamma_scalar_grids[k], DELTA_CAS_010, DELTA_XS_010)
         lines!(ax, T_xs, T_ys; color=iterate_color_054(T_COLOR_054, k), linewidth=LINEWIDTH_054)
         lines!(ax, gamma_xs, gamma_ys; color=iterate_color_054(GAMMA_COLOR_054, k), linewidth=LINEWIDTH_054)
     end
@@ -660,8 +765,8 @@ function main()
     plot_path = joinpath(ATTEMPT54_ROOT, "$(OUTPUT_TAG_054)_contours.png")
     summary_path = joinpath(ATTEMPT54_ROOT, "$(OUTPUT_TAG_054)_summary.txt")
     write_merged_results_054(results_path)
-    T_grids, gamma_grids, error_count = build_iterate_grids_054()
-    save_tangent_contour_plot_054(plot_path, T_grids, gamma_grids)
+    _, _, T_scalar_grids, gamma_scalar_grids, error_count = build_iterate_grids_054()
+    save_tangent_contour_plot_054(plot_path, T_scalar_grids, gamma_scalar_grids)
     elapsed = time() - started
     write_summary_054(summary_path, error_count, elapsed)
 
