@@ -41,6 +41,7 @@ const MIN_EVENT_TIME_054 = parse(Float64, get(ENV, "ATTEMPT054_MIN_EVENT_TIME", 
 const REORTH_EVERY_STEP_054 = get(ENV, "ATTEMPT054_REORTH_EVERY_STEP", "1") != "0"
 const TANGENT_ABSTOL_054 = parse(Float64, get(ENV, "ATTEMPT054_TANGENT_ABSTOL", "3.0e-7"))
 const TANGENT_RELTOL_054 = parse(Float64, get(ENV, "ATTEMPT054_TANGENT_RELTOL", "3.0e-7"))
+const CA_MIN_V_MAX_054 = parse(Float64, get(ENV, "ATTEMPT054_CA_MIN_V_MAX", "0.0"))
 const T_COLOR_054 = RGBAf(1.0, 0.0, 0.0, 0.82)
 const GAMMA_COLOR_054 = RGBAf(0.0, 0.23, 1.0, 0.78)
 const LINEWIDTH_054 = parse(Float64, get(ENV, "ATTEMPT054_CONTOUR_LINEWIDTH", "0.45"))
@@ -167,6 +168,10 @@ function make_ca_min_tangent_callback_054(recorder::TangentRecorder054)
     end
 
     function affect!(integrator)
+        state = state5_054(integrator.u)
+        if state[5] > CA_MIN_V_MAX_054
+            return nothing
+        end
         reorthonormalize_augmented_054!(integrator.u, integrator.p, integrator.t)
         ca_component = Float64(integrator.u[9])
         push!(recorder.signs, ca_component > 0 ? 1 : (ca_component < 0 ? -1 : 0))
@@ -741,6 +746,7 @@ function write_summary_054(path::String, error_count::Int, elapsed::Float64)
         println(io, "max_iter\t$(MAX_ITER_054)")
         println(io, "tmax\t$(TANGENT_TMAX_054)")
         println(io, "reorth_every_step\t$(REORTH_EVERY_STEP_054)")
+        println(io, "ca_min_v_max\t$(CA_MIN_V_MAX_054)")
         println(io, "y_stubbed\ttrue")
         println(io, "active_state_order\tx\tn\th\tCa\tV")
         println(io, "total_points\t$(total_points)")

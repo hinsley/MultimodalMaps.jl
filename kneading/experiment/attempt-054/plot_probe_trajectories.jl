@@ -33,8 +33,12 @@ function make_ca_min_record_callback_probe(recorder::CaMinRecorderProbe)
     end
 
     function affect!(integrator)
+        state = state5_054(integrator.u)
+        if state[5] > CA_MIN_V_MAX_054
+            return nothing
+        end
         push!(recorder.times, Float64(integrator.t))
-        push!(recorder.states, state5_054(integrator.u))
+        push!(recorder.states, state)
         if length(recorder.times) >= PROBE_MAX_MINIMA
             terminate!(integrator)
         end
@@ -76,6 +80,7 @@ function write_probe_summary(path::String, T0::SVector{6, Float64}, gamma0::SVec
         println(io, "delta_x\t$(PROBE_DELTA_X)")
         println(io, "tmax\t$(PROBE_TMAX)")
         println(io, "max_minima\t$(PROBE_MAX_MINIMA)")
+        println(io, "ca_min_v_max\t$(CA_MIN_V_MAX_054)")
         println(io, "active_state_order\tx\tn\th\tCa\tV")
         println(io, @sprintf("T0_x\t%.12f", T0[1]))
         println(io, @sprintf("T0_Ca\t%.12f", T0[5]))
