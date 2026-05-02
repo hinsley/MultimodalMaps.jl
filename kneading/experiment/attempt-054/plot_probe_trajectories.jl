@@ -17,14 +17,14 @@ const PROBE_DELTA_CA = probe_env_float("ATTEMPT054_PROBE_DELTA_CA", -35.0)
 const PROBE_DELTA_X = probe_env_float("ATTEMPT054_PROBE_DELTA_X", -1.0)
 const PROBE_MAX_MINIMA = probe_env_int("ATTEMPT054_PROBE_MAX_MINIMA", 8)
 const PROBE_TMAX = probe_env_float("ATTEMPT054_PROBE_TMAX", 1.0e5)
-const PROBE_TAG = get(ENV, "ATTEMPT054_PROBE_TAG", "probe_dca35_dxm1_ystub_trajectories")
+const PROBE_TAG = get(ENV, "ATTEMPT054_PROBE_TAG", "probe_dca35_dxm1_ystub_trajectories_sf_xfiltered")
 
 mutable struct CaMinRecorderProbe
     times::Vector{Float64}
     states::Vector{SVector{5, Float64}}
 end
 
-function make_ca_min_record_callback_probe(recorder::CaMinRecorderProbe)
+function make_ca_min_record_callback_probe(recorder::CaMinRecorderProbe, x_max::Float64)
     function condition(u, t, integrator)
         if t < MIN_EVENT_TIME_054
             return 1.0
@@ -34,7 +34,7 @@ function make_ca_min_record_callback_probe(recorder::CaMinRecorderProbe)
 
     function affect!(integrator)
         state = state5_054(integrator.u)
-        if state[5] > CA_MIN_V_MAX_054
+        if state[5] > CA_MIN_V_MAX_054 || state[1] > x_max
             return nothing
         end
         push!(recorder.times, Float64(integrator.t))
@@ -48,7 +48,7 @@ function make_ca_min_record_callback_probe(recorder::CaMinRecorderProbe)
     return ContinuousCallback(condition, affect!, affect_neg! = nothing; save_positions=(true, true))
 end
 
-function solve_active_probe_trajectory(p, u0_6::SVector{6, Float64}; abstol::Float64, reltol::Float64)
+function solve_active_probe_trajectory(p, u0_6::SVector{6, Float64}, x_max::Float64; abstol::Float64, reltol::Float64)
     u0 = collect(state5_from_state6_054(u0_6))
     recorder = CaMinRecorderProbe(Float64[], SVector{5, Float64}[])
     prob = ODEProblem((du, u, p, t) -> begin
@@ -61,7 +61,7 @@ function solve_active_probe_trajectory(p, u0_6::SVector{6, Float64}; abstol::Flo
     sol = solve(
         prob,
         SOLVER_010;
-        callback=make_ca_min_record_callback_probe(recorder),
+        callback=make_ca_min_record_callback_probe(recorder, x_max),
         abstol=abstol,
         reltol=reltol,
         save_everystep=true,
@@ -74,13 +74,14 @@ extract_active_x(sol) = [u[1] for u in sol.u]
 extract_marker_ca(recorder::CaMinRecorderProbe) = [u[4] for u in recorder.states]
 extract_marker_x(recorder::CaMinRecorderProbe) = [u[1] for u in recorder.states]
 
-function write_probe_summary(path::String, T0::SVector{6, Float64}, gamma0::SVector{6, Float64}, T_rec, gamma_rec)
+function write_probe_summary(path::String, T0::SVector{6, Float64}, gamma0::SVector{6, Float64}, x_eq_SF::Float64, T_rec, gamma_rec)
     open(path, "w") do io
         println(io, "delta_ca\t$(PROBE_DELTA_CA)")
         println(io, "delta_x\t$(PROBE_DELTA_X)")
         println(io, "tmax\t$(PROBE_TMAX)")
         println(io, "max_minima\t$(PROBE_MAX_MINIMA)")
         println(io, "ca_min_v_max\t$(CA_MIN_V_MAX_054)")
+        println(io, @sprintf("ca_min_x_max\t%.12f", x_eq_SF))
         println(io, "active_state_order\tx\tn\th\tCa\tV")
         println(io, @sprintf("T0_x\t%.12f", T0[1]))
         println(io, @sprintf("T0_Ca\t%.12f", T0[5]))
@@ -98,8 +99,8 @@ function main()
     saddle_data = compute_gamma_sd_minus0(p)
     T0 = initialize_T_Ca0(p, saddle_data.x_eq_SF, saddle_data.gamma_sd_minus0)
 
-    T_sol, T_rec = solve_active_probe_trajectory(p, T0; abstol=3e-6, reltol=3e-6)
-    gamma_sol, gamma_rec = solve_active_probe_trajectory(p, saddle_data.gamma_sd_minus0; abstol=1e-8, reltol=1e-8)
+    T_sol, T_rec = solve_active_probe_trajectory(p, T0, saddle_data.x_eq_SF; abstol=3e-6, reltol=3e-6)
+    gamma_sol, gamma_rec = solve_active_probe_trajectory(p, saddle_data.gamma_sd_minus0, saddle_data.x_eq_SF; abstol=1e-8, reltol=1e-8)
 
     plot_path = joinpath(ATTEMPT54_PROBE_ROOT, "$(PROBE_TAG).png")
     summary_path = joinpath(ATTEMPT54_PROBE_ROOT, "$(PROBE_TAG)_summary.txt")
@@ -112,7 +113,7 @@ function main()
         fig[1, 1],
         xlabel="Ca",
         ylabel="x",
-        title=@sprintf("Active y-stubbed trajectories: ΔCa = %.3f, Δx = %.3f", PROBE_DELTA_CA, PROBE_DELTA_X),
+        title=@sprintf("Active y-stubbed trajectories: ΔCa = %.3f, Δx = %.3f, x ≤ x_SF", PROBE_DELTA_CA, PROBE_DELTA_X),
         xlabelsize=28,
         ylabelsize=28,
         titlesize=28,
@@ -149,7 +150,7 @@ function main()
     axislegend(ax, position=:rb, labelsize=18)
 
     save(plot_path, fig; px_per_unit=2)
-    write_probe_summary(summary_path, T0, saddle_data.gamma_sd_minus0, T_rec, gamma_rec)
+    write_probe_summary(summary_path, T0, saddle_data.gamma_sd_minus0, saddle_data.x_eq_SF, T_rec, gamma_rec)
 
     println("plot_path=$(plot_path)")
     println("summary_path=$(summary_path)")

@@ -158,7 +158,7 @@ function make_reorth_callback_054()
     return DiscreteCallback(condition, affect!; save_positions=(false, false))
 end
 
-function make_ca_min_tangent_callback_054(recorder::TangentRecorder054)
+function make_ca_min_tangent_callback_054(recorder::TangentRecorder054, x_max::Float64)
     function condition(u, t, integrator)
         if t < MIN_EVENT_TIME_054
             return 1.0
@@ -169,7 +169,7 @@ function make_ca_min_tangent_callback_054(recorder::TangentRecorder054)
 
     function affect!(integrator)
         state = state5_054(integrator.u)
-        if state[5] > CA_MIN_V_MAX_054
+        if state[5] > CA_MIN_V_MAX_054 || state[1] > x_max
             return nothing
         end
         reorthonormalize_augmented_054!(integrator.u, integrator.p, integrator.t)
@@ -190,6 +190,7 @@ function tangent_minima_signs_054(
     p,
     u0::SVector{6, Float64},
     tangent0::SVector{5, Float64};
+    x_max::Float64,
     abstol::Float64=TANGENT_ABSTOL_054,
     reltol::Float64=TANGENT_RELTOL_054,
 )
@@ -197,7 +198,7 @@ function tangent_minima_signs_054(
     tangent = projected_unit_tangent_054(active_u0, tangent0, p, 0.0)
     u0_aug = vcat(collect(active_u0), collect(tangent))
     recorder = TangentRecorder054(Int[], Float64[], Float64[])
-    callback = CallbackSet(make_ca_min_tangent_callback_054(recorder), make_reorth_callback_054())
+    callback = CallbackSet(make_ca_min_tangent_callback_054(recorder, x_max), make_reorth_callback_054())
     prob = ODEProblem(tangent_augmented_rhs_054!, u0_aug, TANGENT_TSPAN_054, p)
     sol = solve(prob, SOLVER_010; callback=callback, abstol=abstol, reltol=reltol, save_everystep=false)
     return recorder.signs, recorder.times, recorder.ca_components, string(sol.retcode)
@@ -250,10 +251,10 @@ function finalize_tangent_point_054(
     T0_method::String,
 )::TangentScanResult054
     T_signs, T_times, T_ca_components, T_retcode =
-        tangent_minima_signs_054(p, T0, initial_T_tangent_054(p, T0); abstol=3e-6, reltol=3e-6)
+        tangent_minima_signs_054(p, T0, initial_T_tangent_054(p, T0); x_max=saddle_data.x_eq_SF, abstol=3e-6, reltol=3e-6)
     gamma_tangent0 = upper_saddle_weak_stable_tangent_054(p)
     gamma_signs, gamma_times, gamma_ca_components, gamma_retcode =
-        tangent_minima_signs_054(p, saddle_data.gamma_sd_minus0, gamma_tangent0; abstol=1e-8, reltol=1e-8)
+        tangent_minima_signs_054(p, saddle_data.gamma_sd_minus0, gamma_tangent0; x_max=saddle_data.x_eq_SF, abstol=1e-8, reltol=1e-8)
 
     if length(T_signs) < MAX_ITER_054
         error("T tangent signs only reached $(length(T_signs)) / $(MAX_ITER_054) minima; retcode=$(T_retcode)")
