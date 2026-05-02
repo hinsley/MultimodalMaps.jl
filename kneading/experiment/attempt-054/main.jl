@@ -32,7 +32,7 @@ using LinearAlgebra
 using Printf
 using StaticArrays
 
-const OUTPUT_TAG_054 = get(ENV, "ATTEMPT054_OUTPUT_TAG", "grid200_tangent_ca_dotzero_tmax1e5_iter8_activegamma")
+const OUTPUT_TAG_054 = get(ENV, "ATTEMPT054_OUTPUT_TAG", "grid200_tangent_ca_dotzero_tmax1e5_iter8_ystub")
 const SWEEP_DIR_054 = joinpath(ATTEMPT54_ROOT, "$(OUTPUT_TAG_054)_columns")
 const TANGENT_TMAX_054 = parse(Float64, get(ENV, "ATTEMPT054_TMAX", "1.0e5"))
 const TANGENT_TSPAN_054 = (0.0, TANGENT_TMAX_054)
@@ -48,11 +48,11 @@ const PLOT_WIDTH_054 = parse(Int, get(ENV, "ATTEMPT054_PLOT_WIDTH", "1600"))
 const PLOT_HEIGHT_054 = parse(Int, get(ENV, "ATTEMPT054_PLOT_HEIGHT", "1200"))
 const PLOT_PX_PER_UNIT_054 = parse(Float64, get(ENV, "ATTEMPT054_PLOT_PX_PER_UNIT", "2.0"))
 const LOG_LOCK_054 = ReentrantLock()
-const BASIS_054 = (
-    SVector{6, Float64}(0.0, 0.0, 0.0, 0.0, 1.0, 0.0),
-    SVector{6, Float64}(0.0, 0.0, 0.0, 0.0, 0.0, 1.0),
-    SVector{6, Float64}(1.0, 0.0, 0.0, 0.0, 0.0, 0.0),
-    SVector{6, Float64}(0.0, 1.0, 0.0, 0.0, 0.0, 0.0),
+const ACTIVE_BASIS_054 = (
+    SVector{5, Float64}(0.0, 0.0, 0.0, 1.0, 0.0), # Ca
+    SVector{5, Float64}(0.0, 0.0, 0.0, 0.0, 1.0), # V
+    SVector{5, Float64}(1.0, 0.0, 0.0, 0.0, 0.0), # x
+    SVector{5, Float64}(0.0, 1.0, 0.0, 0.0, 0.0), # n
 )
 
 mutable struct TangentRecorder054
@@ -76,16 +76,28 @@ struct TangentScanResult054
     error_message::Union{Nothing, String}
 end
 
-state6_054(u) = SVector{6, Float64}(ntuple(i -> Float64(u[i]), 6))
-tangent6_054(u) = SVector{6, Float64}(ntuple(i -> Float64(u[i + 6]), 6))
+state5_054(u) = SVector{5, Float64}(ntuple(i -> Float64(u[i]), 5))
+tangent5_054(u) = SVector{5, Float64}(ntuple(i -> Float64(u[i + 5]), 5))
+state5_from_state6_054(u::SVector{6, Float64}) = SVector{5, Float64}(u[1], u[3], u[4], u[5], u[6])
+
+function active_flow_054(state::SVector{5, T}, p, t) where {T}
+    x, n, h, Ca, V = state
+    return SVector{5, T}(
+        Plant.dx(p, x, V),
+        Plant.dn(n, V),
+        Plant.dh(h, V),
+        Plant.dCa(p, Ca, x, V),
+        Plant.dV(p, x, zero(T), n, h, Ca, V),
+    )
+end
 
 function projected_unit_tangent_054(
-    state::SVector{6, Float64},
-    tangent::SVector{6, Float64},
+    state::SVector{5, Float64},
+    tangent::SVector{5, Float64},
     p,
     t::Float64,
-)::SVector{6, Float64}
-    flow = SVector{6, Float64}(Plant.melibeNew(state, p, t))
+)::SVector{5, Float64}
+    flow = SVector{5, Float64}(active_flow_054(state, p, t))
     flow_norm2 = dot(flow, flow)
     v = tangent
     if isfinite(flow_norm2) && flow_norm2 > 1.0e-24
@@ -96,7 +108,7 @@ function projected_unit_tangent_054(
         return v / v_norm
     end
 
-    for basis in BASIS_054
+    for basis in ACTIVE_BASIS_054
         v = basis
         if isfinite(flow_norm2) && flow_norm2 > 1.0e-24
             v = v - (dot(v, flow) / flow_norm2) * flow
@@ -111,30 +123,30 @@ function projected_unit_tangent_054(
 end
 
 function reorthonormalize_augmented_054!(u, p, t)
-    state = state6_054(u)
-    tangent = tangent6_054(u)
+    state = state5_054(u)
+    tangent = tangent5_054(u)
     tangent_new = projected_unit_tangent_054(state, tangent, p, Float64(t))
-    for i in 1:6
-        u[i + 6] = tangent_new[i]
+    for i in 1:5
+        u[i + 5] = tangent_new[i]
     end
     return nothing
 end
 
-function jvp_054(state::SVector{6, Float64}, tangent::SVector{6, Float64}, p, t)
+function jvp_054(state::SVector{5, Float64}, tangent::SVector{5, Float64}, p, t)
     dual_zero = ForwardDiff.Dual(0.0, 1.0)
     dual_state = state .+ dual_zero .* tangent
-    fdual = Plant.melibeNew(dual_state, p, t)
-    return SVector{6, Float64}(ntuple(i -> ForwardDiff.partials(fdual[i])[1], 6))
+    fdual = active_flow_054(dual_state, p, t)
+    return SVector{5, Float64}(ntuple(i -> ForwardDiff.partials(fdual[i])[1], 5))
 end
 
 function tangent_augmented_rhs_054!(du, u, p, t)
-    state = state6_054(u)
-    tangent = tangent6_054(u)
-    flow = Plant.melibeNew(state, p, t)
+    state = state5_054(u)
+    tangent = tangent5_054(u)
+    flow = active_flow_054(state, p, t)
     tangent_dot = jvp_054(state, tangent, p, t)
-    for i in 1:6
+    for i in 1:5
         du[i] = flow[i]
-        du[i + 6] = tangent_dot[i]
+        du[i + 5] = tangent_dot[i]
     end
     return nothing
 end
@@ -150,13 +162,13 @@ function make_ca_min_tangent_callback_054(recorder::TangentRecorder054)
         if t < MIN_EVENT_TIME_054
             return 1.0
         end
-        state = state6_054(u)
-        return Plant.melibeNew(state, integrator.p, integrator.t)[5]
+        state = state5_054(u)
+        return active_flow_054(state, integrator.p, integrator.t)[4]
     end
 
     function affect!(integrator)
         reorthonormalize_augmented_054!(integrator.u, integrator.p, integrator.t)
-        ca_component = Float64(integrator.u[11])
+        ca_component = Float64(integrator.u[9])
         push!(recorder.signs, ca_component > 0 ? 1 : (ca_component < 0 ? -1 : 0))
         push!(recorder.times, Float64(integrator.t))
         push!(recorder.ca_components, ca_component)
@@ -172,12 +184,13 @@ end
 function tangent_minima_signs_054(
     p,
     u0::SVector{6, Float64},
-    tangent0::SVector{6, Float64};
+    tangent0::SVector{5, Float64};
     abstol::Float64=TANGENT_ABSTOL_054,
     reltol::Float64=TANGENT_RELTOL_054,
 )
-    tangent = projected_unit_tangent_054(u0, tangent0, p, 0.0)
-    u0_aug = vcat(collect(u0), collect(tangent))
+    active_u0 = state5_from_state6_054(u0)
+    tangent = projected_unit_tangent_054(active_u0, tangent0, p, 0.0)
+    u0_aug = vcat(collect(active_u0), collect(tangent))
     recorder = TangentRecorder054(Int[], Float64[], Float64[])
     callback = CallbackSet(make_ca_min_tangent_callback_054(recorder), make_reorth_callback_054())
     prob = ODEProblem(tangent_augmented_rhs_054!, u0_aug, TANGENT_TSPAN_054, p)
@@ -185,7 +198,7 @@ function tangent_minima_signs_054(
     return recorder.signs, recorder.times, recorder.ca_components, string(sol.retcode)
 end
 
-function upper_saddle_weak_stable_tangent_054(p)::SVector{6, Float64}
+function upper_saddle_weak_stable_tangent_054(p)::SVector{5, Float64}
     V_eqs = find_equilibria(p)
     length(V_eqs) >= 3 || error("Expected at least three slow-subsystem equilibria, got $(length(V_eqs)).")
     V_eq_SD = V_eqs[3]
@@ -193,42 +206,27 @@ function upper_saddle_weak_stable_tangent_054(p)::SVector{6, Float64}
     x_eq_SD = Plant.xinf(p, V_eq_SD)
     SD_eq = @SVector [
         x_eq_SD,
-        Plant.yinf(V_eq_SD),
         Plant.ninf(V_eq_SD),
         Plant.hinf(V_eq_SD),
         Ca_eq_SD,
         V_eq_SD,
     ]
-    jac = ForwardDiff.jacobian(u -> Plant.melibeNew(SVector{6}(u), p, 0.0), SD_eq)
+    jac = ForwardDiff.jacobian(u -> active_flow_054(SVector{5}(u), p, 0.0), SD_eq)
     vals, vecs = eigen(Matrix(jac))
     real_stable = findall(i -> real(vals[i]) < 0 && abs(imag(vals[i])) < 1.0e-8, eachindex(vals))
     candidates = isempty(real_stable) ? findall(i -> real(vals[i]) < 0, eachindex(vals)) : real_stable
     isempty(candidates) && error("Could not find a stable eigendirection at the upper saddle.")
-
-    # At g_h = 0 the y equation is passively decoupled; the formal weakest
-    # stable eigenvector is often pure y and carries no Ca information. Exclude
-    # that trivial direction by requiring non-negligible projection onto the
-    # active (x,n,h,Ca,V) coordinates.
-    active_indices = (1, 3, 4, 5, 6)
     ordered = sort(candidates; by=i -> real(vals[i]), rev=true)
-    weak_idx = nothing
-    for idx in ordered
-        active_norm = norm(real.(vecs[collect(active_indices), idx]))
-        if active_norm > 1.0e-8
-            weak_idx = idx
-            break
-        end
-    end
-    isnothing(weak_idx) && error("Stable eigendirections at the upper saddle are all passive-y to tolerance.")
+    weak_idx = first(ordered)
 
     raw_vec = real.(vecs[:, weak_idx])
-    tangent = SVector{6, Float64}(Tuple(Float64.(raw_vec)))
+    tangent = SVector{5, Float64}(Tuple(Float64.(raw_vec)))
     tangent_norm = norm(tangent)
     tangent_norm > 0 || error("Weak stable eigenvector has zero norm.")
     tangent = tangent / tangent_norm
 
-    active_values = abs.(collect(tangent)[collect(active_indices)])
-    orient_component = active_indices[argmax(active_values)]
+    active_values = abs.(collect(tangent))
+    orient_component = argmax(active_values)
     if tangent[orient_component] < 0
         tangent = -tangent
     end
@@ -236,7 +234,7 @@ function upper_saddle_weak_stable_tangent_054(p)::SVector{6, Float64}
 end
 
 initial_T_tangent_054(p, T0::SVector{6, Float64}) =
-    projected_unit_tangent_054(T0, BASIS_054[1], p, 0.0)
+    projected_unit_tangent_054(state5_from_state6_054(T0), ACTIVE_BASIS_054[1], p, 0.0)
 
 function finalize_tangent_point_054(
     delta_x::Float64,
@@ -743,6 +741,8 @@ function write_summary_054(path::String, error_count::Int, elapsed::Float64)
         println(io, "max_iter\t$(MAX_ITER_054)")
         println(io, "tmax\t$(TANGENT_TMAX_054)")
         println(io, "reorth_every_step\t$(REORTH_EVERY_STEP_054)")
+        println(io, "y_stubbed\ttrue")
+        println(io, "active_state_order\tx\tn\th\tCa\tV")
         println(io, "total_points\t$(total_points)")
         println(io, "successful_points\t$(total_points - error_count)")
         println(io, "error_points\t$(error_count)")

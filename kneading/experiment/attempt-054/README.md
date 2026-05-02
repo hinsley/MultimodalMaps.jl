@@ -10,14 +10,14 @@ by the recent kneading scans:
 - `Gamma_SD^-`, started from the displaced unstable-manifold point computed from
   the upper real saddle.
 
-Each trajectory is augmented with one tangent vector. The tangent vector is
-evolved by the variational equation using a ForwardDiff Jacobian-vector product
-and is projected/renormalized against the flow after accepted solver steps and
-at detected calcium minima. At each local minimum of the actual calcium
-coordinate, the code records the tangent vector's calcium component,
-equivalently its dot product with the `partial Ca` basis vector. Contours are
-drawn as zero-level contours of that scalar field for each fixed calcium-map
-iterate.
+Each trajectory is reduced to the active `g_h = 0` coordinates
+`(x, n, h, Ca, V)` before the tangent diagnostic. The passive `y` variable is
+stubbed out completely in the trajectory used for the calcium minima, in the
+unit tangent vector, and in the variational dynamics. The active tangent vector
+is evolved by a ForwardDiff Jacobian-vector product, projected/renormalized
+against the active flow after accepted solver steps and at detected calcium
+minima, and its `Ca` component is recorded. Contours are drawn as zero-level
+contours of that scalar field for each fixed calcium-map iterate.
 
 Default test settings:
 
@@ -27,8 +27,8 @@ Default test settings:
 - Iterates: first `8` calcium minima.
 - Red contours: `T0` trajectory.
 - Blue contours: `Gamma_SD^-` trajectory, with the initial tangent taken from
-  the upper saddle's weakest real stable eigendirection after excluding the
-  passive decoupled `y` direction that occurs at `g_h = 0`.
+  the upper saddle's weakest real stable eigendirection in the reduced active
+  `(x, n, h, Ca, V)` subsystem.
 
 Run a smoke test:
 
