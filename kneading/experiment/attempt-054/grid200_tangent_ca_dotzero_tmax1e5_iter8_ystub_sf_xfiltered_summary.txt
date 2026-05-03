@@ -1,0 +1,18 @@
+output_tag	grid200_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered
+grid_delta_ca	200
+grid_delta_x	200
+delta_ca_min	-45.0
+delta_ca_max	-20.0
+delta_x_min	-1.5
+delta_x_max	-0.5
+max_iter	8
+tmax	100000.0
+reorth_every_step	true
+ca_min_v_max	0.0
+ca_min_x_max	saddle_focus_x_eq
+y_stubbed	true
+active_state_order	x	n	h	Ca	V
+total_points	40000
+successful_points	39322
+error_points	678
+elapsed_seconds	12644.11838722229
