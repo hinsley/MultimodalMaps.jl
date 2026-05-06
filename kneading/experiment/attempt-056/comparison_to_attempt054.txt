@@ -1,0 +1,11 @@
+comparison attempt-054 old Ca-min tangent-Ca vs attempt-056 SSCS-event tangent-V
+total grid points: 40000
+old ok: 39322; new ok: 33609
+both ok: 33581; old-only ok: 5741; new-only ok: 28; both error: 650
+old unique T sign sequences: 255; old unique gamma sign sequences: 128
+new unique T sign sequences: 206; new unique gamma sign sequences: 189
+zero-crossing cell counts by iterate k=1..8
+old T: 18537,23237,25084,26165,26565,26953,27113,27232
+old gamma: 0,3610,11587,16601,18817,19904,20351,20540
+new T: 6101,23044,23655,24130,24498,24638,24736,24725
+new gamma: 861,3693,10520,14125,15697,16278,16538,16740
