@@ -4,6 +4,7 @@ include("../maps/chebyshev_cubic.jl")
 include("../maps/kneading/affine_modulo.jl")
 include("../kneading/matrix.jl")
 include("../kneading/encodings.jl")
+include("flow_folding_tests.jl")
 
 @testset "MultimodalMaps" begin
     function build_matrix(p, K; chebyshev_escape_fix=false)

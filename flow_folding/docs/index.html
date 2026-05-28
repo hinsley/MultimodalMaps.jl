@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>flow_folding | MultimodalMaps.jl</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>flow_folding</h1>
+        <p class="lead">
+          Extremum-section return maps, tangent-sign kneading words, and saddle-focus seeded
+          critical-point continuation for ODE flows.
+        </p>
+      </header>
+
+      <section class="grid two">
+        <div>
+          <h2>Scope</h2>
+          <p>
+            The folder is organized around one convention: choose a state variable, collect its
+            maxima or minima as the Poincare return section, and build scalar return-map or tangent
+            kneading diagnostics from the accepted event sequence. For the Rössler work here, the
+            section is <code>y</code>-minima and the kneading symbols are signs of the projected
+            tangent <code>y</code> component at those minima.
+          </p>
+          <p>
+            The paper sweep reproduced below uses the Malykh-Shilnikov Rössler variant
+            <code>xdot=-y-z</code>, <code>ydot=x+a*y</code>,
+            <code>zdot=b*x+z*(x-c)</code> with <code>b=0.3</code>. The displayed scan covers the
+            same broad rectangle used for the paper's symbolic diagram, <code>2 <= c <= 7</code>
+            and <code>0.30 <= a <= 0.55</code>, but with the tangent/y-minima convention requested
+            here instead of the paper's z-maximum threshold coding.
+          </p>
+        </div>
+        <aside class="panel">
+          <h3>Folder Map</h3>
+          <table>
+            <tr><th>Path</th><th>Role</th></tr>
+            <tr><td><code>FlowFolding.jl</code></td><td>Event helpers, tangent events, return-map critical estimates, seeded residuals, continuation.</td></tr>
+            <tr><td><code>examples/</code></td><td>Rössler y-minima tangent scan and seeded critical-point continuation scripts.</td></tr>
+            <tr><td><code>results/</code></td><td>Committed coarse scan output over the Malykh-Shilnikov rectangle.</td></tr>
+            <tr><td><code>docs/</code></td><td>This browser-readable documentation and scan viewer.</td></tr>
+          </table>
+        </aside>
+      </section>
+
+      <section>
+        <h2>Event Convention</h2>
+        <p>
+          For <code>du/dt=f(u,p,t)</code> and selected variable <code>x=u[i]</code>, the section
+          event is <code>h=f[i]</code>. A maximum requires <code>h=0</code> and
+          <code>Dh*f&lt;0</code>; a minimum requires <code>h=0</code> and <code>Dh*f&gt;0</code>.
+          No coordinate-sign filter is applied by default.
+        </p>
+        <p class="callout">
+          Tangent kneading words use the variational equation, project the tangent away from the
+          flow direction, re-normalize it, and encode the sign of the selected observable component.
+          In the Rössler examples, <code>1</code> means positive tangent <code>y</code> component at
+          a <code>y</code>-minimum and <code>0</code> means negative.
+        </p>
+      </section>
+
+      <section>
+        <h2>Rössler Y-Minima Tangent Scan</h2>
+        <div class="scan-shell">
+          <div class="canvas-wrap">
+            <canvas id="scan-canvas" aria-label="Rössler tangent kneading scan heatmap"></canvas>
+          </div>
+          <aside class="meta">
+            <div id="scan-summary" class="grid"></div>
+            <div id="point-detail" class="metric"></div>
+          </aside>
+        </div>
+        <h3>Most Common Completed Words</h3>
+        <table>
+          <thead><tr><th>word</th><th>grid points</th></tr></thead>
+          <tbody id="word-legend"></tbody>
+        </table>
+        <p class="small">
+          Gray cells did not collect the requested number of accepted y-minima before the configured
+          time/state cutoff. The default committed scan is intentionally coarse and reproducible;
+          increase <code>MM_FLOW_FOLDING_NC</code>, <code>MM_FLOW_FOLDING_NA</code>, and
+          <code>MM_FLOW_FOLDING_WORD_LENGTH</code> for denser production runs.
+        </p>
+      </section>
+
+      <section>
+        <h2>Use</h2>
+        <h3>Load the Library</h3>
+        <pre><code>include("flow_folding/FlowFolding.jl")
+using .FlowFolding</code></pre>
+
+        <h3>Collect Tangent Symbols at Y-Minima</h3>
+        <pre><code>include("flow_folding/examples/rossler_common.jl")
+
+problem = rossler_y_minima_problem(0.35, 4.6)
+events = collect_tangent_extrema_rk4(
+    problem,
+    [1.0, 0.0, 0.0],
+    [1.0, 0.0, 0.0];
+    observable_index=2,
+    transient_events=20,
+    max_events=8,
+)
+word = tangent_word(events)</code></pre>
+
+        <h3>Run the Coarse Rössler Region Scan</h3>
+        <pre><code>julia --project=. flow_folding/examples/rossler_y_minima_tangent_scan.jl</code></pre>
+
+        <h3>Run a Denser Scan</h3>
+        <pre><code>MM_FLOW_FOLDING_NC=101 \
+MM_FLOW_FOLDING_NA=61 \
+MM_FLOW_FOLDING_WORD_LENGTH=12 \
+MM_FLOW_FOLDING_TRANSIENT_EVENTS=80 \
+julia --project=. flow_folding/examples/rossler_y_minima_tangent_scan.jl</code></pre>
+
+        <h3>Seeded Critical Point Continuation</h3>
+        <pre><code>julia --project=. flow_folding/examples/rossler_seeded_continuation.jl</code></pre>
+      </section>
+
+      <section>
+        <h2>Core API</h2>
+        <table>
+          <tr><th>Function</th><th>Purpose</th></tr>
+          <tr><td><code>FlowFoldingProblem</code></td><td>Defines vector field, parameters, selected event variable, extremum type, dimension, and optional analytic Jacobian.</td></tr>
+          <tr><td><code>collect_extrema</code></td><td>SciML callback-based accepted extrema collection.</td></tr>
+          <tr><td><code>collect_extrema_rk4</code></td><td>Fixed-step accepted extrema collection for scan-style workloads.</td></tr>
+          <tr><td><code>collect_tangent_extrema</code></td><td>SciML variational tangent integration and tangent-sign event recording.</td></tr>
+          <tr><td><code>collect_tangent_extrema_rk4</code></td><td>Fixed-step tangent-sign event recording used by the coarse Rössler scan.</td></tr>
+          <tr><td><code>return_map_sample</code></td><td>Builds <code>X_M -> X_{M+1}</code> scalar return-map samples from event values.</td></tr>
+          <tr><td><code>estimate_critical_points</code></td><td>Local quadratic fold estimates from a sampled one-dimensional return map.</td></tr>
+          <tr><td><code>saddle_focus_seed_ray</code></td><td>Constructs a local seed ray from the unstable complex eigenspace and extremum tangent hyperplane.</td></tr>
+          <tr><td><code>criticality_residual</code></td><td>Evaluates <code>(partial_rho X_{M+1})/(partial_rho X_M)</code> with event-time derivative correction.</td></tr>
+          <tr><td><code>continue_seeded_critical_point</code></td><td>Newton corrector continuation of a seeded critical point along a parameter list.</td></tr>
+        </table>
+      </section>
+    </main>
+    <script src="rossler_y_minima_tangent_scan_data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
+

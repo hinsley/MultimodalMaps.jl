@@ -1,14 +1,18 @@
 # flow_folding
 
-`flow_folding/` is a scaffold for detecting critical points in one-dimensional
-reductions of Poincare return maps for ODE flows.
+`flow_folding/` detects and continues critical points in one-dimensional
+reductions of Poincare return maps for ODE flows, and records tangent-based
+kneading words from extremum sections.
 
 The target workflow is: take an ODE system, choose a state variable, collect
 successive minima or maxima of that variable on the attractor, use those event
 values as a one-dimensional return coordinate, and identify fold/critical
 points of the induced return map.
 
-This is intentionally not a full implementation yet.
+The Rössler examples in this folder use `y`-minima and tangent signs at those
+minima. They intentionally do not use the z-maximum threshold convention from
+the Malykh-Shilnikov paper, because the kneading scans here encode the tangent
+orientation sequence.
 
 ## Event Convention
 
@@ -42,7 +46,21 @@ Do not add coordinate-sign filters by default. The maxima/minima constraint is
 the section definition unless a specific diagnostic explicitly asks for a
 restricted section.
 
-## Intended Criticality Test
+## Tangent Kneading Convention
+
+For tangent kneading words, integrate the variational equation alongside the
+state, project the tangent transverse to the flow direction, re-normalize it,
+and record the sign of the chosen tangent component at each accepted extremum.
+
+For the Rössler scan:
+
+- event variable: `y`
+- accepted event: `y`-minimum
+- observable tangent component: `dy`
+- symbol `1`: positive tangent `y` component
+- symbol `0`: negative tangent `y` component
+
+## Criticality Test
 
 After collecting accepted extrema, define the scalar return-map coordinates
 from the selected state variable:
@@ -65,15 +83,40 @@ Finite differences are acceptable only for quick prototype checks.
 
 ## Current Files
 
-- `FlowFolding.jl` contains a minimal problem type, extremum event helpers, and
-  a deliberately unimplemented `detect_critical_points` entrypoint.
+- `FlowFolding.jl` contains the core event, tangent, return-map, seed-ray, and
+  continuation functions.
+- `examples/rossler_common.jl` defines the Malykh-Shilnikov Rössler variant and
+  the `y`-minima problem adapter.
+- `examples/rossler_y_minima_tangent_scan.jl` runs a coarse tangent-kneading
+  scan over `2 <= c <= 7`, `0.30 <= a <= 0.55`, `b=0.3`.
+- `examples/rossler_seeded_continuation.jl` shows seeded critical-point
+  location and continuation along `c`.
+- `docs/index.html` is a static browser-readable guide and scan viewer.
+- `results/rossler_y_minima_tangent_scan/coarse_scan.tsv` is the committed
+  coarse Rössler scan used by the browser docs.
+
+## Usage
+
+```bash
+julia --project=. flow_folding/examples/rossler_y_minima_tangent_scan.jl
+```
+
+Open the local docs from the repository root with:
+
+```bash
+python3 -m http.server 8765
+```
+
+and browse to:
+
+```text
+http://localhost:8765/flow_folding/docs/
+```
 
 ## Planned Buildout
 
-1. Add adapters for in-place and out-of-place SciML vector fields.
-2. Add robust extrema collection on long attractor trajectories.
-3. Add saddle-focus seeded local ray construction for systems where that
-   geometry is available.
-4. Add event-corrected sensitivity derivatives.
-5. Add root finding and continuation for the criticality residual.
-6. Add plotting and validation against sampled extremum return maps.
+1. Add higher-order interpolation for fixed-step event/tangent samples.
+2. Add plotting helpers for sampled return maps and seeded critical branches.
+3. Add stronger diagnostics for failed/short attractor scans.
+4. Add production-scale parallel scan runners once the local convention is
+   stable.
