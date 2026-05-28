@@ -144,6 +144,32 @@ canvas {
   font-size: 1.1rem;
 }
 
+.figure-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+figure {
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+  background: #fff;
+}
+
+figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+figcaption {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -176,7 +202,8 @@ th {
 
 @media (max-width: 840px) {
   .two,
-  .scan-shell {
+  .scan-shell,
+  .figure-grid {
     grid-template-columns: 1fr;
   }
 
@@ -184,4 +211,3 @@ th {
     padding-inline: 14px;
   }
 }
-

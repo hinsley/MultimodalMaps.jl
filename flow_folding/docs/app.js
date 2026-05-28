@@ -132,6 +132,7 @@
       `<span>status: ${row.status}, events: ${row.events}</span>`,
       `<span>word: <code>${row.word || "none"}</code></span>`,
       `<span>code: ${row.code}, period: ${row.period}, gamma: ${formatNumber(row.gamma)}</span>`,
+      `<span>last event: ${formatNumber(row.last_time)} / max time: ${formatNumber(row.max_time || config.max_time)}</span>`,
       `<span>y-min range: ${formatNumber(row.min_y)} to ${formatNumber(row.max_y)}</span>`,
     ].join("");
   }
@@ -141,6 +142,7 @@
       return;
     }
     const ok = rows.filter((row) => row.status === "ok").length;
+    const maxTime = Number.isFinite(config.max_time) ? config.max_time : Math.max(...rows.map((row) => row.max_time || 0));
     const words = new Map();
     for (const row of rows) {
       if (row.status === "ok") {
@@ -155,6 +157,7 @@
       `<div class="metric"><strong>${ok}</strong><span>completed words</span></div>`,
       `<div class="metric"><strong>${config.n_c} x ${config.n_a}</strong><span>coarse region grid</span></div>`,
       `<div class="metric"><strong>${config.word_length}</strong><span>tangent symbols after ${config.transient_events} transient y-minima</span></div>`,
+      `<div class="metric"><strong>${formatNumber(maxTime)}</strong><span>max integration time per grid point</span></div>`,
     ].join("");
     legend.innerHTML = topWords
       .map(([word, count]) => `<tr><td><code>${word}</code></td><td>${count}</td></tr>`)
@@ -169,4 +172,3 @@
   renderDetail(null);
   draw();
 })();
-

@@ -45,3 +45,31 @@ using .FlowFolding
     @test all(event.sign == -1 for event in tangent_events)
 end
 
+include("../flow_folding/examples/rossler_y_minima_tangent_contours.jl")
+
+@testset "flow_folding scan contours" begin
+    temp_dir = mktempdir()
+    scan_path = joinpath(temp_dir, "scan.tsv")
+    contour_dir = joinpath(temp_dir, "contours")
+    open(scan_path, "w") do io
+        println(io, "a\tc\tb\tstatus\tevents\tword\tcode\tperiod\tgamma\tmax_time\tfirst_time\tlast_time\tmin_y\tmax_y")
+        println(io, "0.30\t2.0\t0.3\tok\t3\t101\t5\t3\t0.625\t80\t1\t3\t-2\t-1")
+        println(io, "0.30\t3.0\t0.3\tok\t3\t001\t1\t3\t0.5\t80\t1\t3\t-3\t-1")
+        println(io, "0.30\t4.0\t0.3\tok\t3\t011\t3\t3\t0.75\t80\t1\t3\t-4\t-1")
+        println(io, "0.40\t2.0\t0.3\tok\t3\t100\t4\t3\t0.125\t80\t1\t3\t-2\t-1")
+        println(io, "0.40\t3.0\t0.3\tmax_time\t1\t0\t0\t0\tNaN\t80\t1\t1\t-3\t-3")
+        println(io, "0.40\t4.0\t0.3\tok\t3\t111\t7\t1\t0.875\t80\t1\t3\t-4\t-1")
+        println(io, "0.50\t2.0\t0.3\tok\t3\t000\t0\t1\t0\t80\t1\t3\t-2\t-1")
+        println(io, "0.50\t3.0\t0.3\tok\t3\t010\t2\t3\t0.25\t80\t1\t3\t-3\t-1")
+        println(io, "0.50\t4.0\t0.3\tok\t3\t110\t6\t3\t0.375\t80\t1\t3\t-4\t-1")
+    end
+
+    write_all_contours(scan_path; output_dir=contour_dir, stem="test_scan")
+    @test isfile(joinpath(contour_dir, "test_scan_all_symbol_contours.svg"))
+    @test isfile(joinpath(contour_dir, "test_scan_word_boundary_contours.svg"))
+    @test isfile(joinpath(contour_dir, "test_scan_prefix03_contours.svg"))
+    @test isfile(joinpath(contour_dir, "test_scan_symbol03_contours.svg"))
+    summary = read(joinpath(contour_dir, "test_scan_contour_summary.tsv"), String)
+    @test occursin("max_time_limited_points\t1", summary)
+    @test occursin("word_length\t3", summary)
+end

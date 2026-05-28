@@ -40,8 +40,8 @@
           <table>
             <tr><th>Path</th><th>Role</th></tr>
             <tr><td><code>FlowFolding.jl</code></td><td>Event helpers, tangent events, return-map critical estimates, seeded residuals, continuation.</td></tr>
-            <tr><td><code>examples/</code></td><td>Rössler y-minima tangent scan and seeded critical-point continuation scripts.</td></tr>
-            <tr><td><code>results/</code></td><td>Committed coarse scan output over the Malykh-Shilnikov rectangle.</td></tr>
+            <tr><td><code>examples/</code></td><td>Rössler y-minima tangent scan, contour generation, and seeded critical-point continuation scripts.</td></tr>
+            <tr><td><code>results/</code></td><td>Committed coarse scan output and contour SVGs over the Malykh-Shilnikov rectangle.</td></tr>
             <tr><td><code>docs/</code></td><td>This browser-readable documentation and scan viewer.</td></tr>
           </table>
         </aside>
@@ -81,9 +81,40 @@
         </table>
         <p class="small">
           Gray cells did not collect the requested number of accepted y-minima before the configured
-          time/state cutoff. The default committed scan is intentionally coarse and reproducible;
+          max-time cutoff. The default committed scan is intentionally coarse and reproducible;
           increase <code>MM_FLOW_FOLDING_NC</code>, <code>MM_FLOW_FOLDING_NA</code>, and
-          <code>MM_FLOW_FOLDING_WORD_LENGTH</code> for denser production runs.
+          <code>MM_FLOW_FOLDING_MAX_TIME</code> for denser production runs with fewer limited cells.
+        </p>
+      </section>
+
+      <section>
+        <h2>Contour Artifacts</h2>
+        <p>
+          The scan script writes Marching-Squares contours for each tangent symbol, each prefix
+          boundary, and the full 8-symbol word partition. These SVGs are generated from the same
+          committed TSV used by the heatmap above.
+        </p>
+        <div class="figure-grid">
+          <figure>
+            <img src="../results/rossler_y_minima_tangent_scan/contours/coarse_scan_all_symbol_contours.svg" alt="All eight tangent-symbol zero contours over the Rössler y-minima scan" />
+            <figcaption>All eight tangent-symbol zero contours.</figcaption>
+          </figure>
+          <figure>
+            <img src="../results/rossler_y_minima_tangent_scan/contours/coarse_scan_word_boundary_contours.svg" alt="Full eight-symbol kneading word boundary contours over the Rössler y-minima scan" />
+            <figcaption>Full 8-symbol word boundaries.</figcaption>
+          </figure>
+          <figure>
+            <img src="../results/rossler_y_minima_tangent_scan/contours/coarse_scan_symbol01_contours.svg" alt="First tangent-symbol zero contour over the Rössler y-minima scan" />
+            <figcaption>First tangent-symbol zero contour.</figcaption>
+          </figure>
+          <figure>
+            <img src="../results/rossler_y_minima_tangent_scan/contours/coarse_scan_symbol08_contours.svg" alt="Eighth tangent-symbol zero contour over the Rössler y-minima scan" />
+            <figcaption>Eighth tangent-symbol zero contour.</figcaption>
+          </figure>
+        </div>
+        <p class="small">
+          A TSV summary and word legend live next to the SVGs in
+          <code>results/rossler_y_minima_tangent_scan/contours/</code>.
         </p>
       </section>
 
@@ -113,9 +144,13 @@ word = tangent_word(events)</code></pre>
         <h3>Run a Denser Scan</h3>
         <pre><code>MM_FLOW_FOLDING_NC=101 \
 MM_FLOW_FOLDING_NA=61 \
-MM_FLOW_FOLDING_WORD_LENGTH=12 \
+MM_FLOW_FOLDING_WORD_LENGTH=8 \
 MM_FLOW_FOLDING_TRANSIENT_EVENTS=80 \
+MM_FLOW_FOLDING_MAX_TIME=1200 \
 julia --project=. flow_folding/examples/rossler_y_minima_tangent_scan.jl</code></pre>
+
+        <h3>Regenerate Contours From an Existing Scan</h3>
+        <pre><code>julia --project=. flow_folding/examples/rossler_y_minima_tangent_contours.jl</code></pre>
 
         <h3>Seeded Critical Point Continuation</h3>
         <pre><code>julia --project=. flow_folding/examples/rossler_seeded_continuation.jl</code></pre>
@@ -142,4 +177,3 @@ julia --project=. flow_folding/examples/rossler_y_minima_tangent_scan.jl</code><
     <script src="app.js"></script>
   </body>
 </html>
-

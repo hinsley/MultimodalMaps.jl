@@ -12,7 +12,9 @@ points of the induced return map.
 The Rössler examples in this folder use `y`-minima and tangent signs at those
 minima. They intentionally do not use the z-maximum threshold convention from
 the Malykh-Shilnikov paper, because the kneading scans here encode the tangent
-orientation sequence.
+orientation sequence. The committed scan records 8 accepted `y`-minima events
+per completed grid point and reports `max_time` for points that do not finish
+within the configured integration horizon.
 
 ## Event Convention
 
@@ -88,17 +90,40 @@ Finite differences are acceptable only for quick prototype checks.
 - `examples/rossler_common.jl` defines the Malykh-Shilnikov Rössler variant and
   the `y`-minima problem adapter.
 - `examples/rossler_y_minima_tangent_scan.jl` runs a coarse tangent-kneading
-  scan over `2 <= c <= 7`, `0.30 <= a <= 0.55`, `b=0.3`.
+  scan over `2 <= c <= 7`, `0.30 <= a <= 0.55`, `b=0.3`; it also generates
+  contour artifacts by default.
+- `examples/rossler_y_minima_tangent_contours.jl` regenerates symbol, prefix,
+  and full-word contour SVGs from an existing scan TSV.
 - `examples/rossler_seeded_continuation.jl` shows seeded critical-point
   location and continuation along `c`.
 - `docs/index.html` is a static browser-readable guide and scan viewer.
 - `results/rossler_y_minima_tangent_scan/coarse_scan.tsv` is the committed
   coarse Rössler scan used by the browser docs.
+- `results/rossler_y_minima_tangent_scan/contours/` contains the generated
+  Marching-Squares SVG contours, scan summary, and word legend.
 
 ## Usage
 
 ```bash
 julia --project=. flow_folding/examples/rossler_y_minima_tangent_scan.jl
+```
+
+The scan defaults to 8 tangent symbols after 20 transient `y`-minima and
+`MM_FLOW_FOLDING_MAX_TIME=450`. A denser run with the same 8-symbol convention:
+
+```bash
+MM_FLOW_FOLDING_NC=101 \
+MM_FLOW_FOLDING_NA=61 \
+MM_FLOW_FOLDING_WORD_LENGTH=8 \
+MM_FLOW_FOLDING_TRANSIENT_EVENTS=80 \
+MM_FLOW_FOLDING_MAX_TIME=1200 \
+julia --project=. flow_folding/examples/rossler_y_minima_tangent_scan.jl
+```
+
+To regenerate contours from the current TSV without re-running the ODE scan:
+
+```bash
+julia --project=. flow_folding/examples/rossler_y_minima_tangent_contours.jl
 ```
 
 Open the local docs from the repository root with:
@@ -116,7 +141,7 @@ http://localhost:8765/flow_folding/docs/
 ## Planned Buildout
 
 1. Add higher-order interpolation for fixed-step event/tangent samples.
-2. Add plotting helpers for sampled return maps and seeded critical branches.
+2. Add plotted diagnostics for sampled return maps and seeded critical branches.
 3. Add stronger diagnostics for failed/short attractor scans.
 4. Add production-scale parallel scan runners once the local convention is
    stable.

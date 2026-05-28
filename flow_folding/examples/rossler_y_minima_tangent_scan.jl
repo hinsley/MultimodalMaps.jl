@@ -17,7 +17,7 @@ function scan_point(
     word_length=8,
     transient_events=20,
     dt=0.05,
-    t_end=450.0,
+    max_time=450.0,
     max_state=1e6,
     u0=[1.0, 0.0, 0.0],
     tangent0=[1.0, 0.0, 0.0],
@@ -29,7 +29,7 @@ function scan_point(
         tangent0;
         observable_index=2,
         dt=dt,
-        t_end=t_end,
+        t_end=max_time,
         transient_events=transient_events,
         max_events=word_length,
         max_state=max_state,
@@ -38,7 +38,7 @@ function scan_point(
     bits = tangent_bits(events)
     period = isnothing(bits) || length(bits) != word_length ? 0 : least_period(bits)
     gamma = isnothing(bits) || length(bits) != word_length ? NaN : binary_sequence_value(bits)
-    status = length(events) == word_length ? "ok" : "short"
+    status = length(events) == word_length ? "ok" : "max_time"
     return (
         a=Float64(a),
         c=Float64(c),
@@ -49,6 +49,7 @@ function scan_point(
         code=tangent_word_code(events),
         period=period,
         gamma=gamma,
+        max_time=Float64(max_time),
         first_time=isempty(events) ? NaN : first(events).t,
         last_time=isempty(events) ? NaN : last(events).t,
         min_y=isempty(events) ? NaN : minimum(event.value for event in events),
@@ -67,7 +68,7 @@ function run_scan(;
     word_length=8,
     transient_events=20,
     dt=0.05,
-    t_end=450.0,
+    max_time=450.0,
     max_state=1e6,
 )
     c_values = collect(range(c_min, c_max; length=n_c))
@@ -85,7 +86,7 @@ function run_scan(;
                 word_length=word_length,
                 transient_events=transient_events,
                 dt=dt,
-                t_end=t_end,
+                max_time=max_time,
                 max_state=max_state,
             )
             if k == 1 || k == total || k % max(1, total ÷ 20) == 0
@@ -100,11 +101,11 @@ end
 function write_tsv(path, rows)
     mkpath(dirname(path))
     open(path, "w") do io
-        println(io, "a\tc\tb\tstatus\tevents\tword\tcode\tperiod\tgamma\tfirst_time\tlast_time\tmin_y\tmax_y")
+        println(io, "a\tc\tb\tstatus\tevents\tword\tcode\tperiod\tgamma\tmax_time\tfirst_time\tlast_time\tmin_y\tmax_y")
         for row in rows
             @printf(
                 io,
-                "%.12g\t%.12g\t%.12g\t%s\t%d\t%s\t%d\t%d\t%.12g\t%.12g\t%.12g\t%.12g\t%.12g\n",
+                "%.12g\t%.12g\t%.12g\t%s\t%d\t%s\t%d\t%d\t%.12g\t%.12g\t%.12g\t%.12g\t%.12g\t%.12g\n",
                 row.a,
                 row.c,
                 row.b,
@@ -114,6 +115,7 @@ function write_tsv(path, rows)
                 row.code,
                 row.period,
                 row.gamma,
+                row.max_time,
                 row.first_time,
                 row.last_time,
                 row.min_y,
@@ -148,7 +150,7 @@ function write_docs_data(path, rows; config)
             print(io, "a:$(row.a),c:$(row.c),b:$(row.b),")
             print(io, "status:$(js_string(row.status)),events:$(row.events),")
             print(io, "word:$(js_string(row.word)),code:$(row.code),period:$(row.period),")
-            print(io, "gamma:$(row.gamma),first_time:$(row.first_time),last_time:$(row.last_time),")
+            print(io, "gamma:$(row.gamma),max_time:$(row.max_time),first_time:$(row.first_time),last_time:$(row.last_time),")
             print(io, "min_y:$(row.min_y),max_y:$(row.max_y)")
             println(io, "}$(comma)")
         end
@@ -159,6 +161,7 @@ function write_docs_data(path, rows; config)
 end
 
 function main()
+    default_max_time = env_float("MM_FLOW_FOLDING_MAX_TIME", env_float("MM_FLOW_FOLDING_T_END", 450.0))
     config = (
         c_min=env_float("MM_FLOW_FOLDING_C_MIN", 2.0),
         c_max=env_float("MM_FLOW_FOLDING_C_MAX", 7.0),
@@ -170,7 +173,7 @@ function main()
         word_length=env_int("MM_FLOW_FOLDING_WORD_LENGTH", 8),
         transient_events=env_int("MM_FLOW_FOLDING_TRANSIENT_EVENTS", 20),
         dt=env_float("MM_FLOW_FOLDING_DT", 0.05),
-        t_end=env_float("MM_FLOW_FOLDING_T_END", 450.0),
+        max_time=default_max_time,
         max_state=env_float("MM_FLOW_FOLDING_MAX_STATE", 1e6),
     )
     output = get(
@@ -183,13 +186,24 @@ function main()
         "MM_FLOW_FOLDING_DOCS_DATA",
         joinpath(@__DIR__, "..", "docs", "rossler_y_minima_tangent_scan_data.js"),
     )
+    contour_dir = get(
+        ENV,
+        "MM_FLOW_FOLDING_CONTOUR_DIR",
+        joinpath(@__DIR__, "..", "results", "rossler_y_minima_tangent_scan", "contours"),
+    )
+    generate_contours = lowercase(get(ENV, "MM_FLOW_FOLDING_GENERATE_CONTOURS", "true")) in ("1", "true", "yes")
 
     rows = run_scan(; config...)
     write_tsv(output, rows)
     write_docs_data(docs_data, rows; config=config)
+    if generate_contours
+        include(joinpath(@__DIR__, "rossler_y_minima_tangent_contours.jl"))
+        Base.invokelatest(write_all_contours, output; output_dir=contour_dir)
+    end
     ok = count(row -> row.status == "ok", rows)
     @printf("wrote %s\n", output)
     @printf("wrote %s\n", docs_data)
+    generate_contours && @printf("wrote contours in %s\n", contour_dir)
     @printf("ok points: %d/%d\n", ok, length(rows))
 end
 
