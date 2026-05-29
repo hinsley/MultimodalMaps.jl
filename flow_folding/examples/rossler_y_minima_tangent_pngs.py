@@ -26,6 +26,9 @@ from typing import Callable, Iterable, Iterator, Sequence
 RGB = tuple[int, int, int]
 Segment = tuple[float, float, float, float]
 
+BASE_PNG_WIDTH = 1600
+BASE_PNG_HEIGHT = 1100
+
 PALETTE = [
     "#b23a2e",
     "#2f66b3",
@@ -214,6 +217,10 @@ class Canvas:
 def hex_rgb(value: str) -> RGB:
     text = value.lstrip("#")
     return int(text[0:2], 16), int(text[2:4], 16), int(text[4:6], 16)
+
+
+def style_scale(width: int, height: int) -> float:
+    return min(width / BASE_PNG_WIDTH, height / BASE_PNG_HEIGHT)
 
 
 def open_scan(path: str):
@@ -488,12 +495,19 @@ def clean_output_dir(output_dir: str, stem: str) -> None:
 
 def render_plot(path: str, title: str, data: ScanData, specs: Sequence[PlotSpec], width: int, height: int) -> list[int]:
     canvas = Canvas(width, height)
-    left = 96
-    right = 300
-    top = 76
-    bottom = 92
+    scale = style_scale(width, height)
+
+    def sp(value: float) -> int:
+        return int(round(value * scale))
+
+    left = sp(96)
+    right = sp(300)
+    top = sp(76)
+    bottom = sp(92)
     plot_width = width - left - right
     plot_height = height - top - bottom
+    if plot_width <= 0 or plot_height <= 0:
+        raise SystemExit(f"PNG size {width}x{height} is too small for scaled plot layout")
     c_min, c_max = data.c_values[0], data.c_values[-1]
     a_min, a_max = data.a_values[0], data.a_values[-1]
 
@@ -508,44 +522,78 @@ def render_plot(path: str, title: str, data: ScanData, specs: Sequence[PlotSpec]
     text_color = hex_rgb("#59635d")
     title_color = hex_rgb("#17201c")
 
-    title_width = canvas.text_width(title, scale=3)
-    canvas.draw_text(max(8, (width - title_width) // 2), 26, title, title_color, scale=3)
+    title_text_scale = max(1, int(round(3 * scale)))
+    tick_text_scale = max(1, int(round(2 * scale)))
+    axis_text_scale = max(1, int(round(3 * scale)))
+    grid_width = max(1.0, 1.0 * scale)
+    axis_width = max(1.0, 2.0 * scale)
+
+    title_width = canvas.text_width(title, scale=title_text_scale)
+    canvas.draw_text(max(sp(8), (width - title_width) // 2), sp(26), title, title_color, scale=title_text_scale)
 
     for idx in range(6):
         c_tick = c_min + (c_max - c_min) * idx / 5
         x = xpix(c_tick)
-        canvas.draw_line(x, top, x, top + plot_height, grid_color, width=1)
+        canvas.draw_line(x, top, x, top + plot_height, grid_color, width=grid_width)
         label = f"{c_tick:.2f}"
-        canvas.draw_text(int(x - canvas.text_width(label, scale=2) / 2), top + plot_height + 20, label, text_color, scale=2)
+        canvas.draw_text(
+            int(x - canvas.text_width(label, scale=tick_text_scale) / 2),
+            top + plot_height + sp(20),
+            label,
+            text_color,
+            scale=tick_text_scale,
+        )
     for idx in range(6):
         a_tick = a_min + (a_max - a_min) * idx / 5
         y = ypix(a_tick)
-        canvas.draw_line(left, y, left + plot_width, y, grid_color, width=1)
+        canvas.draw_line(left, y, left + plot_width, y, grid_color, width=grid_width)
         label = f"{a_tick:.3f}"
-        canvas.draw_text(max(4, left - canvas.text_width(label, scale=2) - 14), int(y - 7), label, text_color, scale=2)
+        canvas.draw_text(
+            max(sp(4), left - canvas.text_width(label, scale=tick_text_scale) - sp(14)),
+            int(y - sp(7)),
+            label,
+            text_color,
+            scale=tick_text_scale,
+        )
 
-    canvas.draw_line(left, top, left + plot_width, top, axis_color, width=2)
-    canvas.draw_line(left + plot_width, top, left + plot_width, top + plot_height, axis_color, width=2)
-    canvas.draw_line(left + plot_width, top + plot_height, left, top + plot_height, axis_color, width=2)
-    canvas.draw_line(left, top + plot_height, left, top, axis_color, width=2)
+    canvas.draw_line(left, top, left + plot_width, top, axis_color, width=axis_width)
+    canvas.draw_line(left + plot_width, top, left + plot_width, top + plot_height, axis_color, width=axis_width)
+    canvas.draw_line(left + plot_width, top + plot_height, left, top + plot_height, axis_color, width=axis_width)
+    canvas.draw_line(left, top + plot_height, left, top, axis_color, width=axis_width)
 
     counts: list[int] = []
     for spec in specs:
         count = 0
         for x0, y0, x1, y1 in spec.segments():
-            canvas.draw_line(xpix(x0), ypix(y0), xpix(x1), ypix(y1), spec.color, width=spec.stroke_width, alpha=spec.alpha)
+            canvas.draw_line(
+                xpix(x0),
+                ypix(y0),
+                xpix(x1),
+                ypix(y1),
+                spec.color,
+                width=spec.stroke_width * scale,
+                alpha=spec.alpha,
+            )
             count += 1
         counts.append(count)
 
-    legend_y = top + 16
-    legend_x = left + plot_width + 28
+    legend_y = top + sp(16)
+    legend_x = left + plot_width + sp(28)
     for spec in specs:
-        canvas.draw_line(legend_x, legend_y, legend_x + 34, legend_y, spec.color, width=max(1.0, spec.stroke_width), alpha=spec.alpha)
-        canvas.draw_text(legend_x + 48, legend_y - 8, spec.label, axis_color, scale=2)
-        legend_y += 28
+        canvas.draw_line(
+            legend_x,
+            legend_y,
+            legend_x + sp(34),
+            legend_y,
+            spec.color,
+            width=max(1.0, spec.stroke_width * scale),
+            alpha=spec.alpha,
+        )
+        canvas.draw_text(legend_x + sp(48), legend_y - sp(8), spec.label, axis_color, scale=tick_text_scale)
+        legend_y += sp(28)
 
-    canvas.draw_text(int(left + plot_width / 2 - 5), height - 30, "C", axis_color, scale=3)
-    canvas.draw_text(34, int(top + plot_height / 2 - 10), "A", axis_color, scale=3)
+    canvas.draw_text(int(left + plot_width / 2 - sp(5)), height - sp(30), "C", axis_color, scale=axis_text_scale)
+    canvas.draw_text(sp(34), int(top + plot_height / 2 - sp(10)), "A", axis_color, scale=axis_text_scale)
     write_png(path, canvas)
     return counts
 
@@ -570,6 +618,7 @@ def write_summary(
     contour_generation_seconds: float,
     width: int,
     height: int,
+    render_style_scale: float,
     line_width_scale: float,
     alpha: float,
 ) -> None:
@@ -583,6 +632,7 @@ def write_summary(
         write("image_format", "png")
         write("png_width", width)
         write("png_height", height)
+        write("style_scale", f"{render_style_scale:.12g}")
         write("line_width_scale", line_width_scale)
         write("contour_alpha", alpha)
         write("symbol_value_source", data.symbol_value_source)
@@ -671,6 +721,7 @@ def render_all(data: ScanData, args: argparse.Namespace) -> str:
         contour_generation_seconds=time.time() - started,
         width=args.width,
         height=args.height,
+        render_style_scale=style_scale(args.width, args.height),
         line_width_scale=args.line_width_scale,
         alpha=args.alpha,
     )
