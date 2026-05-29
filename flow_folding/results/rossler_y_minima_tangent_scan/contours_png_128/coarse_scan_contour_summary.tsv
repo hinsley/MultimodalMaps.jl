@@ -14,7 +14,7 @@ word_length	8
 max_time	450.0
 scan_seconds	54.574760167
 write_tsv_seconds	0.4442475
-contour_generation_seconds	2.2781147956848145
+contour_generation_seconds	1.7473411560058594
 symbol01_segments	10458
 symbol02_segments	10400
 symbol03_segments	10385
@@ -23,11 +23,3 @@ symbol05_segments	10399
 symbol06_segments	10486
 symbol07_segments	10449
 symbol08_segments	10429
-prefix01_boundary_segments	8447
-prefix02_boundary_segments	4512
-prefix03_boundary_segments	2449
-prefix04_boundary_segments	1615
-prefix05_boundary_segments	1262
-prefix06_boundary_segments	1108
-prefix07_boundary_segments	1016
-prefix08_boundary_segments	976

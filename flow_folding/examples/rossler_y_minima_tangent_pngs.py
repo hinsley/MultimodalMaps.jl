@@ -300,12 +300,6 @@ def word_code(word: str) -> int:
     return code
 
 
-def prefix_code(word: str, prefix_length: int) -> int:
-    if len(word) < prefix_length:
-        return -1
-    return word_code(word[:prefix_length])
-
-
 def least_period(word: str) -> int:
     n = len(word)
     if n == 0:
@@ -427,14 +421,6 @@ def iter_symbol_segments(data: ScanData, symbol_index: int) -> Iterator[Segment]
                 if p1 is None or p2 is None:
                     continue
                 yield p1[0], p1[1], p2[0], p2[1]
-
-
-def prefix_grid(data: ScanData, prefix_length: int) -> array:
-    values = array("i", [-1]) * data.total_points
-    for idx, is_ok in enumerate(data.ok):
-        if is_ok:
-            values[idx] = prefix_code(data.words[idx], prefix_length)
-    return values
 
 
 def iter_category_segments(data: ScanData, values: Sequence[int]) -> Iterator[Segment]:
@@ -577,7 +563,6 @@ def write_summary(
     path: str,
     data: ScanData,
     symbol_counts: Sequence[int],
-    prefix_counts: Sequence[int],
     results_path: str,
     output_dir: str,
     scan_seconds: float,
@@ -612,8 +597,6 @@ def write_summary(
         write("contour_generation_seconds", contour_generation_seconds)
         for idx, count in enumerate(symbol_counts, start=1):
             write(f"symbol{idx:02d}_segments", count)
-        for idx, count in enumerate(prefix_counts, start=1):
-            write(f"prefix{idx:02d}_boundary_segments", count)
 
 
 def render_all(data: ScanData, args: argparse.Namespace) -> str:
@@ -656,25 +639,6 @@ def render_all(data: ScanData, args: argparse.Namespace) -> str:
     render_plot(path, "ROSSLER Y-MIN SYMBOL CONTOURS", data, all_specs, args.width, args.height)
     print(f"wrote {path} seconds={time.time() - before:.3f}", flush=True)
 
-    prefix_counts: list[int] = []
-    for prefix_length in range(1, data.n_symbols + 1):
-        values = prefix_grid(data, prefix_length)
-        color = hex_rgb(PALETTE[(prefix_length - 1) % len(PALETTE)])
-        specs = [
-            PlotSpec(
-                label=f"PREFIX {prefix_length:02d}",
-                color=color,
-                stroke_width=2.0 * args.line_width_scale,
-                alpha=args.alpha,
-                segments=lambda values=values: iter_category_segments(data, values),
-            )
-        ]
-        path = os.path.join(args.output_dir, f"{args.stem}_prefix{prefix_length:02d}_contours.png")
-        before = time.time()
-        counts = render_plot(path, f"ROSSLER Y-MIN PREFIX {prefix_length:02d}", data, specs, args.width, args.height)
-        prefix_counts.append(counts[0])
-        print(f"wrote {path} segments={counts[0]} seconds={time.time() - before:.3f}", flush=True)
-
     path = os.path.join(args.output_dir, f"{args.stem}_word_boundary_contours.png")
     before = time.time()
     render_plot(
@@ -700,7 +664,6 @@ def render_all(data: ScanData, args: argparse.Namespace) -> str:
         os.path.join(args.output_dir, f"{args.stem}_contour_summary.tsv"),
         data,
         symbol_counts,
-        prefix_counts,
         results_path=data.path,
         output_dir=args.output_dir,
         scan_seconds=args.scan_seconds,
