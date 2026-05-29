@@ -1,0 +1,16 @@
+label	total
+total_points	180
+total_seconds	1822.168299375
+fast_median_seconds	0.1009875
+fast_p95_seconds	61.931411875
+gold_median_seconds	8.876833583
+gold_p95_seconds	62.381047625
+predict_count	27
+fallback_local_count	106
+fallback_global_count	22
+pair_mismatch_count	68
+shared_failure_count	25
+s_diff_median	0.0003226501606109211
+s_diff_max	0.006228299927693498
+R_diff_median	0.00038274678516449136
+R_diff_max	0.01749999783991622

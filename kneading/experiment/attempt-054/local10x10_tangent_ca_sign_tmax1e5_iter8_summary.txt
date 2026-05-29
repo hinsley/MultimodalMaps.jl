@@ -1,0 +1,14 @@
+output_tag	local10x10_tangent_ca_sign_tmax1e5_iter8
+grid_delta_ca	10
+grid_delta_x	10
+delta_ca_min	-45.0
+delta_ca_max	-20.0
+delta_x_min	-1.5
+delta_x_max	-0.5
+max_iter	8
+tmax	100000.0
+reorth_every_step	true
+total_points	100
+successful_points	100
+error_points	0
+elapsed_seconds	13.822010040283203

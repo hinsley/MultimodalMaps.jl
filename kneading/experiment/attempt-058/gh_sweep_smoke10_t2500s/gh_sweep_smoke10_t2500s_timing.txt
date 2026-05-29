@@ -1,0 +1,13 @@
+created_at	2026-05-08T06:31:06.186
+n_threads	4
+n_g_h_values	10
+g_h_min	0.0
+g_h_max	0.01
+delta_x	-1.0
+delta_ca	-35.0
+transient_time_model_units	10000.0
+run_time_model_units	2.5e6
+run_time_seconds	2500.0
+total_wall_runtime_seconds	57.7064528465271
+summary_path	/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-058/gh_sweep_smoke10_t2500s/gh_sweep_smoke10_t2500s_summary.tsv
+plot_path	/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-058/gh_sweep_smoke10_t2500s/gh_sweep_smoke10_t2500s_lle_lz76_bits_per_second.png

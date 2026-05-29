@@ -1,0 +1,17 @@
+requested_delta_x	-1.0
+requested_delta_ca	-38.386774
+grid_delta_x	-1.001002
+grid_delta_ca	-38.386774
+random_seed	1107
+section_s0	0.29252515298796133
+u0	0.7170577419695854,0.0,0.0817696371366091,0.634745031895148,0.8859850343853094,-45.337351315811006
+Ttr	2000.0
+T	10000.0
+delta_t	1.0
+d0	1.0e-9
+d0_lower	1.0e-12
+d0_upper	1.0e-6
+running_final_estimate	-9.557625954913007e-5
+direct_chaostools_estimate	-9.557593533736299e-5
+difference	-3.242117670794638e-10
+sample_count	10000

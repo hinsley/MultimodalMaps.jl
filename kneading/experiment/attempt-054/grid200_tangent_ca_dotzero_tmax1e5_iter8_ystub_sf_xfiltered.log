@@ -1,0 +1,238 @@
+┌ Warning: Error initializing Revise
+│   exception =
+│    ArgumentError: Package Revise not found in current path.
+│    - Run `import Pkg; Pkg.add("Revise")` to install the Revise package.
+│    Stacktrace:
+│     [1] macro expansion
+│       @ ./loading.jl:2403 [inlined]
+│     [2] macro expansion
+│       @ ./lock.jl:376 [inlined]
+│     [3] __require(into::Module, mod::Symbol)
+│       @ Base ./loading.jl:2386
+│     [4] require(into::Module, mod::Symbol)
+│       @ Base ./loading.jl:2362
+│     [5] top-level scope
+│       @ ~/.julia/config/startup.jl:2
+│     [6] include(mod::Module, _path::String)
+│       @ Base ./Base.jl:306
+│     [7] load_julia_startup()
+│       @ Base ./client.jl:358
+│     [8] exec_options(opts::Base.JLOptions)
+│       @ Base ./client.jl:273
+│     [9] _start()
+│       @ Base ./client.jl:550
+└ @ Main ~/.julia/config/startup.jl:4
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+Running attempt-054 tangent-sign Ca-minimum contour scan.
+Grid: 200 Delta Ca points x 200 Delta x points
+Output tag: grid200_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered
+Tangent tmax: 100000.0, iterates: 8, Julia threads: 4
+Column checkpoint directory: /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-054/grid200_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns
+Saved column 1/200 (Delta Ca=-45.000000) with 200/200 successful points in 68.29 s
+Saved column 51/200 (Delta Ca=-38.718593) with 184/200 successful points in 116.07 s
+Saved column 2/200 (Delta Ca=-44.874372) with 200/200 successful points in 57.02 s
+Saved column 101/200 (Delta Ca=-32.437186) with 197/200 successful points in 129.30 s
+Saved column 151/200 (Delta Ca=-26.155779) with 200/200 successful points in 139.14 s
+Saved column 3/200 (Delta Ca=-44.748744) with 200/200 successful points in 43.17 s
+Saved column 52/200 (Delta Ca=-38.592965) with 184/200 successful points in 72.81 s
+Saved column 4/200 (Delta Ca=-44.623116) with 200/200 successful points in 54.20 s
+Saved column 102/200 (Delta Ca=-32.311558) with 195/200 successful points in 102.95 s
+Saved column 152/200 (Delta Ca=-26.030151) with 200/200 successful points in 108.98 s
+Saved column 5/200 (Delta Ca=-44.497487) with 200/200 successful points in 41.79 s
+Saved column 53/200 (Delta Ca=-38.467337) with 191/200 successful points in 80.27 s
+Saved column 6/200 (Delta Ca=-44.371859) with 200/200 successful points in 51.36 s
+Saved column 103/200 (Delta Ca=-32.185930) with 196/200 successful points in 87.68 s
+Saved column 153/200 (Delta Ca=-25.904523) with 200/200 successful points in 101.53 s
+Saved column 54/200 (Delta Ca=-38.341709) with 190/200 successful points in 81.22 s
+Saved column 7/200 (Delta Ca=-44.246231) with 200/200 successful points in 45.56 s
+Saved column 104/200 (Delta Ca=-32.060302) with 194/200 successful points in 91.48 s
+Saved column 8/200 (Delta Ca=-44.120603) with 200/200 successful points in 57.51 s
+Saved column 55/200 (Delta Ca=-38.216080) with 194/200 successful points in 82.19 s
+Saved column 154/200 (Delta Ca=-25.778894) with 200/200 successful points in 111.04 s
+Saved column 9/200 (Delta Ca=-43.994975) with 200/200 successful points in 55.98 s
+Saved column 56/200 (Delta Ca=-38.090452) with 196/200 successful points in 74.50 s
+Saved column 105/200 (Delta Ca=-31.934673) with 198/200 successful points in 100.58 s
+Saved column 10/200 (Delta Ca=-43.869347) with 200/200 successful points in 51.67 s
+Saved column 155/200 (Delta Ca=-25.653266) with 200/200 successful points in 107.13 s
+Saved column 57/200 (Delta Ca=-37.964824) with 197/200 successful points in 82.54 s
+Saved column 11/200 (Delta Ca=-43.743719) with 199/200 successful points in 64.31 s
+Saved column 106/200 (Delta Ca=-31.809045) with 198/200 successful points in 103.08 s
+Saved column 12/200 (Delta Ca=-43.618090) with 195/200 successful points in 64.75 s
+Saved column 58/200 (Delta Ca=-37.839196) with 195/200 successful points in 77.60 s
+Saved column 156/200 (Delta Ca=-25.527638) with 200/200 successful points in 109.77 s
+Saved column 107/200 (Delta Ca=-31.683417) with 198/200 successful points in 110.51 s
+Saved column 13/200 (Delta Ca=-43.492462) with 197/200 successful points in 74.50 s
+Saved column 59/200 (Delta Ca=-37.713568) with 197/200 successful points in 105.59 s
+Saved column 14/200 (Delta Ca=-43.366834) with 197/200 successful points in 84.94 s
+Saved column 157/200 (Delta Ca=-25.402010) with 200/200 successful points in 144.83 s
+Saved column 108/200 (Delta Ca=-31.557789) with 199/200 successful points in 126.80 s
+Saved column 60/200 (Delta Ca=-37.587940) with 196/200 successful points in 91.96 s
+Saved column 15/200 (Delta Ca=-43.241206) with 198/200 successful points in 65.73 s
+Saved column 158/200 (Delta Ca=-25.276382) with 200/200 successful points in 127.84 s
+Saved column 16/200 (Delta Ca=-43.115578) with 200/200 successful points in 84.97 s
+Saved column 61/200 (Delta Ca=-37.462312) with 197/200 successful points in 132.75 s
+Saved column 109/200 (Delta Ca=-31.432161) with 200/200 successful points in 155.97 s
+Saved column 17/200 (Delta Ca=-42.989950) with 197/200 successful points in 161.33 s
+Saved column 62/200 (Delta Ca=-37.336683) with 195/200 successful points in 171.76 s
+Saved column 159/200 (Delta Ca=-25.150754) with 200/200 successful points in 243.55 s
+Saved column 110/200 (Delta Ca=-31.306533) with 200/200 successful points in 203.91 s
+Saved column 18/200 (Delta Ca=-42.864322) with 199/200 successful points in 95.82 s
+Saved column 63/200 (Delta Ca=-37.211055) with 190/200 successful points in 139.73 s
+Saved column 19/200 (Delta Ca=-42.738693) with 198/200 successful points in 99.68 s
+Saved column 160/200 (Delta Ca=-25.025126) with 200/200 successful points in 165.95 s
+Saved column 111/200 (Delta Ca=-31.180905) with 200/200 successful points in 150.12 s
+Saved column 20/200 (Delta Ca=-42.613065) with 199/200 successful points in 73.16 s
+Saved column 64/200 (Delta Ca=-37.085427) with 179/200 successful points in 106.74 s
+Saved column 21/200 (Delta Ca=-42.487437) with 198/200 successful points in 98.00 s
+Saved column 112/200 (Delta Ca=-31.055276) with 200/200 successful points in 166.20 s
+Saved column 161/200 (Delta Ca=-24.899497) with 200/200 successful points in 228.94 s
+Saved column 65/200 (Delta Ca=-36.959799) with 176/200 successful points in 226.93 s
+Saved column 22/200 (Delta Ca=-42.361809) with 199/200 successful points in 197.32 s
+Saved column 113/200 (Delta Ca=-30.929648) with 200/200 successful points in 234.90 s
+Saved column 66/200 (Delta Ca=-36.834171) with 171/200 successful points in 136.53 s
+Saved column 23/200 (Delta Ca=-42.236181) with 199/200 successful points in 89.82 s
+Saved column 162/200 (Delta Ca=-24.773869) with 200/200 successful points in 197.09 s
+Saved column 24/200 (Delta Ca=-42.110553) with 199/200 successful points in 46.55 s
+Saved column 114/200 (Delta Ca=-30.804020) with 200/200 successful points in 80.39 s
+Saved column 67/200 (Delta Ca=-36.708543) with 173/200 successful points in 77.90 s
+Saved column 163/200 (Delta Ca=-24.648241) with 200/200 successful points in 79.09 s
+Saved column 25/200 (Delta Ca=-41.984925) with 196/200 successful points in 45.20 s
+Saved column 115/200 (Delta Ca=-30.678392) with 200/200 successful points in 64.83 s
+Saved column 26/200 (Delta Ca=-41.859296) with 191/200 successful points in 42.62 s
+Saved column 68/200 (Delta Ca=-36.582915) with 175/200 successful points in 69.03 s
+Saved column 164/200 (Delta Ca=-24.522613) with 200/200 successful points in 71.62 s
+Saved column 27/200 (Delta Ca=-41.733668) with 190/200 successful points in 43.64 s
+Saved column 116/200 (Delta Ca=-30.552764) with 200/200 successful points in 63.10 s
+Saved column 69/200 (Delta Ca=-36.457286) with 175/200 successful points in 69.08 s
+Saved column 28/200 (Delta Ca=-41.608040) with 194/200 successful points in 44.44 s
+Saved column 165/200 (Delta Ca=-24.396985) with 200/200 successful points in 72.20 s
+Saved column 117/200 (Delta Ca=-30.427136) with 200/200 successful points in 61.83 s
+Saved column 29/200 (Delta Ca=-41.482412) with 196/200 successful points in 41.39 s
+Saved column 70/200 (Delta Ca=-36.331658) with 177/200 successful points in 62.91 s
+Saved column 166/200 (Delta Ca=-24.271357) with 200/200 successful points in 67.51 s
+Saved column 30/200 (Delta Ca=-41.356784) with 193/200 successful points in 40.72 s
+Saved column 118/200 (Delta Ca=-30.301508) with 200/200 successful points in 59.12 s
+Saved column 71/200 (Delta Ca=-36.206030) with 177/200 successful points in 62.89 s
+Saved column 31/200 (Delta Ca=-41.231156) with 193/200 successful points in 43.33 s
+Saved column 167/200 (Delta Ca=-24.145729) with 200/200 successful points in 67.81 s
+Saved column 119/200 (Delta Ca=-30.175879) with 200/200 successful points in 59.62 s
+Saved column 32/200 (Delta Ca=-41.105528) with 199/200 successful points in 38.46 s
+Saved column 72/200 (Delta Ca=-36.080402) with 182/200 successful points in 60.83 s
+Saved column 33/200 (Delta Ca=-40.979899) with 198/200 successful points in 38.55 s
+Saved column 168/200 (Delta Ca=-24.020101) with 200/200 successful points in 66.52 s
+Saved column 120/200 (Delta Ca=-30.050251) with 200/200 successful points in 59.01 s
+Saved column 73/200 (Delta Ca=-35.954774) with 188/200 successful points in 56.37 s
+Saved column 34/200 (Delta Ca=-40.854271) with 197/200 successful points in 39.57 s
+Saved column 121/200 (Delta Ca=-29.924623) with 200/200 successful points in 59.26 s
+Saved column 169/200 (Delta Ca=-23.894472) with 200/200 successful points in 66.63 s
+Saved column 35/200 (Delta Ca=-40.728643) with 199/200 successful points in 39.28 s
+Saved column 74/200 (Delta Ca=-35.829146) with 194/200 successful points in 54.99 s
+Saved column 36/200 (Delta Ca=-40.603015) with 199/200 successful points in 39.11 s
+Saved column 122/200 (Delta Ca=-29.798995) with 200/200 successful points in 59.75 s
+Saved column 170/200 (Delta Ca=-23.768844) with 200/200 successful points in 66.79 s
+Saved column 75/200 (Delta Ca=-35.703518) with 194/200 successful points in 55.89 s
+Saved column 37/200 (Delta Ca=-40.477387) with 200/200 successful points in 39.81 s
+Saved column 123/200 (Delta Ca=-29.673367) with 200/200 successful points in 59.69 s
+Saved column 76/200 (Delta Ca=-35.577889) with 194/200 successful points in 54.67 s
+Saved column 38/200 (Delta Ca=-40.351759) with 199/200 successful points in 41.06 s
+Saved column 171/200 (Delta Ca=-23.643216) with 200/200 successful points in 66.40 s
+Saved column 39/200 (Delta Ca=-40.226131) with 198/200 successful points in 41.86 s
+Saved column 124/200 (Delta Ca=-29.547739) with 200/200 successful points in 59.98 s
+Saved column 77/200 (Delta Ca=-35.452261) with 198/200 successful points in 54.17 s
+Saved column 172/200 (Delta Ca=-23.517588) with 200/200 successful points in 67.21 s
+Saved column 40/200 (Delta Ca=-40.100503) with 197/200 successful points in 43.82 s
+Saved column 78/200 (Delta Ca=-35.326633) with 198/200 successful points in 201.39 s
+Saved column 125/200 (Delta Ca=-29.422111) with 200/200 successful points in 209.25 s
+Saved column 41/200 (Delta Ca=-39.974874) with 198/200 successful points in 2975.04 s
+Saved column 173/200 (Delta Ca=-23.391960) with 200/200 successful points in 5967.65 s
+Saved column 79/200 (Delta Ca=-35.201005) with 200/200 successful points in 7039.21 s
+Saved column 126/200 (Delta Ca=-29.296482) with 200/200 successful points in 7043.81 s
+Saved column 42/200 (Delta Ca=-39.849246) with 192/200 successful points in 4242.36 s
+Saved column 174/200 (Delta Ca=-23.266332) with 200/200 successful points in 1284.07 s
+Saved column 80/200 (Delta Ca=-35.075377) with 200/200 successful points in 33.71 s
+Saved column 43/200 (Delta Ca=-39.723618) with 188/200 successful points in 29.38 s
+Saved column 127/200 (Delta Ca=-29.170854) with 200/200 successful points in 37.99 s
+Saved column 44/200 (Delta Ca=-39.597990) with 177/200 successful points in 30.37 s
+Saved column 81/200 (Delta Ca=-34.949749) with 200/200 successful points in 35.69 s
+Saved column 175/200 (Delta Ca=-23.140704) with 200/200 successful points in 44.78 s
+Saved column 128/200 (Delta Ca=-29.045226) with 200/200 successful points in 41.44 s
+Saved column 45/200 (Delta Ca=-39.472362) with 176/200 successful points in 31.55 s
+Saved column 82/200 (Delta Ca=-34.824121) with 198/200 successful points in 39.06 s
+Saved column 176/200 (Delta Ca=-23.015075) with 200/200 successful points in 49.46 s
+Saved column 129/200 (Delta Ca=-28.919598) with 200/200 successful points in 44.68 s
+Saved column 46/200 (Delta Ca=-39.346734) with 173/200 successful points in 42.00 s
+Saved column 83/200 (Delta Ca=-34.698492) with 200/200 successful points in 39.13 s
+Saved column 130/200 (Delta Ca=-28.793970) with 200/200 successful points in 49.35 s
+Saved column 177/200 (Delta Ca=-22.889447) with 200/200 successful points in 54.01 s
+Saved column 47/200 (Delta Ca=-39.221106) with 174/200 successful points in 46.27 s
+Saved column 84/200 (Delta Ca=-34.572864) with 198/200 successful points in 45.40 s
+Saved column 131/200 (Delta Ca=-28.668342) with 200/200 successful points in 57.85 s
+Saved column 48/200 (Delta Ca=-39.095477) with 180/200 successful points in 48.93 s
+Saved column 178/200 (Delta Ca=-22.763819) with 200/200 successful points in 65.59 s
+Saved column 85/200 (Delta Ca=-34.447236) with 200/200 successful points in 52.59 s
+Saved column 49/200 (Delta Ca=-38.969849) with 174/200 successful points in 61.41 s
+Saved column 132/200 (Delta Ca=-28.542714) with 200/200 successful points in 71.33 s
+Saved column 86/200 (Delta Ca=-34.321608) with 200/200 successful points in 62.07 s
+Saved column 179/200 (Delta Ca=-22.638191) with 200/200 successful points in 78.92 s
+Saved column 50/200 (Delta Ca=-38.844221) with 178/200 successful points in 60.16 s
+Saved column 87/200 (Delta Ca=-34.195980) with 200/200 successful points in 61.18 s
+Saved column 133/200 (Delta Ca=-28.417085) with 200/200 successful points in 70.24 s
+Saved column 180/200 (Delta Ca=-22.512563) with 200/200 successful points in 81.00 s
+Saved column 88/200 (Delta Ca=-34.070352) with 200/200 successful points in 63.05 s
+Saved column 134/200 (Delta Ca=-28.291457) with 200/200 successful points in 73.56 s
+Saved column 181/200 (Delta Ca=-22.386935) with 200/200 successful points in 75.18 s
+Saved column 89/200 (Delta Ca=-33.944724) with 200/200 successful points in 59.95 s
+Saved column 135/200 (Delta Ca=-28.165829) with 200/200 successful points in 1594.68 s
+Saved column 90/200 (Delta Ca=-33.819095) with 200/200 successful points in 1571.49 s
+Saved column 182/200 (Delta Ca=-22.261307) with 200/200 successful points in 1587.32 s
+Saved column 136/200 (Delta Ca=-28.040201) with 200/200 successful points in 40.37 s
+Saved column 91/200 (Delta Ca=-33.693467) with 200/200 successful points in 34.02 s
+Saved column 183/200 (Delta Ca=-22.135678) with 200/200 successful points in 44.56 s
+Saved column 137/200 (Delta Ca=-27.914573) with 200/200 successful points in 42.44 s
+Saved column 92/200 (Delta Ca=-33.567839) with 200/200 successful points in 34.73 s
+Saved column 184/200 (Delta Ca=-22.010050) with 200/200 successful points in 44.32 s
+Saved column 93/200 (Delta Ca=-33.442211) with 198/200 successful points in 37.59 s
+Saved column 138/200 (Delta Ca=-27.788945) with 200/200 successful points in 41.62 s
+Saved column 185/200 (Delta Ca=-21.884422) with 200/200 successful points in 45.14 s
+Saved column 94/200 (Delta Ca=-33.316583) with 200/200 successful points in 37.61 s
+Saved column 139/200 (Delta Ca=-27.663317) with 200/200 successful points in 42.32 s
+Saved column 95/200 (Delta Ca=-33.190955) with 198/200 successful points in 41.04 s
+Saved column 186/200 (Delta Ca=-21.758794) with 200/200 successful points in 48.01 s
+Saved column 140/200 (Delta Ca=-27.537688) with 200/200 successful points in 45.61 s
+Saved column 96/200 (Delta Ca=-33.065327) with 197/200 successful points in 40.17 s
+Saved column 187/200 (Delta Ca=-21.633166) with 200/200 successful points in 47.18 s
+Saved column 141/200 (Delta Ca=-27.412060) with 200/200 successful points in 44.13 s
+Saved column 97/200 (Delta Ca=-32.939698) with 194/200 successful points in 41.20 s
+Saved column 188/200 (Delta Ca=-21.507538) with 200/200 successful points in 48.04 s
+Saved column 142/200 (Delta Ca=-27.286432) with 200/200 successful points in 45.80 s
+Saved column 98/200 (Delta Ca=-32.814070) with 192/200 successful points in 47.48 s
+Saved column 189/200 (Delta Ca=-21.381910) with 200/200 successful points in 54.83 s
+Saved column 143/200 (Delta Ca=-27.160804) with 200/200 successful points in 52.25 s
+Saved column 99/200 (Delta Ca=-32.688442) with 196/200 successful points in 52.84 s
+Saved column 144/200 (Delta Ca=-27.035176) with 200/200 successful points in 58.78 s
+Saved column 190/200 (Delta Ca=-21.256281) with 200/200 successful points in 61.29 s
+Saved column 100/200 (Delta Ca=-32.562814) with 196/200 successful points in 52.65 s
+Saved column 145/200 (Delta Ca=-26.909548) with 200/200 successful points in 51.30 s
+Saved column 191/200 (Delta Ca=-21.130653) with 200/200 successful points in 52.83 s
+Saved column 146/200 (Delta Ca=-26.783920) with 200/200 successful points in 51.26 s
+Saved column 192/200 (Delta Ca=-21.005025) with 200/200 successful points in 53.38 s
+Saved column 147/200 (Delta Ca=-26.658291) with 200/200 successful points in 59.58 s
+Saved column 193/200 (Delta Ca=-20.879397) with 200/200 successful points in 63.35 s
+Saved column 148/200 (Delta Ca=-26.532663) with 200/200 successful points in 62.64 s
+Saved column 194/200 (Delta Ca=-20.753769) with 200/200 successful points in 60.95 s
+Saved column 149/200 (Delta Ca=-26.407035) with 200/200 successful points in 49.40 s
+Saved column 195/200 (Delta Ca=-20.628141) with 200/200 successful points in 50.28 s
+Saved column 150/200 (Delta Ca=-26.281407) with 200/200 successful points in 46.72 s
+Saved column 196/200 (Delta Ca=-20.502513) with 200/200 successful points in 45.18 s
+Saved column 197/200 (Delta Ca=-20.376884) with 200/200 successful points in 35.91 s
+Saved column 198/200 (Delta Ca=-20.251256) with 200/200 successful points in 33.51 s
+Saved column 199/200 (Delta Ca=-20.125628) with 200/200 successful points in 35.77 s
+Saved column 200/200 (Delta Ca=-20.000000) with 200/200 successful points in 36.10 s
+Successful points: 39322 / 40000
+Saved merged results to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-054/grid200_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_results.tsv
+Saved contour plot to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-054/grid200_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_contours.png
+Saved summary to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-054/grid200_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_summary.txt
+Elapsed 12644.12 s

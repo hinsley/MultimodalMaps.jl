@@ -1,0 +1,24 @@
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+Running attempt-054 tangent-sign Ca-minimum contour scan.
+Grid: 10 Delta Ca points x 10 Delta x points
+Output tag: local10x10_tangent_ca_sign_tmax1e5_iter8
+Tangent tmax: 100000.0, iterates: 8, Julia threads: 8
+Column checkpoint directory: /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-054/local10x10_tangent_ca_sign_tmax1e5_iter8_columns
+Saved column 3/10 (Delta Ca=-39.444444) with 10/10 successful points in 3.10 s
+Saved column 1/10 (Delta Ca=-45.000000) with 10/10 successful points in 3.19 s
+Saved column 5/10 (Delta Ca=-33.888889) with 10/10 successful points in 3.22 s
+Saved column 6/10 (Delta Ca=-31.111111) with 10/10 successful points in 3.22 s
+Saved column 7/10 (Delta Ca=-28.333333) with 10/10 successful points in 3.22 s
+Saved column 8/10 (Delta Ca=-25.555556) with 10/10 successful points in 3.20 s
+Saved column 9/10 (Delta Ca=-22.777778) with 10/10 successful points in 3.22 s
+Saved column 10/10 (Delta Ca=-20.000000) with 10/10 successful points in 3.22 s
+Saved column 2/10 (Delta Ca=-42.222222) with 10/10 successful points in 0.22 s
+Saved column 4/10 (Delta Ca=-36.666667) with 10/10 successful points in 0.24 s
+Successful points: 100 / 100
+Saved merged results to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-054/local10x10_tangent_ca_sign_tmax1e5_iter8_results.tsv
+Saved contour plot to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-054/local10x10_tangent_ca_sign_tmax1e5_iter8_contours.png
+Saved summary to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-054/local10x10_tangent_ca_sign_tmax1e5_iter8_summary.txt
+Elapsed 13.82 s

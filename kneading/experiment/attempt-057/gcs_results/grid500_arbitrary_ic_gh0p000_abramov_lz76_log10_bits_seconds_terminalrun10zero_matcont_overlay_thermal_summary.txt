@@ -1,0 +1,21 @@
+results_path	/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-057/gcs_results/grid500_arbitrary_ic_gh0p000_seq20_tmax3e5_results.tsv
+plot_path	/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-057/gcs_results/grid500_arbitrary_ic_gh0p000_abramov_lz76_log10_bits_seconds_terminalrun10zero_matcont_overlay_thermal.png
+curves_path	/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-057/../attempt-050/gcs_results/jack_red_hil_overlap1_matcont_overlay_curves.tsv
+ok_count	249974
+error_count	26
+finite_count	249974
+full_length_count	240199
+transient_symbols_omitted	0
+zero_terminal_run_length	10
+time_unit_scale_to_seconds	1000.0
+sequence_length_min	0
+sequence_length_max	20
+finite_min	0.0
+finite_max	0.4910955522702694
+positive_finite_count	127719
+positive_finite_min	0.06283358211690113
+positive_finite_max	0.4910955522702694
+color_quantity	log10_abramov_normalized_lz76
+colorrange_min	-1.2018081806269205
+colorrange_max	-0.3088339991472112
+normalization	lz76_phrase_count * log2(n) / (sum(used_event_intervals) / time_unit_scale_to_seconds)

@@ -1,0 +1,38 @@
+Running attempt-011 contour scan.
+Grid: 20 ΔCa points × 20 Δx points
+Julia threads: 6, output tag: column20x20_seq4, max sequence length: 4
+T0 continuation refinement steps: 5, Ca-window: 0.003
+Column checkpoint directory: /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/column20x20_seq4_columns
+Saved column 5/20 (ΔCa=-39.736842) with 20/20 successful points in 26.43 s
+Saved column 9/20 (ΔCa=-34.473684) with 20/20 successful points in 27.81 s
+Saved column 18/20 (ΔCa=-22.631579) with 20/20 successful points in 27.81 s
+Saved column 15/20 (ΔCa=-26.578947) with 20/20 successful points in 27.81 s
+Saved column 12/20 (ΔCa=-30.526316) with 20/20 successful points in 27.81 s
+Saved column 1/20 (ΔCa=-45.000000) with 12/20 successful points in 27.81 s
+Saved column 2/20 (ΔCa=-43.684211) with 20/20 successful points in 7.58 s
+Saved column 6/20 (ΔCa=-38.421053) with 19/20 successful points in 7.75 s
+Saved column 10/20 (ΔCa=-33.157895) with 20/20 successful points in 7.93 s
+Saved column 13/20 (ΔCa=-29.210526) with 20/20 successful points in 8.40 s
+Saved column 19/20 (ΔCa=-21.315789) with 20/20 successful points in 8.43 s
+Saved column 16/20 (ΔCa=-25.263158) with 20/20 successful points in 8.65 s
+Saved column 3/20 (ΔCa=-42.368421) with 20/20 successful points in 6.79 s
+Saved column 7/20 (ΔCa=-37.105263) with 19/20 successful points in 7.87 s
+Saved column 11/20 (ΔCa=-31.842105) with 20/20 successful points in 8.20 s
+Saved column 14/20 (ΔCa=-27.894737) with 20/20 successful points in 8.22 s
+Saved column 20/20 (ΔCa=-20.000000) with 20/20 successful points in 8.37 s
+Saved column 17/20 (ΔCa=-23.947368) with 20/20 successful points in 8.45 s
+Saved column 4/20 (ΔCa=-41.052632) with 20/20 successful points in 4.87 s
+Saved column 8/20 (ΔCa=-35.789474) with 20/20 successful points in 4.75 s
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+Successful points: 390 / 400
+Unique T encodings: 165
+Unique gamma encodings: 179
+Saved merged results to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/column20x20_seq4_results.tsv
+Saved T legend to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/column20x20_seq4_T_legend.tsv
+Saved gamma legend to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/column20x20_seq4_gamma_legend.tsv
+Saved contour plot to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/column20x20_seq4_contours.png
+real 133.83
+user 206.56
+sys 10.08

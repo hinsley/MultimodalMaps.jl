@@ -1,0 +1,26 @@
+{
+  "ok": true,
+  "peer": "me",
+  "msgId": 236283,
+  "date": 1777443389,
+  "data": {
+    "name": "MultimodalMaps.jl_kneading_experiment_attempt-049_grid1000_seq12_per-symbol-contour-plots_addendum.tar.gz",
+    "ufid": "6344c6579ff0327dda082860f2f16cf5250a5c181ba5bf63481963820da55485",
+    "size": 36764656,
+    "uploadComplete": true,
+    "chunks": [
+      236284
+    ],
+    "IV": "IU8EZs7+oJZGeiAWPGD35An8WaFhW9lVJcFsIOjEdxA="
+  },
+  "chunks": [
+    {
+      "msgId": 236284,
+      "status": "ok",
+      "size": 36775869,
+      "className": "Message"
+    }
+  ],
+  "format": "unknown",
+  "probeError": "Format probe skipped. Re-run with --probe to verify current vs legacy format."
+}

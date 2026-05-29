@@ -1,0 +1,40 @@
+{
+  "system": "rossler",
+  "params": {
+    "a": 0.2,
+    "b": 0.2,
+    "c": 5.7
+  },
+  "n_return_samples": 1214,
+  "n_unique_nodes": 1188,
+  "c_crit": 7.7616,
+  "coverage_fraction": 0.99875,
+  "left_y_range": [
+    6.553636,
+    11.433181
+  ],
+  "right_y_range": [
+    3.606484,
+    11.433181
+  ],
+  "h_top_pressure": 0.08595762505945753,
+  "lambda_at_root": 0.9999999999135548,
+  "root_bracket": {
+    "s_lo": 0.0,
+    "s_hi": 0.2,
+    "lambda_lo": 1.6564770624054388,
+    "lambda_hi": 0.5119239384502338
+  },
+  "timings_seconds": {
+    "ode_and_events": 9.561459083925001,
+    "map_aggregation": 0.005827500019222498,
+    "build_operator": 0.005235875025391579,
+    "solve_root": 0.011298832949250937,
+    "scan_plot_values": 0.13214041700121015,
+    "total": 9.715961708920076
+  },
+  "outputs": {
+    "plot": "/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-008/rossler/pressure_root_scan_rossler.png",
+    "report_json": "/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-008/rossler/pressure_report_rossler.json"
+  }
+}

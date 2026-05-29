@@ -1,0 +1,1201 @@
+delta_x	delta_ca	T0_V	T0_Ca	T0_method	T_encoding	gamma_encoding	T_scs	gamma_scs	status
+-3.200000	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-3.197164	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-3.194329	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-3.191493	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.188657	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.185822	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.182986	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.180150	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.177314	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.174479	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.171643	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.168807	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.165972	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.163136	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.160300	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.157465	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.154629	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.151793	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.148957	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.146122	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.143286	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.140450	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.137615	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.134779	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.131943	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.129108	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.126272	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.123436	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.120601	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.117765	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.114929	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.112093	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.109258	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.106422	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.103586	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.100751	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.097915	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.095079	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.092244	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.089408	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.086572	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.083736	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.080901	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.078065	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.075229	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.072394	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.069558	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.066722	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.063887	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.061051	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.058215	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.055379	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.052544	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.049708	-45.763136								error: BoundsError: attempt to access 0-element Vector{Float64} at index [1]
+-3.046872	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.044037	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.041201	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.038365	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.035530	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.032694	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.029858	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.027023	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.024187	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.021351	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.018515	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.015680	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.012844	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.010008	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.007173	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.004337	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-3.001501	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.998666	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.995830	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.992994	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.990158	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.987323	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.984487	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.981651	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.978816	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.975980	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.973144	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.970309	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.967473	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.964637	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.961802	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.958966	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.956130	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.953294	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.950459	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.947623	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.944787	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.941952	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.939116	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.936280	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.933445	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.930609	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.927773	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.924937	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.922102	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.919266	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.916430	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.913595	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.910759	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.907923	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.905088	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.902252	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.899416	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.896580	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.893745	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.890909	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.888073	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.885238	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.882402	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.879566	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.876731	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.873895	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.871059	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.868224	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.865388	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.862552	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.859716	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.856881	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.854045	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.851209	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.848374	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.845538	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.842702	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.839867	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.837031	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.834195	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.831359	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.828524	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.825688	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.822852	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.820017	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.817181	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.814345	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.811510	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.808674	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.805838	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.803003	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.800167	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.797331	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.794495	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.791660	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.788824	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.785988	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.783153	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.780317	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.777481	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.774646	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.771810	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.768974	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.766138	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.763303	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.760467	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.757631	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.754796	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.751960	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.749124	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.746289	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.743453	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.740617	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.737781	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.734946	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.732110	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.729274	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.726439	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.723603	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.720767	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.717932	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.715096	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.712260	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.709425	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.706589	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.703753	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.700917	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.698082	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.695246	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.692410	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.689575	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.686739	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.683903	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.681068	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.678232	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.675396	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.672560	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.669725	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.666889	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.664053	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.661218	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.658382	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.655546	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.652711	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.649875	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.647039	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.644204	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.641368	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.638532	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.635696	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.632861	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.630025	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.627189	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.624354	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.621518	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.618682	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.615847	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.613011	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.610175	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.607339	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.604504	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.601668	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.598832	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.595997	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.593161	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.590325	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.587490	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.584654	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.581818	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.578982	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.576147	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.573311	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.570475	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.567640	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.564804	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.561968	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.559133	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.556297	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.553461	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.550626	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.547790	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.544954	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.542118	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.539283	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.536447	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.533611	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.530776	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.527940	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.525104	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.522269	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.519433	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.516597	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.513761	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.510926	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.508090	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.505254	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.502419	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.499583	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.496747	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.493912	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.491076	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.488240	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.485405	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.482569	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.479733	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.476897	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.474062	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.471226	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.468390	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.465555	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.462719	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.459883	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.457048	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.454212	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.451376	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.448540	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.445705	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.442869	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.440033	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.437198	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.434362	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.431526	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.428691	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.425855	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.423019	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.420183	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.417348	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.414512	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.411676	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.408841	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.406005	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.403169	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.400334	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.397498	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.394662	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.391827	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.388991	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.386155	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.383319	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.380484	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.377648	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.374812	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.371977	-45.763136								error: Expected at least three slow-subsystem equilibria, got 1.
+-2.369141	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.366305	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.363470	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.360634	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.357798	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.354962	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.352127	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.349291	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.346455	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.343620	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.340784	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.337948	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.335113	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.332277	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.329441	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.326606	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.323770	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.320934	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.318098	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.315263	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.312427	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.309591	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.306756	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.303920	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.301084	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.298249	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.295413	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.292577	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.289741	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.286906	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.284070	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.281234	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.278399	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.275563	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.272727	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.269892	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.267056	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.264220	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.261384	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.258549	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.255713	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.252877	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.250042	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.247206	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.244370	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.241535	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.238699	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.235863	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.233028	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.230192	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.227356	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.224520	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.221685	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.218849	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.216013	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.213178	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.210342	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.207506	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.204671	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.201835	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.198999	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.196163	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.193328	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.190492	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.187656	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.184821	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.181985	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.179149	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.176314	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.173478	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.170642	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.167807	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.164971	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.162135	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.159299	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.156464	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.153628	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.150792	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.147957	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.145121	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.142285	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.139450	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.136614	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.133778	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.130942	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.128107	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.125271	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.122435	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.119600	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.116764	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.113928	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.111093	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.108257	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.105421	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.102585	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.099750	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.096914	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.094078	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.091243	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.088407	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.085571	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.082736	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.079900	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.077064	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.074229	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.071393	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.068557	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.065721	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.062886	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.060050	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.057214	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.054379	-45.763136								error: T SSCS does not start with ±1: [0]
+-2.051543	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.048707	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.045872	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.043036	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.040200	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.037364	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.034529	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.031693	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.028857	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.026022	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.023186	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.020350	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-2.017515	-45.763136								error: T SSCS does not start with ±1: [0, 0]
+-2.014679	-45.763136								error: T SSCS does not start with ±1: [0, 0]
+-2.011843	-45.763136								error: T SSCS does not start with ±1: [0, 0]
+-2.009008	-45.763136								error: T SSCS does not start with ±1: [0, 0]
+-2.006172	-45.763136								error: T SSCS does not start with ±1: [0, 0]
+-2.003336	-45.763136								error: T SSCS does not start with ±1: [0, 0]
+-2.000500	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-1.997665	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-1.994829	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-1.991993	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-1.989158	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-1.986322	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-1.983486	-45.763136								error: T SSCS does not start with ±1: [0, 0]
+-1.980651	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.977815	-45.763136								error: Could not locate the first local maximum of the reduced return map.
+-1.974979	-45.763136								error: T SSCS does not start with ±1: [0, 0]
+-1.972143	-45.763136								error: T SSCS does not start with ±1: [0, 0]
+-1.969308	-45.763136								error: T SSCS does not start with ±1: [0, 0]
+-1.966472	-45.763136								error: T SSCS does not start with ±1: [0, 0]
+-1.963636	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.960801	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.957965	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.955129	-45.763136								error: T SSCS does not start with ±1: [0, 0]
+-1.952294	-45.763136								error: T SSCS does not start with ±1: [0, 0]
+-1.949458	-45.763136								error: T SSCS does not start with ±1: [0, 0]
+-1.946622	-45.763136								error: T SSCS does not start with ±1: [0, 0]
+-1.943786	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.940951	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.938115	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.935279	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.932444	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.929608	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.926772	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.923937	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.921101	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.918265	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.915430	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.912594	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.909758	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.906922	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.904087	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.901251	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.898415	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.895580	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.892744	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.889908	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.887073	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.884237	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.881401	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.878565	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.875730	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.872894	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.870058	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.867223	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.864387	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.861551	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.858716	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.855880	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.853044	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.850209	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.847373	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.844537	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.841701	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.838866	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.836030	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.833194	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.830359	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.827523	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.824687	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.821852	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.819016	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.816180	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.813344	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.810509	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.807673	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.804837	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.802002	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.799166	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.796330	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.793495	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.790659	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.787823	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.784987	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.782152	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.779316	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.776480	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.773645	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.770809	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.767973	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.765138	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.762302	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.759466	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.756631	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.753795	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.750959	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.748123	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.745288	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.742452	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.739616	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.736781	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.733945	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.731109	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.728274	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.725438	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.722602	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.719766	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.716931	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.714095	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.711259	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.708424	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.705588	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.702752	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.699917	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.697081	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.694245	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.691410	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.688574	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.685738	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.682902	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.680067	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.677231	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.674395	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.671560	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.668724	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.665888	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.663053	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.660217	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.657381	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.654545	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.651710	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.648874	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.646038	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.643203	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.640367	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.637531	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.634696	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.631860	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.629024	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.626188	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.623353	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.620517	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.617681	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.614846	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.612010	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.609174	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.606339	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.603503	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.600667	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.597832	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.594996	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.592160	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.589324	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.586489	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.583653	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.580817	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.577982	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.575146	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.572310	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.569475	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.566639	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.563803	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.560967	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.558132	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.555296	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.552460	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.549625	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.546789	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.543953	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.541118	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.538282	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.535446	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.532611	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.529775	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.526939	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.524103	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.521268	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.518432	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.515596	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.512761	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.509925	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.507089	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.504254	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.501418	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.498582	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.495746	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.492911	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.490075	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.487239	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.484404	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.481568	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.478732	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.475897	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.473061	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.470225	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.467389	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.464554	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.461718	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.458882	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.456047	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.453211	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.450375	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.447540	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.444704	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.441868	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.439033	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.436197	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.433361	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.430525	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.427690	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.424854	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.422018	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.419183	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.416347	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.413511	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.410676	-45.763136								error: T SSCS does not start with ±1: Int64[]
+-1.407840	-45.763136								error: T SSCS does not start with ±1: [-2]
+-1.405004	-45.763136								error: T SSCS does not start with ±1: [-2]
+-1.402168	-45.763136								error: T SSCS does not start with ±1: [-2]
+-1.399333	-45.763136								error: T SSCS does not start with ±1: [-2]
+-1.396497	-45.763136								error: T SSCS does not start with ±1: [-2]
+-1.393661	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2]
+-1.390826	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.387990	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.385154	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.382319	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.379483	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.376647	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.373812	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.370976	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.368140	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.365304	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.362469	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.359633	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.356797	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.353962	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.351126	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.348290	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.345455	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.342619	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.339783	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.336947	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.334112	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.331276	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.328440	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.325605	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.322769	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.319933	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.317098	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.314262	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.311426	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.308590	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.305755	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.302919	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.300083	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.297248	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.294412	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.291576	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.288741	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.285905	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.283069	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.280234	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.277398	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.274562	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.271726	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.268891	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.266055	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.263219	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.260384	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.257548	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.254712	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.251877	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.249041	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.246205	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.243369	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.240534	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.237698	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.234862	-45.763136								error: T SSCS does not start with ±1: [-2, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.232027	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.229191	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.226355	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.223520	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.220684	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.217848	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -1, -1, -1, -1, -1, -1, -1]
+-1.215013	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -1, -1, -1, -1, -1, -1]
+-1.212177	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -1, -1, -1, -1, -1, -1]
+-1.209341	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -1, -1, -1, -1]
+-1.206505	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.203670	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.200834	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.197998	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.195163	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.192327	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.189491	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.186656	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.183820	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.180984	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.178148	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.175313	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.172477	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.169641	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.166806	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.163970	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.161134	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.158299	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.155463	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.152627	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.149791	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.146956	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.144120	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.141284	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.138449	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.135613	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.132777	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.129942	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.127106	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.124270	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.121435	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.118599	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.115763	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -2, -2, -2, -2]
+-1.112927	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -1, -2, -2, -2]
+-1.110092	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -1, -2, -2, -2]
+-1.107256	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -1, -2, -2, -2]
+-1.104420	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -1, -2, -2, -1, -1]
+-1.101585	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -1, -2, -2, -1, -1]
+-1.098749	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -1, -1, -1, -2, -2]
+-1.095913	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -1, -1, -1, -2, -2]
+-1.093078	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -1, -1, -1, -1, -1, -2]
+-1.090242	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -1, -1, -1, -1, -1, -1]
+-1.087406	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -1, -1, -2, -2, -1]
+-1.084570	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -1, -1, -2, -2]
+-1.081735	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -1, -1, -2, -1, -1]
+-1.078899	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -2, -2, -1, -2]
+-1.076063	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -2, -2, -1, -1, -1]
+-1.073228	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -2, -2, -2, -2]
+-1.070392	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -2, -1, -1, -2, -1]
+-1.067556	-45.763136								error: T SSCS does not start with ±1: [-2, -2, -1, -2, -1, -1, -1, -1, -1]
+-1.064721	-45.763136								error: T SSCS does not start with ±1: [-2, -3, -2, -1, -2, -2]
+-1.061885	-45.763136								error: T SSCS does not start with ±1: [-2, -3, -3, -2, -1, -2]
+-1.059049	-45.763136								error: T SSCS does not start with ±1: [-2, -3, -3, -3, -3]
+-1.056214	-45.763136								error: T SSCS does not start with ±1: [-2, -3, -3, -3, -3]
+-1.053378	-45.763136								error: T SSCS does not start with ±1: [-2, -3, -3, -2, -1, -2]
+-1.050542	-45.763136								error: T SSCS does not start with ±1: [-2, -3, -2, -1, -2, -2, -1]
+-1.047706	-45.763136								error: T SSCS does not start with ±1: [-2, -3, -2, -1, -1, -2]
+-1.044871	-45.763136								error: T SSCS does not start with ±1: [-2, -3, -2, -2, -2, -2]
+-1.042035	-45.763136								error: T SSCS does not start with ±1: [-2, -3, -2, -3, -3]
+-1.039199	-45.763136								error: T SSCS does not start with ±1: [-2, -3, -1, -1, -3, -3]
+-1.036364	-45.763136								error: T SSCS does not start with ±1: [-2, -3, -1, -1, -2, -3]
+-1.033528	-45.763136								error: T SSCS does not start with ±1: [-2, -3, -1, -1, -1, -2, -3]
+-1.030692	-45.763136								error: T SSCS does not start with ±1: [-2, -3, -1, -2, -3, -3]
+-1.027857	-45.763136								error: T SSCS does not start with ±1: [-2, -3, -1, -2, -1, -3]
+-1.025021	-45.763136								error: T SSCS does not start with ±1: [-2, -4, -3, -1, -2, -1, -1]
+-1.022185	-45.763136								error: T SSCS does not start with ±1: [-2, -4, -3, -1, -2, -2]
+-1.019349	-45.763136								error: T SSCS does not start with ±1: [-2, -4, -2, -1, -2, -1, -1]
+-1.016514	-45.763136								error: T SSCS does not start with ±1: [-2, -4, -2, -4]
+-1.013678	-45.763136								error: T SSCS does not start with ±1: [-2, -4, -1, -1, -1, -1, -1, -2]
+-1.010842	-45.763136								error: T SSCS does not start with ±1: [-2, -4, -1, -3, -3, -2]
+-1.008007	-45.763136								error: T SSCS does not start with ±1: [-2, -5, -3, -1, -3, -1]
+-1.005171	-45.763136								error: T SSCS does not start with ±1: [-2, -5, -2, -4, -2]
+-1.002335	-45.763136								error: T SSCS does not start with ±1: [-2, -6, -4, -1, -2]
+-0.999500	-45.763136								error: T SSCS does not start with ±1: [-2, -6, -1, -1, -2, -2, -1]
+-0.996664	-45.763136								error: T SSCS does not start with ±1: [-2, -7, -1, -1, -3, -1]
+-0.993828	-45.763136								error: T SSCS does not start with ±1: [-2, -9, -3, -9]
+-0.990992	-45.763136								error: T SSCS does not start with ±1: [-2, -13, -3, -3]
+-0.988157	-45.763136								error: T SSCS does not start with ±1: [-2, -16, -2, -1, -4]
+-0.985321	-45.763136								error: T SSCS does not start with ±1: [-2, -17, -8, -1]
+-0.982485	-45.763136								error: T SSCS does not start with ±1: [-2, -17, -2, -4, -1]
+-0.979650	-45.763136								error: T SSCS does not start with ±1: [-2, -17, -1, -2, -1, -1]
+-0.976814	-45.763136	-45.999963	0.801420	continued:5	31772404	450740	1,-17,-7	-18,-17,-1,-1	ok
+-0.973978	-45.763136	-46.258004	0.801046	full	9748198633	373645	1,15,-16	-18,-17,-2	ok
+-0.971143	-45.763136	-44.747408	0.803129	continued:5	637019657009	954236	1,-12,-4,-5	-18,-17,-2,-1	ok
+-0.968307	-45.763136	-45.106952	0.801545	continued:5	107949469	159860	1,8,-9	-18,16	ok
+-0.965471	-45.763136	-45.442553	0.800502	continued:5	31355338745710498	20652537433	1,-7,-1,-1,-2,-1	-17,-1,-16,1	ok
+-0.962636	-45.763136	-45.752488	0.799794	continued:5	121305796952042834	1976224113	1,-6,-1,-3,-3	-17,-1,13	ok
+-0.959800	-45.763136	-46.036686	0.799420	continued:5	69649544433754	160011818821377	1,-6,-3,-7	-17,-1,8,-7	ok
+-0.956964	-45.763136	-46.294589	0.799047	full	10667273014	5904733	1,5,16	-17,-1,-6,0	ok
+-0.954128	-45.763136	-44.782194	0.801131	continued:5	489474040335384364708447125790126	87652538876851914822	1,-5,-1,-1,-1,-2,-1	-17,-1,-5,-1,-3,-1	ok
+-0.951293	-45.763136	-45.143732	0.799754	continued:5	129206073816079973	330858	1,-5,-2,-3,-3	-17,-1,4	ok
+-0.948457	-45.763136	-45.478319	0.798505	continued:5	7460629302608	429978233831502313570191262710392757303	1,-5,3,-6	-17,-1,-4,-1,-1,-4	ok
+-0.945621	-45.763136	-45.789118	0.797796	continued:5	11396045933	140152	1,4,-11,2	-17,-1,-4	ok
+-0.942786	-45.763136	-46.073579	0.797423	continued:5	15459578	82863052413328202907	1,4,-5,1	-17,-1,-3,-1,-3,-1	ok
+-0.939950	-45.763136	-46.331221	0.797049	full	50511169877283422514497998	50502719657367118228	1,-4,-1,-6,-1,-1,-1	-17,-1,-3,1,-4	ok
+-0.937114	-45.763136	-45.172568	0.798087	continued:5	22549371887219928987024993117673	19387069383	1,-4,-1,-2,-1,-3	-17,-1,-3,-4	ok
+-0.934279	-45.763136	-45.508367	0.796838	continued:5	102235518507448219111544633865735386896561873079173	522005433763	1,-4,-1,-1,-1,-5,-1	-17,-1,2,-4,-1	ok
+-0.931443	-45.763136	-45.819813	0.796130	continued:5	78316131150545582974	9144466913927603727919263	1,-4,-1,-1,-3,-1	-17,-1,-2,-1,-6	ok
+-0.928607	-45.763136	-46.104423	0.795756	continued:5	58327347376	4248433229358	1,-4,1,4	-17,-1,-2,-1,-1,-1	ok
+-0.925771	-45.763136	-46.361786	0.795382	full	771149781509489431131219466944959984631198531514641151	2372898	1,-4,-2,-2,-1,-7	-17,-1,-2,-2	ok
+-0.922936	-45.763136	-45.202198	0.796428	continued:5	17637186484994199397416903333510479451001	129076472373319383	1,-4,-2,-1,-3,-4	-17,-1,-2,-3,-3	ok
+-0.920100	-45.763136	-45.538983	0.795178	continued:5	540958276	85236786077553967713	1,-4,-3,-3	-17,-1,-2,-16,-1	ok
+-0.917264	-45.763136	-45.850877	0.794470	continued:5	1075053769648	387054373662	1,-4,-4,-3,1	-17,-1,1,-4,-1	ok
+-0.914429	-45.763136	-46.135459	0.794096	continued:5	81828935329	440783423999595005587807	1,-4,6,-4	-17,-1,-1,0,5	ok
+-0.911593	-45.763136	-46.392387	0.793723	full	10432829023	103176133346553640303939572090328483	1,-4,16	-17,-1,-1,-1,-4,-3	ok
+-0.908757	-45.763136	-45.232898	0.794688	continued:5	10355547739	525479538	1,3,16	-17,-1,-1,-1,1	ok
+-0.905922	-45.763136	-45.571375	0.793646	continued:5	1302413201	109713	1,3,-7,2	-17,-1,-1,-1,0	ok
+-0.903086	-45.763136	-45.882112	0.792810	continued:5	37583909026	129108868542861538	1,3,4,-4	-17,-1,-1,-2,-2,-1	ok
+-0.900250	-45.763136	-46.166597	0.792436	continued:5	812052140404	7064668108652191152313	1,3,-4,-4,-1	-17,-1,-1,-3,-4,0	ok
+-0.897415	-45.763136	-46.423026	0.792062	full	4537567214	4262526966532	1,3,3,3	-17,-1,-1,-6	ok
+-0.894579	-45.763136	-45.263337	0.793029	continued:5	4537567214	79426857864687135252	1,3,3,3	-17,-1,0,-17	ok
+-0.891743	-45.763136	-45.602587	0.791986	continued:5	33309215801851038776	1570667377427433	1,3,-4,-16	-17,-1,0,-5,-2	ok
+-0.888907	-45.763136	-45.913579	0.791150	continued:5	194831244399558190571927669571944569	700633428	1,-3,0,-4,-1,3	-17,1,3,-3	ok
+-0.886072	-45.763136	-46.197864	0.790776	continued:5	8758641447794280765058433	63870	1,-3,0,-6,-5,0	-17,1,3	ok
+-0.883236	-45.763136	-46.453705	0.790403	full	30768838451705305313	1734420	1,-3,0,-15,-1	-17,1,-5,0	ok
+-0.880400	-45.763136	-45.294421	0.791374	continued:5	79434862019843475374	10055108922	1,-3,0,-17	-17,1,16	ok
+-0.877565	-45.763136	-45.634263	0.790331	continued:5	32598659392645977123569	3668418143437	1,-3,-1,16,-3	-17,-2,-12,-1,-2	ok
+-0.874729	-45.763136	-45.945352	0.789495	continued:5	4097726544542338122218	24378859233	1,-3,-1,13,-3	-17,-2,3,-4	ok
+-0.871893	-45.763136	-46.229296	0.789121	continued:5	33390136979612795994522623	33734786955567237	1,-3,-1,-5,-1,-1,-1	-17,-2,-2,-1,-2,-1	ok
+-0.869058	-45.763136	-46.484425	0.788747	full	7007868376572903151058	389392093795	1,-3,-1,3,4	-17,-2,1,-4,-1	ok
+-0.866222	-45.763136	-45.325918	0.789718	continued:5	4906211255367750174923	489473993374532505232035470835970	1,-3,-1,-3,4	-17,-2,-1,-1,-1,-2,-1	ok
+-0.863386	-45.763136	-45.666242	0.788676	continued:5	105049474586662784688833797608829690037562351965881847578339168296408307875734	1486944630778720	1,-3,-1,-2,-1,-16	-17,-2,-1,-6,-1,0	ok
+-0.860550	-45.763136	-45.977329	0.787840	continued:5	889858976098454	83403	1,-3,-1,-2,-2,0	-17,2,3	ok
+-0.857715	-45.763136	-46.260846	0.787466	continued:5	703887811112655579587408263394	3935382	1,-3,-1,1,8	-17,2,-5,-1	ok
+-0.854879	-45.763136	-46.515187	0.787092	full	1511960377887797176486512399337231345158253766074296221383268425395161671493	35401872	1,-3,-1,-1,0,-15	-17,-3,-7,-1	ok
+-0.852043	-45.763136	-44.994879	0.789315	continued:5	16217557574999270408026423030747783207506807366083	31261092784421969997	1,-3,-1,-1,-1,-1,-1,-1	-17,-3,-2,-16	ok
+-0.849208	-45.763136	-45.364202	0.787731	continued:5	405619770476087006100945867726018854677210988	30279508459079744457	1,-3,-1,-1,-2,-1,-2	-17,-3,-1,-16	ok
+-0.846372	-45.763136	-45.704978	0.786689	continued:5	3955211755599333205729625867468	6339774073	1,-3,-1,-1,-9	-17,3,-15,0	ok
+-0.843536	-45.763136	-46.015949	0.785853	continued:5	443873357854813226951941390408631660453	17830363264793989870	1,-3,-1,0,-16	-17,-4,-1,0,-4	ok
+-0.840701	-45.763136	-46.298852	0.785479	continued:5	1996393264	10593201757	1,-3,1,-3,0	-17,-5,16	ok
+-0.837865	-45.763136	-46.552159	0.785105	full	27045997127498012007497346493334	10750838262	1,-3,1,-3,-1,-3	-17,-6,16	ok
+-0.835029	-45.763136	-45.033357	0.787334	continued:5	54260366538454	11071389577	1,-3,1,-7	-17,-8,16	ok
+-0.832193	-45.763136	-45.403450	0.785750	continued:5	51275112051094180829	455502	1,-3,-2,16	-17,13,-3	ok
+-0.829358	-45.763136	-45.744406	0.784708	continued:5	42743260533470209019	11787907	1,-3,-2,-6,-1,1	-17,15,-6	ok
+-0.826522	-45.763136	-46.055024	0.783872	continued:5	47321854	224082	1,-3,-2,-2,0	-17,-16,1	ok
+-0.823686	-45.763136	-46.337104	0.783498	continued:5	150110963471637417328321409919232424	15405653713	1,-3,-2,-1,0,-3,0	-17,-16,-1,-3,-1	ok
+-0.820851	-45.763136	-46.589197	0.783124	full	2409608970497814891136021403	159297	1,-3,-2,-1,-5,1	-17,-16,0	ok
+-0.818015	-45.763136	-45.073012	0.785358	continued:5	707635345724	753345	1,-3,2,-3,1	-17,16,-3	ok
+-0.815179	-45.763136	-45.443588	0.783774	continued:5	52831702563394617224	753345	1,-3,2,-16,0	-17,16,-3	ok
+-0.812344	-45.763136	-45.784474	0.782731	continued:5	71204209	5000670	1,-3,-3,2	-17,16,-5	ok
+-0.809508	-45.763136	-46.094519	0.781895	continued:5	1275838120116211527307341823299031888549	752119	1,-3,-3,-1,-16,0	16,16,-3	ok
+-0.806672	-45.763136	-46.375587	0.781522	continued:5	90154484213545001249	226721995621	1,-3,-4,-16,-1	16,-16,0,-5	ok
+-0.803837	-45.763136	-46.626301	0.781148	full	53975629205818	178471	1,-3,4,-3,-2	16,-16,-1	ok
+-0.801001	-45.763136	-45.111811	0.783253	continued:5	81829744424	11307358	1,-3,5,-3,-1	16,-16,-1,-1,-1	ok
+-0.798165	-45.763136	-45.484331	0.781797	continued:5	22564780017110346049	10408171	1,-3,-8,0,-4	16,-16,-2,-2	ok
+-0.795329	-45.763136	-45.824985	0.780755	continued:5	46804457878823297014	9826267546	1,-3,-15,-16	16,-16,-16	ok
+-0.792494	-45.763136	-46.134314	0.779919	continued:5	48240584949212822879	307688	1,-3,-16,-16	16,-15,-1,-1	ok
+-0.789658	-45.763136	-46.414244	0.779545	continued:5	21168485918	124243934	1,-3,-16,1	16,-12,0,-3	ok
+-0.786822	-45.763136	-46.663475	0.779171	full	8859311606573	9698	1,-3,-16,-1,-2	16,7	ok
+-0.783987	-45.763136	-45.153547	0.781359	continued:5	13241096009	1642418609	1,-3,-16,-1	16,-6,-13	ok
+-0.781151	-45.763136	-45.525176	0.779903	continued:5	10355691653	29265043	1,-3,-16,0	16,-5,-4,-2	ok
+-0.778315	-45.763136	-45.864587	0.778654	continued:5	258767100899	30281450168898203953	1,-3,16,-3	16,-4,-1,-16	ok
+-0.775480	-45.763136	-46.174517	0.777946	continued:5	10278840508	87509803	1,2,-16,0	16,-4,-9	ok
+-0.772644	-45.763136	-46.453128	0.777572	continued:5	13148662528	295264	1,2,-16,-1	16,3,-3,-1	ok
+-0.769808	-45.763136	-46.700719	0.777198	full	26335698751	10681787541203491388	1,2,-16,-1,0	16,-3,-1,-15	ok
+-0.766972	-45.763136	-45.196010	0.779387	continued:5	219005834398	333997409363	1,2,-16,-3	16,-3,-2,-5	ok
+-0.764137	-45.763136	-45.567447	0.777931	continued:5	6177772588	91916429	1,2,15	16,-3,-7,1	ok
+-0.761301	-45.763136	-45.906203	0.776682	continued:5	2789335393	13245978434	1,2,-13,-1	16,-3,-16,-1	ok
+-0.758465	-45.763136	-46.215047	0.775974	continued:5	80943592528303	7973634871	1,2,-6,-2,-1,-1	16,2,-16	ok
+-0.755630	-45.763136	-46.492200	0.775600	continued:5	21744087135654986648908	1965121	1,2,-4,0,-5	16,2,-5,0	ok
+-0.752794	-45.763136	-46.738036	0.775226	full	37584457363	82996	1,2,3,-3,-1	16,2,3	ok
+-0.749958	-45.763136	-45.238487	0.777338	continued:5	108125863	82996	1,2,-3,-2,0	16,2,3	ok
+-0.747123	-45.763136	-45.610496	0.775961	continued:5	31761242099403639418	398536996	1,2,2,-16	16,2,-11	ok
+-0.744287	-45.763136	-45.948378	0.774712	continued:5	365242876	31757217510027637997	1,2,2,-3	-16,0,2,-16	ok
+-0.741451	-45.763136	-46.255947	0.774004	continued:5	44674876	69021386227349	1,2,2,2	-16,0,-3,-7	ok
+-0.738616	-45.763136	-46.531483	0.773630	continued:5	5791904	29665441484460818714549	1,-2,0,2	-16,0,-3,-1,-5	ok
+-0.735780	-45.763136	-46.775426	0.773256	full	14077267700507716543571654	33302959587353363597	1,-2,0,-3,-1,-1,-1	-16,0,-4,-16	ok
+-0.732944	-45.763136	-45.283151	0.775372	continued:5	4801297763413	11450474	1,-2,0,-5,-1	-16,0,-5,1	ok
+-0.730108	-45.763136	-45.654425	0.773995	continued:5	17828405336544543404	533746097	1,-2,0,15	-16,0,11	ok
+-0.727273	-45.763136	-45.991183	0.772746	continued:5	210481928022754676978	5974392674	1,-2,0,-16,1	-16,0,15	ok
+-0.724437	-45.763136	-46.297262	0.772037	continued:5	334712118330723171169	73273895452247	1,-2,-1,-16,-1,0	-16,0,-16,-6	ok
+-0.721601	-45.763136	-46.570995	0.771664	continued:5	30277566593628424019	39665473622	1,-2,-1,-16	-16,0,-16,-2	ok
+-0.718766	-45.763136	-46.812892	0.771290	full	1236616370224	20523076070	1,-2,-1,-5,0	-16,0,-16,1	ok
+-0.715930	-45.763136	-45.326236	0.773411	continued:5	111742729146164929993786498637574155620330804	60051743489	1,-2,-1,-2,-1,-1,-2	-16,-1,-16,-1,-1	ok
+-0.713094	-45.763136	-45.696814	0.771828	continued:5	93906308779797064843627963754400046187887926833621009	39876997997	1,-2,-1,-1,-1,-3,-2	-16,-1,-16,-2	ok
+-0.710259	-45.763136	-46.034707	0.770785	continued:5	164429136770193960149786071404816631678	298841582752989	1,-2,-1,0,-15,0	-16,-1,-16,-3,-2	ok
+-0.707423	-45.763136	-46.339045	0.770077	continued:5	1011521604756583579504	7785211340	1,-2,1,-5,-4	-16,-1,-16	ok
+-0.704587	-45.763136	-46.610763	0.769703	continued:5	23815815139266674768549	183364476540	1,-2,-2,-16,-3	-16,-1,15,-3	ok
+-0.701751	-45.763136	-46.850435	0.769329	full	488565788452150704961553583798480389428	37752634043103071922	1,-2,-2,-2,-16	-16,-1,-8,-16	ok
+-0.698916	-45.763136	-45.372946	0.771449	continued:5	2989908659659	33304002268008431085	1,-2,2,-3,-1,0	-16,-1,-4,-16	ok
+-0.696080	-45.763136	-45.742286	0.769865	continued:5	488627953622584778359860921499052151283	82573368122	1,-2,-3,-2,-16	-16,-1,2,4	ok
+-0.693244	-45.763136	-46.078618	0.768822	continued:5	3313509119	31257115577799973215	1,-2,-4,-1,1	-16,-1,-2,-16	ok
+-0.690409	-45.763136	-46.381092	0.768114	continued:5	439457479	17826447915857040905	1,-2,7,-2	-16,-1,-1,0,-4	ok
+-0.687573	-45.763136	-46.650691	0.767740	continued:5	40723868743	1422177747	1,-2,-15,-1,-1	-16,-1,-1,-3,0	ok
+-0.684737	-45.763136	-46.888056	0.767366	full	47515049469305774243	794749694048933687439	1,-2,15,-16	-16,-1,-1,-16,-2	ok
+-0.681902	-45.763136	-45.420436	0.769484	continued:5	48237831579568580639	73465350	1,-2,-16,-16	-16,-1,0,-3	ok
+-0.679066	-45.763136	-45.788349	0.767900	continued:5	29767272464415051598	242525	1,-2,-16,15	-16,1,-2,1	ok
+-0.676230	-45.763136	-46.122958	0.766858	continued:5	656310402900672979	13153690079	1,-2,-16,-12	-16,1,-15,1	ok
+-0.673394	-45.763136	-46.423428	0.766150	continued:5	4068282566809	7847601809	1,-2,-16,4	-16,1,-16	ok
+-0.670559	-45.763136	-46.690793	0.765776	continued:5	88967110751	7910367059	1,1,-16,2	-16,-2,-16	ok
+-0.667723	-45.763136	-46.925755	0.765402	full	656255562984919808	2857055083379	1,1,-16,-12	-16,-2,-15,0,-2	ok
+-0.664887	-45.763136	-45.467755	0.767399	continued:5	7843969124	43669154	1,1,-16	-16,-2,2,2	ok
+-0.662052	-45.763136	-45.835500	0.765943	continued:5	48236454938946160808	21967013647888799757016799	1,1,-16,-16	-16,-2,-1,-3,-6	ok
+-0.659216	-45.763136	-46.168065	0.764900	continued:5	16581570776	2670	1,1,15,1	-16,2,1	ok
+-0.656380	-45.763136	-46.466262	0.764192	continued:5	20752901	7973508590	1,1,5,1	-16,2,-16	ok
+-0.653545	-45.763136	-46.731165	0.763818	continued:5	32267369257828614064	6233475309	1,1,-3,-16	-16,-3,15	ok
+-0.650709	-45.763136	-46.963535	0.763444	full	31258109610626807501	243600952970	1,1,-2,-16	-16,-3,-1,-5	ok
+-0.647873	-45.763136	-45.514021	0.765473	continued:5	95264	8100926510	1,1,1,1	-16,3,-16	ok
+-0.645038	-45.763136	-45.879862	0.764017	continued:5	2350991206213	3656682043172069000	1,-1,0,-2,-2	-16,-4,-1,-13,-1	ok
+-0.642202	-45.763136	-46.210296	0.762975	continued:5	17827100260047557401	30770803868020589114	1,-1,0,15	-16,-5,1,-16	ok
+-0.639366	-45.763136	-46.506151	0.762807	continued:5	6299157049446450077	8693595699	-1,0,1,14	-16,-7,-15,-1	ok
+-0.636530	-45.763136	-46.763050	0.765601	full	48235078317967725627	5671071719	-1,-1,-16,-16	-16,12,-15	ok
+-0.633695	-45.763136	-45.547941	0.763856	continued:5	1555102880812472103797649566915849786120327764	9678787115	1,-1,-1,-2,-1,-4,-1	-16,-15,-16	ok
+-0.630859	-45.763136	-45.912884	0.762272	continued:5	12623193937764514463606430094062620740578102635873978116321839486128431391326	179070	1,-1,-1,0,0,15	-16,-15,1	ok
+-0.628023	-45.763136	-46.243486	0.761230	continued:5	31257115348508743126	124719	1,-1,-2,-16	-16,-15,0	ok
+-0.625188	-45.763136	-46.539035	0.761063	continued:5	458306736000374771745198446941739587880	338222	-1,0,-1,-1,-16	-16,15,-1,-1	ok
+-0.622352	-45.763136	-46.795250	0.763856	full	47512327206850942527	23842934	-1,-1,15,-16	-16,15,-3,-2	ok
+-0.619516	-45.763136	-45.587538	0.762183	continued:5	376468395682544178619	5971113809	1,-1,-5,-15,-2	-16,15,-15	ok
+-0.616681	-45.763136	-45.951361	0.760727	continued:5	46799074672244309029	7657711859	1,-1,-15,-16	-16,15,15	ok
+-0.613845	-45.763136	-46.279207	0.759685	continued:5	10126566139	7657711859	1,-1,15,-1	-16,15,15	ok
+-0.611009	-45.763136	-46.571979	0.759311	continued:5	2374016345974518394805848480865591327	7657711859	-1,0,-1,-4,0,-2,0,0	-16,15,15	ok
+-0.608173	-45.763136	-46.827511	0.762104	full	29291855523931052325	7657711859	-1,-1,15,15	-16,15,15	ok
+-0.605338	-45.763136	-45.624434	0.760474	continued:5	47512327216599001534	7657711859	1,-1,15,-16	-16,15,15	ok
+-0.602502	-45.763136	-45.987841	0.759097	continued:5	1163311389696478909100939562739465827418	7657711859	1,0,-1,-16,-16	-16,15,15	ok
+-0.599666	-45.763136	-46.314046	0.758054	continued:5	48235078327789647874	7657711859	1,-1,-16,-16	-16,15,15	ok
+-0.596831	-45.763136	-46.604983	0.757553	continued:5	1128710617842281174036217531139203887525	7657711859	-1,0,-1,15,-16	-16,15,15	ok
+-0.593995	-45.763136	-46.859834	0.760346	full	3649725957128147577	7657711859	-1,-1,15,13	-16,15,15	ok
+-0.591159	-45.763136	-45.662487	0.758915	continued:5	29290908555782767079	7657711859	1,0,15,15	-16,15,15	ok
+-0.588324	-45.763136	-46.023591	0.757538	continued:5	92011346038292725197064792635538374416084104246920675952606964366669613761639	7657711859	-1,0,0,0,15,15	-16,15,15	ok
+-0.585488	-45.763136	-46.347417	0.756289	continued:5	2672235859960357780258	7657711859	1,0,0,15,2	-16,15,15	ok
+-0.582652	-45.763136	-46.638049	0.755787	continued:5	4172217877189444708328709836517674474199274928653721376340578643108285970144436004668471715455260869806164163556759757353963074521019068501643928369486110053364095018654482592596956632841141589755612455246692584318440849314359074223441561264525704792907257102899206418908521386747912668397812272195626952	7657711859	-1,0,0,0,0,0,0,-15,0	-16,15,15	ok
+-0.579817	-45.763136	-46.892219	0.758581	full	164765038040324030532192974428063481127	7657711859	-1,-1,15,-1,15	-16,15,15	ok
+-0.576981	-45.763136	-45.700970	0.757350	continued:5	5036676557332078788571566019955052608647415126849238672929366769296269036748496477307999650878235937329986997113523053243241712709120268495089676041833123325718000527958986452227249902384662175744553808236368990378718532534141160901622936339597521728052175725104406587661685565807444251438220129380872977484218393500869063435301958421686847901691065089301969543958092972476476127902095578170709025024470547499488334436236250655608864034434018302788662684751544280145734800282461811937203296975370674137809016703607469200059144220361824744391277848757934318619121058119917866058138569086088157458926521490214	7657711859	-1,0,0,0,0,0,0,0,15	-16,15,15	ok
+-0.574145	-45.763136	-46.059719	0.755766	continued:5	3173854614607316504632795178045088187889125454922354055927307845407436614004609124400311053815459655893234310369116699835375983917154799793736537062967704619034833453498018096684789595631966791783044780383951016970679099036659966131468827466194628087987228440775713270057828531531372661651420462770857688	7657711859	1,0,0,0,0,0,0,15	-16,15,15	ok
+-0.571309	-45.763136	-46.383323	0.754724	continued:5	91321251833392916103104511626356914640480054306971774735960809781360535647575627607074441191796836132754890094550195876752066280381976916777356714149170	7657711859	-1,0,0,0,0,-1,15	-16,15,15	ok
+-0.568474	-45.763136	-46.671175	0.754015	continued:5	488534708214979993761486121679475566264	7657711859	-1,0,0,-1,-15,-1	-16,15,15	ok
+-0.565638	-45.763136	-46.924666	0.756809	full	164753031223938930386832395293300426377	7657711859	-1,-1,-15,-1,15	-16,15,15	ok
+-0.562802	-45.763136	-45.741843	0.755571	continued:5	18444417850514135027	7657711859	-1,0,1,15	-16,15,15	ok
+-0.559967	-45.763136	-46.100172	0.754115	continued:5	164441122493115752551590229409044026380	7657588105	-1,0,-2,-1,15	15,15,15	ok
+-0.557131	-45.763136	-46.421606	0.753200	continued:5	13514529461964959368207673530232130801352721733653751382261134330854603411645	7657588105	-1,0,3,0,-1,15	15,15,15	ok
+-0.554295	-45.763136	-46.705857	0.752364	continued:5	24501577324886466455	7657588105	-1,0,-10,15	15,15,15	ok
+-0.551460	-45.763136	-46.957176	0.755030	full	17505644030684069780	7657588105	-1,-1,-15,-15	15,15,15	ok
+-0.548624	-45.763136	-45.784168	0.753913	continued:5	45396690966044566514	5971004530	-1,0,-15,-1,-4	15,15,-15	ok
+-0.545788	-45.763136	-46.140472	0.752536	continued:5	159228755137373809606564966663693184540	5971004530	-1,0,-15,0,15	15,15,-15	ok
+-0.542952	-45.763136	-46.458917	0.751493	continued:5	12874267415	5971004530	-1,0,15,0,0	15,15,-15	ok
+-0.540117	-45.763136	-46.741527	0.750785	continued:5	49059178940	5971004530	-1,0,15,-1,-1	15,15,-15	ok
+-0.537281	-45.763136	-46.989749	0.753244	full	606175604267983826670	4997511	-1,-1,7,15,-2	15,15,-4,-1	ok
+-0.534445	-45.763136	-45.827222	0.752278	continued:5	182681412377	752121	-1,0,15,-3	15,15,-2,-1	ok
+-0.531610	-45.763136	-46.181065	0.750822	continued:5	6500531428912473280548827	199366	-1,0,0,15,4	15,15,1	ok
+-0.528774	-45.763136	-46.497832	0.749908	continued:5	678292239919860463985979803357983880	140685	-1,0,0,15,12	15,-15,-1	ok
+-0.525938	-45.763136	-46.777262	0.749199	continued:5	17806880550286261877	140685	-1,0,15,-15	15,-15,-1	ok
+-0.523103	-45.763136	-47.022385	0.751452	full	2569220777562842899225126764684	124221	-1,-1,-3,15,-8	15,-15,0	ok
+-0.520267	-45.763136	-45.870414	0.750656	continued:5	17807532524420261625	140685	-1,-1,15,-15	15,-15,-1	ok
+-0.517431	-45.763136	-46.221572	0.749279	continued:5	66084303543975098203046056031358245934	10692456926567469423	-1,-1,15,-3,-15	15,-15,-1,-15	ok
+-0.514595	-45.763136	-46.534802	0.748236	continued:5	176357797210613884456621400317409048652	306123	-1,-1,15,-2,15	15,-15,-1,-1	ok
+-0.511760	-45.763136	-46.812138	0.747528	continued:5	2984266859535627592747165871974366446450	248835	-1,-1,15,0,-1,-3,-1	15,-15,-2	ok
+-0.508924	-45.763136	-47.055084	0.749653	full	65933297686630819770391671558973322877	586956	-1,-1,1,-3,-15	15,-15,-3	ok
+-0.506088	-45.763136	-45.913690	0.749007	continued:5	57164316129316019194261092863046141327	5920188861	-1,-1,-15,-1,-15	15,-15,-15	ok
+-0.503253	-45.763136	-46.262348	0.747552	continued:5	57164316129316019194261092863046141327	5920188861	-1,-1,-15,-1,-15	15,-15,-15	ok
+-0.500417	-45.763136	-46.573866	0.746637	continued:5	57164316129316019194261092863046141327	5869698696	-1,-1,-15,-1,-15	15,14,-15	ok
+-0.497581	-45.763136	-46.848003	0.745929	continued:5	45398006364161200752	5242316785	-1,-1,-15,-1,-4	15,-8,-15	ok
+-0.494746	-45.763136	-47.087846	0.747846	full	85241005498443942009	8295041973	-1,-1,-1,-15,1	15,-4,-15,-1	ok
+-0.491910	-45.763136	-45.957091	0.747371	continued:5	61470229993044079145377600426561812252	8165333706	-1,-1,-15,-2,-15	15,-3,-15,-1	ok
+-0.489074	-45.763136	-46.303026	0.745994	continued:5	60620401305	11075974755764095890	-1,-1,-15,2	15,-2,-2,-15	ok
+-0.486239	-45.763136	-46.610982	0.744952	continued:5	10881049522590	8037027907	-1,-1,-15,-4,-1	-15,-2,-15,-1	ok
+-0.483403	-45.763136	-46.883008	0.744243	continued:5	17505644030684069780	7973508592	-1,-1,-15,-15	-15,1,-15,-1	ok
+-0.480567	-45.763136	-47.120672	0.746034	full	66078905326475968071790153352310687219	11075061508689083311	-1,1,-15,-3,-15	-15,-1,-2,-15	ok
+-0.477731	-45.763136	-46.002018	0.745679	continued:5	473861711658146766327	2662249	-1,-1,-15,-15,-2	-15,-1,-1,-1,-1	ok
+-0.474896	-45.763136	-46.345529	0.744302	continued:5	61449964212208925606015213626929327002	11075061508689083311	-1,-1,-13,-2,-15	-15,-1,-2,-15	ok
+-0.472060	-45.763136	-46.651002	0.743260	continued:5	363487762409589837684	82572555361	-1,-1,3,-15,-2	-15,-1,2,4	ok
+-0.469224	-45.763136	-46.920504	0.742758	continued:5	14949430032010921608735	241439296	-1,-1,-2,-1,-1,-2	-15,-1,-2,-3	ok
+-0.466389	-45.763136	-47.153561	0.744214	full	61470230097471876796204028986469735564	11075061508689083311	-1,-2,-15,-2,-15	-15,-1,-2,-15	ok
+-0.463553	-45.763136	-46.048110	0.744060	continued:5	5695183504492614029263277	2662249	-1,-1,-1,-1,-1,-1,-1	-15,-1,-1,-1,-1	ok
+-0.460717	-45.763136	-46.388164	0.742683	continued:5	346790558592093493152	6447312206	-1,-1,1,-15,-2	-15,1,-12,-2	ok
+-0.457882	-45.763136	-46.690297	0.741640	continued:5	17208881226045297479	10426624902808667	-1,1,14,-15	-15,1,-15,-9	ok
+-0.455046	-45.763136	-46.956567	0.741139	continued:5	17506287715197408764	26497976707	-1,1,-15,-15	-15,-2,-15,-2	ok
+-0.452210	-45.763136	-47.186514	0.742388	full	17506931417461957694	1137311914843257607	-1,-2,-15,-15	-15,-2,-15,12	ok
+-0.449374	-45.763136	-45.725806	0.743650	continued:5	71010125526423132886412481507647444034	17506931583144994192	-1,1,-15,-4,-15	-15,-2,-15,-15	ok
+-0.446539	-45.763136	-46.104414	0.742066	continued:5	33581113256427179	11483787449307249061	-1,-2,-15,-4,2	-15,-2,-3,-15	ok
+-0.443703	-45.763136	-46.440605	0.740689	continued:5	10475323531260485039	4751906299	-1,-2,-15,14	-15,2,-15	ok
+-0.440867	-45.763136	-46.738968	0.739853	continued:5	17506931417461957694	17508219040935119357	-1,-2,-15,-15	-15,-3,-15,-15	ok
+-0.438032	-45.763136	-46.999444	0.739145	continued:5	17506931417461957694	4838377606	-1,-2,-15,-15	-15,3,-15	ok
+-0.435196	-45.763136	-47.226141	0.740188	full	17507575137478042925	4926025624	-1,2,-15,-15	-15,4,-15	ok
+-0.432360	-45.763136	-45.783667	0.741646	continued:5	17506931417461957694	4561681	-1,-2,-15,-15	-15,-7,-2,-2	ok
+-0.429525	-45.763136	-46.158617	0.740063	continued:5	153291407463769061966896691185974587252	5819424757	-1,-2,-4,-15,-15	-15,-14,-15	ok
+-0.426689	-45.763136	-46.491241	0.738686	continued:5	12120156788890541159	5869590349	-1,-2,4,-15	-15,14,-15	ok
+-0.423853	-45.763136	-46.786087	0.737771	continued:5	17507575137478042925	5920080049	-1,2,-15,-15	-15,-15,-15	ok
+-0.421018	-45.763136	-47.043917	0.737270	continued:5	17508218875245990815	5920080049	-1,-3,-15,-15	-15,-15,-15	ok
+-0.418182	-45.763136	-47.265859	0.737978	full	17508862630766127725	5920080049	-1,3,-15,-15	-15,-15,-15	ok
+-0.415346	-45.763136	-45.846673	0.739634	continued:5	17508218875245990815	5920080049	-1,-3,-15,-15	-15,-15,-15	ok
+-0.412510	-45.763136	-46.217158	0.738050	continued:5	17508862630766127725	5920080049	-1,3,-15,-15	-15,-15,-15	ok
+-0.409675	-45.763136	-46.545545	0.736801	continued:5	17509506404038780019	5920080049	-1,-4,-15,-15	-15,-15,-15	ok
+-0.406839	-45.763136	-46.834983	0.735965	continued:5	12122111130808396424	5920080049	-1,-4,4,-15	-15,-15,-15	ok
+-0.404003	-45.763136	-47.086984	0.735257	continued:5	17510794003842936230	5920080049	-1,-5,-15,-15	-15,-15,-15	ok
+-0.401168	-45.763136	-47.305668	0.735758	full	17222230066727112194	5920080049	-1,-12,14,-15	-15,-15,-15	ok
+-0.398332	-45.763136	-45.905041	0.737611	continued:5	17519809191009633599	5920080049	-1,-12,-15,-15	-15,-15,-15	ok
+-0.395496	-45.763136	-46.271757	0.736028	continued:5	17522385598022683664	5920080049	-1,-14,-15,-15	-15,-15,-15	ok
+-0.392661	-45.763136	-46.596481	0.734779	continued:5	17522385598022683664	5920080049	-1,-14,-15,-15	-15,-15,-15	ok
+-0.389825	-45.763136	-46.882334	0.733864	continued:5	17224773583285584629	5920080049	-1,-14,14,-15	-15,-15,-15	ok
+-0.386989	-45.763136	-47.131649	0.733362	continued:5	17523029744173554419	5920080049	-1,14,-15,-15	-15,-15,-15	ok
+-0.384153	-45.763136	-47.345567	0.733529	full	17523029744173554419	5920080049	-1,14,-15,-15	-15,-15,-15	ok
+-0.381318	-45.763136	-45.971865	0.735580	continued:5	17523029744173554419	5920080049	-1,14,-15,-15	-15,-15,-15	ok
+-0.378482	-45.763136	-46.333473	0.734124	continued:5	17523029744173554419	5920080049	-1,14,-15,-15	-15,-15,-15	ok
+-0.375646	-45.763136	-46.652065	0.732874	continued:5	17523029744173554419	5920080049	-1,14,-15,-15	-15,-15,-15	ok
+-0.372811	-45.763136	-46.932286	0.731960	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.369975	-45.763136	-47.176410	0.731458	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.367139	-45.763136	-47.385557	0.731291	full	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.364304	-45.763136	-46.035808	0.733573	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.361468	-45.763136	-46.392353	0.732117	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.358632	-45.763136	-46.706216	0.730867	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.355796	-45.763136	-46.981977	0.730032	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.352961	-45.763136	-47.221095	0.729530	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.350125	-45.763136	-47.425635	0.729156	full	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.347289	-45.763136	-46.100128	0.731563	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.344454	-45.763136	-46.451444	0.729980	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.341618	-45.763136	-46.761798	0.728937	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.338782	-45.763136	-47.031969	0.728101	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.335947	-45.763136	-47.265956	0.727600	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.333111	-45.763136	-47.465803	0.727226	full	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.330275	-45.763136	-46.168088	0.729584	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.327440	-45.763136	-46.513130	0.728129	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.324604	-45.763136	-46.816407	0.726879	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.321768	-45.763136	-47.082336	0.726171	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.318932	-45.763136	-47.311029	0.725670	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.316097	-45.763136	-47.506058	0.725296	full	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.313261	-45.763136	-46.235279	0.727582	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.310425	-45.763136	-46.574294	0.725998	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.307590	-45.763136	-46.873402	0.724955	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.304754	-45.763136	-47.133218	0.724247	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.301918	-45.763136	-47.356375	0.723746	continued:5	17523673908084121325	5920080049	-1,-15,-15,-15	-15,-15,-15	ok
+-0.299083	-45.763136	-47.546401	0.723372	full	17523029744173554419	5920080049	-1,14,-15,-15	-15,-15,-15	ok
+-0.296247	-45.763136	-45.939203	0.726999	continued:5	17523029744173554419	5920080049	-1,14,-15,-15	-15,-15,-15	ok
+-0.293411	-45.763136	-46.315637	0.725209	continued:5	17523029744173554419	5920080049	-1,14,-15,-15	-15,-15,-15	ok
+-0.290575	-45.763136	-46.647518	0.723753	continued:5	17523029744173554419	5920080049	-1,14,-15,-15	-15,-15,-15	ok
+-0.287740	-45.763136	-46.938762	0.722710	continued:5	17523029744173554419	5920080049	-1,14,-15,-15	-15,-15,-15	ok
+-0.284904	-45.763136	-47.191484	0.721874	continued:5	17523029744173554419	5920080049	-1,14,-15,-15	-15,-15,-15	ok
+-0.282068	-45.763136	-47.409526	0.721500	continued:5	17523029744173554419	5920080049	-1,14,-15,-15	-15,-15,-15	ok
+-0.279233	-45.763136	-47.593577	0.721127	full	17523029744173554419	5920080049	-1,14,-15,-15	-15,-15,-15	ok
+-0.276397	-45.763136	-46.027366	0.724622	continued:5	17523029744173554419	5920080049	-1,14,-15,-15	-15,-15,-15	ok
+-0.273561	-45.763136	-46.395720	0.722832	continued:5	17523029744173554419	5920080049	-1,14,-15,-15	-15,-15,-15	ok
+-0.270726	-45.763136	-46.720354	0.721376	continued:5	17523029744173554419	5920080049	-1,14,-15,-15	-15,-15,-15	ok
+-0.267890	-45.763136	-47.004996	0.720334	continued:5	17523029744173554419	5920080049	-1,14,-15,-15	-15,-15,-15	ok
+-0.265054	-45.763136	-47.251677	0.719625	continued:5	17523029744173554419	5920080049	-1,14,-15,-15	-15,-15,-15	ok
+-0.262219	-45.763136	-47.462906	0.719251	continued:5	17523029744173554419	5920080049	-1,14,-15,-15	-15,-15,-15	ok
+-0.259383	-45.763136	-47.640868	0.718878	full	17225409506444151014	5920080049	-1,14,14,-15	-15,-15,-15	ok
+-0.256547	-45.763136	-46.120926	0.722171	continued:5	17225409506444151014	5920080049	-1,14,14,-15	-15,-15,-15	ok
+-0.253711	-45.763136	-46.480925	0.720381	continued:5	10296487171183901877	5869590349	-1,14,14,14	-15,14,-15	ok
+-0.250876	-45.763136	-46.798073	0.719131	continued:5	10296487171183901877	4538043517	-1,14,14,14	-15,14,14	ok
+-0.248040	-45.763136	-47.073755	0.718089	continued:5	10296487171183901877	4538043517	-1,14,14,14	-15,14,14	ok
+-0.245204	-45.763136	-47.312467	0.717381	continued:5	10296487171183901877	4538043517	-1,14,14,14	-15,14,14	ok
+-0.242369	-45.763136	-47.516606	0.717007	continued:5	10296487171183901877	4537948250	-1,14,14,14	14,14,14	ok
+-0.239533	-45.763136	-47.688273	0.716633	full	10296487171183901877	4537948250	-1,14,14,14	14,14,14	ok
+-0.236697	-45.763136	-46.217301	0.719804	continued:5	10296487171183901877	4537948250	-1,14,14,14	14,14,14	ok
+-0.233862	-45.763136	-46.567335	0.718013	continued:5	10296487171183901877	4537948250	-1,14,14,14	14,14,14	ok
+-0.231026	-45.763136	-46.875686	0.716764	continued:5	10296487171183901877	4537948250	-1,14,14,14	14,14,14	ok
+-0.228190	-45.763136	-47.143513	0.715849	continued:5	10296487171183901877	4537948250	-1,14,14,14	14,14,14	ok
+-0.225354	-45.763136	-47.373876	0.715141	continued:5	10296487171183901877	4537948250	-1,14,14,14	14,14,14	ok
+-0.222519	-45.763136	-47.570634	0.714767	continued:5	10296487171183901877	4537948250	-1,14,14,14	14,14,14	ok
+-0.219683	-45.763136	-47.735789	0.714393	full	10296487171183901877	4537948250	-1,14,14,14	14,14,14	ok
+-0.216847	-45.763136	-46.316869	0.717290	continued:5	10296487171183901877	4537948250	-1,14,14,14	14,14,14	ok
+-0.214012	-45.763136	-46.657777	0.715706	continued:5	10296487171183901877	4537948250	-1,14,14,14	14,14,14	ok
+-0.211176	-45.763136	-46.955805	0.714457	continued:5	10296487171183901877	4537948250	-1,14,14,14	14,14,14	ok
+-0.208340	-45.763136	-47.214542	0.713621	continued:5	10296487171183901877	4537948250	-1,14,14,14	14,14,14	ok
+-0.205505	-45.763136	-47.436065	0.712913	continued:5	10296487171183901877	4537948250	-1,14,14,14	14,14,14	ok
+-0.202669	-45.763136	-47.625061	0.712539	continued:5	10296487171183901877	4537948250	-1,14,14,14	14,14,14	ok
+-0.199833	-45.763136	-47.783415	0.712165	full	10296487171183901877	4537948250	-1,14,14,14	14,14,14	ok
+-0.196997	-45.763136	-46.411604	0.714794	continued:5	10296054863543484590	4537948250	-1,-14,14,14	14,14,14	ok
+-0.194162	-45.763136	-46.743768	0.713338	continued:5	10109286123422004455	4537948250	-1,-14,-14,14	14,14,14	ok
+-0.191326	-45.763136	-47.032648	0.712089	continued:5	5940728395798568504	3480908175	-1,-14,-14,-14	14,14,-14	ok
+-0.188490	-45.763136	-47.283279	0.711174	continued:5	5940728395798568504	3480908175	-1,-14,-14,-14	14,14,-14	ok
+-0.185655	-45.763136	-47.498408	0.710672	continued:5	5940728395798568504	3447031937	-1,-14,-14,-14	14,-14,-14	ok
+-0.182819	-45.763136	-47.679603	0.710299	continued:5	5940728395798568504	3447031937	-1,-14,-14,-14	14,-14,-14	ok
+-0.179983	-45.763136	-47.831147	0.709925	full	5940728395798568504	3447031937	-1,-14,-14,-14	14,-14,-14	ok
+-0.177148	-45.763136	-46.164950	0.713874	continued:5	5940728395798568504	3447031937	-1,-14,-14,-14	14,-14,-14	ok
+-0.174312	-45.763136	-46.529589	0.712084	continued:5	5940728395798568504	3447031937	-1,-14,-14,-14	14,-14,-14	ok
+-0.171476	-45.763136	-46.848275	0.710500	continued:5	5940728395798568504	3447031937	-1,-14,-14,-14	14,-14,-14	ok
+-0.168641	-45.763136	-47.126761	0.709458	continued:5	5940728395798568504	3447031937	-1,-14,-14,-14	14,-14,-14	ok
+-0.165805	-45.763136	-47.366047	0.708622	continued:5	5940728395798568504	3446948908	-1,-14,-14,-14	-14,-14,-14	ok
+-0.162969	-45.763136	-47.570464	0.708120	continued:5	5940728395798568504	3446948908	-1,-14,-14,-14	-14,-14,-14	ok
+-0.160133	-45.763136	-47.742352	0.707747	continued:5	5940728395798568504	3446948908	-1,-14,-14,-14	-14,-14,-14	ok
+-0.157298	-45.763136	-47.885826	0.707373	full	5940728395798568504	3446948908	-1,-14,-14,-14	-14,-14,-14	ok
+-0.154462	-45.763136	-46.296439	0.710990	continued:5	5940728395798568504	3446948908	-1,-14,-14,-14	-14,-14,-14	ok
+-0.151626	-45.763136	-46.647363	0.709199	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.148791	-45.763136	-46.954161	0.707823	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.145955	-45.763136	-47.220032	0.706780	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.143119	-45.763136	-47.448338	0.705944	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.140284	-45.763136	-47.643180	0.705570	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.137448	-45.763136	-47.805453	0.705196	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.134612	-45.763136	-47.940637	0.704823	full	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.131776	-45.763136	-46.431939	0.708053	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.128941	-45.763136	-46.768668	0.706470	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.126105	-45.763136	-47.060969	0.705093	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.123269	-45.763136	-47.314305	0.704178	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.120434	-45.763136	-47.530415	0.703342	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.117598	-45.763136	-47.714730	0.702841	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.114762	-45.763136	-47.869202	0.702673	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.111927	-45.763136	-47.995574	0.702300	full	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.109091	-45.763136	-46.226032	0.706693	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.106255	-45.763136	-46.591478	0.704775	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.103420	-45.763136	-46.910276	0.703319	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.100584	-45.763136	-47.185809	0.702070	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.097748	-45.763136	-47.423358	0.701155	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.094912	-45.763136	-47.625892	0.700447	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.092077	-45.763136	-47.797236	0.699945	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.089241	-45.763136	-47.940619	0.699778	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.086405	-45.763136	-48.057526	0.699070	full	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+-0.083570	-45.763136	-46.460615	0.703153	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.080734	-45.763136	-46.797636	0.701362	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.077898	-45.763136	-47.091165	0.699906	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.075063	-45.763136	-47.345265	0.698864	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.072227	-45.763136	-47.562388	0.698028	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.069391	-45.763136	-47.746745	0.697526	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.066555	-45.763136	-47.900580	0.698362	full	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.063720	-45.763136	-46.212860	0.702314	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.060884	-45.763136	-46.584119	0.700189	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.058048	-45.763136	-46.908638	0.698606	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.055213	-45.763136	-47.189119	0.697229	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.052377	-45.763136	-47.431139	0.696186	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.049541	-45.763136	-47.637859	0.695478	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.046706	-45.763136	-47.811960	0.694976	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.043870	-45.763136	-47.957037	0.695144	full	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.041034	-45.763136	-46.360698	0.699307	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.038198	-45.763136	-46.715680	0.697389	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.035363	-45.763136	-47.024129	0.695805	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.032527	-45.763136	-47.290910	0.694556	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.029691	-45.763136	-47.519840	0.693641	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.026856	-45.763136	-47.714063	0.692933	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.024020	-45.763136	-47.877543	0.692431	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.021184	-45.763136	-48.013605	0.692058	full	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.018349	-45.763136	-46.500958	0.696293	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.015513	-45.763136	-46.840776	0.694502	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.012677	-45.763136	-47.134914	0.692919	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.009842	-45.763136	-47.389437	0.691876	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.007006	-45.763136	-47.605670	0.690961	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.004170	-45.763136	-47.789073	0.690253	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+-0.001334	-45.763136	-47.943337	0.689879	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.001501	-45.763136	-48.070277	0.689506	full	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.004337	-45.763136	-46.301774	0.694965	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.007173	-45.763136	-46.670737	0.693047	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.010008	-45.763136	-46.989251	0.691257	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.012844	-45.763136	-47.265434	0.689801	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.015680	-45.763136	-47.503350	0.688758	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.018515	-45.763136	-47.705489	0.688050	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.021351	-45.763136	-47.874807	0.687342	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.024187	-45.763136	-48.017201	0.686968	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.027023	-45.763136	-48.134149	0.686594	full	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.029858	-45.763136	-46.500726	0.691475	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.032694	-45.763136	-46.845608	0.689557	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.035530	-45.763136	-47.144023	0.687974	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.038365	-45.763136	-47.401003	0.686725	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.041201	-45.763136	-47.620526	0.685810	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.044037	-45.763136	-47.805867	0.684974	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.046872	-45.763136	-47.962393	0.684472	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.049708	-45.763136	-48.091927	0.684099	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.052544	-45.763136	-48.198134	0.683725	full	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.055379	-45.763136	-46.366129	0.689787	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.058215	-45.763136	-46.729893	0.687663	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.061051	-45.763136	-47.045160	0.685872	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.063887	-45.763136	-47.317537	0.684495	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.066722	-45.763136	-47.550522	0.683246	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.069558	-45.763136	-47.749953	0.682331	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.072394	-45.763136	-47.918449	0.681623	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.075229	-45.763136	-48.059548	0.681249	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.078065	-45.763136	-48.174916	0.680875	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.080901	-45.763136	-48.269346	0.680502	full	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.083736	-45.763136	-46.630834	0.685561	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.086572	-45.763136	-46.962577	0.683643	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.089408	-45.763136	-47.249078	0.682060	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.092244	-45.763136	-47.495246	0.680811	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.095079	-45.763136	-47.704995	0.679768	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.097915	-45.763136	-47.882869	0.679060	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.100751	-45.763136	-48.031307	0.678352	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+0.103586	-45.763136	-48.155781	0.677850	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+0.106422	-45.763136	-48.258663	0.677683	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+0.109258	-45.763136	-48.340666	0.677309	full	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+0.112093	-45.763136	-46.609355	0.682948	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.114929	-45.763136	-46.945872	0.680823	continued:5	17646127468735791542507331672356580785	5940728485419240489	-1,-14,-14,-14,-14	-14,-14,-14,-14	ok
+0.117765	-45.763136	-47.237817	0.679239	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+0.120601	-45.763136	-47.487819	0.677784	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+0.123436	-45.763136	-47.702377	0.676741	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+0.126272	-45.763136	-47.883734	0.676033	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+0.129108	-45.763136	-48.034645	0.675325	continued:5	5940728395798568504	5940728485419240489	-1,-14,-14,-14	-14,-14,-14,-14	ok
+0.131943	-45.763136	-48.160843	0.674823	continued:5	5940442205971251902	5940728485419240489	-1,13,-14,-14	-14,-14,-14,-14	ok
+0.134779	-45.763136	-48.264891	0.674321	continued:5	5940442205971251902	5940728485419240489	-1,13,-14,-14	-14,-14,-14,-14	ok
+0.137615	-45.763136	-48.350993	0.674154	continued:5	5940442205971251902	5940728485419240489	-1,13,-14,-14	-14,-14,-14,-14	ok
+0.140450	-45.763136	-48.419224	0.673780	full	5825099312279387084	3446948908	-1,13,13,-14	-14,-14,-14	ok
+0.143286	-45.763136	-46.715872	0.679256	continued:5	3361378628987190902	2592900051	-1,13,13,13	-14,13,13	ok
+0.146122	-45.763136	-47.041379	0.677338	continued:5	3361378628987190902	2592828040	-1,13,13,13	13,13,13	ok
+0.148957	-45.763136	-47.321486	0.675755	continued:5	3361378628987190902	2592828040	-1,13,13,13	13,13,13	ok
+0.151793	-45.763136	-47.561313	0.674378	continued:5	3361378628987190902	2592828040	-1,13,13,13	13,13,13	ok
+0.154629	-45.763136	-47.766277	0.673335	continued:5	3361378628987190902	2592828040	-1,13,13,13	13,13,13	ok
+0.157465	-45.763136	-47.939426	0.672499	continued:5	3361378628987190902	3361378693807892252	-1,13,13,13	13,13,13,13	ok
+0.160300	-45.763136	-48.084637	0.671791	continued:5	3361378628987190902	3361378693807892252	-1,13,13,13	13,13,13,13	ok
+0.163136	-45.763136	-48.205907	0.671289	continued:5	3361378628987190902	3361378693807892252	-1,13,13,13	13,13,13,13	ok
+0.165972	-45.763136	-48.305708	0.670916	continued:5	3361378628987190902	3361378693807892252	-1,13,13,13	13,13,13,13	ok
+0.168807	-45.763136	-48.386883	0.670542	continued:5	3361378628987190902	3361378693807892252	-1,13,13,13	13,13,13,13	ok
+0.171643	-45.763136	-48.453038	0.670375	continued:5	3361378628987190902	3361378693807892252	-1,13,13,13	13,13,13,13	ok
+0.174479	-45.763136	-48.505023	0.669539	full	3361378628987190902	3361378693807892252	-1,13,13,13	13,13,13,13	ok
+0.177314	-45.763136								error: T SSCS does not start with ±1: [-2, 13, 13, 13]
+0.180150	-45.763136								error: T SSCS does not start with ±1: [-2, 13, 13, 13]
+0.182986	-45.763136								error: T SSCS does not start with ±1: [-2, 13, 13, 13]
+0.185822	-45.763136								error: T SSCS does not start with ±1: [-2, 13, 13, 13]
+0.188657	-45.763136								error: T SSCS does not start with ±1: [-2, 13, 13, 13]
+0.191493	-45.763136								error: T SSCS does not start with ±1: [-2, 13, 13, 13]
+0.194329	-45.763136								error: T SSCS does not start with ±1: [-2, 13, 13, 13]
+0.197164	-45.763136								error: T SSCS does not start with ±1: [-2, 13, 13, 13, 13]
+0.200000	-45.763136								error: T SSCS does not start with ±1: [-2, 13, 13, 13, 13]

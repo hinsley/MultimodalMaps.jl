@@ -1,0 +1,28 @@
+Running attempt-011 contour scan.
+Grid: 10 ΔCa points × 10 Δx points
+Julia threads: 6, output tag: preflight11d_seq4, max sequence length: 4
+T0 continuation refinement steps: 5, Ca-window: 0.003
+Row checkpoint directory: /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/preflight11d_seq4_rows
+Saved row 3/10 (Δx=-1.277778) with 9/10 successful points in 8.54 s
+Saved row 1/10 (Δx=-1.500000) with 7/10 successful points in 9.04 s
+Saved row 10/10 (Δx=-0.500000) with 9/10 successful points in 9.04 s
+Saved row 9/10 (Δx=-0.611111) with 10/10 successful points in 9.04 s
+Saved row 5/10 (Δx=-1.055556) with 10/10 successful points in 9.04 s
+Saved row 7/10 (Δx=-0.833333) with 10/10 successful points in 9.04 s
+Saved row 2/10 (Δx=-1.388889) with 9/10 successful points in 0.96 s
+Saved row 4/10 (Δx=-1.166667) with 10/10 successful points in 1.33 s
+Saved row 6/10 (Δx=-0.944444) with 10/10 successful points in 1.54 s
+Saved row 8/10 (Δx=-0.722222) with 10/10 successful points in 1.60 s
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+Successful points: 94 / 100
+Unique T encodings: 50
+Unique gamma encodings: 62
+Saved merged results to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/preflight11d_seq4_results.tsv
+Saved T legend to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/preflight11d_seq4_T_legend.tsv
+Saved gamma legend to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/preflight11d_seq4_gamma_legend.tsv
+Saved contour plot to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/preflight11d_seq4_contours.png
+real 56.98
+user 112.96
+sys 5.91

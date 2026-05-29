@@ -1,0 +1,9 @@
+results_path	/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-049/gcs_results/grid1000_seq12_prefixes_remap40_newmodel_results.tsv
+plot_path	/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-049/gcs_results/grid1000_seq12_prefixcompatible_contours.png
+ok_count	892665
+error_count	107335
+red_category_rule	T_scs[2:end]
+suppressed_T_rule	all T_scs[2:6] == 0
+prefix_compatibility_rule	omit contours where all nonempty corner SSCSs match after truncation to the shortest corner sequence length
+suppressed_T_points	182523
+T_tail_unique	70141

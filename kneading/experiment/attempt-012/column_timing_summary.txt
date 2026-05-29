@@ -1,0 +1,16 @@
+label	column
+total_points	80
+total_seconds	1431.968108211
+fast_median_seconds	0.0083267495
+fast_p95_seconds	0.122248333
+gold_median_seconds	0.5646247915
+gold_p95_seconds	327.223377084
+predict_count	27
+fallback_local_count	27
+fallback_global_count	2
+pair_mismatch_count	25
+shared_failure_count	24
+s_diff_median	0.00026074335648518937
+s_diff_max	0.003814081462476804
+R_diff_median	0.00016042192641507633
+R_diff_max	0.015258445263989725

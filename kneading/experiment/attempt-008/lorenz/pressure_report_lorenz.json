@@ -1,0 +1,40 @@
+{
+  "system": "lorenz",
+  "params": {
+    "sigma": 10.0,
+    "rho": 28.0,
+    "beta": 2.6666666666666665
+  },
+  "n_return_samples": 1333,
+  "n_unique_nodes": 1320,
+  "c_crit": 14.7963,
+  "coverage_fraction": 0.91875,
+  "left_y_range": [
+    9.864325,
+    18.791853
+  ],
+  "right_y_range": [
+    9.761506,
+    18.791853
+  ],
+  "h_top_pressure": 0.9144828509542614,
+  "lambda_at_root": 1.0000000000445488,
+  "root_bracket": {
+    "s_lo": 0.0,
+    "s_hi": 1.0,
+    "lambda_lo": 1.9995968438331118,
+    "lambda_hi": 0.9373208927417322
+  },
+  "timings_seconds": {
+    "ode_and_events": 2.7450027079321444,
+    "map_aggregation": 0.007101959083229303,
+    "build_operator": 0.006168374908156693,
+    "solve_root": 0.006079250015318394,
+    "scan_plot_values": 0.07541441603098065,
+    "total": 2.8397667079698294
+  },
+  "outputs": {
+    "plot": "/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-008/lorenz/pressure_root_scan_lorenz.png",
+    "report_json": "/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-008/lorenz/pressure_report_lorenz.json"
+  }
+}

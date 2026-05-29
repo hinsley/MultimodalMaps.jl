@@ -1,0 +1,9 @@
+created_at	2026-05-08T06:52:50
+status	partial; killed while running g_h=0.00777777777778 after extended runtime
+n_completed_points	7
+completed_g_h_max	0.00666666666667
+sum_completed_point_runtime_seconds	93.6732439996
+sum_completed_main_runtime_seconds	92.081104999
+run_time_seconds_per_point	2500
+summary_path	/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-059/gh_sweep_full6d_warmstart_nointertransient_smoke10_t2500s/gh_sweep_full6d_warmstart_nointertransient_smoke10_t2500s_summary.tsv
+plot_path	/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-059/gh_sweep_full6d_warmstart_nointertransient_smoke10_t2500s/gh_sweep_full6d_warmstart_nointertransient_smoke10_t2500s_lle_lz76_bits_per_second.png

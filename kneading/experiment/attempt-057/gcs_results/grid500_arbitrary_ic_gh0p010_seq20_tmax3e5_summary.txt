@@ -1,0 +1,18 @@
+output_tag	grid500_arbitrary_ic_gh0p010_seq20_tmax3e5
+results_path	/home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-057/grid500_arbitrary_ic_gh0p010_seq20_tmax3e5_results.tsv
+columns_dir	/home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-057/grid500_arbitrary_ic_gh0p010_seq20_tmax3e5_columns
+grid_delta_ca	500
+grid_delta_x	500
+delta_ca_min	-45.0
+delta_ca_max	-20.0
+delta_x_min	-1.5
+delta_x_max	-0.5
+max_seq_length	20
+sscs_tmax	300000.0
+g_h	0.01
+u0_rule	V=-30.0, x=xinf(p,V)+-0.0001, y=yinf(V), n=ninf(V), h=hinf(V), Ca=Ca_null_Ca(p,V)
+total_points	250000
+ok_count	249971
+error_count	29
+full_length_count	239540
+elapsed_seconds	59.08337688446045

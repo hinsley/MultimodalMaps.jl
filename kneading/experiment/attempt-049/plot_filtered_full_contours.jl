@@ -15,6 +15,10 @@ const FILTER_OUTPUT_DIR = get(ENV, "ATTEMPT049_FILTER_OUTPUT_DIR", dirname(FILTE
 const FILTER_OUTPUT_TAG = get(ENV, "ATTEMPT049_FILTER_OUTPUT_TAG", "grid1000_seq12_prefixcompatible")
 const FILTER_T_ZERO_TAIL_START = 2
 const FILTER_T_ZERO_TAIL_STOP = 6
+const FILTER_T_RGB = (0.86, 0.16, 0.12)
+const FILTER_GAMMA_RGB = (0.12, 0.28, 0.88)
+const FILTER_LINEWIDTH = parse(Float64, get(ENV, "ATTEMPT049_FILTER_LINEWIDTH", "0.35"))
+const FILTER_ALPHA_EXPONENT = parse(Float64, get(ENV, "ATTEMPT049_FILTER_ALPHA_EXPONENT", "0.3"))
 
 function header_lookup(header::AbstractString)
     names = split(header, '\t'; keepempty=true)
@@ -47,6 +51,27 @@ function sequences_are_prefix_compatible(seqs::NTuple{4, Vector{Int}})
     end
     return true
 end
+
+function first_mismatch_index(seqs::NTuple{4, Vector{Int}})
+    nonempty = [seq for seq in seqs if !isempty(seq)]
+    isempty(nonempty) && return nothing
+    min_length = minimum(length.(nonempty))
+    min_length == 0 && return nothing
+
+    reference = nonempty[1]
+    for idx in 1:min_length
+        for seq in nonempty[2:end]
+            if seq[idx] != reference[idx]
+                return idx
+            end
+        end
+    end
+    return nothing
+end
+
+alpha_for_mismatch_index(idx::Int) = 1.0 / (idx ^ FILTER_ALPHA_EXPONENT)
+
+rgba_from_rgb_alpha(rgb, alpha::Float64) = RGBAf(rgb[1], rgb[2], rgb[3], alpha)
 
 function build_filtered_full_grids(results_path::String)
     T_grid = fill(0, length(DELTA_CAS_010), length(DELTA_XS_010))
@@ -110,10 +135,12 @@ function categorical_marching_squares_prefix_compatible(
     sequences::Matrix{Vector{Int}},
     suppress_grid::Union{Nothing, BitMatrix}=nothing,
 )
-    xs = Float32[]
-    ys = Float32[]
-    sizehint!(xs, 3 * (length(x_values) - 1) * (length(y_values) - 1))
-    sizehint!(ys, 3 * (length(x_values) - 1) * (length(y_values) - 1))
+    xs_by_mismatch = [Float32[] for _ in 1:ATTEMPT10_MAX_SEQ_LENGTH]
+    ys_by_mismatch = [Float32[] for _ in 1:ATTEMPT10_MAX_SEQ_LENGTH]
+    for idx in 1:ATTEMPT10_MAX_SEQ_LENGTH
+        sizehint!(xs_by_mismatch[idx], div(3 * (length(x_values) - 1) * (length(y_values) - 1), ATTEMPT10_MAX_SEQ_LENGTH))
+        sizehint!(ys_by_mismatch[idx], div(3 * (length(x_values) - 1) * (length(y_values) - 1), ATTEMPT10_MAX_SEQ_LENGTH))
+    end
 
     local_segments = NTuple{4, Float64}[]
     sizehint!(local_segments, 8)
@@ -130,14 +157,17 @@ function categorical_marching_squares_prefix_compatible(
                 continue
             end
 
-            if sequences_are_prefix_compatible((
+            corner_sequences = (
                 sequences[x_idx, y_idx],
                 sequences[x_idx + 1, y_idx],
                 sequences[x_idx + 1, y_idx + 1],
                 sequences[x_idx, y_idx + 1],
-            ))
+            )
+            mismatch_idx = first_mismatch_index(corner_sequences)
+            if isnothing(mismatch_idx) || sequences_are_prefix_compatible(corner_sequences)
                 continue
             end
+            mismatch_idx = min(mismatch_idx, ATTEMPT10_MAX_SEQ_LENGTH)
 
             y0 = y_values[y_idx]
             y1 = y_values[y_idx + 1]
@@ -178,13 +208,13 @@ function categorical_marching_squares_prefix_compatible(
             end
 
             for (x_a, y_a, x_b, y_b) in local_segments
-                push!(xs, Float32(x_a), Float32(x_b), NaN32)
-                push!(ys, Float32(y_a), Float32(y_b), NaN32)
+                push!(xs_by_mismatch[mismatch_idx], Float32(x_a), Float32(x_b), NaN32)
+                push!(ys_by_mismatch[mismatch_idx], Float32(y_a), Float32(y_b), NaN32)
             end
         end
     end
 
-    return xs, ys
+    return xs_by_mismatch, ys_by_mismatch
 end
 
 function save_filtered_contour_plot(
@@ -208,11 +238,31 @@ function save_filtered_contour_plot(
         yticklabelsize=TICK_LABEL_SIZE,
     )
 
-    T_xs, T_ys = categorical_marching_squares_prefix_compatible(T_grid, DELTA_CAS_010, DELTA_XS_010, T_sequences, suppress_T_grid)
-    gamma_xs, gamma_ys = categorical_marching_squares_prefix_compatible(gamma_grid, DELTA_CAS_010, DELTA_XS_010, gamma_sequences)
+    T_xs_by_mismatch, T_ys_by_mismatch =
+        categorical_marching_squares_prefix_compatible(T_grid, DELTA_CAS_010, DELTA_XS_010, T_sequences, suppress_T_grid)
+    gamma_xs_by_mismatch, gamma_ys_by_mismatch =
+        categorical_marching_squares_prefix_compatible(gamma_grid, DELTA_CAS_010, DELTA_XS_010, gamma_sequences)
 
-    lines!(ax, T_xs, T_ys; color=T_COLOR, linewidth=LINEWIDTH)
-    lines!(ax, gamma_xs, gamma_ys; color=GAMMA_COLOR, linewidth=LINEWIDTH)
+    for idx in 1:ATTEMPT10_MAX_SEQ_LENGTH
+        if !isempty(gamma_xs_by_mismatch[idx])
+            lines!(
+                ax,
+                gamma_xs_by_mismatch[idx],
+                gamma_ys_by_mismatch[idx];
+                color=rgba_from_rgb_alpha(FILTER_GAMMA_RGB, alpha_for_mismatch_index(idx)),
+                linewidth=FILTER_LINEWIDTH,
+            )
+        end
+        if !isempty(T_xs_by_mismatch[idx])
+            lines!(
+                ax,
+                T_xs_by_mismatch[idx],
+                T_ys_by_mismatch[idx];
+                color=rgba_from_rgb_alpha(FILTER_T_RGB, alpha_for_mismatch_index(idx)),
+                linewidth=FILTER_LINEWIDTH,
+            )
+        end
+    end
     ax.xticks = fixed_ticks(DELTA_CAS_010, "%.0f", DELTA_CA_TICK_STEP_010)
     ax.yticks = fixed_ticks(DELTA_XS_010, "%.1f", DELTA_X_TICK_STEP_010)
     save(path, fig; px_per_unit=PLOT_PX_PER_UNIT)

@@ -1,0 +1,751 @@
+delta_x	delta_ca	T0_V	T0_Ca	T0_method	T_encoding	gamma_encoding	T_scs	gamma_scs	status
+-1.500000	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.479592	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.459184	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.438776	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.418367	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.397959	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.377551	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.357143	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.336735	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.316327	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.295918	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.275510	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.255102	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.234694	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.214286	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.193878	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.173469	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.153061	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.132653	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.112245	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.091837	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.071429	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.051020	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.030612	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-1.010204	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.989796	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.969388	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.948980	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.928571	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.908163	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.887755	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.867347	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.846939	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.826531	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.806122	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.785714	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.765306	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.744898	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.724490	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.704082	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.683673	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.663265	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.642857	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.622449	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.602041	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.581633	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.561224	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.540816	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.520408	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+
+-0.500000	-45.000000								error: Initial condition incompatible with functional form.
+Detected an in-place function with an initial condition of type Number or SArray.
+This is incompatible because Numbers cannot be mutated, i.e.
+`x = 2.0; y = 2.0; x .= y` will error.
+
+If using a immutable initial condition type, please use the out-of-place form.
+I.e. define the function `du=f(u,p,t)` instead of attempting to "mutate" the immutable `du`.
+
+If your differential equation function was defined with multiple dispatches and one is
+in-place, then the automatic detection will choose in-place. In this case, override the
+choice in the problem constructor, i.e. `ODEProblem{false}(f,u0,tspan,p,kwargs...)`.
+
+For a longer discussion on mutability vs immutability and in-place vs out-of-place, see:
+<https://docs.sciml.ai/DiffEqDocs/stable/tutorials/faster_ode_example#Example-Accelerating-a-Non-Stiff-Equation:-The-Lorenz-Equation>
+

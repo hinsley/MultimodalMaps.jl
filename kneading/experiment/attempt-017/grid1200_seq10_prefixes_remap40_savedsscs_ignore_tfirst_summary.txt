@@ -1,0 +1,11 @@
+input_results=/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-017/grid1200_seq10_prefixes_remap40_results.tsv
+output_plot=/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-017/grid1200_seq10_prefixes_remap40_savedsscs_ignore_tfirst_contours.png
+total_rows=1440000
+ok_rows_preserved=903449
+usable_T_rows=1261208
+recovered_T_rows_from_error_status=357759
+usable_gamma_rows=903449
+rows_still_missing_both=178792
+unique_T_categories_ignore_first=38456
+unique_gamma_categories_saved_only=44481
+note=T categories ignore the first T symbol; gamma categories use only saved gamma_scs with no recomputation.

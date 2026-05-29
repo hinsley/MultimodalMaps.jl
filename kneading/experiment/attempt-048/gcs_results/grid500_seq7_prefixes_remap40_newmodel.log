@@ -1,0 +1,1334 @@
+
+[2026-04-29T03:32:10+00:00] Running attempt-048 full scan with remap resolution 40
+Repo root: /home/carterhinsley/MultimodalMaps.jl
+Julia threads: 24
+Julia GC threads: 6
+OpenBLAS threads: 1
+GCS artifact URI: gs://carter-kneading-attempt048/attempt-048
+Instantiating Julia project dependencies.
+kneading/experiment/attempt-048/run_grid500_seq7_prefixes_remap40_newmodel.sh: line 111: julia: command not found
+[2026-04-29T03:32:10+00:00] Runner exiting with status 127; syncing resumable checkpoints if configured.
+[2026-04-29T03:32:10+00:00] Syncing attempt-048 checkpoint artifacts to gs://carter-kneading-attempt048/attempt-048
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel.log to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel.log
+  
+
+
+[2026-04-29T03:32:26+00:00] Running attempt-048 full scan with remap resolution 40
+Repo root: /home/carterhinsley/MultimodalMaps.jl
+Julia threads: 24
+Julia GC threads: 6
+OpenBLAS threads: 1
+GCS artifact URI: gs://carter-kneading-attempt048/attempt-048
+Instantiating Julia project dependencies.
+Precompiling packages...
+  12309.3 ms  ✓ OrdinaryDiffEqRosenbrock
+  14210.9 ms  ✓ NonlinearSolveFirstOrder
+   3239.4 ms  ✓ BoundaryValueDiffEqCore
+   3645.3 ms  ✓ BoundaryValueDiffEqAscher
+   4406.2 ms  ✓ BoundaryValueDiffEqMIRKN
+   4433.7 ms  ✓ BoundaryValueDiffEqShooting
+   7893.1 ms  ✓ NonlinearSolve
+   2295.3 ms  ✓ NonlinearSolve → NonlinearSolveSundialsExt
+   2625.0 ms  ✓ PeriodicOrbits
+   3048.4 ms  ✓ OrdinaryDiffEqNonlinearSolve
+   2876.7 ms  ✓ OrdinaryDiffEqIMEXMultistep
+   2919.2 ms  ✓ OrdinaryDiffEqStabilizedIRK
+   3338.2 ms  ✓ OrdinaryDiffEqPDIRK
+   4108.1 ms  ✓ OrdinaryDiffEqSDIRK
+   4727.3 ms  ✓ DynamicalSystems
+   5170.7 ms  ✓ StochasticDiffEq
+  33001.2 ms  ✓ Plots
+   3034.4 ms  ✓ DynamicalSystemsBase → StochasticSystemsBase
+   1518.4 ms  ✓ Plots → FileIOExt
+   1623.3 ms  ✓ Plots → GeometryBasicsExt
+   1643.1 ms  ✓ Plots → UnitfulExt
+   8641.7 ms  ✓ OrdinaryDiffEqBDF
+  14389.3 ms  ✓ OrdinaryDiffEqFIRK
+  48418.2 ms  ✓ Enzyme
+   1353.6 ms  ✓ Enzyme → EnzymeChainRulesCoreExt
+   1362.6 ms  ✓ Enzyme → EnzymeBFloat16sExt
+   1360.8 ms  ✓ QuadGK → QuadGKEnzymeExt
+   1582.1 ms  ✓ Enzyme → EnzymeGPUArraysCoreExt
+   1599.8 ms  ✓ SciMLBase → SciMLBaseEnzymeExt
+   1616.5 ms  ✓ Enzyme → EnzymeStaticArraysExt
+   1617.8 ms  ✓ DifferentiationInterface → DifferentiationInterfaceEnzymeExt
+    303.6 ms  ✓ NonlinearSolveBase → NonlinearSolveBaseEnzymeExt
+   1720.2 ms  ✓ Enzyme → EnzymeLogExpFunctionsExt
+   2036.1 ms  ✓ FastPower → FastPowerEnzymeExt
+   2086.5 ms  ✓ Enzyme → EnzymeSpecialFunctionsExt
+  12721.4 ms  ✓ OrdinaryDiffEqDefault
+   1551.6 ms  ✓ DiffEqBase → DiffEqBaseEnzymeExt
+   3129.8 ms  ✓ OrdinaryDiffEq
+   3711.9 ms  ✓ DelayDiffEq
+   7643.3 ms  ✓ SciMLSensitivity
+  48031.5 ms  ✓ BoundaryValueDiffEqMIRK
+  78204.4 ms  ✓ BoundaryValueDiffEqFIRK
+   3953.9 ms  ✓ BoundaryValueDiffEq
+   5553.3 ms  ✓ DifferentialEquations
+ 107485.1 ms  ✓ Makie
+   3334.8 ms  ✓ Measurements → MeasurementsMakieExt
+   3491.1 ms  ✓ Polynomials → PolynomialsMakieExt
+   3560.2 ms  ✓ SciMLBase → SciMLBaseMakieExt
+   3713.9 ms  ✓ TimeseriesSurrogates → TimeseriesSurrogatesVisualizations
+   3715.4 ms  ✓ Peaks → MakieExt
+              ✗ GLMakie
+   4513.5 ms  ✓ Attractors → AttractorsVisualizations
+              ✗ DynamicalSystems → DynamicalSystemsVisualizations
+  33598.5 ms  ✓ CairoMakie
+  52 dependencies successfully precompiled in 149 seconds. 728 already precompiled.
+  1 dependency had output during precompilation:
+┌ DynamicalSystemsBase → StochasticSystemsBase
+│  WARNING: Constructor for type "CoupledSDEs" was extended in `StochasticSystemsBase` without explicit qualification or import.
+│    NOTE: Assumed "CoupledSDEs" refers to `DynamicalSystemsBase.CoupledSDEs`. This behavior is deprecated and may differ in future versions.`
+│    NOTE: This behavior may have differed in Julia versions prior to 1.12.
+│    Hint: If you intended to create a new generic function of the same name, use `function CoupledSDEs end`.
+│    Hint: To silence the warning, qualify `CoupledSDEs` as `DynamicalSystemsBase.CoupledSDEs` in the method signature or explicitly `import DynamicalSystemsBase: CoupledSDEs`.
+└  
+
+The following 3 direct dependencies failed to precompile:
+
+MultimodalMaps 
+
+Error: Missing source file for Base.PkgId(Base.UUID("44c66d49-f3d1-415d-9436-9a651fc58ffb"), "MultimodalMaps")
+GLMakie 
+
+Failed to precompile GLMakie [e9467ef8-e4e7-5192-8a1a-b1aee30e663a] to "/home/carterhinsley/.julia/compiled/v1.12/GLMakie/jl_W5bgSR".
+┌ Warning:     OpenGL/GLFW wasn't loaded correctly or couldn't be initialized.
+│     This likely means, you're on a headless server without having OpenGL support setup correctly.
+│     Have a look at the troubleshooting section in the readme:
+│     https://github.com/MakieOrg/Makie.jl/tree/master/GLMakie#troubleshooting-opengl.
+└ @ GLMakie ~/.julia/packages/GLMakie/vdrwE/src/gl_backend.jl:4
+ERROR: LoadError: InitError: Exception[GLFW.GLFWError(65550, "X11: The DISPLAY environment variable is missing"), ErrorException("glfwInit failed")]
+Stacktrace:
+  [1] __init__()
+    @ GLFW ~/.julia/packages/GLFW/wA4ue/src/GLFW.jl:69
+  [2] run_module_init(mod::Module, i::Int64)
+    @ Base ./loading.jl:1445
+  [3] register_restored_modules(sv::Core.SimpleVector, pkg::Base.PkgId, path::String)
+    @ Base ./loading.jl:1433
+  [4] _include_from_serialized(pkg::Base.PkgId, path::String, ocachepath::String, depmods::Vector{Any}; register::Bool)
+    @ Base ./loading.jl:1321
+  [5] _include_from_serialized
+    @ ./loading.jl:1276 [inlined]
+  [6] _require_search_from_serialized(pkg::Base.PkgId, sourcepath::String, build_id::UInt128, stalecheck::Bool; reasons::Dict{String, Int64}, DEPOT_PATH::Vector{String})
+    @ Base ./loading.jl:2117
+  [7] _require_search_from_serialized
+    @ ./loading.jl:2011 [inlined]
+  [8] __require_prelocked(pkg::Base.PkgId, env::String)
+    @ Base ./loading.jl:2629
+  [9] _require_prelocked(uuidkey::Base.PkgId, env::String)
+    @ Base ./loading.jl:2495
+ [10] macro expansion
+    @ ./loading.jl:2423 [inlined]
+ [11] macro expansion
+    @ ./lock.jl:376 [inlined]
+ [12] __require(into::Module, mod::Symbol)
+    @ Base ./loading.jl:2388
+ [13] require(into::Module, mod::Symbol)
+    @ Base ./loading.jl:2364
+ [14] top-level scope
+    @ ~/.julia/packages/GLMakie/vdrwE/src/gl_backend.jl:2
+ [15] include(mapexpr::Function, mod::Module, _path::String)
+    @ Base ./Base.jl:307
+ [16] top-level scope
+    @ ~/.julia/packages/GLMakie/vdrwE/src/GLMakie.jl:90
+ [17] include(mod::Module, _path::String)
+    @ Base ./Base.jl:306
+ [18] include_package_for_output(pkg::Base.PkgId, input::String, depot_path::Vector{String}, dl_load_path::Vector{String}, load_path::Vector{String}, concrete_deps::Vector{Pair{Base.PkgId, UInt128}}, source::Nothing)
+    @ Base ./loading.jl:3028
+ [19] top-level scope
+    @ stdin:5
+ [20] eval(m::Module, e::Any)
+    @ Core ./boot.jl:489
+ [21] include_string(mapexpr::typeof(identity), mod::Module, code::String, filename::String)
+    @ Base ./loading.jl:2874
+ [22] include_string
+    @ ./loading.jl:2884 [inlined]
+ [23] exec_options(opts::Base.JLOptions)
+    @ Base ./client.jl:315
+ [24] _start()
+    @ Base ./client.jl:550
+during initialization of module GLFW
+in expression starting at /home/carterhinsley/.julia/packages/GLMakie/vdrwE/src/gl_backend.jl:1
+in expression starting at /home/carterhinsley/.julia/packages/GLMakie/vdrwE/src/GLMakie.jl:1
+in expression starting at stdin:5
+
+DynamicalSystems → DynamicalSystemsVisualizations 
+
+Failed to precompile DynamicalSystemsVisualizations [bf41aec9-21e8-5d35-8521-19f2dd369247] to "/home/carterhinsley/.julia/compiled/v1.12/DynamicalSystemsVisualizations/jl_gi3gwX".
+ERROR: LoadError: invalid assignment to constant DynamicalSystemsVisualizations.subscript. This redefinition may be permitted using the `const` keyword.
+Stacktrace:
+ [1] top-level scope
+   @ ~/.julia/packages/DynamicalSystems/sv3mw/ext/DynamicalSystemsVisualizations.jl:14
+ [2] include(mod::Module, _path::String)
+   @ Base ./Base.jl:306
+ [3] include_package_for_output(pkg::Base.PkgId, input::String, depot_path::Vector{String}, dl_load_path::Vector{String}, load_path::Vector{String}, concrete_deps::Vector{Pair{Base.PkgId, UInt128}}, source::Nothing)
+   @ Base ./loading.jl:3028
+ [4] top-level scope
+   @ stdin:5
+ [5] eval(m::Module, e::Any)
+   @ Core ./boot.jl:489
+ [6] include_string(mapexpr::typeof(identity), mod::Module, code::String, filename::String)
+   @ Base ./loading.jl:2874
+ [7] include_string
+   @ ./loading.jl:2884 [inlined]
+ [8] exec_options(opts::Base.JLOptions)
+   @ Base ./client.jl:315
+ [9] _start()
+   @ Base ./client.jl:550
+in expression starting at /home/carterhinsley/.julia/packages/DynamicalSystems/sv3mw/ext/DynamicalSystemsVisualizations.jl:1
+in expression starting at stdin:5kneading/experiment/attempt-048/run_grid500_seq7_prefixes_remap40_newmodel.sh: line 114: /usr/bin/time: No such file or directory
+[2026-04-29T03:34:59+00:00] Runner exiting with status 127; syncing resumable checkpoints if configured.
+[2026-04-29T03:34:59+00:00] Syncing attempt-048 checkpoint artifacts to gs://carter-kneading-attempt048/attempt-048
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel.log to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel.log
+  
+
+
+[2026-04-29T03:36:49+00:00] Running attempt-048 full scan with remap resolution 40
+Repo root: /home/carterhinsley/MultimodalMaps.jl
+Julia threads: 24
+Julia GC threads: 6
+OpenBLAS threads: 1
+GCS artifact URI: gs://carter-kneading-attempt048/attempt-048
+Instantiating Julia project dependencies.
+Precompiling packages...
+              ✗ GLMakie
+              ✗ DynamicalSystems → DynamicalSystemsVisualizations
+  0 dependencies successfully precompiled in 8 seconds. 780 already precompiled.
+
+The following 3 direct dependencies failed to precompile:
+
+MultimodalMaps 
+
+Error: Missing source file for Base.PkgId(Base.UUID("44c66d49-f3d1-415d-9436-9a651fc58ffb"), "MultimodalMaps")
+GLMakie 
+
+Failed to precompile GLMakie [e9467ef8-e4e7-5192-8a1a-b1aee30e663a] to "/home/carterhinsley/.julia/compiled/v1.12/GLMakie/jl_8yNDaF".
+┌ Warning:     OpenGL/GLFW wasn't loaded correctly or couldn't be initialized.
+│     This likely means, you're on a headless server without having OpenGL support setup correctly.
+│     Have a look at the troubleshooting section in the readme:
+│     https://github.com/MakieOrg/Makie.jl/tree/master/GLMakie#troubleshooting-opengl.
+└ @ GLMakie ~/.julia/packages/GLMakie/vdrwE/src/gl_backend.jl:4
+ERROR: LoadError: InitError: Exception[GLFW.GLFWError(65550, "X11: The DISPLAY environment variable is missing"), ErrorException("glfwInit failed")]
+Stacktrace:
+  [1] __init__()
+    @ GLFW ~/.julia/packages/GLFW/wA4ue/src/GLFW.jl:69
+  [2] run_module_init(mod::Module, i::Int64)
+    @ Base ./loading.jl:1445
+  [3] register_restored_modules(sv::Core.SimpleVector, pkg::Base.PkgId, path::String)
+    @ Base ./loading.jl:1433
+  [4] _include_from_serialized(pkg::Base.PkgId, path::String, ocachepath::String, depmods::Vector{Any}; register::Bool)
+    @ Base ./loading.jl:1321
+  [5] _include_from_serialized
+    @ ./loading.jl:1276 [inlined]
+  [6] _require_search_from_serialized(pkg::Base.PkgId, sourcepath::String, build_id::UInt128, stalecheck::Bool; reasons::Dict{String, Int64}, DEPOT_PATH::Vector{String})
+    @ Base ./loading.jl:2117
+  [7] _require_search_from_serialized
+    @ ./loading.jl:2011 [inlined]
+  [8] __require_prelocked(pkg::Base.PkgId, env::String)
+    @ Base ./loading.jl:2629
+  [9] _require_prelocked(uuidkey::Base.PkgId, env::String)
+    @ Base ./loading.jl:2495
+ [10] macro expansion
+    @ ./loading.jl:2423 [inlined]
+ [11] macro expansion
+    @ ./lock.jl:376 [inlined]
+ [12] __require(into::Module, mod::Symbol)
+    @ Base ./loading.jl:2388
+ [13] require(into::Module, mod::Symbol)
+    @ Base ./loading.jl:2364
+ [14] top-level scope
+    @ ~/.julia/packages/GLMakie/vdrwE/src/gl_backend.jl:2
+ [15] include(mapexpr::Function, mod::Module, _path::String)
+    @ Base ./Base.jl:307
+ [16] top-level scope
+    @ ~/.julia/packages/GLMakie/vdrwE/src/GLMakie.jl:90
+ [17] include(mod::Module, _path::String)
+    @ Base ./Base.jl:306
+ [18] include_package_for_output(pkg::Base.PkgId, input::String, depot_path::Vector{String}, dl_load_path::Vector{String}, load_path::Vector{String}, concrete_deps::Vector{Pair{Base.PkgId, UInt128}}, source::Nothing)
+    @ Base ./loading.jl:3028
+ [19] top-level scope
+    @ stdin:5
+ [20] eval(m::Module, e::Any)
+    @ Core ./boot.jl:489
+ [21] include_string(mapexpr::typeof(identity), mod::Module, code::String, filename::String)
+    @ Base ./loading.jl:2874
+ [22] include_string
+    @ ./loading.jl:2884 [inlined]
+ [23] exec_options(opts::Base.JLOptions)
+    @ Base ./client.jl:315
+ [24] _start()
+    @ Base ./client.jl:550
+during initialization of module GLFW
+in expression starting at /home/carterhinsley/.julia/packages/GLMakie/vdrwE/src/gl_backend.jl:1
+in expression starting at /home/carterhinsley/.julia/packages/GLMakie/vdrwE/src/GLMakie.jl:1
+in expression starting at stdin:5
+
+DynamicalSystems → DynamicalSystemsVisualizations 
+
+Failed to precompile DynamicalSystemsVisualizations [bf41aec9-21e8-5d35-8521-19f2dd369247] to "/home/carterhinsley/.julia/compiled/v1.12/DynamicalSystemsVisualizations/jl_6YoP8V".
+ERROR: LoadError: invalid assignment to constant DynamicalSystemsVisualizations.subscript. This redefinition may be permitted using the `const` keyword.
+Stacktrace:
+ [1] top-level scope
+   @ ~/.julia/packages/DynamicalSystems/sv3mw/ext/DynamicalSystemsVisualizations.jl:14
+ [2] include(mod::Module, _path::String)
+   @ Base ./Base.jl:306
+ [3] include_package_for_output(pkg::Base.PkgId, input::String, depot_path::Vector{String}, dl_load_path::Vector{String}, load_path::Vector{String}, concrete_deps::Vector{Pair{Base.PkgId, UInt128}}, source::Nothing)
+   @ Base ./loading.jl:3028
+ [4] top-level scope
+   @ stdin:5
+ [5] eval(m::Module, e::Any)
+   @ Core ./boot.jl:489
+ [6] include_string(mapexpr::typeof(identity), mod::Module, code::String, filename::String)
+   @ Base ./loading.jl:2874
+ [7] include_string
+   @ ./loading.jl:2884 [inlined]
+ [8] exec_options(opts::Base.JLOptions)
+   @ Base ./client.jl:315
+ [9] _start()
+   @ Base ./client.jl:550
+in expression starting at /home/carterhinsley/.julia/packages/DynamicalSystems/sv3mw/ext/DynamicalSystemsVisualizations.jl:1
+in expression starting at stdin:5/usr/bin/time is not available; using shell timing fallback.
+  Activating project at `~/MultimodalMaps.jl`
+  Activating project at `~/MultimodalMaps.jl`
+  Activating project at `~/MultimodalMaps.jl`
+  Activating project at `~/MultimodalMaps.jl`
+Running attempt-048 contour scan.
+Grid: 500 ΔCa points × 500 Δx points
+Julia threads: 24, output tag: grid500_seq7_prefixes_remap40_newmodel, max sequence length: 7, remap resolution: 40
+T0 continuation refinement steps: 5, Ca-window: 0.003
+Column checkpoint directory: /home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns
+Saved column 1/500 (ΔCa=-45.000000) with 0/500 successful points in 25.03 s
+Saved column 22/500 (ΔCa=-43.947896) with 71/500 successful points in 28.29 s
+Saved column 64/500 (ΔCa=-41.843687) with 298/500 successful points in 31.53 s
+Saved column 127/500 (ΔCa=-38.687375) with 500/500 successful points in 32.74 s
+Saved column 106/500 (ΔCa=-39.739479) with 500/500 successful points in 32.97 s
+Saved column 85/500 (ΔCa=-40.791583) with 445/500 successful points in 33.29 s
+Saved column 148/500 (ΔCa=-37.635271) with 500/500 successful points in 33.98 s
+Saved column 169/500 (ΔCa=-36.583166) with 500/500 successful points in 35.23 s
+Saved column 43/500 (ΔCa=-42.895792) with 168/500 successful points in 35.85 s
+Saved column 190/500 (ΔCa=-35.531062) with 500/500 successful points in 36.72 s
+Saved column 211/500 (ΔCa=-34.478958) with 500/500 successful points in 37.70 s
+Saved column 232/500 (ΔCa=-33.426854) with 500/500 successful points in 38.73 s
+Saved column 253/500 (ΔCa=-32.374749) with 500/500 successful points in 39.44 s
+Saved column 295/500 (ΔCa=-30.270541) with 500/500 successful points in 40.67 s
+Saved column 316/500 (ΔCa=-29.218437) with 500/500 successful points in 41.70 s
+Saved column 274/500 (ΔCa=-31.322645) with 500/500 successful points in 41.88 s
+Saved column 337/500 (ΔCa=-28.166333) with 500/500 successful points in 44.54 s
+Saved column 379/500 (ΔCa=-26.062124) with 500/500 successful points in 44.56 s
+Saved column 400/500 (ΔCa=-25.010020) with 500/500 successful points in 44.99 s
+Saved column 358/500 (ΔCa=-27.114228) with 500/500 successful points in 45.85 s
+Saved column 2/500 (ΔCa=-44.949900) with 0/500 successful points in 21.76 s
+Saved column 421/500 (ΔCa=-23.957916) with 500/500 successful points in 47.46 s
+Saved column 481/500 (ΔCa=-20.951904) with 500/500 successful points in 47.94 s
+Saved column 441/500 (ΔCa=-22.955912) with 500/500 successful points in 48.73 s
+Saved column 461/500 (ΔCa=-21.953908) with 500/500 successful points in 49.89 s
+Saved column 23/500 (ΔCa=-43.897796) with 76/500 successful points in 25.07 s
+Saved column 107/500 (ΔCa=-39.689379) with 500/500 successful points in 29.37 s
+Saved column 65/500 (ΔCa=-41.793587) with 298/500 successful points in 30.82 s
+Saved column 128/500 (ΔCa=-38.637275) with 500/500 successful points in 29.77 s
+Saved column 86/500 (ΔCa=-40.741483) with 453/500 successful points in 30.26 s
+Saved column 149/500 (ΔCa=-37.585170) with 500/500 successful points in 30.89 s
+Saved column 170/500 (ΔCa=-36.533066) with 500/500 successful points in 32.06 s
+Saved column 44/500 (ΔCa=-42.845691) with 173/500 successful points in 32.49 s
+Saved column 3/500 (ΔCa=-44.899800) with 0/500 successful points in 21.90 s
+Saved column 191/500 (ΔCa=-35.480962) with 500/500 successful points in 33.26 s
+Saved column 212/500 (ΔCa=-34.428858) with 500/500 successful points in 34.42 s
+Saved column 233/500 (ΔCa=-33.376754) with 500/500 successful points in 35.54 s
+Saved column 254/500 (ΔCa=-32.324649) with 500/500 successful points in 36.32 s
+Saved column 296/500 (ΔCa=-30.220441) with 500/500 successful points in 37.42 s
+Saved column 24/500 (ΔCa=-43.847695) with 81/500 successful points in 25.36 s
+Saved column 317/500 (ΔCa=-29.168337) with 500/500 successful points in 38.56 s
+Saved column 275/500 (ΔCa=-31.272545) with 500/500 successful points in 38.79 s
+Saved column 338/500 (ΔCa=-28.116232) with 500/500 successful points in 41.13 s
+Saved column 380/500 (ΔCa=-26.012024) with 500/500 successful points in 41.24 s
+Saved column 401/500 (ΔCa=-24.959920) with 500/500 successful points in 41.89 s
+Saved column 359/500 (ΔCa=-27.064128) with 500/500 successful points in 42.63 s
+Saved column 66/500 (ΔCa=-41.743487) with 312/500 successful points in 28.03 s
+Saved column 4/500 (ΔCa=-44.849699) with 0/500 successful points in 21.65 s
+Saved column 108/500 (ΔCa=-39.639279) with 500/500 successful points in 29.24 s
+Saved column 422/500 (ΔCa=-23.907816) with 500/500 successful points in 44.34 s
+Saved column 129/500 (ΔCa=-38.587174) with 500/500 successful points in 29.51 s
+Saved column 482/500 (ΔCa=-20.901804) with 500/500 successful points in 44.61 s
+Saved column 87/500 (ΔCa=-40.691383) with 461/500 successful points in 30.26 s
+Saved column 442/500 (ΔCa=-22.905812) with 500/500 successful points in 45.64 s
+Saved column 150/500 (ΔCa=-37.535070) with 500/500 successful points in 30.60 s
+Saved column 462/500 (ΔCa=-21.903808) with 500/500 successful points in 46.59 s
+Saved column 171/500 (ΔCa=-36.482966) with 499/500 successful points in 31.86 s
+Saved column 45/500 (ΔCa=-42.795591) with 179/500 successful points in 32.30 s
+Saved column 192/500 (ΔCa=-35.430862) with 500/500 successful points in 32.99 s
+Saved column 25/500 (ΔCa=-43.797595) with 85/500 successful points in 25.73 s
+Saved column 213/500 (ΔCa=-34.378758) with 499/500 successful points in 34.65 s
+Saved column 234/500 (ΔCa=-33.326653) with 500/500 successful points in 36.00 s
+Saved column 255/500 (ΔCa=-32.274549) with 500/500 successful points in 36.07 s
+Saved column 5/500 (ΔCa=-44.799599) with 0/500 successful points in 21.78 s
+Saved column 297/500 (ΔCa=-30.170341) with 500/500 successful points in 38.49 s
+Saved column 67/500 (ΔCa=-41.693387) with 317/500 successful points in 29.22 s
+Saved column 318/500 (ΔCa=-29.118236) with 500/500 successful points in 39.90 s
+Saved column 276/500 (ΔCa=-31.222445) with 500/500 successful points in 40.03 s
+Saved column 109/500 (ΔCa=-39.589178) with 500/500 successful points in 30.98 s
+Saved column 130/500 (ΔCa=-38.537074) with 500/500 successful points in 31.22 s
+Saved column 88/500 (ΔCa=-40.641283) with 470/500 successful points in 32.65 s
+Saved column 151/500 (ΔCa=-37.484970) with 500/500 successful points in 33.14 s
+Saved column 339/500 (ΔCa=-28.066132) with 500/500 successful points in 43.93 s
+Saved column 381/500 (ΔCa=-25.961924) with 500/500 successful points in 43.92 s
+Saved column 402/500 (ΔCa=-24.909820) with 500/500 successful points in 45.05 s
+Saved column 26/500 (ΔCa=-43.747495) with 90/500 successful points in 29.30 s
+Saved column 360/500 (ΔCa=-27.014028) with 500/500 successful points in 45.97 s
+Saved column 172/500 (ΔCa=-36.432866) with 500/500 successful points in 35.38 s
+Saved column 46/500 (ΔCa=-42.745491) with 184/500 successful points in 35.91 s
+Saved column 6/500 (ΔCa=-44.749499) with 0/500 successful points in 25.65 s
+Saved column 423/500 (ΔCa=-23.857715) with 500/500 successful points in 48.68 s
+Saved column 193/500 (ΔCa=-35.380762) with 500/500 successful points in 37.69 s
+Saved column 483/500 (ΔCa=-20.851703) with 500/500 successful points in 49.13 s
+Saved column 443/500 (ΔCa=-22.855711) with 500/500 successful points in 50.82 s
+Saved column 214/500 (ΔCa=-34.328657) with 500/500 successful points in 40.07 s
+Saved column 463/500 (ΔCa=-21.853707) with 500/500 successful points in 52.76 s
+Saved column 235/500 (ΔCa=-33.276553) with 500/500 successful points in 42.31 s
+Saved column 68/500 (ΔCa=-41.643287) with 325/500 successful points in 34.38 s
+Saved column 256/500 (ΔCa=-32.224449) with 500/500 successful points in 42.78 s
+Saved column 110/500 (ΔCa=-39.539078) with 500/500 successful points in 35.22 s
+Saved column 131/500 (ΔCa=-38.486974) with 500/500 successful points in 35.37 s
+Saved column 298/500 (ΔCa=-30.120240) with 500/500 successful points in 45.17 s
+Saved column 89/500 (ΔCa=-40.591182) with 478/500 successful points in 36.58 s
+Saved column 7/500 (ΔCa=-44.699399) with 0/500 successful points in 26.39 s
+Saved column 27/500 (ΔCa=-43.697395) with 95/500 successful points in 31.65 s
+Saved column 152/500 (ΔCa=-37.434870) with 500/500 successful points in 37.07 s
+Saved column 319/500 (ΔCa=-29.068136) with 500/500 successful points in 46.56 s
+Saved column 277/500 (ΔCa=-31.172345) with 500/500 successful points in 46.65 s
+Saved column 173/500 (ΔCa=-36.382766) with 500/500 successful points in 39.11 s
+Saved column 47/500 (ΔCa=-42.695391) with 190/500 successful points in 39.10 s
+Saved column 382/500 (ΔCa=-25.911824) with 500/500 successful points in 50.00 s
+Saved column 340/500 (ΔCa=-28.016032) with 500/500 successful points in 50.39 s
+Saved column 194/500 (ΔCa=-35.330661) with 500/500 successful points in 40.44 s
+Saved column 403/500 (ΔCa=-24.859719) with 500/500 successful points in 51.56 s
+Saved column 361/500 (ΔCa=-26.963928) with 500/500 successful points in 52.09 s
+Saved column 215/500 (ΔCa=-34.278557) with 500/500 successful points in 42.18 s
+Saved column 69/500 (ΔCa=-41.593186) with 325/500 successful points in 37.41 s
+Saved column 111/500 (ΔCa=-39.488978) with 500/500 successful points in 36.56 s
+Saved column 424/500 (ΔCa=-23.807615) with 500/500 successful points in 54.54 s
+Saved column 132/500 (ΔCa=-38.436874) with 500/500 successful points in 36.55 s
+Saved column 236/500 (ΔCa=-33.226453) with 500/500 successful points in 43.49 s
+Saved column 484/500 (ΔCa=-20.801603) with 500/500 successful points in 54.61 s
+Saved column 257/500 (ΔCa=-32.174349) with 500/500 successful points in 44.74 s
+Saved column 90/500 (ΔCa=-40.541082) with 487/500 successful points in 37.69 s
+Saved column 444/500 (ΔCa=-22.805611) with 500/500 successful points in 56.29 s
+Saved column 153/500 (ΔCa=-37.384770) with 500/500 successful points in 38.00 s
+Saved column 464/500 (ΔCa=-21.803607) with 500/500 successful points in 57.25 s
+Saved column 28/500 (ΔCa=-43.647295) with 93/500 successful points in 41.97 s
+Saved column 8/500 (ΔCa=-44.649299) with 5/500 successful points in 43.14 s
+Saved column 299/500 (ΔCa=-30.070140) with 500/500 successful points in 46.78 s
+Saved column 174/500 (ΔCa=-36.332665) with 499/500 successful points in 39.77 s
+Saved column 320/500 (ΔCa=-29.018036) with 500/500 successful points in 48.00 s
+Saved column 278/500 (ΔCa=-31.122244) with 500/500 successful points in 47.83 s
+Saved column 48/500 (ΔCa=-42.645291) with 195/500 successful points in 39.57 s
+Saved column 195/500 (ΔCa=-35.280561) with 500/500 successful points in 40.96 s
+Saved column 70/500 (ΔCa=-41.543086) with 332/500 successful points in 37.46 s
+Saved column 112/500 (ΔCa=-39.438878) with 500/500 successful points in 36.18 s
+Saved column 383/500 (ΔCa=-25.861723) with 500/500 successful points in 50.84 s
+Saved column 216/500 (ΔCa=-34.228457) with 500/500 successful points in 42.12 s
+Saved column 341/500 (ΔCa=-27.965932) with 500/500 successful points in 51.47 s
+Saved column 133/500 (ΔCa=-38.386774) with 500/500 successful points in 36.51 s
+Saved column 404/500 (ΔCa=-24.809619) with 500/500 successful points in 52.13 s
+Saved column 91/500 (ΔCa=-40.490982) with 496/500 successful points in 37.14 s
+Saved column 362/500 (ΔCa=-26.913828) with 500/500 successful points in 52.39 s
+Saved column 237/500 (ΔCa=-33.176353) with 500/500 successful points in 43.25 s
+Saved column 154/500 (ΔCa=-37.334669) with 500/500 successful points in 37.72 s
+Saved column 258/500 (ΔCa=-32.124248) with 500/500 successful points in 45.11 s
+Saved column 29/500 (ΔCa=-43.597194) with 97/500 successful points in 41.73 s
+Saved column 425/500 (ΔCa=-23.757515) with 500/500 successful points in 54.56 s
+Saved column 9/500 (ΔCa=-44.599198) with 9/500 successful points in 42.80 s
+Saved column 485/500 (ΔCa=-20.751503) with 500/500 successful points in 54.67 s
+Saved column 175/500 (ΔCa=-36.282565) with 500/500 successful points in 39.54 s
+Saved column 49/500 (ΔCa=-42.595190) with 201/500 successful points in 39.08 s
+Saved column 300/500 (ΔCa=-30.020040) with 500/500 successful points in 46.58 s
+Saved column 445/500 (ΔCa=-22.755511) with 500/500 successful points in 56.36 s
+Saved column 321/500 (ΔCa=-28.967936) with 500/500 successful points in 47.96 s
+Saved column 279/500 (ΔCa=-31.072144) with 500/500 successful points in 47.53 s
+Saved column 196/500 (ΔCa=-35.230461) with 500/500 successful points in 40.91 s
+Saved column 465/500 (ΔCa=-21.753507) with 500/500 successful points in 57.01 s
+Saved column 71/500 (ΔCa=-41.492986) with 338/500 successful points in 37.21 s
+Saved column 113/500 (ΔCa=-39.388778) with 500/500 successful points in 36.39 s
+Saved column 134/500 (ΔCa=-38.336673) with 500/500 successful points in 36.58 s
+Saved column 217/500 (ΔCa=-34.178357) with 500/500 successful points in 42.25 s
+Saved column 92/500 (ΔCa=-40.440882) with 500/500 successful points in 36.95 s
+Saved column 155/500 (ΔCa=-37.284569) with 500/500 successful points in 37.76 s
+Saved column 384/500 (ΔCa=-25.811623) with 500/500 successful points in 50.80 s
+Saved column 342/500 (ΔCa=-27.915832) with 500/500 successful points in 51.62 s
+Saved column 238/500 (ΔCa=-33.126253) with 500/500 successful points in 43.97 s
+Saved column 405/500 (ΔCa=-24.759519) with 500/500 successful points in 52.12 s
+Saved column 259/500 (ΔCa=-32.074148) with 500/500 successful points in 45.83 s
+Saved column 30/500 (ΔCa=-43.547094) with 102/500 successful points in 41.47 s
+Saved column 363/500 (ΔCa=-26.863727) with 500/500 successful points in 52.12 s
+Saved column 176/500 (ΔCa=-36.232465) with 500/500 successful points in 39.64 s
+Saved column 10/500 (ΔCa=-44.549098) with 14/500 successful points in 42.54 s
+Saved column 50/500 (ΔCa=-42.545090) with 207/500 successful points in 38.74 s
+Saved column 301/500 (ΔCa=-29.969940) with 500/500 successful points in 46.15 s
+Saved column 72/500 (ΔCa=-41.442886) with 353/500 successful points in 35.38 s
+Saved column 114/500 (ΔCa=-39.338677) with 500/500 successful points in 35.98 s
+Saved column 197/500 (ΔCa=-35.180361) with 500/500 successful points in 40.52 s
+Saved column 426/500 (ΔCa=-23.707415) with 500/500 successful points in 54.24 s
+Saved column 135/500 (ΔCa=-38.286573) with 500/500 successful points in 36.35 s
+Saved column 486/500 (ΔCa=-20.701403) with 500/500 successful points in 54.24 s
+Saved column 280/500 (ΔCa=-31.022044) with 500/500 successful points in 47.01 s
+Saved column 322/500 (ΔCa=-28.917836) with 500/500 successful points in 47.56 s
+Saved column 93/500 (ΔCa=-40.390782) with 500/500 successful points in 36.58 s
+Saved column 446/500 (ΔCa=-22.705411) with 500/500 successful points in 55.81 s
+Saved column 218/500 (ΔCa=-34.128257) with 500/500 successful points in 41.59 s
+Saved column 156/500 (ΔCa=-37.234469) with 500/500 successful points in 37.01 s
+Saved column 466/500 (ΔCa=-21.703407) with 500/500 successful points in 56.13 s
+Saved column 239/500 (ΔCa=-33.076152) with 500/500 successful points in 42.08 s
+Saved column 51/500 (ΔCa=-42.494990) with 219/500 successful points in 32.51 s
+Saved column 385/500 (ΔCa=-25.761523) with 500/500 successful points in 49.36 s
+Saved column 31/500 (ΔCa=-43.496994) with 107/500 successful points in 40.41 s
+Saved column 177/500 (ΔCa=-36.182365) with 500/500 successful points in 38.94 s
+Saved column 343/500 (ΔCa=-27.865731) with 500/500 successful points in 50.43 s
+Saved column 11/500 (ΔCa=-44.498998) with 17/500 successful points in 41.24 s
+Saved column 260/500 (ΔCa=-32.024048) with 500/500 successful points in 44.58 s
+Saved column 73/500 (ΔCa=-41.392786) with 360/500 successful points in 34.66 s
+Saved column 115/500 (ΔCa=-39.288577) with 500/500 successful points in 35.53 s
+Saved column 406/500 (ΔCa=-24.709419) with 500/500 successful points in 51.12 s
+Saved column 136/500 (ΔCa=-38.236473) with 500/500 successful points in 35.92 s
+Saved column 364/500 (ΔCa=-26.813627) with 500/500 successful points in 50.99 s
+Saved column 198/500 (ΔCa=-35.130261) with 500/500 successful points in 39.88 s
+Saved column 302/500 (ΔCa=-29.919840) with 500/500 successful points in 45.48 s
+Saved column 94/500 (ΔCa=-40.340681) with 500/500 successful points in 36.08 s
+Saved column 157/500 (ΔCa=-37.184369) with 500/500 successful points in 37.30 s
+Saved column 281/500 (ΔCa=-30.971944) with 500/500 successful points in 46.11 s
+Saved column 219/500 (ΔCa=-34.078156) with 500/500 successful points in 41.62 s
+Saved column 427/500 (ΔCa=-23.657315) with 500/500 successful points in 53.46 s
+Saved column 323/500 (ΔCa=-28.867735) with 499/500 successful points in 47.32 s
+Saved column 487/500 (ΔCa=-20.651303) with 500/500 successful points in 53.66 s
+Saved column 12/500 (ΔCa=-44.448898) with 26/500 successful points in 28.14 s
+Saved column 52/500 (ΔCa=-42.444890) with 218/500 successful points in 38.10 s
+Saved column 240/500 (ΔCa=-33.026052) with 500/500 successful points in 42.43 s
+Saved column 447/500 (ΔCa=-22.655311) with 500/500 successful points in 55.69 s
+Saved column 178/500 (ΔCa=-36.132265) with 500/500 successful points in 39.53 s
+Saved column 74/500 (ΔCa=-41.342685) with 367/500 successful points in 35.26 s
+Saved column 32/500 (ΔCa=-43.446894) with 112/500 successful points in 41.10 s
+Saved column 116/500 (ΔCa=-39.238477) with 500/500 successful points in 36.43 s
+Saved column 467/500 (ΔCa=-21.653307) with 500/500 successful points in 56.01 s
+Saved column 137/500 (ΔCa=-38.186373) with 500/500 successful points in 36.72 s
+Saved column 261/500 (ΔCa=-31.973948) with 500/500 successful points in 45.29 s
+Saved column 386/500 (ΔCa=-25.711423) with 500/500 successful points in 50.10 s
+Saved column 199/500 (ΔCa=-35.080160) with 500/500 successful points in 40.66 s
+Saved column 95/500 (ΔCa=-40.290581) with 500/500 successful points in 37.05 s
+Saved column 344/500 (ΔCa=-27.815631) with 500/500 successful points in 51.03 s
+Saved column 13/500 (ΔCa=-44.398798) with 31/500 successful points in 28.71 s
+Saved column 407/500 (ΔCa=-24.659319) with 500/500 successful points in 52.11 s
+Saved column 158/500 (ΔCa=-37.134269) with 500/500 successful points in 37.98 s
+Saved column 303/500 (ΔCa=-29.869739) with 500/500 successful points in 46.25 s
+Saved column 365/500 (ΔCa=-26.763527) with 500/500 successful points in 51.84 s
+Saved column 220/500 (ΔCa=-34.028056) with 500/500 successful points in 41.81 s
+Saved column 53/500 (ΔCa=-42.394790) with 224/500 successful points in 38.16 s
+Saved column 282/500 (ΔCa=-30.921844) with 500/500 successful points in 46.37 s
+Saved column 33/500 (ΔCa=-43.396794) with 123/500 successful points in 31.43 s
+Saved column 324/500 (ΔCa=-28.817635) with 500/500 successful points in 47.79 s
+Saved column 75/500 (ΔCa=-41.292585) with 367/500 successful points in 36.85 s
+Saved column 241/500 (ΔCa=-32.975952) with 500/500 successful points in 42.49 s
+Saved column 179/500 (ΔCa=-36.082164) with 500/500 successful points in 39.30 s
+Saved column 117/500 (ΔCa=-39.188377) with 500/500 successful points in 35.60 s
+Saved column 428/500 (ΔCa=-23.607214) with 500/500 successful points in 53.99 s
+Saved column 488/500 (ΔCa=-20.601202) with 500/500 successful points in 54.24 s
+Saved column 138/500 (ΔCa=-38.136273) with 500/500 successful points in 36.23 s
+Saved column 14/500 (ΔCa=-44.348697) with 36/500 successful points in 28.50 s
+Saved column 96/500 (ΔCa=-40.240481) with 500/500 successful points in 36.00 s
+Saved column 200/500 (ΔCa=-35.030060) with 500/500 successful points in 40.13 s
+Saved column 262/500 (ΔCa=-31.923848) with 500/500 successful points in 44.61 s
+Saved column 448/500 (ΔCa=-22.605210) with 500/500 successful points in 55.46 s
+Saved column 159/500 (ΔCa=-37.084168) with 500/500 successful points in 37.43 s
+Saved column 387/500 (ΔCa=-25.661323) with 500/500 successful points in 49.59 s
+Saved column 468/500 (ΔCa=-21.603206) with 500/500 successful points in 55.29 s
+Saved column 345/500 (ΔCa=-27.765531) with 500/500 successful points in 50.32 s
+Saved column 34/500 (ΔCa=-43.346693) with 128/500 successful points in 31.61 s
+Saved column 304/500 (ΔCa=-29.819639) with 500/500 successful points in 45.50 s
+Saved column 54/500 (ΔCa=-42.344689) with 230/500 successful points in 37.46 s
+Saved column 221/500 (ΔCa=-33.977956) with 500/500 successful points in 41.07 s
+Saved column 408/500 (ΔCa=-24.609218) with 500/500 successful points in 51.85 s
+Saved column 366/500 (ΔCa=-26.713427) with 500/500 successful points in 51.00 s
+Saved column 76/500 (ΔCa=-41.242485) with 374/500 successful points in 36.85 s
+Saved column 118/500 (ΔCa=-39.138277) with 500/500 successful points in 35.56 s
+Saved column 283/500 (ΔCa=-30.871743) with 500/500 successful points in 45.94 s
+Saved column 15/500 (ΔCa=-44.298597) with 40/500 successful points in 29.51 s
+Saved column 139/500 (ΔCa=-38.086172) with 500/500 successful points in 36.44 s
+Saved column 180/500 (ΔCa=-36.032064) with 500/500 successful points in 39.60 s
+Saved column 325/500 (ΔCa=-28.767535) with 500/500 successful points in 47.80 s
+Saved column 242/500 (ΔCa=-32.925852) with 500/500 successful points in 42.89 s
+Saved column 97/500 (ΔCa=-40.190381) with 500/500 successful points in 35.93 s
+Saved column 201/500 (ΔCa=-34.979960) with 500/500 successful points in 41.28 s
+Saved column 429/500 (ΔCa=-23.557114) with 500/500 successful points in 54.38 s
+Saved column 160/500 (ΔCa=-37.034068) with 500/500 successful points in 38.47 s
+Saved column 489/500 (ΔCa=-20.551102) with 500/500 successful points in 54.54 s
+Saved column 35/500 (ΔCa=-43.296593) with 134/500 successful points in 33.32 s
+Saved column 263/500 (ΔCa=-31.873747) with 500/500 successful points in 45.61 s
+Saved column 55/500 (ΔCa=-42.294589) with 236/500 successful points in 38.73 s
+Saved column 388/500 (ΔCa=-25.611222) with 500/500 successful points in 50.96 s
+Saved column 449/500 (ΔCa=-22.555110) with 500/500 successful points in 56.91 s
+Saved column 222/500 (ΔCa=-33.927856) with 500/500 successful points in 42.39 s
+Saved column 119/500 (ΔCa=-39.088176) with 500/500 successful points in 36.93 s
+Saved column 77/500 (ΔCa=-41.192385) with 382/500 successful points in 38.92 s
+Saved column 305/500 (ΔCa=-29.769539) with 500/500 successful points in 46.97 s
+Saved column 346/500 (ΔCa=-27.715431) with 500/500 successful points in 52.03 s
+Saved column 140/500 (ΔCa=-38.036072) with 500/500 successful points in 37.67 s
+Saved column 469/500 (ΔCa=-21.553106) with 500/500 successful points in 56.65 s
+Saved column 181/500 (ΔCa=-35.981964) with 500/500 successful points in 40.91 s
+Saved column 16/500 (ΔCa=-44.248497) with 39/500 successful points in 42.90 s
+Saved column 98/500 (ΔCa=-40.140281) with 500/500 successful points in 37.00 s
+Saved column 284/500 (ΔCa=-30.821643) with 500/500 successful points in 46.92 s
+Saved column 409/500 (ΔCa=-24.559118) with 500/500 successful points in 53.29 s
+Saved column 367/500 (ΔCa=-26.663327) with 500/500 successful points in 52.38 s
+Saved column 243/500 (ΔCa=-32.875752) with 500/500 successful points in 44.74 s
+Saved column 36/500 (ΔCa=-43.246493) with 139/500 successful points in 32.89 s
+Saved column 326/500 (ΔCa=-28.717435) with 500/500 successful points in 49.19 s
+Saved column 161/500 (ΔCa=-36.983968) with 500/500 successful points in 38.40 s
+Saved column 202/500 (ΔCa=-34.929860) with 500/500 successful points in 41.54 s
+Saved column 264/500 (ΔCa=-31.823647) with 500/500 successful points in 45.24 s
+Saved column 56/500 (ΔCa=-42.244489) with 242/500 successful points in 37.70 s
+Saved column 120/500 (ΔCa=-39.038076) with 500/500 successful points in 36.21 s
+Saved column 430/500 (ΔCa=-23.507014) with 500/500 successful points in 54.90 s
+Saved column 78/500 (ΔCa=-41.142285) with 389/500 successful points in 37.83 s
+Saved column 490/500 (ΔCa=-20.501002) with 500/500 successful points in 54.93 s
+Saved column 223/500 (ΔCa=-33.877756) with 500/500 successful points in 42.09 s
+Saved column 141/500 (ΔCa=-37.985972) with 500/500 successful points in 37.04 s
+Saved column 99/500 (ΔCa=-40.090180) with 500/500 successful points in 36.41 s
+Saved column 182/500 (ΔCa=-35.931864) with 500/500 successful points in 40.34 s
+Saved column 306/500 (ΔCa=-29.719439) with 500/500 successful points in 46.30 s
+Saved column 389/500 (ΔCa=-25.561122) with 500/500 successful points in 50.40 s
+Saved column 17/500 (ΔCa=-44.198397) with 44/500 successful points in 42.40 s
+Saved column 37/500 (ΔCa=-43.196393) with 144/500 successful points in 33.06 s
+Saved column 347/500 (ΔCa=-27.665331) with 500/500 successful points in 51.46 s
+Saved column 450/500 (ΔCa=-22.505010) with 500/500 successful points in 56.68 s
+Saved column 285/500 (ΔCa=-30.771543) with 500/500 successful points in 46.42 s
+Saved column 244/500 (ΔCa=-32.825651) with 500/500 successful points in 43.98 s
+Saved column 470/500 (ΔCa=-21.503006) with 500/500 successful points in 55.99 s
+Saved column 162/500 (ΔCa=-36.933868) with 500/500 successful points in 38.37 s
+Saved column 203/500 (ΔCa=-34.879760) with 500/500 successful points in 41.79 s
+Saved column 368/500 (ΔCa=-26.613226) with 500/500 successful points in 51.77 s
+Saved column 410/500 (ΔCa=-24.509018) with 500/500 successful points in 53.13 s
+Saved column 57/500 (ΔCa=-42.194389) with 254/500 successful points in 33.82 s
+Saved column 327/500 (ΔCa=-28.667335) with 500/500 successful points in 49.04 s
+Saved column 121/500 (ΔCa=-38.987976) with 500/500 successful points in 36.39 s
+Saved column 79/500 (ΔCa=-41.092184) with 397/500 successful points in 37.69 s
+Saved column 265/500 (ΔCa=-31.773547) with 500/500 successful points in 45.43 s
+Saved column 142/500 (ΔCa=-37.935872) with 500/500 successful points in 37.23 s
+Saved column 224/500 (ΔCa=-33.827655) with 500/500 successful points in 41.77 s
+Saved column 100/500 (ΔCa=-40.040080) with 500/500 successful points in 36.19 s
+Saved column 38/500 (ΔCa=-43.146293) with 149/500 successful points in 32.92 s
+Saved column 183/500 (ΔCa=-35.881764) with 500/500 successful points in 40.04 s
+Saved column 431/500 (ΔCa=-23.456914) with 500/500 successful points in 54.75 s
+Saved column 18/500 (ΔCa=-44.148297) with 47/500 successful points in 41.83 s
+Saved column 491/500 (ΔCa=-20.450902) with 500/500 successful points in 54.66 s
+Saved column 307/500 (ΔCa=-29.669339) with 500/500 successful points in 46.17 s
+Saved column 163/500 (ΔCa=-36.883768) with 500/500 successful points in 37.80 s
+Saved column 390/500 (ΔCa=-25.511022) with 500/500 successful points in 50.29 s
+Saved column 58/500 (ΔCa=-42.144289) with 261/500 successful points in 33.36 s
+Saved column 245/500 (ΔCa=-32.775551) with 500/500 successful points in 43.35 s
+Saved column 286/500 (ΔCa=-30.721443) with 500/500 successful points in 45.76 s
+Saved column 348/500 (ΔCa=-27.615230) with 500/500 successful points in 51.15 s
+Saved column 204/500 (ΔCa=-34.829659) with 500/500 successful points in 41.41 s
+Saved column 122/500 (ΔCa=-38.937876) with 500/500 successful points in 35.84 s
+Saved column 451/500 (ΔCa=-22.454910) with 500/500 successful points in 56.17 s
+Saved column 80/500 (ΔCa=-41.042084) with 405/500 successful points in 36.88 s
+Saved column 143/500 (ΔCa=-37.885772) with 500/500 successful points in 36.38 s
+Saved column 471/500 (ΔCa=-21.452906) with 500/500 successful points in 55.09 s
+Saved column 328/500 (ΔCa=-28.617234) with 500/500 successful points in 48.19 s
+Saved column 369/500 (ΔCa=-26.563126) with 500/500 successful points in 50.78 s
+Saved column 39/500 (ΔCa=-43.096192) with 154/500 successful points in 33.06 s
+Saved column 101/500 (ΔCa=-39.989980) with 500/500 successful points in 35.44 s
+Saved column 411/500 (ΔCa=-24.458918) with 500/500 successful points in 52.45 s
+Saved column 266/500 (ΔCa=-31.723447) with 500/500 successful points in 44.55 s
+Saved column 225/500 (ΔCa=-33.777555) with 500/500 successful points in 41.05 s
+Saved column 184/500 (ΔCa=-35.831663) with 499/500 successful points in 39.67 s
+Saved column 19/500 (ΔCa=-44.098196) with 52/500 successful points in 40.93 s
+Saved column 59/500 (ΔCa=-42.094188) with 267/500 successful points in 34.13 s
+Saved column 164/500 (ΔCa=-36.833667) with 500/500 successful points in 37.32 s
+Saved column 308/500 (ΔCa=-29.619238) with 500/500 successful points in 45.47 s
+Saved column 123/500 (ΔCa=-38.887776) with 500/500 successful points in 35.56 s
+Saved column 246/500 (ΔCa=-32.725451) with 500/500 successful points in 42.97 s
+Saved column 432/500 (ΔCa=-23.406814) with 500/500 successful points in 53.66 s
+Saved column 492/500 (ΔCa=-20.400802) with 500/500 successful points in 53.66 s
+Saved column 205/500 (ΔCa=-34.779559) with 500/500 successful points in 40.94 s
+Saved column 391/500 (ΔCa=-25.460922) with 500/500 successful points in 49.53 s
+Saved column 287/500 (ΔCa=-30.671343) with 500/500 successful points in 45.02 s
+Saved column 81/500 (ΔCa=-40.991984) with 412/500 successful points in 36.69 s
+Saved column 40/500 (ΔCa=-43.046092) with 159/500 successful points in 33.04 s
+Saved column 144/500 (ΔCa=-37.835671) with 500/500 successful points in 36.19 s
+Saved column 102/500 (ΔCa=-39.939880) with 500/500 successful points in 35.43 s
+Saved column 349/500 (ΔCa=-27.565130) with 500/500 successful points in 50.67 s
+Saved column 20/500 (ΔCa=-44.048096) with 61/500 successful points in 28.81 s
+Saved column 329/500 (ΔCa=-28.567134) with 500/500 successful points in 48.02 s
+Saved column 226/500 (ΔCa=-33.727455) with 500/500 successful points in 41.27 s
+Saved column 370/500 (ΔCa=-26.513026) with 500/500 successful points in 50.32 s
+Saved column 452/500 (ΔCa=-22.404810) with 500/500 successful points in 55.72 s
+Saved column 267/500 (ΔCa=-31.673347) with 500/500 successful points in 44.89 s
+Saved column 185/500 (ΔCa=-35.781563) with 500/500 successful points in 39.58 s
+Saved column 472/500 (ΔCa=-21.402806) with 500/500 successful points in 54.48 s
+Saved column 412/500 (ΔCa=-24.408818) with 500/500 successful points in 52.14 s
+Saved column 60/500 (ΔCa=-42.044088) with 266/500 successful points in 37.21 s
+Saved column 165/500 (ΔCa=-36.783567) with 500/500 successful points in 37.93 s
+Saved column 124/500 (ΔCa=-38.837675) with 500/500 successful points in 35.53 s
+Saved column 41/500 (ΔCa=-42.995992) with 164/500 successful points in 32.88 s
+Saved column 309/500 (ΔCa=-29.569138) with 500/500 successful points in 45.36 s
+Saved column 82/500 (ΔCa=-40.941884) with 427/500 successful points in 35.92 s
+Saved column 145/500 (ΔCa=-37.785571) with 500/500 successful points in 36.40 s
+Saved column 247/500 (ΔCa=-32.675351) with 500/500 successful points in 42.83 s
+Saved column 206/500 (ΔCa=-34.729459) with 500/500 successful points in 41.08 s
+Saved column 103/500 (ΔCa=-39.889780) with 500/500 successful points in 35.36 s
+Saved column 21/500 (ΔCa=-43.997996) with 66/500 successful points in 28.99 s
+Saved column 288/500 (ΔCa=-30.621242) with 500/500 successful points in 44.70 s
+Saved column 392/500 (ΔCa=-25.410822) with 500/500 successful points in 49.33 s
+Saved column 433/500 (ΔCa=-23.356713) with 500/500 successful points in 53.81 s
+Saved column 493/500 (ΔCa=-20.350701) with 500/500 successful points in 53.79 s
+Saved column 61/500 (ΔCa=-41.993988) with 278/500 successful points in 33.41 s
+Saved column 227/500 (ΔCa=-33.677355) with 500/500 successful points in 40.72 s
+Saved column 186/500 (ΔCa=-35.731463) with 500/500 successful points in 39.53 s
+Saved column 350/500 (ΔCa=-27.515030) with 500/500 successful points in 50.78 s
+Saved column 166/500 (ΔCa=-36.733467) with 500/500 successful points in 38.10 s
+Saved column 268/500 (ΔCa=-31.623246) with 500/500 successful points in 44.96 s
+Saved column 330/500 (ΔCa=-28.517034) with 500/500 successful points in 47.85 s
+Saved column 413/500 (ΔCa=-24.358717) with 500/500 successful points in 41.61 s
+Saved column 125/500 (ΔCa=-38.787575) with 500/500 successful points in 35.43 s
+Saved column 42/500 (ΔCa=-42.945892) with 170/500 successful points in 32.88 s
+Saved column 371/500 (ΔCa=-26.462926) with 500/500 successful points in 49.83 s
+Saved column 83/500 (ΔCa=-40.891784) with 435/500 successful points in 35.47 s
+Saved column 453/500 (ΔCa=-22.354709) with 500/500 successful points in 55.50 s
+Saved column 473/500 (ΔCa=-21.352705) with 500/500 successful points in 53.90 s
+Saved column 146/500 (ΔCa=-37.735471) with 500/500 successful points in 36.31 s
+Saved column 104/500 (ΔCa=-39.839679) with 500/500 successful points in 34.96 s
+Saved column 207/500 (ΔCa=-34.679359) with 500/500 successful points in 36.82 s
+Saved column 248/500 (ΔCa=-32.625251) with 500/500 successful points in 42.02 s
+Saved column 310/500 (ΔCa=-29.519038) with 500/500 successful points in 45.10 s
+Saved column 228/500 (ΔCa=-33.627255) with 500/500 successful points in 32.23 s
+Saved column 62/500 (ΔCa=-41.943888) with 286/500 successful points in 33.60 s
+Saved column 289/500 (ΔCa=-30.571142) with 500/500 successful points in 44.48 s
+Saved column 187/500 (ΔCa=-35.681363) with 500/500 successful points in 39.18 s
+Saved column 393/500 (ΔCa=-25.360721) with 500/500 successful points in 48.46 s
+Saved column 167/500 (ΔCa=-36.683367) with 500/500 successful points in 37.24 s
+Saved column 126/500 (ΔCa=-38.737475) with 500/500 successful points in 34.98 s
+Saved column 434/500 (ΔCa=-23.306613) with 500/500 successful points in 51.98 s
+Saved column 208/500 (ΔCa=-34.629259) with 500/500 successful points in 27.05 s
+Saved column 494/500 (ΔCa=-20.300601) with 500/500 successful points in 52.78 s
+Saved column 84/500 (ΔCa=-40.841683) with 443/500 successful points in 34.90 s
+Saved column 269/500 (ΔCa=-31.573146) with 500/500 successful points in 44.07 s
+Saved column 351/500 (ΔCa=-27.464930) with 500/500 successful points in 49.91 s
+Saved column 105/500 (ΔCa=-39.789579) with 499/500 successful points in 34.66 s
+Saved column 147/500 (ΔCa=-37.685371) with 500/500 successful points in 35.59 s
+Saved column 331/500 (ΔCa=-28.466934) with 500/500 successful points in 47.34 s
+Saved column 414/500 (ΔCa=-24.308617) with 500/500 successful points in 48.08 s
+Saved column 372/500 (ΔCa=-26.412826) with 500/500 successful points in 46.66 s
+Saved column 229/500 (ΔCa=-33.577154) with 500/500 successful points in 26.49 s
+Saved column 249/500 (ΔCa=-32.575150) with 500/500 successful points in 36.77 s
+Saved column 474/500 (ΔCa=-21.302605) with 500/500 successful points in 46.57 s
+Saved column 63/500 (ΔCa=-41.893788) with 285/500 successful points in 35.75 s
+Saved column 311/500 (ΔCa=-29.468938) with 500/500 successful points in 44.17 s
+Saved column 454/500 (ΔCa=-22.304609) with 500/500 successful points in 54.10 s
+Saved column 209/500 (ΔCa=-34.579158) with 500/500 successful points in 26.29 s
+Saved column 290/500 (ΔCa=-30.521042) with 500/500 successful points in 42.87 s
+Saved column 188/500 (ΔCa=-35.631263) with 500/500 successful points in 37.96 s
+Saved column 168/500 (ΔCa=-36.633267) with 500/500 successful points in 36.28 s
+Saved column 435/500 (ΔCa=-23.256513) with 500/500 successful points in 34.11 s
+Saved column 230/500 (ΔCa=-33.527054) with 500/500 successful points in 25.91 s
+Saved column 394/500 (ΔCa=-25.310621) with 500/500 successful points in 47.28 s
+Saved column 250/500 (ΔCa=-32.525050) with 500/500 successful points in 27.12 s
+Saved column 373/500 (ΔCa=-26.362725) with 500/500 successful points in 31.12 s
+Saved column 415/500 (ΔCa=-24.258517) with 500/500 successful points in 37.32 s
+Saved column 332/500 (ΔCa=-28.416834) with 500/500 successful points in 39.17 s
+Saved column 270/500 (ΔCa=-31.523046) with 500/500 successful points in 42.98 s
+Saved column 475/500 (ΔCa=-21.252505) with 500/500 successful points in 33.80 s
+Saved column 495/500 (ΔCa=-20.250501) with 500/500 successful points in 50.94 s
+Saved column 352/500 (ΔCa=-27.414830) with 500/500 successful points in 48.23 s
+Saved column 312/500 (ΔCa=-29.418838) with 500/500 successful points in 31.68 s
+Saved column 210/500 (ΔCa=-34.529058) with 500/500 successful points in 36.71 s
+Saved column 231/500 (ΔCa=-33.476954) with 500/500 successful points in 26.57 s
+Saved column 455/500 (ΔCa=-22.254509) with 500/500 successful points in 40.76 s
+Saved column 291/500 (ΔCa=-30.470942) with 500/500 successful points in 36.35 s
+Saved column 189/500 (ΔCa=-35.581162) with 500/500 successful points in 35.80 s
+Saved column 374/500 (ΔCa=-26.312625) with 500/500 successful points in 31.27 s
+Saved column 436/500 (ΔCa=-23.206413) with 500/500 successful points in 41.29 s
+Saved column 333/500 (ΔCa=-28.366733) with 500/500 successful points in 30.82 s
+Saved column 251/500 (ΔCa=-32.474950) with 500/500 successful points in 36.05 s
+Saved column 416/500 (ΔCa=-24.208417) with 500/500 successful points in 33.24 s
+Saved column 395/500 (ΔCa=-25.260521) with 500/500 successful points in 40.23 s
+Saved column 271/500 (ΔCa=-31.472946) with 500/500 successful points in 34.65 s
+Saved column 313/500 (ΔCa=-29.368737) with 500/500 successful points in 28.72 s
+Saved column 476/500 (ΔCa=-21.202405) with 500/500 successful points in 33.84 s
+Saved column 353/500 (ΔCa=-27.364729) with 500/500 successful points in 35.66 s
+Saved column 292/500 (ΔCa=-30.420842) with 500/500 successful points in 27.98 s
+Saved column 456/500 (ΔCa=-22.204409) with 500/500 successful points in 34.84 s
+Saved column 496/500 (ΔCa=-20.200401) with 500/500 successful points in 50.70 s
+Saved column 375/500 (ΔCa=-26.262525) with 500/500 successful points in 30.85 s
+Saved column 252/500 (ΔCa=-32.424850) with 500/500 successful points in 27.08 s
+Saved column 334/500 (ΔCa=-28.316633) with 500/500 successful points in 30.50 s
+Saved column 272/500 (ΔCa=-31.422846) with 500/500 successful points in 29.22 s
+Saved column 417/500 (ΔCa=-24.158317) with 500/500 successful points in 32.88 s
+Saved column 314/500 (ΔCa=-29.318637) with 500/500 successful points in 28.64 s
+Saved column 396/500 (ΔCa=-25.210421) with 500/500 successful points in 31.26 s
+Saved column 437/500 (ΔCa=-23.156313) with 500/500 successful points in 43.60 s
+Saved column 477/500 (ΔCa=-21.152305) with 500/500 successful points in 33.06 s
+Saved column 354/500 (ΔCa=-27.314629) with 500/500 successful points in 31.17 s
+Saved column 293/500 (ΔCa=-30.370741) with 500/500 successful points in 27.39 s
+Saved column 457/500 (ΔCa=-22.154309) with 500/500 successful points in 33.33 s
+Saved column 376/500 (ΔCa=-26.212425) with 500/500 successful points in 29.22 s
+Saved column 497/500 (ΔCa=-20.150301) with 500/500 successful points in 32.21 s
+Saved column 335/500 (ΔCa=-28.266533) with 500/500 successful points in 28.76 s
+Saved column 315/500 (ΔCa=-29.268537) with 500/500 successful points in 26.63 s
+Saved column 273/500 (ΔCa=-31.372745) with 500/500 successful points in 27.41 s
+Saved column 397/500 (ΔCa=-25.160321) with 500/500 successful points in 29.03 s
+Saved column 418/500 (ΔCa=-24.108216) with 500/500 successful points in 30.47 s
+Saved column 294/500 (ΔCa=-30.320641) with 500/500 successful points in 25.47 s
+Saved column 438/500 (ΔCa=-23.106212) with 500/500 successful points in 30.96 s
+Saved column 478/500 (ΔCa=-21.102204) with 500/500 successful points in 30.53 s
+Saved column 355/500 (ΔCa=-27.264529) with 500/500 successful points in 28.96 s
+Saved column 377/500 (ΔCa=-26.162325) with 500/500 successful points in 27.70 s
+Saved column 336/500 (ΔCa=-28.216433) with 500/500 successful points in 27.45 s
+Saved column 458/500 (ΔCa=-22.104208) with 500/500 successful points in 31.41 s
+Saved column 498/500 (ΔCa=-20.100200) with 500/500 successful points in 30.31 s
+Saved column 398/500 (ΔCa=-25.110220) with 500/500 successful points in 28.26 s
+Saved column 419/500 (ΔCa=-24.058116) with 500/500 successful points in 29.62 s
+Saved column 356/500 (ΔCa=-27.214429) with 500/500 successful points in 28.55 s
+Saved column 479/500 (ΔCa=-21.052104) with 500/500 successful points in 30.09 s
+Saved column 439/500 (ΔCa=-23.056112) with 500/500 successful points in 30.39 s
+Saved column 378/500 (ΔCa=-26.112224) with 500/500 successful points in 27.63 s
+Saved column 459/500 (ΔCa=-22.054108) with 500/500 successful points in 31.52 s
+Saved column 499/500 (ΔCa=-20.050100) with 500/500 successful points in 30.49 s
+Saved column 399/500 (ΔCa=-25.060120) with 500/500 successful points in 28.58 s
+Saved column 420/500 (ΔCa=-24.008016) with 500/500 successful points in 29.93 s
+Saved column 357/500 (ΔCa=-27.164329) with 500/500 successful points in 28.66 s
+Saved column 480/500 (ΔCa=-21.002004) with 500/500 successful points in 30.12 s
+Saved column 440/500 (ΔCa=-23.006012) with 500/500 successful points in 30.63 s
+Saved column 500/500 (ΔCa=-20.000000) with 500/500 successful points in 30.17 s
+Saved column 460/500 (ΔCa=-22.004008) with 500/500 successful points in 31.20 s
+Successful points: 223163 / 250000
+Unique T encodings: 32784
+Unique gamma encodings: 38555
+Saved merged results to /home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_results.tsv
+Saved T legend to /home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_T_legend.tsv
+Saved gamma legend to /home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_gamma_legend.tsv
+Saved contour plot to /home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_contours.png
+Saved prefix 1 plot to /home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_prefix01_contours.png (unique T=2, unique gamma=20)
+Saved prefix 2 plot to /home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_prefix02_contours.png (unique T=64, unique gamma=449)
+Saved prefix 3 plot to /home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_prefix03_contours.png (unique T=900, unique gamma=6293)
+Saved prefix 4 plot to /home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_prefix04_contours.png (unique T=7076, unique gamma=25289)
+Saved prefix 5 plot to /home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_prefix05_contours.png (unique T=22467, unique gamma=36688)
+Saved prefix 6 plot to /home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_prefix06_contours.png (unique T=30462, unique gamma=38452)
+Saved prefix 7 plot to /home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_prefix07_contours.png (unique T=32784, unique gamma=38555)
+[2026-04-29T03:54:17+00:00] Uploading attempt-048 final artifacts to gs://carter-kneading-attempt048/attempt-048
+[2026-04-29T03:54:17+00:00] Syncing attempt-048 checkpoint artifacts to gs://carter-kneading-attempt048/attempt-048
+At file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/**, worker process 5808 thread 140630569375552 listed 500...
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0001.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0001.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0002.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0002.tsv
+  
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0003.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0003.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0004.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0004.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0005.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0005.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0006.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0006.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0007.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0007.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0008.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0008.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0009.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0009.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0010.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0010.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0011.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0011.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0012.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0012.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0013.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0013.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0014.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0014.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0015.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0015.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0016.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0016.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0017.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0017.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0018.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0018.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0019.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0019.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0020.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0020.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0021.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0021.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0022.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0022.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0023.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0023.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0024.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0024.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0025.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0025.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0026.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0026.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0027.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0027.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0028.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0028.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0029.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0029.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0030.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0030.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0031.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0031.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0032.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0032.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0033.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0033.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0034.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0034.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0035.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0035.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0036.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0036.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0037.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0037.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0038.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0038.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0039.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0039.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0040.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0040.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0041.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0041.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0042.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0042.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0043.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0043.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0044.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0044.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0045.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0045.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0046.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0046.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0047.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0047.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0048.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0048.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0049.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0049.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0050.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0050.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0051.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0051.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0052.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0052.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0053.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0053.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0054.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0054.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0055.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0055.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0056.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0056.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0057.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0057.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0058.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0058.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0059.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0059.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0060.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0060.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0061.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0061.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0062.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0062.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0063.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0063.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0064.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0064.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0065.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0065.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0066.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0066.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0067.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0067.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0068.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0068.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0069.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0069.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0070.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0070.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0071.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0071.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0072.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0072.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0073.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0073.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0074.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0074.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0075.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0075.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0076.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0076.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0077.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0077.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0078.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0078.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0079.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0079.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0080.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0080.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0081.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0081.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0082.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0082.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0083.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0083.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0084.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0084.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0085.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0085.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0086.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0086.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0087.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0087.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0088.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0088.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0089.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0089.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0090.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0090.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0091.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0091.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0092.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0092.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0093.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0093.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0094.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0094.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0095.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0095.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0096.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0096.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0097.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0097.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0098.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0098.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0099.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0099.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0100.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0100.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0101.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0101.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0102.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0102.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0103.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0103.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0104.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0104.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0105.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0105.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0106.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0106.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0107.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0107.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0108.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0108.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0109.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0109.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0110.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0110.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0111.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0111.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0112.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0112.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0113.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0113.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0114.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0114.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0115.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0115.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0116.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0116.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0117.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0117.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0118.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0118.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0119.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0119.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0120.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0120.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0121.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0121.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0122.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0122.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0123.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0123.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0124.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0124.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0125.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0125.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0126.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0126.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0127.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0127.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0128.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0128.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0129.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0129.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0130.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0130.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0131.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0131.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0132.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0132.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0133.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0133.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0134.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0134.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0135.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0135.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0136.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0136.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0137.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0137.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0138.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0138.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0139.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0139.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0140.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0140.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0141.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0141.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0142.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0142.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0143.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0143.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0144.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0144.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0145.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0145.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0146.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0146.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0147.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0147.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0148.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0148.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0149.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0149.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0150.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0150.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0151.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0151.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0152.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0152.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0153.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0153.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0154.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0154.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0155.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0155.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0156.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0156.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0157.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0157.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0158.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0158.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0159.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0159.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0160.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0160.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0161.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0161.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0162.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0162.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0163.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0163.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0164.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0164.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0165.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0165.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0166.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0166.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0167.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0167.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0168.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0168.tsv
+.Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0169.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0169.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0170.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0170.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0171.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0171.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0172.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0172.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0173.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0173.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0174.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0174.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0175.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0175.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0176.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0176.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0177.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0177.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0178.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0178.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0179.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0179.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0180.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0180.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0181.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0181.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0182.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0182.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0183.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0183.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0184.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0184.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0185.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0185.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0186.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0186.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0187.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0187.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0188.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0188.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0189.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0189.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0190.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0190.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0191.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0191.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0192.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0192.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0193.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0193.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0194.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0194.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0195.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0195.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0196.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0196.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0197.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0197.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0198.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0198.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0199.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0199.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0200.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0200.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0201.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0201.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0202.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0202.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0203.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0203.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0204.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0204.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0205.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0205.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0206.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0206.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0207.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0207.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0208.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0208.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0209.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0209.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0210.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0210.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0211.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0211.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0212.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0212.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0213.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0213.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0214.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0214.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0215.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0215.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0216.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0216.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0217.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0217.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0218.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0218.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0219.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0219.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0220.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0220.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0221.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0221.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0222.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0222.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0223.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0223.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0224.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0224.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0225.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0225.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0226.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0226.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0227.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0227.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0228.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0228.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0229.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0229.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0230.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0230.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0231.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0231.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0232.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0232.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0233.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0233.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0234.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0234.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0235.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0235.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0236.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0236.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0237.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0237.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0238.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0238.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0239.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0239.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0240.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0240.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0241.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0241.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0242.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0242.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0243.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0243.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0244.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0244.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0245.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0245.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0246.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0246.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0247.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0247.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0248.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0248.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0249.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0249.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0250.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0250.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0251.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0251.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0252.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0252.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0253.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0253.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0254.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0254.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0255.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0255.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0256.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0256.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0257.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0257.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0258.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0258.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0259.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0259.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0260.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0260.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0261.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0261.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0262.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0262.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0263.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0263.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0264.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0264.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0265.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0265.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0266.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0266.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0267.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0267.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0268.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0268.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0269.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0269.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0270.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0270.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0271.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0271.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0272.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0272.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0273.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0273.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0274.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0274.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0275.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0275.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0276.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0276.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0277.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0277.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0278.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0278.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0279.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0279.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0280.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0280.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0281.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0281.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0282.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0282.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0283.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0283.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0284.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0284.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0285.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0285.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0286.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0286.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0287.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0287.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0288.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0288.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0289.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0289.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0290.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0290.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0291.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0291.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0292.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0292.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0293.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0293.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0294.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0294.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0295.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0295.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0296.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0296.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0297.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0297.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0298.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0298.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0299.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0299.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0300.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0300.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0301.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0301.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0302.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0302.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0303.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0303.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0304.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0304.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0305.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0305.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0306.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0306.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0307.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0307.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0308.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0308.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0309.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0309.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0310.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0310.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0311.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0311.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0312.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0312.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0313.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0313.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0314.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0314.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0315.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0315.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0316.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0316.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0317.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0317.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0318.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0318.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0319.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0319.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0320.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0320.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0321.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0321.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0322.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0322.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0323.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0323.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0324.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0324.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0325.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0325.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0326.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0326.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0327.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0327.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0328.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0328.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0329.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0329.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0330.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0330.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0331.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0331.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0332.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0332.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0333.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0333.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0334.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0334.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0335.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0335.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0336.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0336.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0337.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0337.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0338.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0338.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0339.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0339.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0340.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0340.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0341.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0341.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0342.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0342.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0343.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0343.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0344.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0344.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0345.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0345.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0346.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0346.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0347.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0347.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0348.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0348.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0349.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0349.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0350.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0350.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0351.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0351.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0352.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0352.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0353.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0353.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0354.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0354.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0355.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0355.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0356.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0356.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0357.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0357.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0358.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0358.tsv
+.Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0359.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0359.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0360.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0360.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0361.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0361.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0362.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0362.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0363.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0363.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0364.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0364.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0365.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0365.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0366.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0366.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0367.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0367.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0368.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0368.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0369.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0369.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0370.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0370.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0371.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0371.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0372.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0372.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0373.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0373.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0374.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0374.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0375.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0375.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0376.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0376.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0377.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0377.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0378.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0378.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0379.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0379.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0380.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0380.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0381.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0381.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0382.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0382.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0383.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0383.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0384.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0384.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0385.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0385.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0386.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0386.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0387.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0387.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0388.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0388.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0389.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0389.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0390.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0390.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0391.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0391.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0392.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0392.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0393.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0393.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0394.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0394.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0395.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0395.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0396.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0396.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0397.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0397.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0398.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0398.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0399.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0399.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0400.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0400.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0401.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0401.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0402.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0402.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0403.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0403.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0404.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0404.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0405.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0405.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0406.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0406.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0407.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0407.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0408.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0408.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0409.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0409.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0410.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0410.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0411.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0411.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0412.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0412.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0413.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0413.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0414.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0414.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0415.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0415.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0416.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0416.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0417.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0417.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0418.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0418.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0419.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0419.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0420.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0420.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0421.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0421.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0422.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0422.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0423.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0423.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0424.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0424.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0425.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0425.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0426.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0426.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0427.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0427.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0428.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0428.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0429.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0429.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0430.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0430.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0431.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0431.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0432.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0432.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0433.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0433.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0434.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0434.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0435.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0435.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0436.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0436.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0437.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0437.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0438.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0438.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0439.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0439.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0440.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0440.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0441.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0441.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0442.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0442.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0443.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0443.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0444.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0444.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0445.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0445.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0446.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0446.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0447.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0447.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0448.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0448.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0449.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0449.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0450.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0450.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0451.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0451.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0452.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0452.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0453.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0453.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0454.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0454.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0455.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0455.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0456.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0456.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0457.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0457.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0458.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0458.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0459.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0459.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0460.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0460.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0461.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0461.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0462.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0462.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0463.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0463.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0464.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0464.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0465.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0465.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0466.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0466.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0467.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0467.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0468.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0468.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0469.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0469.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0470.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0470.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0471.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0471.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0472.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0472.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0473.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0473.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0474.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0474.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0475.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0475.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0476.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0476.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0477.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0477.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0478.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0478.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0479.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0479.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0480.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0480.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0481.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0481.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0482.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0482.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0483.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0483.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0484.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0484.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0485.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0485.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0486.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0486.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0487.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0487.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0488.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0488.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0489.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0489.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0490.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0490.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0491.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0491.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0492.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0492.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0493.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0493.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0494.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0494.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0495.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0495.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0496.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0496.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0497.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0497.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0498.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0498.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0499.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0499.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0500.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_columns/column_0500.tsv
+.
+
+Average throughput: 55.4MiB/s
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel.log to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel.log
+  
+
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_results.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_results.tsv
+  
+..
+
+Average throughput: 99.9MiB/s
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel_prefix03_T_legend.tsv to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel_prefix03_T_legend.tsv
+  
+
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-048/grid500_seq7_prefixes_remap40_newmodel.log to gs://carter-kneading-attempt048/attempt-048/grid500_seq7_prefixes_remap40_newmodel.log
+  

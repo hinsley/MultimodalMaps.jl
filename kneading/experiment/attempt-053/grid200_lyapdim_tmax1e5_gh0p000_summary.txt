@@ -1,0 +1,26 @@
+output_tag	grid200_lyapdim_tmax1e5_gh0p000
+generated_at	2026-05-01T00:09:00.196
+grid	200x200
+delta_ca_range	-45.0	-20.0
+delta_x_range	-1.5	-0.5
+g_h	0.0
+tau_y	20000.0
+lyap_ttr	5000.0
+lyap_tmax	100000.0
+lyap_dt	10.0
+lyap_min_time	30000.0
+lyap_check_interval	5000.0
+lyap_conv_atol	0.0001
+lyap_conv_rtol	0.01
+lyap_dim_conv_atol	0.005
+lyap_stable_checks	3
+ok_count	40000
+converged_count	8970
+dimension_min	0.0
+dimension_max	3.04297220004
+dimension_mean	1.8624131903520131
+plot_path	/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-053/grid200_lyapdim_tmax1e5_gh0p000_dimension.png
+results_path	/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-053/grid200_lyapdim_tmax1e5_gh0p000_results.tsv
+scan_runtime_seconds	5174.046444792
+merge_runtime_seconds	0.059980333
+plot_runtime_seconds	12.110470333

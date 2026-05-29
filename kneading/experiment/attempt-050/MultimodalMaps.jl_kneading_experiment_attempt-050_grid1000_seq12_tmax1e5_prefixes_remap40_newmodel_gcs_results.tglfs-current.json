@@ -1,0 +1,26 @@
+{
+  "ok": true,
+  "peer": "me",
+  "msgId": 236290,
+  "date": 1777456978,
+  "data": {
+    "name": "MultimodalMaps.jl_kneading_experiment_attempt-050_grid1000_seq12_tmax1e5_prefixes_remap40_newmodel_gcs_results.tar.gz",
+    "ufid": "53435f616f527d08dc08b2964dc7c8bb81a307e07fff2494f8b3cdb76bc4efc4",
+    "size": 1675191670,
+    "uploadComplete": true,
+    "chunks": [
+      236291
+    ],
+    "IV": "aT8//NdZ7stkngWVSjbD9EHhWYG5ALjlgyxzKDspPH8="
+  },
+  "chunks": [
+    {
+      "msgId": 236291,
+      "status": "ok",
+      "size": 1671236782,
+      "className": "Message"
+    }
+  ],
+  "format": "unknown",
+  "probeError": "Format probe skipped. Re-run with --probe to verify current vs legacy format."
+}

@@ -1,0 +1,1040 @@
+[2026-05-05T23:53:55+00:00] Running attempt-055 tangent zero-contour scan.
+Repo root: /home/carterhinsley/MultimodalMaps.jl
+Julia command: julia +release
+Julia threads: 48
+Julia GC threads: 8
+OpenBLAS threads: 1
+Grid: 500 Delta Ca x 500 Delta x
+Delta Ca range: [-45.0, -20.0]
+Delta x range: [-1.5, -0.5]
+Max iterates: 8
+Tangent integration tmax: 1.0e5
+Ca-min filter: V <= 0.0 and x <= saddle-focus x_eq
+Output tag: grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered
+GCS artifact URI: gs://carter-kneading-attempt055/attempt-055
+  Activating project at `~/MultimodalMaps.jl`
+  Activating project at `~/MultimodalMaps.jl`
+  Activating project at `~/MultimodalMaps.jl`
+  Activating project at `~/MultimodalMaps.jl`
+Running attempt-054 tangent-sign Ca-minimum contour scan.
+Grid: 500 Delta Ca points x 500 Delta x points
+Output tag: grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered
+Tangent tmax: 100000.0, iterates: 8, Julia threads: 48
+Column checkpoint directory: /home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns
+Saved column 1/500 (Delta Ca=-45.000000) with 500/500 successful points in 47.14 s
+Saved column 12/500 (Delta Ca=-44.448898) with 500/500 successful points in 50.74 s
+Saved column 23/500 (Delta Ca=-43.897796) with 500/500 successful points in 56.47 s
+Saved column 45/500 (Delta Ca=-42.795591) with 499/500 successful points in 59.99 s
+Saved column 56/500 (Delta Ca=-42.244489) with 499/500 successful points in 60.69 s
+Saved column 34/500 (Delta Ca=-43.346693) with 494/500 successful points in 62.96 s
+Saved column 89/500 (Delta Ca=-40.591182) with 498/500 successful points in 66.90 s
+Saved column 78/500 (Delta Ca=-41.142285) with 492/500 successful points in 67.19 s
+Saved column 67/500 (Delta Ca=-41.693387) with 479/500 successful points in 71.54 s
+Saved column 100/500 (Delta Ca=-40.040080) with 495/500 successful points in 72.40 s
+Saved column 111/500 (Delta Ca=-39.488978) with 445/500 successful points in 75.21 s
+Saved column 144/500 (Delta Ca=-37.835671) with 491/500 successful points in 77.56 s
+Saved column 133/500 (Delta Ca=-38.386774) with 478/500 successful points in 80.46 s
+Saved column 155/500 (Delta Ca=-37.284569) with 484/500 successful points in 80.98 s
+Saved column 166/500 (Delta Ca=-36.733467) with 427/500 successful points in 86.13 s
+Saved column 122/500 (Delta Ca=-38.937876) with 440/500 successful points in 87.36 s
+Saved column 221/500 (Delta Ca=-33.977956) with 500/500 successful points in 88.31 s
+Saved column 199/500 (Delta Ca=-35.080160) with 500/500 successful points in 89.15 s
+Saved column 210/500 (Delta Ca=-34.529058) with 500/500 successful points in 89.25 s
+Saved column 2/500 (Delta Ca=-44.949900) with 500/500 successful points in 44.60 s
+Saved column 188/500 (Delta Ca=-35.631263) with 484/500 successful points in 92.43 s
+Saved column 231/500 (Delta Ca=-33.476954) with 500/500 successful points in 92.74 s
+Saved column 241/500 (Delta Ca=-32.975952) with 488/500 successful points in 96.97 s
+Saved column 251/500 (Delta Ca=-32.474950) with 486/500 successful points in 97.25 s
+Saved column 271/500 (Delta Ca=-31.472946) with 499/500 successful points in 97.71 s
+Saved column 291/500 (Delta Ca=-30.470942) with 500/500 successful points in 98.02 s
+Saved column 261/500 (Delta Ca=-31.973948) with 495/500 successful points in 98.08 s
+Saved column 281/500 (Delta Ca=-30.971944) with 500/500 successful points in 98.52 s
+Saved column 13/500 (Delta Ca=-44.398798) with 500/500 successful points in 48.15 s
+Saved column 301/500 (Delta Ca=-29.969940) with 500/500 successful points in 99.93 s
+Saved column 311/500 (Delta Ca=-29.468938) with 500/500 successful points in 100.19 s
+Saved column 321/500 (Delta Ca=-28.967936) with 500/500 successful points in 101.31 s
+Saved column 331/500 (Delta Ca=-28.466934) with 500/500 successful points in 103.70 s
+Saved column 177/500 (Delta Ca=-36.182365) with 441/500 successful points in 103.79 s
+Saved column 341/500 (Delta Ca=-27.965932) with 500/500 successful points in 105.62 s
+Saved column 391/500 (Delta Ca=-25.460922) with 500/500 successful points in 106.47 s
+Saved column 351/500 (Delta Ca=-27.464930) with 500/500 successful points in 106.68 s
+Saved column 381/500 (Delta Ca=-25.961924) with 500/500 successful points in 106.70 s
+Saved column 361/500 (Delta Ca=-26.963928) with 500/500 successful points in 106.94 s
+Saved column 371/500 (Delta Ca=-26.462926) with 500/500 successful points in 106.95 s
+Saved column 401/500 (Delta Ca=-24.959920) with 500/500 successful points in 107.63 s
+Saved column 481/500 (Delta Ca=-20.951904) with 500/500 successful points in 110.30 s
+Saved column 491/500 (Delta Ca=-20.450902) with 500/500 successful points in 110.37 s
+Saved column 24/500 (Delta Ca=-43.847695) with 500/500 successful points in 54.02 s
+Saved column 411/500 (Delta Ca=-24.458918) with 500/500 successful points in 110.49 s
+Saved column 421/500 (Delta Ca=-23.957916) with 500/500 successful points in 111.68 s
+Saved column 431/500 (Delta Ca=-23.456914) with 500/500 successful points in 112.12 s
+Saved column 441/500 (Delta Ca=-22.955912) with 500/500 successful points in 112.52 s
+Saved column 471/500 (Delta Ca=-21.452906) with 500/500 successful points in 112.62 s
+Saved column 451/500 (Delta Ca=-22.454910) with 500/500 successful points in 113.24 s
+Saved column 461/500 (Delta Ca=-21.953908) with 500/500 successful points in 114.21 s
+Saved column 46/500 (Delta Ca=-42.745491) with 500/500 successful points in 56.58 s
+Saved column 57/500 (Delta Ca=-42.194389) with 494/500 successful points in 61.24 s
+Saved column 35/500 (Delta Ca=-43.296593) with 496/500 successful points in 59.07 s
+Saved column 90/500 (Delta Ca=-40.541082) with 499/500 successful points in 63.87 s
+Saved column 79/500 (Delta Ca=-41.092184) with 491/500 successful points in 65.44 s
+Saved column 3/500 (Delta Ca=-44.899800) with 500/500 successful points in 44.47 s
+Saved column 68/500 (Delta Ca=-41.643287) with 475/500 successful points in 66.33 s
+Saved column 101/500 (Delta Ca=-39.989980) with 491/500 successful points in 69.91 s
+Saved column 14/500 (Delta Ca=-44.348697) with 500/500 successful points in 47.98 s
+Saved column 112/500 (Delta Ca=-39.438878) with 435/500 successful points in 74.58 s
+Saved column 145/500 (Delta Ca=-37.785571) with 493/500 successful points in 74.29 s
+Saved column 134/500 (Delta Ca=-38.336673) with 484/500 successful points in 76.26 s
+Saved column 156/500 (Delta Ca=-37.234469) with 476/500 successful points in 78.57 s
+Saved column 25/500 (Delta Ca=-43.797595) with 498/500 successful points in 54.53 s
+Saved column 123/500 (Delta Ca=-38.887776) with 453/500 successful points in 81.47 s
+Saved column 222/500 (Delta Ca=-33.927856) with 500/500 successful points in 85.14 s
+Saved column 47/500 (Delta Ca=-42.695391) with 498/500 successful points in 57.59 s
+Saved column 211/500 (Delta Ca=-34.478958) with 499/500 successful points in 86.10 s
+Saved column 200/500 (Delta Ca=-35.030060) with 496/500 successful points in 86.62 s
+Saved column 189/500 (Delta Ca=-35.581162) with 486/500 successful points in 88.24 s
+Saved column 36/500 (Delta Ca=-43.246493) with 495/500 successful points in 58.86 s
+Saved column 4/500 (Delta Ca=-44.849699) with 500/500 successful points in 44.79 s
+Saved column 58/500 (Delta Ca=-42.144289) with 492/500 successful points in 62.44 s
+Saved column 232/500 (Delta Ca=-33.426854) with 500/500 successful points in 91.96 s
+Saved column 167/500 (Delta Ca=-36.683367) with 433/500 successful points in 102.03 s
+Saved column 252/500 (Delta Ca=-32.424850) with 487/500 successful points in 91.32 s
+Saved column 292/500 (Delta Ca=-30.420842) with 500/500 successful points in 94.37 s
+Saved column 262/500 (Delta Ca=-31.923848) with 492/500 successful points in 95.07 s
+Saved column 242/500 (Delta Ca=-32.925852) with 484/500 successful points in 96.32 s
+Saved column 282/500 (Delta Ca=-30.921844) with 500/500 successful points in 95.12 s
+Saved column 272/500 (Delta Ca=-31.422846) with 500/500 successful points in 95.96 s
+Saved column 91/500 (Delta Ca=-40.490982) with 499/500 successful points in 64.40 s
+Saved column 15/500 (Delta Ca=-44.298597) with 500/500 successful points in 49.10 s
+Saved column 302/500 (Delta Ca=-29.919840) with 500/500 successful points in 96.58 s
+Saved column 312/500 (Delta Ca=-29.418838) with 500/500 successful points in 97.01 s
+Saved column 80/500 (Delta Ca=-41.042084) with 492/500 successful points in 64.69 s
+Saved column 322/500 (Delta Ca=-28.917836) with 500/500 successful points in 98.21 s
+Saved column 178/500 (Delta Ca=-36.132265) with 449/500 successful points in 98.32 s
+Saved column 332/500 (Delta Ca=-28.416834) with 500/500 successful points in 100.48 s
+Saved column 69/500 (Delta Ca=-41.593186) with 480/500 successful points in 68.37 s
+Saved column 342/500 (Delta Ca=-27.915832) with 500/500 successful points in 102.43 s
+Saved column 392/500 (Delta Ca=-25.410822) with 500/500 successful points in 102.98 s
+Saved column 352/500 (Delta Ca=-27.414830) with 500/500 successful points in 103.17 s
+Saved column 382/500 (Delta Ca=-25.911824) with 500/500 successful points in 103.49 s
+Saved column 362/500 (Delta Ca=-26.913828) with 500/500 successful points in 103.29 s
+Saved column 372/500 (Delta Ca=-26.412826) with 500/500 successful points in 103.29 s
+Saved column 402/500 (Delta Ca=-24.909820) with 500/500 successful points in 104.31 s
+Saved column 102/500 (Delta Ca=-39.939880) with 492/500 successful points in 70.31 s
+Saved column 482/500 (Delta Ca=-20.901804) with 500/500 successful points in 106.54 s
+Saved column 492/500 (Delta Ca=-20.400802) with 500/500 successful points in 106.76 s
+Saved column 412/500 (Delta Ca=-24.408818) with 500/500 successful points in 107.04 s
+Saved column 422/500 (Delta Ca=-23.907816) with 500/500 successful points in 108.22 s
+Saved column 26/500 (Delta Ca=-43.747495) with 497/500 successful points in 55.70 s
+Saved column 432/500 (Delta Ca=-23.406814) with 500/500 successful points in 108.61 s
+Saved column 472/500 (Delta Ca=-21.402806) with 500/500 successful points in 109.01 s
+Saved column 442/500 (Delta Ca=-22.905812) with 500/500 successful points in 109.48 s
+Saved column 452/500 (Delta Ca=-22.404810) with 500/500 successful points in 110.09 s
+Saved column 462/500 (Delta Ca=-21.903808) with 500/500 successful points in 110.74 s
+Saved column 5/500 (Delta Ca=-44.799599) with 500/500 successful points in 45.31 s
+Saved column 146/500 (Delta Ca=-37.735471) with 492/500 successful points in 76.76 s
+Saved column 48/500 (Delta Ca=-42.645291) with 500/500 successful points in 56.77 s
+Saved column 135/500 (Delta Ca=-38.286573) with 478/500 successful points in 78.73 s
+Saved column 37/500 (Delta Ca=-43.196393) with 494/500 successful points in 58.83 s
+Saved column 113/500 (Delta Ca=-39.388778) with 429/500 successful points in 90.16 s
+Saved column 157/500 (Delta Ca=-37.184369) with 466/500 successful points in 82.28 s
+Saved column 16/500 (Delta Ca=-44.248497) with 500/500 successful points in 49.85 s
+Saved column 59/500 (Delta Ca=-42.094188) with 495/500 successful points in 61.99 s
+Saved column 124/500 (Delta Ca=-38.837675) with 455/500 successful points in 80.04 s
+Saved column 223/500 (Delta Ca=-33.877756) with 500/500 successful points in 86.43 s
+Saved column 92/500 (Delta Ca=-40.440882) with 498/500 successful points in 64.97 s
+Saved column 212/500 (Delta Ca=-34.428858) with 500/500 successful points in 85.47 s
+Saved column 81/500 (Delta Ca=-40.991984) with 490/500 successful points in 65.47 s
+Saved column 201/500 (Delta Ca=-34.979960) with 496/500 successful points in 87.18 s
+Saved column 190/500 (Delta Ca=-35.531062) with 492/500 successful points in 87.71 s
+Saved column 6/500 (Delta Ca=-44.749499) with 500/500 successful points in 45.30 s
+Saved column 70/500 (Delta Ca=-41.543086) with 480/500 successful points in 68.67 s
+Saved column 27/500 (Delta Ca=-43.697395) with 497/500 successful points in 55.83 s
+Saved column 233/500 (Delta Ca=-33.376754) with 499/500 successful points in 92.48 s
+Saved column 253/500 (Delta Ca=-32.374749) with 487/500 successful points in 94.53 s
+Saved column 103/500 (Delta Ca=-39.889780) with 488/500 successful points in 72.04 s
+Saved column 263/500 (Delta Ca=-31.873747) with 496/500 successful points in 93.51 s
+Saved column 293/500 (Delta Ca=-30.370741) with 500/500 successful points in 95.03 s
+Saved column 49/500 (Delta Ca=-42.595190) with 498/500 successful points in 57.37 s
+Saved column 283/500 (Delta Ca=-30.871743) with 500/500 successful points in 95.50 s
+Saved column 273/500 (Delta Ca=-31.372745) with 500/500 successful points in 96.75 s
+Saved column 243/500 (Delta Ca=-32.875752) with 484/500 successful points in 97.76 s
+Saved column 168/500 (Delta Ca=-36.633267) with 433/500 successful points in 103.04 s
+Saved column 303/500 (Delta Ca=-29.869739) with 500/500 successful points in 97.14 s
+Saved column 313/500 (Delta Ca=-29.368737) with 500/500 successful points in 96.85 s
+Saved column 17/500 (Delta Ca=-44.198397) with 500/500 successful points in 50.56 s
+Saved column 179/500 (Delta Ca=-36.082164) with 457/500 successful points in 95.70 s
+Saved column 38/500 (Delta Ca=-43.146293) with 496/500 successful points in 58.33 s
+Saved column 323/500 (Delta Ca=-28.867735) with 500/500 successful points in 98.66 s
+Saved column 147/500 (Delta Ca=-37.685371) with 490/500 successful points in 77.03 s
+Saved column 333/500 (Delta Ca=-28.366733) with 500/500 successful points in 101.51 s
+Saved column 60/500 (Delta Ca=-42.044088) with 489/500 successful points in 63.78 s
+Saved column 343/500 (Delta Ca=-27.865731) with 500/500 successful points in 102.86 s
+Saved column 136/500 (Delta Ca=-38.236473) with 483/500 successful points in 77.22 s
+Saved column 393/500 (Delta Ca=-25.360721) with 500/500 successful points in 103.58 s
+Saved column 353/500 (Delta Ca=-27.364729) with 500/500 successful points in 103.29 s
+Saved column 383/500 (Delta Ca=-25.861723) with 500/500 successful points in 103.75 s
+Saved column 373/500 (Delta Ca=-26.362725) with 500/500 successful points in 103.71 s
+Saved column 363/500 (Delta Ca=-26.863727) with 500/500 successful points in 103.85 s
+Saved column 403/500 (Delta Ca=-24.859719) with 500/500 successful points in 104.85 s
+Saved column 7/500 (Delta Ca=-44.699399) with 500/500 successful points in 45.99 s
+Saved column 158/500 (Delta Ca=-37.134269) with 455/500 successful points in 79.34 s
+Saved column 483/500 (Delta Ca=-20.851703) with 500/500 successful points in 106.71 s
+Saved column 493/500 (Delta Ca=-20.350701) with 500/500 successful points in 107.32 s
+Saved column 413/500 (Delta Ca=-24.358717) with 500/500 successful points in 107.73 s
+Saved column 82/500 (Delta Ca=-40.941884) with 495/500 successful points in 62.82 s
+Saved column 125/500 (Delta Ca=-38.787575) with 463/500 successful points in 77.20 s
+Saved column 93/500 (Delta Ca=-40.390782) with 496/500 successful points in 66.22 s
+Saved column 423/500 (Delta Ca=-23.857715) with 500/500 successful points in 108.54 s
+Saved column 433/500 (Delta Ca=-23.356713) with 500/500 successful points in 108.87 s
+Saved column 473/500 (Delta Ca=-21.352705) with 500/500 successful points in 108.78 s
+Saved column 114/500 (Delta Ca=-39.338677) with 435/500 successful points in 90.72 s
+Saved column 443/500 (Delta Ca=-22.855711) with 500/500 successful points in 109.42 s
+Saved column 28/500 (Delta Ca=-43.647295) with 496/500 successful points in 57.02 s
+Saved column 453/500 (Delta Ca=-22.354709) with 500/500 successful points in 110.34 s
+Saved column 463/500 (Delta Ca=-21.853707) with 500/500 successful points in 110.77 s
+Saved column 71/500 (Delta Ca=-41.492986) with 484/500 successful points in 67.25 s
+Saved column 50/500 (Delta Ca=-42.545090) with 499/500 successful points in 57.36 s
+Saved column 224/500 (Delta Ca=-33.827655) with 500/500 successful points in 86.40 s
+Saved column 213/500 (Delta Ca=-34.378758) with 500/500 successful points in 86.18 s
+Saved column 18/500 (Delta Ca=-44.148297) with 500/500 successful points in 50.87 s
+Saved column 202/500 (Delta Ca=-34.929860) with 499/500 successful points in 86.44 s
+Saved column 191/500 (Delta Ca=-35.480962) with 491/500 successful points in 87.02 s
+Saved column 39/500 (Delta Ca=-43.096192) with 493/500 successful points in 59.00 s
+Saved column 104/500 (Delta Ca=-39.839679) with 485/500 successful points in 73.11 s
+Saved column 8/500 (Delta Ca=-44.649299) with 500/500 successful points in 46.33 s
+Saved column 234/500 (Delta Ca=-33.326653) with 495/500 successful points in 93.76 s
+Saved column 61/500 (Delta Ca=-41.993988) with 483/500 successful points in 64.18 s
+Saved column 169/500 (Delta Ca=-36.583166) with 429/500 successful points in 83.71 s
+Saved column 254/500 (Delta Ca=-32.324649) with 485/500 successful points in 94.91 s
+Saved column 264/500 (Delta Ca=-31.823647) with 496/500 successful points in 93.03 s
+Saved column 294/500 (Delta Ca=-30.320641) with 500/500 successful points in 94.99 s
+Saved column 148/500 (Delta Ca=-37.635271) with 490/500 successful points in 76.96 s
+Saved column 244/500 (Delta Ca=-32.825651) with 480/500 successful points in 92.27 s
+Saved column 284/500 (Delta Ca=-30.821643) with 500/500 successful points in 95.59 s
+Saved column 274/500 (Delta Ca=-31.322645) with 500/500 successful points in 96.10 s
+Saved column 137/500 (Delta Ca=-38.186373) with 484/500 successful points in 75.46 s
+Saved column 83/500 (Delta Ca=-40.891784) with 492/500 successful points in 64.02 s
+Saved column 304/500 (Delta Ca=-29.819639) with 500/500 successful points in 96.78 s
+Saved column 314/500 (Delta Ca=-29.318637) with 500/500 successful points in 96.97 s
+Saved column 29/500 (Delta Ca=-43.597194) with 496/500 successful points in 58.27 s
+Saved column 94/500 (Delta Ca=-40.340681) with 497/500 successful points in 66.98 s
+Saved column 180/500 (Delta Ca=-36.032064) with 464/500 successful points in 95.60 s
+Saved column 324/500 (Delta Ca=-28.817635) with 500/500 successful points in 98.44 s
+Saved column 19/500 (Delta Ca=-44.098196) with 500/500 successful points in 51.33 s
+Saved column 159/500 (Delta Ca=-37.084168) with 450/500 successful points in 79.35 s
+Saved column 51/500 (Delta Ca=-42.494990) with 500/500 successful points in 57.06 s
+Saved column 126/500 (Delta Ca=-38.737475) with 462/500 successful points in 77.49 s
+Saved column 334/500 (Delta Ca=-28.316633) with 500/500 successful points in 101.54 s
+Saved column 72/500 (Delta Ca=-41.442886) with 477/500 successful points in 68.66 s
+Saved column 9/500 (Delta Ca=-44.599198) with 500/500 successful points in 46.78 s
+Saved column 344/500 (Delta Ca=-27.815631) with 500/500 successful points in 102.63 s
+Saved column 40/500 (Delta Ca=-43.046092) with 498/500 successful points in 57.62 s
+Saved column 354/500 (Delta Ca=-27.314629) with 500/500 successful points in 103.07 s
+Saved column 394/500 (Delta Ca=-25.310621) with 500/500 successful points in 103.38 s
+Saved column 374/500 (Delta Ca=-26.312625) with 500/500 successful points in 103.53 s
+Saved column 384/500 (Delta Ca=-25.811623) with 500/500 successful points in 103.57 s
+Saved column 364/500 (Delta Ca=-26.813627) with 500/500 successful points in 103.81 s
+Saved column 404/500 (Delta Ca=-24.809619) with 500/500 successful points in 105.12 s
+Saved column 115/500 (Delta Ca=-39.288577) with 434/500 successful points in 92.58 s
+Saved column 484/500 (Delta Ca=-20.801603) with 500/500 successful points in 106.26 s
+Saved column 494/500 (Delta Ca=-20.300601) with 500/500 successful points in 107.01 s
+Saved column 225/500 (Delta Ca=-33.777555) with 500/500 successful points in 85.79 s
+Saved column 105/500 (Delta Ca=-39.789579) with 482/500 successful points in 74.95 s
+Saved column 214/500 (Delta Ca=-34.328657) with 500/500 successful points in 86.05 s
+Saved column 414/500 (Delta Ca=-24.308617) with 500/500 successful points in 107.80 s
+Saved column 203/500 (Delta Ca=-34.879760) with 500/500 successful points in 84.35 s
+Saved column 424/500 (Delta Ca=-23.807615) with 500/500 successful points in 108.20 s
+Saved column 434/500 (Delta Ca=-23.306613) with 500/500 successful points in 109.01 s
+Saved column 474/500 (Delta Ca=-21.302605) with 500/500 successful points in 108.69 s
+Saved column 62/500 (Delta Ca=-41.943888) with 482/500 successful points in 66.09 s
+Saved column 192/500 (Delta Ca=-35.430862) with 497/500 successful points in 85.34 s
+Saved column 444/500 (Delta Ca=-22.805611) with 500/500 successful points in 109.76 s
+Saved column 454/500 (Delta Ca=-22.304609) with 500/500 successful points in 110.49 s
+Saved column 464/500 (Delta Ca=-21.803607) with 500/500 successful points in 110.78 s
+Saved column 30/500 (Delta Ca=-43.547094) with 496/500 successful points in 57.45 s
+Saved column 20/500 (Delta Ca=-44.048096) with 500/500 successful points in 51.66 s
+Saved column 84/500 (Delta Ca=-40.841683) with 496/500 successful points in 62.44 s
+Saved column 10/500 (Delta Ca=-44.549098) with 500/500 successful points in 47.28 s
+Saved column 149/500 (Delta Ca=-37.585170) with 492/500 successful points in 77.22 s
+Saved column 52/500 (Delta Ca=-42.444890) with 498/500 successful points in 57.76 s
+Saved column 95/500 (Delta Ca=-40.290581) with 492/500 successful points in 68.01 s
+Saved column 138/500 (Delta Ca=-38.136273) with 485/500 successful points in 75.66 s
+Saved column 235/500 (Delta Ca=-33.276553) with 496/500 successful points in 94.75 s
+Saved column 255/500 (Delta Ca=-32.274549) with 486/500 successful points in 94.50 s
+Saved column 41/500 (Delta Ca=-42.995992) with 496/500 successful points in 58.12 s
+Saved column 265/500 (Delta Ca=-31.773547) with 497/500 successful points in 93.85 s
+Saved column 245/500 (Delta Ca=-32.775551) with 479/500 successful points in 91.32 s
+Saved column 295/500 (Delta Ca=-30.270541) with 500/500 successful points in 94.51 s
+Saved column 170/500 (Delta Ca=-36.533066) with 438/500 successful points in 102.54 s
+Saved column 73/500 (Delta Ca=-41.392786) with 480/500 successful points in 67.76 s
+Saved column 285/500 (Delta Ca=-30.771543) with 500/500 successful points in 95.06 s
+Saved column 127/500 (Delta Ca=-38.687375) with 466/500 successful points in 77.80 s
+Saved column 160/500 (Delta Ca=-37.034068) with 448/500 successful points in 81.61 s
+Saved column 275/500 (Delta Ca=-31.272545) with 500/500 successful points in 95.61 s
+Saved column 181/500 (Delta Ca=-35.981964) with 468/500 successful points in 93.84 s
+Saved column 305/500 (Delta Ca=-29.769539) with 500/500 successful points in 97.06 s
+Saved column 315/500 (Delta Ca=-29.268537) with 500/500 successful points in 96.81 s
+Saved column 325/500 (Delta Ca=-28.767535) with 500/500 successful points in 98.61 s
+Saved column 21/500 (Delta Ca=-43.997996) with 499/500 successful points in 52.14 s
+Saved column 11/500 (Delta Ca=-44.498998) with 500/500 successful points in 47.27 s
+Saved column 106/500 (Delta Ca=-39.739479) with 475/500 successful points in 73.06 s
+Saved column 31/500 (Delta Ca=-43.496994) with 495/500 successful points in 57.95 s
+Saved column 63/500 (Delta Ca=-41.893788) with 477/500 successful points in 67.26 s
+Saved column 335/500 (Delta Ca=-28.266533) with 500/500 successful points in 101.41 s
+Saved column 345/500 (Delta Ca=-27.765531) with 500/500 successful points in 101.31 s
+Saved column 116/500 (Delta Ca=-39.238477) with 431/500 successful points in 92.26 s
+Saved column 85/500 (Delta Ca=-40.791583) with 493/500 successful points in 63.92 s
+Saved column 385/500 (Delta Ca=-25.761523) with 500/500 successful points in 100.53 s
+Saved column 53/500 (Delta Ca=-42.394790) with 497/500 successful points in 58.44 s
+Saved column 215/500 (Delta Ca=-34.278557) with 500/500 successful points in 86.10 s
+Saved column 226/500 (Delta Ca=-33.727455) with 500/500 successful points in 87.40 s
+Saved column 355/500 (Delta Ca=-27.264529) with 500/500 successful points in 103.83 s
+Saved column 395/500 (Delta Ca=-25.260521) with 500/500 successful points in 103.98 s
+Saved column 204/500 (Delta Ca=-34.829659) with 496/500 successful points in 87.70 s
+Saved column 375/500 (Delta Ca=-26.262525) with 500/500 successful points in 103.98 s
+Saved column 365/500 (Delta Ca=-26.763527) with 500/500 successful points in 104.32 s
+Saved column 405/500 (Delta Ca=-24.759519) with 500/500 successful points in 105.73 s
+Saved column 193/500 (Delta Ca=-35.380762) with 493/500 successful points in 87.37 s
+Saved column 96/500 (Delta Ca=-40.240481) with 496/500 successful points in 67.23 s
+Saved column 42/500 (Delta Ca=-42.945892) with 496/500 successful points in 58.59 s
+Saved column 485/500 (Delta Ca=-20.751503) with 500/500 successful points in 106.97 s
+Saved column 150/500 (Delta Ca=-37.535070) with 493/500 successful points in 78.07 s
+Saved column 495/500 (Delta Ca=-20.250501) with 500/500 successful points in 107.88 s
+Saved column 425/500 (Delta Ca=-23.757515) with 500/500 successful points in 102.78 s
+Saved column 139/500 (Delta Ca=-38.086172) with 487/500 successful points in 76.15 s
+Saved column 415/500 (Delta Ca=-24.258517) with 500/500 successful points in 108.18 s
+Saved column 74/500 (Delta Ca=-41.342685) with 483/500 successful points in 67.38 s
+Saved column 475/500 (Delta Ca=-21.252505) with 500/500 successful points in 108.60 s
+Saved column 435/500 (Delta Ca=-23.256513) with 500/500 successful points in 109.78 s
+Saved column 445/500 (Delta Ca=-22.755511) with 500/500 successful points in 109.99 s
+Saved column 455/500 (Delta Ca=-22.254509) with 500/500 successful points in 110.89 s
+Saved column 22/500 (Delta Ca=-43.947896) with 500/500 successful points in 53.35 s
+Saved column 465/500 (Delta Ca=-21.753507) with 500/500 successful points in 111.16 s
+Saved column 128/500 (Delta Ca=-38.637275) with 468/500 successful points in 76.63 s
+Saved column 236/500 (Delta Ca=-33.226453) with 495/500 successful points in 93.43 s
+Saved column 32/500 (Delta Ca=-43.446894) with 494/500 successful points in 55.14 s
+Saved column 161/500 (Delta Ca=-36.983968) with 443/500 successful points in 83.53 s
+Saved column 266/500 (Delta Ca=-31.723447) with 498/500 successful points in 93.16 s
+Saved column 256/500 (Delta Ca=-32.224449) with 489/500 successful points in 95.01 s
+Saved column 296/500 (Delta Ca=-30.220441) with 500/500 successful points in 92.33 s
+Saved column 246/500 (Delta Ca=-32.725451) with 484/500 successful points in 96.46 s
+Saved column 64/500 (Delta Ca=-41.843687) with 482/500 successful points in 65.25 s
+Saved column 286/500 (Delta Ca=-30.721443) with 500/500 successful points in 95.19 s
+Saved column 54/500 (Delta Ca=-42.344689) with 496/500 successful points in 57.48 s
+Saved column 276/500 (Delta Ca=-31.222445) with 500/500 successful points in 95.90 s
+Saved column 171/500 (Delta Ca=-36.482966) with 436/500 successful points in 101.97 s
+Saved column 86/500 (Delta Ca=-40.741483) with 493/500 successful points in 64.02 s
+Saved column 107/500 (Delta Ca=-39.689379) with 464/500 successful points in 74.52 s
+Saved column 182/500 (Delta Ca=-35.931864) with 468/500 successful points in 94.96 s
+Saved column 306/500 (Delta Ca=-29.719439) with 500/500 successful points in 97.13 s
+Saved column 316/500 (Delta Ca=-29.218437) with 500/500 successful points in 97.11 s
+Saved column 43/500 (Delta Ca=-42.895792) with 495/500 successful points in 58.85 s
+Saved column 326/500 (Delta Ca=-28.717435) with 500/500 successful points in 99.10 s
+Saved column 97/500 (Delta Ca=-40.190381) with 494/500 successful points in 68.11 s
+Saved column 227/500 (Delta Ca=-33.677355) with 500/500 successful points in 78.50 s
+Saved column 117/500 (Delta Ca=-39.188377) with 434/500 successful points in 87.32 s
+Saved column 216/500 (Delta Ca=-34.228457) with 500/500 successful points in 84.85 s
+Saved column 205/500 (Delta Ca=-34.779559) with 499/500 successful points in 85.87 s
+Saved column 336/500 (Delta Ca=-28.216433) with 500/500 successful points in 100.70 s
+Saved column 75/500 (Delta Ca=-41.292585) with 481/500 successful points in 68.30 s
+Saved column 194/500 (Delta Ca=-35.330661) with 495/500 successful points in 86.60 s
+Saved column 140/500 (Delta Ca=-38.036072) with 489/500 successful points in 74.80 s
+Saved column 151/500 (Delta Ca=-37.484970) with 494/500 successful points in 77.58 s
+Saved column 346/500 (Delta Ca=-27.715431) with 500/500 successful points in 101.50 s
+Saved column 33/500 (Delta Ca=-43.396794) with 496/500 successful points in 56.81 s
+Saved column 386/500 (Delta Ca=-25.711423) with 500/500 successful points in 103.61 s
+Saved column 426/500 (Delta Ca=-23.707415) with 500/500 successful points in 82.95 s
+Saved column 356/500 (Delta Ca=-27.214429) with 500/500 successful points in 103.61 s
+Saved column 396/500 (Delta Ca=-25.210421) with 500/500 successful points in 103.98 s
+Saved column 376/500 (Delta Ca=-26.212425) with 500/500 successful points in 103.76 s
+Saved column 366/500 (Delta Ca=-26.713427) with 500/500 successful points in 104.02 s
+Saved column 55/500 (Delta Ca=-42.294589) with 498/500 successful points in 52.66 s
+Saved column 129/500 (Delta Ca=-38.587174) with 463/500 successful points in 75.19 s
+Saved column 406/500 (Delta Ca=-24.709419) with 500/500 successful points in 105.76 s
+Saved column 87/500 (Delta Ca=-40.691383) with 494/500 successful points in 54.46 s
+Saved column 162/500 (Delta Ca=-36.933868) with 444/500 successful points in 71.46 s
+Saved column 65/500 (Delta Ca=-41.793587) with 480/500 successful points in 65.29 s
+Saved column 486/500 (Delta Ca=-20.701403) with 500/500 successful points in 106.16 s
+Saved column 476/500 (Delta Ca=-21.202405) with 500/500 successful points in 97.60 s
+Saved column 496/500 (Delta Ca=-20.200401) with 500/500 successful points in 107.29 s
+Saved column 466/500 (Delta Ca=-21.703407) with 500/500 successful points in 89.35 s
+Saved column 44/500 (Delta Ca=-42.845691) with 497/500 successful points in 57.01 s
+Saved column 416/500 (Delta Ca=-24.208417) with 500/500 successful points in 106.61 s
+Saved column 297/500 (Delta Ca=-30.170341) with 500/500 successful points in 78.82 s
+Saved column 108/500 (Delta Ca=-39.639279) with 452/500 successful points in 71.70 s
+Saved column 237/500 (Delta Ca=-33.176353) with 494/500 successful points in 93.34 s
+Saved column 436/500 (Delta Ca=-23.206413) with 500/500 successful points in 109.11 s
+Saved column 446/500 (Delta Ca=-22.705411) with 500/500 successful points in 109.40 s
+Saved column 257/500 (Delta Ca=-32.174349) with 489/500 successful points in 93.31 s
+Saved column 267/500 (Delta Ca=-31.673347) with 496/500 successful points in 95.01 s
+Saved column 98/500 (Delta Ca=-40.140281) with 495/500 successful points in 67.92 s
+Saved column 456/500 (Delta Ca=-22.204409) with 500/500 successful points in 110.21 s
+Saved column 247/500 (Delta Ca=-32.675351) with 483/500 successful points in 96.13 s
+Saved column 287/500 (Delta Ca=-30.671343) with 500/500 successful points in 94.26 s
+Saved column 317/500 (Delta Ca=-29.168337) with 500/500 successful points in 86.60 s
+Saved column 327/500 (Delta Ca=-28.667335) with 500/500 successful points in 77.85 s
+Saved column 118/500 (Delta Ca=-39.138277) with 436/500 successful points in 70.01 s
+Saved column 277/500 (Delta Ca=-31.172345) with 500/500 successful points in 95.78 s
+Saved column 141/500 (Delta Ca=-37.985972) with 490/500 successful points in 59.79 s
+Saved column 183/500 (Delta Ca=-35.881764) with 476/500 successful points in 92.92 s
+Saved column 172/500 (Delta Ca=-36.432866) with 447/500 successful points in 99.13 s
+Saved column 76/500 (Delta Ca=-41.242485) with 486/500 successful points in 67.31 s
+Saved column 307/500 (Delta Ca=-29.669339) with 500/500 successful points in 97.26 s
+Saved column 195/500 (Delta Ca=-35.280561) with 497/500 successful points in 69.92 s
+Saved column 228/500 (Delta Ca=-33.627255) with 500/500 successful points in 87.32 s
+Saved column 217/500 (Delta Ca=-34.178357) with 500/500 successful points in 85.39 s
+Saved column 206/500 (Delta Ca=-34.729459) with 499/500 successful points in 83.82 s
+Saved column 152/500 (Delta Ca=-37.434870) with 492/500 successful points in 77.56 s
+Saved column 88/500 (Delta Ca=-40.641283) with 494/500 successful points in 63.96 s
+Saved column 130/500 (Delta Ca=-38.537074) with 469/500 successful points in 69.91 s
+Saved column 66/500 (Delta Ca=-41.743487) with 479/500 successful points in 66.87 s
+Saved column 298/500 (Delta Ca=-30.120240) with 500/500 successful points in 60.24 s
+Saved column 337/500 (Delta Ca=-28.166333) with 500/500 successful points in 101.36 s
+Saved column 163/500 (Delta Ca=-36.883768) with 438/500 successful points in 79.95 s
+Saved column 347/500 (Delta Ca=-27.665331) with 500/500 successful points in 102.83 s
+Saved column 109/500 (Delta Ca=-39.589178) with 447/500 successful points in 72.70 s
+Saved column 387/500 (Delta Ca=-25.661323) with 500/500 successful points in 103.58 s
+Saved column 357/500 (Delta Ca=-27.164329) with 500/500 successful points in 103.32 s
+Saved column 397/500 (Delta Ca=-25.160321) with 500/500 successful points in 103.87 s
+Saved column 377/500 (Delta Ca=-26.162325) with 500/500 successful points in 103.14 s
+Saved column 367/500 (Delta Ca=-26.663327) with 500/500 successful points in 103.14 s
+Saved column 427/500 (Delta Ca=-23.657315) with 500/500 successful points in 107.73 s
+Saved column 99/500 (Delta Ca=-40.090180) with 495/500 successful points in 68.00 s
+Saved column 318/500 (Delta Ca=-29.118236) with 500/500 successful points in 61.28 s
+Saved column 142/500 (Delta Ca=-37.935872) with 491/500 successful points in 58.41 s
+Saved column 467/500 (Delta Ca=-21.653307) with 500/500 successful points in 87.83 s
+Saved column 407/500 (Delta Ca=-24.659319) with 500/500 successful points in 105.70 s
+Saved column 119/500 (Delta Ca=-39.088176) with 436/500 successful points in 69.53 s
+Saved column 417/500 (Delta Ca=-24.158317) with 500/500 successful points in 94.73 s
+Saved column 77/500 (Delta Ca=-41.192385) with 486/500 successful points in 63.63 s
+Saved column 229/500 (Delta Ca=-33.577154) with 499/500 successful points in 61.82 s
+Saved column 238/500 (Delta Ca=-33.126253) with 488/500 successful points in 96.05 s
+Saved column 457/500 (Delta Ca=-22.154309) with 500/500 successful points in 83.35 s
+Saved column 487/500 (Delta Ca=-20.651303) with 500/500 successful points in 105.86 s
+Saved column 328/500 (Delta Ca=-28.617234) with 500/500 successful points in 76.73 s
+Saved column 196/500 (Delta Ca=-35.230461) with 498/500 successful points in 65.96 s
+Saved column 308/500 (Delta Ca=-29.619238) with 500/500 successful points in 69.12 s
+Saved column 477/500 (Delta Ca=-21.152305) with 500/500 successful points in 107.74 s
+Saved column 497/500 (Delta Ca=-20.150301) with 500/500 successful points in 107.44 s
+Saved column 258/500 (Delta Ca=-32.124248) with 492/500 successful points in 94.25 s
+Saved column 268/500 (Delta Ca=-31.623246) with 496/500 successful points in 94.12 s
+Saved column 248/500 (Delta Ca=-32.625251) with 490/500 successful points in 94.86 s
+Saved column 184/500 (Delta Ca=-35.831663) with 489/500 successful points in 87.12 s
+Saved column 288/500 (Delta Ca=-30.621242) with 500/500 successful points in 93.73 s
+Saved column 437/500 (Delta Ca=-23.156313) with 500/500 successful points in 109.40 s
+Saved column 207/500 (Delta Ca=-34.679359) with 499/500 successful points in 77.05 s
+Saved column 278/500 (Delta Ca=-31.122244) with 500/500 successful points in 95.17 s
+Saved column 153/500 (Delta Ca=-37.384770) with 491/500 successful points in 76.85 s
+Saved column 447/500 (Delta Ca=-22.655311) with 500/500 successful points in 109.62 s
+Saved column 218/500 (Delta Ca=-34.128257) with 500/500 successful points in 82.76 s
+Saved column 131/500 (Delta Ca=-38.486974) with 462/500 successful points in 72.90 s
+Saved column 173/500 (Delta Ca=-36.382766) with 435/500 successful points in 102.78 s
+Saved column 338/500 (Delta Ca=-28.116232) with 500/500 successful points in 76.56 s
+Saved column 164/500 (Delta Ca=-36.833667) with 431/500 successful points in 72.68 s
+Saved column 299/500 (Delta Ca=-30.070140) with 500/500 successful points in 85.82 s
+Saved column 110/500 (Delta Ca=-39.539078) with 448/500 successful points in 71.36 s
+Saved column 468/500 (Delta Ca=-21.603206) with 500/500 successful points in 69.44 s
+Saved column 143/500 (Delta Ca=-37.885772) with 491/500 successful points in 74.52 s
+Saved column 418/500 (Delta Ca=-24.108216) with 500/500 successful points in 67.88 s
+Saved column 329/500 (Delta Ca=-28.567134) with 500/500 successful points in 62.65 s
+Saved column 319/500 (Delta Ca=-29.068136) with 500/500 successful points in 80.27 s
+Saved column 120/500 (Delta Ca=-39.038076) with 450/500 successful points in 75.75 s
+Saved column 458/500 (Delta Ca=-22.104208) with 500/500 successful points in 69.65 s
+Saved column 348/500 (Delta Ca=-27.615230) with 500/500 successful points in 102.71 s
+Saved column 230/500 (Delta Ca=-33.527054) with 500/500 successful points in 75.35 s
+Saved column 488/500 (Delta Ca=-20.601202) with 500/500 successful points in 74.23 s
+Saved column 219/500 (Delta Ca=-34.078156) with 500/500 successful points in 53.80 s
+Saved column 388/500 (Delta Ca=-25.611222) with 500/500 successful points in 100.78 s
+Saved column 132/500 (Delta Ca=-38.436874) with 478/500 successful points in 50.37 s
+Saved column 197/500 (Delta Ca=-35.180361) with 498/500 successful points in 75.92 s
+Saved column 398/500 (Delta Ca=-25.110220) with 500/500 successful points in 101.22 s
+Saved column 358/500 (Delta Ca=-27.114228) with 500/500 successful points in 103.37 s
+Saved column 378/500 (Delta Ca=-26.112224) with 500/500 successful points in 102.48 s
+Saved column 368/500 (Delta Ca=-26.613226) with 500/500 successful points in 103.36 s
+Saved column 259/500 (Delta Ca=-32.074148) with 493/500 successful points in 78.96 s
+Saved column 185/500 (Delta Ca=-35.781563) with 488/500 successful points in 75.40 s
+Saved column 428/500 (Delta Ca=-23.607214) with 500/500 successful points in 107.70 s
+Saved column 239/500 (Delta Ca=-33.076152) with 491/500 successful points in 92.10 s
+Saved column 154/500 (Delta Ca=-37.334669) with 488/500 successful points in 71.55 s
+Saved column 408/500 (Delta Ca=-24.609218) with 500/500 successful points in 106.02 s
+Saved column 309/500 (Delta Ca=-29.569138) with 500/500 successful points in 95.65 s
+Saved column 279/500 (Delta Ca=-31.072144) with 500/500 successful points in 78.07 s
+Saved column 269/500 (Delta Ca=-31.573146) with 499/500 successful points in 92.92 s
+Saved column 448/500 (Delta Ca=-22.605210) with 500/500 successful points in 78.68 s
+Saved column 339/500 (Delta Ca=-28.066132) with 500/500 successful points in 63.69 s
+Saved column 208/500 (Delta Ca=-34.629259) with 500/500 successful points in 85.70 s
+Saved column 249/500 (Delta Ca=-32.575150) with 487/500 successful points in 94.32 s
+Saved column 289/500 (Delta Ca=-30.571142) with 500/500 successful points in 94.16 s
+Saved column 438/500 (Delta Ca=-23.106212) with 500/500 successful points in 92.02 s
+Saved column 478/500 (Delta Ca=-21.102204) with 500/500 successful points in 107.34 s
+Saved column 165/500 (Delta Ca=-36.783567) with 429/500 successful points in 70.70 s
+Saved column 498/500 (Delta Ca=-20.100200) with 500/500 successful points in 107.37 s
+Saved column 300/500 (Delta Ca=-30.020040) with 500/500 successful points in 73.54 s
+Saved column 174/500 (Delta Ca=-36.332665) with 430/500 successful points in 87.60 s
+Saved column 469/500 (Delta Ca=-21.553106) with 500/500 successful points in 69.36 s
+Saved column 330/500 (Delta Ca=-28.517034) with 500/500 successful points in 62.69 s
+Saved column 220/500 (Delta Ca=-34.028056) with 500/500 successful points in 54.10 s
+Saved column 121/500 (Delta Ca=-38.987976) with 441/500 successful points in 65.45 s
+Saved column 459/500 (Delta Ca=-22.054108) with 500/500 successful points in 69.51 s
+Saved column 349/500 (Delta Ca=-27.565130) with 500/500 successful points in 69.65 s
+Saved column 186/500 (Delta Ca=-35.731463) with 492/500 successful points in 54.46 s
+Saved column 399/500 (Delta Ca=-25.060120) with 500/500 successful points in 65.36 s
+Saved column 379/500 (Delta Ca=-26.062124) with 500/500 successful points in 64.93 s
+Saved column 489/500 (Delta Ca=-20.551102) with 500/500 successful points in 78.45 s
+Saved column 419/500 (Delta Ca=-24.058116) with 500/500 successful points in 96.67 s
+Saved column 320/500 (Delta Ca=-29.018036) with 500/500 successful points in 97.15 s
+Saved column 198/500 (Delta Ca=-35.130261) with 499/500 successful points in 85.88 s
+Saved column 240/500 (Delta Ca=-33.026052) with 487/500 successful points in 71.81 s
+Saved column 359/500 (Delta Ca=-27.064128) with 500/500 successful points in 83.33 s
+Saved column 340/500 (Delta Ca=-28.016032) with 500/500 successful points in 63.70 s
+Saved column 369/500 (Delta Ca=-26.563126) with 500/500 successful points in 83.93 s
+Saved column 429/500 (Delta Ca=-23.557114) with 500/500 successful points in 79.06 s
+Saved column 449/500 (Delta Ca=-22.555110) with 500/500 successful points in 68.96 s
+Saved column 270/500 (Delta Ca=-31.523046) with 500/500 successful points in 70.64 s
+Saved column 290/500 (Delta Ca=-30.521042) with 500/500 successful points in 63.14 s
+Saved column 389/500 (Delta Ca=-25.561122) with 500/500 successful points in 95.77 s
+Saved column 260/500 (Delta Ca=-32.024048) with 492/500 successful points in 90.71 s
+Saved column 409/500 (Delta Ca=-24.559118) with 500/500 successful points in 81.07 s
+Saved column 439/500 (Delta Ca=-23.056112) with 500/500 successful points in 68.33 s
+Saved column 209/500 (Delta Ca=-34.579158) with 500/500 successful points in 75.52 s
+Saved column 310/500 (Delta Ca=-29.519038) with 500/500 successful points in 86.53 s
+Saved column 499/500 (Delta Ca=-20.050100) with 500/500 successful points in 72.38 s
+Saved column 175/500 (Delta Ca=-36.282565) with 431/500 successful points in 64.98 s
+Saved column 280/500 (Delta Ca=-31.022044) with 500/500 successful points in 86.86 s
+Saved column 250/500 (Delta Ca=-32.525050) with 488/500 successful points in 79.56 s
+Saved column 470/500 (Delta Ca=-21.503006) with 500/500 successful points in 68.82 s
+Saved column 479/500 (Delta Ca=-21.052104) with 500/500 successful points in 87.40 s
+Saved column 187/500 (Delta Ca=-35.681363) with 483/500 successful points in 55.76 s
+Saved column 350/500 (Delta Ca=-27.515030) with 500/500 successful points in 64.76 s
+Saved column 460/500 (Delta Ca=-22.004008) with 500/500 successful points in 69.30 s
+Saved column 400/500 (Delta Ca=-25.010020) with 500/500 successful points in 65.13 s
+Saved column 380/500 (Delta Ca=-26.012024) with 500/500 successful points in 64.57 s
+Saved column 490/500 (Delta Ca=-20.501002) with 500/500 successful points in 66.65 s
+Saved column 420/500 (Delta Ca=-24.008016) with 500/500 successful points in 69.66 s
+Saved column 360/500 (Delta Ca=-27.014028) with 500/500 successful points in 64.45 s
+Saved column 370/500 (Delta Ca=-26.513026) with 500/500 successful points in 64.73 s
+Saved column 430/500 (Delta Ca=-23.507014) with 500/500 successful points in 67.60 s
+Saved column 390/500 (Delta Ca=-25.511022) with 500/500 successful points in 64.34 s
+Saved column 450/500 (Delta Ca=-22.505010) with 500/500 successful points in 68.57 s
+Saved column 410/500 (Delta Ca=-24.509018) with 500/500 successful points in 66.31 s
+Saved column 440/500 (Delta Ca=-23.006012) with 500/500 successful points in 68.01 s
+Saved column 176/500 (Delta Ca=-36.232465) with 432/500 successful points in 64.98 s
+Saved column 500/500 (Delta Ca=-20.000000) with 500/500 successful points in 67.04 s
+Saved column 480/500 (Delta Ca=-21.002004) with 500/500 successful points in 66.58 s
+Successful points: 245735 / 250000
+Saved merged results to /home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_results.tsv
+Saved contour plot to /home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_contours.png
+Saved summary to /home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_summary.txt
+Elapsed 1042.27 s
+[2026-05-06T00:11:36+00:00] Uploading attempt-055 final artifacts for grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered to gs://carter-kneading-attempt055/attempt-055
+[2026-05-06T00:11:36+00:00] Syncing attempt-055 checkpoint artifacts to gs://carter-kneading-attempt055/attempt-055
+At file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/**, worker process 2705 thread 140197001193280 listed 500...
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0001.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0001.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0002.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0002.tsv
+  
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0003.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0003.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0004.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0004.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0005.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0005.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0006.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0006.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0007.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0007.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0008.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0008.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0009.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0009.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0010.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0010.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0011.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0011.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0012.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0012.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0013.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0013.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0014.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0014.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0015.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0015.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0016.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0016.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0017.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0017.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0018.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0018.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0019.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0019.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0020.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0020.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0021.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0021.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0022.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0022.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0023.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0023.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0024.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0024.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0025.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0025.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0026.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0026.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0027.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0027.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0028.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0028.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0029.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0029.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0030.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0030.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0031.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0031.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0032.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0032.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0033.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0033.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0034.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0034.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0035.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0035.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0036.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0036.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0037.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0037.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0038.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0038.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0039.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0039.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0040.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0040.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0041.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0041.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0042.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0042.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0043.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0043.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0044.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0044.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0045.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0045.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0046.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0046.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0047.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0047.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0048.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0048.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0049.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0049.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0050.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0050.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0051.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0051.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0052.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0052.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0053.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0053.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0054.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0054.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0055.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0055.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0056.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0056.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0057.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0057.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0058.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0058.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0059.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0059.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0060.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0060.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0061.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0061.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0062.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0062.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0063.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0063.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0064.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0064.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0065.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0065.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0066.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0066.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0067.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0067.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0068.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0068.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0069.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0069.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0070.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0070.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0071.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0071.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0072.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0072.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0073.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0073.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0074.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0074.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0075.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0075.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0076.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0076.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0077.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0077.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0078.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0078.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0079.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0079.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0080.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0080.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0081.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0081.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0082.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0082.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0083.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0083.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0084.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0084.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0085.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0085.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0086.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0086.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0087.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0087.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0088.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0088.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0089.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0089.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0090.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0090.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0091.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0091.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0092.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0092.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0093.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0093.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0094.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0094.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0095.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0095.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0096.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0096.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0097.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0097.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0098.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0098.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0099.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0099.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0100.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0100.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0101.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0101.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0102.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0102.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0103.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0103.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0104.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0104.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0105.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0105.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0106.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0106.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0107.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0107.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0108.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0108.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0109.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0109.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0110.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0110.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0111.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0111.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0112.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0112.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0113.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0113.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0114.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0114.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0115.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0115.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0116.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0116.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0117.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0117.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0118.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0118.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0119.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0119.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0120.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0120.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0121.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0121.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0122.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0122.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0123.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0123.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0124.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0124.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0125.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0125.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0126.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0126.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0127.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0127.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0128.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0128.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0129.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0129.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0130.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0130.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0131.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0131.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0132.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0132.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0133.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0133.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0134.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0134.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0135.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0135.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0136.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0136.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0137.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0137.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0138.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0138.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0139.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0139.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0140.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0140.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0141.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0141.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0142.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0142.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0143.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0143.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0144.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0144.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0145.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0145.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0146.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0146.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0147.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0147.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0148.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0148.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0149.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0149.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0150.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0150.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0151.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0151.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0152.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0152.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0153.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0153.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0154.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0154.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0155.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0155.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0156.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0156.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0157.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0157.tsv
+.Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0158.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0158.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0159.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0159.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0160.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0160.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0161.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0161.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0162.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0162.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0163.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0163.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0164.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0164.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0165.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0165.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0166.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0166.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0167.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0167.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0168.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0168.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0169.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0169.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0170.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0170.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0171.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0171.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0172.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0172.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0173.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0173.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0174.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0174.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0175.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0175.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0176.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0176.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0177.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0177.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0178.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0178.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0179.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0179.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0180.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0180.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0181.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0181.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0182.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0182.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0183.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0183.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0184.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0184.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0185.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0185.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0186.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0186.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0187.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0187.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0188.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0188.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0189.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0189.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0190.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0190.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0191.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0191.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0192.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0192.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0193.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0193.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0194.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0194.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0195.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0195.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0196.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0196.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0197.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0197.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0198.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0198.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0199.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0199.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0200.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0200.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0201.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0201.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0202.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0202.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0203.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0203.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0204.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0204.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0205.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0205.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0206.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0206.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0207.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0207.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0208.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0208.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0209.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0209.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0210.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0210.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0211.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0211.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0212.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0212.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0213.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0213.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0214.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0214.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0215.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0215.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0216.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0216.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0217.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0217.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0218.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0218.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0219.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0219.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0220.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0220.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0221.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0221.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0222.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0222.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0223.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0223.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0224.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0224.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0225.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0225.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0226.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0226.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0227.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0227.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0228.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0228.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0229.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0229.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0230.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0230.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0231.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0231.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0232.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0232.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0233.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0233.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0234.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0234.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0235.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0235.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0236.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0236.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0237.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0237.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0238.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0238.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0239.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0239.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0240.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0240.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0241.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0241.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0242.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0242.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0243.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0243.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0244.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0244.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0245.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0245.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0246.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0246.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0247.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0247.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0248.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0248.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0249.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0249.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0250.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0250.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0251.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0251.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0252.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0252.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0253.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0253.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0254.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0254.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0255.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0255.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0256.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0256.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0257.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0257.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0258.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0258.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0259.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0259.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0260.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0260.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0261.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0261.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0262.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0262.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0263.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0263.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0264.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0264.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0265.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0265.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0266.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0266.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0267.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0267.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0268.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0268.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0269.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0269.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0270.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0270.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0271.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0271.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0272.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0272.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0273.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0273.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0274.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0274.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0275.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0275.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0276.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0276.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0277.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0277.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0278.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0278.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0279.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0279.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0280.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0280.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0281.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0281.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0282.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0282.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0283.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0283.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0284.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0284.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0285.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0285.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0286.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0286.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0287.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0287.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0288.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0288.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0289.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0289.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0290.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0290.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0291.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0291.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0292.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0292.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0293.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0293.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0294.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0294.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0295.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0295.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0296.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0296.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0297.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0297.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0298.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0298.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0299.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0299.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0300.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0300.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0301.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0301.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0302.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0302.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0303.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0303.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0304.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0304.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0305.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0305.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0306.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0306.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0307.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0307.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0308.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0308.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0309.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0309.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0310.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0310.tsv
+.Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0311.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0311.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0312.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0312.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0313.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0313.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0314.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0314.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0315.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0315.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0316.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0316.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0317.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0317.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0318.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0318.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0319.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0319.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0320.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0320.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0321.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0321.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0322.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0322.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0323.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0323.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0324.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0324.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0325.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0325.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0326.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0326.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0327.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0327.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0328.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0328.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0329.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0329.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0330.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0330.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0331.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0331.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0332.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0332.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0333.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0333.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0334.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0334.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0335.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0335.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0336.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0336.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0337.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0337.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0338.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0338.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0339.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0339.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0340.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0340.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0341.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0341.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0342.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0342.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0343.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0343.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0344.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0344.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0345.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0345.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0346.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0346.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0347.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0347.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0348.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0348.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0349.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0349.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0350.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0350.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0351.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0351.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0352.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0352.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0353.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0353.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0354.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0354.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0355.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0355.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0356.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0356.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0357.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0357.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0358.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0358.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0359.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0359.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0360.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0360.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0361.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0361.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0362.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0362.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0363.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0363.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0364.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0364.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0365.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0365.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0366.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0366.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0367.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0367.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0368.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0368.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0369.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0369.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0370.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0370.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0371.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0371.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0372.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0372.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0373.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0373.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0374.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0374.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0375.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0375.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0376.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0376.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0377.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0377.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0378.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0378.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0379.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0379.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0380.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0380.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0381.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0381.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0382.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0382.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0383.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0383.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0384.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0384.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0385.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0385.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0386.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0386.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0387.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0387.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0388.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0388.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0389.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0389.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0390.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0390.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0391.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0391.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0392.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0392.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0393.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0393.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0394.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0394.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0395.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0395.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0396.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0396.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0397.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0397.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0398.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0398.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0399.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0399.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0400.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0400.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0401.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0401.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0402.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0402.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0403.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0403.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0404.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0404.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0405.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0405.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0406.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0406.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0407.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0407.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0408.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0408.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0409.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0409.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0410.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0410.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0411.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0411.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0412.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0412.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0413.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0413.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0414.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0414.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0415.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0415.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0416.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0416.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0417.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0417.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0418.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0418.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0419.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0419.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0420.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0420.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0421.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0421.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0422.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0422.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0423.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0423.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0424.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0424.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0425.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0425.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0426.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0426.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0427.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0427.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0428.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0428.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0429.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0429.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0430.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0430.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0431.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0431.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0432.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0432.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0433.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0433.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0434.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0434.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0435.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0435.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0436.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0436.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0437.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0437.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0438.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0438.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0439.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0439.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0440.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0440.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0441.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0441.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0442.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0442.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0443.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0443.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0444.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0444.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0445.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0445.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0446.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0446.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0447.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0447.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0448.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0448.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0449.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0449.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0450.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0450.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0451.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0451.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0452.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0452.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0453.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0453.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0454.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0454.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0455.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0455.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0456.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0456.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0457.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0457.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0458.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0458.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0459.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0459.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0460.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0460.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0461.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0461.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0462.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0462.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0463.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0463.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0464.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0464.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0465.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0465.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0466.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0466.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0467.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0467.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0468.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0468.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0469.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0469.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0470.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0470.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0471.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0471.tsv
+.Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0472.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0472.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0473.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0473.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0474.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0474.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0475.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0475.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0476.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0476.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0477.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0477.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0478.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0478.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0479.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0479.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0480.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0480.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0481.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0481.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0482.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0482.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0483.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0483.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0484.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0484.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0485.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0485.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0486.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0486.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0487.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0487.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0488.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0488.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0489.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0489.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0490.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0490.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0491.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0491.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0492.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0492.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0493.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0493.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0494.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0494.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0495.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0495.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0496.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0496.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0497.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0497.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0498.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0498.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0499.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0499.tsv
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0500.tsv to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered_columns/column_0500.tsv
+....
+
+Average throughput: 91.1MiB/s
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered.log to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered.log
+  
+..
+Copying file:///home/carterhinsley/MultimodalMaps.jl/kneading/experiment/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered.log to gs://carter-kneading-attempt055/attempt-055/grid500_tangent_ca_dotzero_tmax1e5_iter8_ystub_sf_xfiltered.log
+  

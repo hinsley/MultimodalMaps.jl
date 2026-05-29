@@ -1,0 +1,701 @@
+delta_x	delta_ca	T0_V	T0_Ca	T0_method	T_encoding	gamma_encoding	T_scs	gamma_scs	status
+-1.500000	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.479592	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.459184	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.438776	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.418367	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.397959	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.377551	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.357143	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.336735	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.316327	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.295918	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.275510	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.255102	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.234694	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.214286	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.193878	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.173469	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.153061	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.132653	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.112245	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.091837	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.071429	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.051020	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.030612	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-1.010204	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.989796	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.969388	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.948980	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.928571	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.908163	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.887755	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.867347	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.846939	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.826531	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.806122	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.785714	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.765306	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.744898	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.724490	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.704082	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.683673	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.663265	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.642857	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.622449	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.602041	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.581633	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.561224	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.540816	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.520408	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+
+-0.500000	-45.000000								error: Detected non-constant types in an out-of-place ODE solve, i.e. for
+`du = f(u,p,t)` we see `typeof(du) !== typeof(u/t)`. This is not
+supported by OrdinaryDiffEq.jl's solvers. Please either make `f`
+type-constant (i.e. typeof(du) === typeof(u/t)) or use the mutating
+in-place form `f(du,u,p,t)` (which is type-constant by construction).
+
+Note that one common case for this is when computing with GPUs, using
+`Float32` for `u0` and `Float64` for `tspan`. To correct this, ensure
+that the element type of `tspan` matches the preferred compute type,
+for example `ODEProblem(f,0f0,(0f0,1f0))` for `Float32`-based time.
+
+typeof(u/t) = Vector{Float64}
+typeof(du) = SVector{6, Float64}
+

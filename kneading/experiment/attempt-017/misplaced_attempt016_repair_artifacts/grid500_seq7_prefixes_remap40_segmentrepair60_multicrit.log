@@ -1,0 +1,19 @@
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+Running attempt-016 segment repair.
+Input tag: grid500_seq7_prefixes_remap40
+Output tag: grid500_seq7_prefixes_remap40_segmentrepair60_multicrit
+Dense remap resolution: 60
+Input columns: /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-016/grid500_seq7_prefixes_remap40_columns
+Output columns: /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-016/grid500_seq7_prefixes_remap40_segmentrepair60_multicrit_columns
+Repaired column 119/500 (ΔCa=-39.088176): 1 points across 1 failed runs, residual errors=0, remap restarts=1
+Repaired column 127/500 (ΔCa=-38.687375): 1 points across 1 failed runs, residual errors=0, remap restarts=1
+Repaired column 1/500 (ΔCa=-45.000000): 157 points across 2 failed runs, residual errors=5, remap restarts=80
+Repaired column 2/500 (ΔCa=-44.949900): 150 points across 2 failed runs, residual errors=5, remap restarts=75
+Repaired column 3/500 (ΔCa=-44.899800): 143 points across 2 failed runs, residual errors=7, remap restarts=69
+Repaired column 4/500 (ΔCa=-44.849699): 137 points across 2 failed runs, residual errors=10, remap restarts=66
+Repaired column 5/500 (ΔCa=-44.799599): 135 points across 1 failed runs, residual errors=16, remap restarts=68
+Repaired column 6/500 (ΔCa=-44.749499): 128 points across 1 failed runs, residual errors=30, remap restarts=72

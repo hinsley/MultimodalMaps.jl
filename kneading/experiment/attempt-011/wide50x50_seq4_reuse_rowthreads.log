@@ -1,0 +1,68 @@
+Running attempt-011 contour scan.
+Grid: 50 ΔCa points × 50 Δx points
+Julia threads: 6, output tag: wide50x50_seq4_reuse_rowthreads, max sequence length: 4
+T0 continuation refinement steps: 5, Ca-window: 0.003
+Row checkpoint directory: /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/wide50x50_seq4_reuse_rowthreads_rows
+Saved row 10/50 (Δx=-1.316327) with 47/50 successful points in 18.96 s
+Saved row 1/50 (Δx=-1.500000) with 37/50 successful points in 19.80 s
+Saved row 19/50 (Δx=-1.132653) with 50/50 successful points in 20.13 s
+Saved row 27/50 (Δx=-0.969388) with 50/50 successful points in 21.90 s
+Saved row 35/50 (Δx=-0.806122) with 50/50 successful points in 22.45 s
+Saved row 43/50 (Δx=-0.642857) with 50/50 successful points in 23.25 s
+Saved row 11/50 (Δx=-1.295918) with 47/50 successful points in 8.73 s
+Saved row 2/50 (Δx=-1.479592) with 37/50 successful points in 9.83 s
+Saved row 20/50 (Δx=-1.112245) with 50/50 successful points in 9.73 s
+Saved row 28/50 (Δx=-0.948980) with 50/50 successful points in 10.98 s
+Saved row 36/50 (Δx=-0.785714) with 50/50 successful points in 12.83 s
+Saved row 44/50 (Δx=-0.622449) with 50/50 successful points in 14.33 s
+Saved row 3/50 (Δx=-1.459184) with 48/50 successful points in 10.72 s
+Saved row 12/50 (Δx=-1.275510) with 49/50 successful points in 12.01 s
+Saved row 21/50 (Δx=-1.091837) with 50/50 successful points in 15.29 s
+Saved row 29/50 (Δx=-0.928571) with 50/50 successful points in 15.36 s
+Saved row 4/50 (Δx=-1.438776) with 48/50 successful points in 8.81 s
+Saved row 13/50 (Δx=-1.255102) with 49/50 successful points in 11.66 s
+Saved row 37/50 (Δx=-0.765306) with 50/50 successful points in 17.09 s
+Saved row 45/50 (Δx=-0.602041) with 50/50 successful points in 17.40 s
+Saved row 22/50 (Δx=-1.071429) with 50/50 successful points in 14.06 s
+Saved row 5/50 (Δx=-1.418367) with 48/50 successful points in 11.34 s
+Saved row 14/50 (Δx=-1.234694) with 49/50 successful points in 11.04 s
+Saved row 30/50 (Δx=-0.908163) with 50/50 successful points in 15.23 s
+Saved row 38/50 (Δx=-0.744898) with 50/50 successful points in 14.93 s
+Saved row 6/50 (Δx=-1.397959) with 48/50 successful points in 8.26 s
+Saved row 46/50 (Δx=-0.581633) with 50/50 successful points in 15.36 s
+Saved row 23/50 (Δx=-1.051020) with 49/50 successful points in 11.59 s
+Saved row 15/50 (Δx=-1.214286) with 49/50 successful points in 11.00 s
+Saved row 31/50 (Δx=-0.887755) with 50/50 successful points in 13.60 s
+Saved row 7/50 (Δx=-1.377551) with 48/50 successful points in 8.69 s
+Saved row 39/50 (Δx=-0.724490) with 50/50 successful points in 13.58 s
+Saved row 24/50 (Δx=-1.030612) with 49/50 successful points in 10.82 s
+Saved row 16/50 (Δx=-1.193878) with 49/50 successful points in 8.96 s
+Saved row 47/50 (Δx=-0.561224) with 50/50 successful points in 13.12 s
+Saved row 8/50 (Δx=-1.357143) with 48/50 successful points in 7.83 s
+Saved row 32/50 (Δx=-0.867347) with 50/50 successful points in 11.44 s
+Saved row 25/50 (Δx=-1.010204) with 49/50 successful points in 11.78 s
+Saved row 17/50 (Δx=-1.173469) with 49/50 successful points in 10.46 s
+Saved row 40/50 (Δx=-0.704082) with 50/50 successful points in 13.43 s
+Saved row 9/50 (Δx=-1.336735) with 47/50 successful points in 9.21 s
+Saved row 48/50 (Δx=-0.540816) with 50/50 successful points in 14.45 s
+Saved row 33/50 (Δx=-0.846939) with 50/50 successful points in 13.58 s
+Saved row 18/50 (Δx=-1.153061) with 50/50 successful points in 10.05 s
+Saved row 26/50 (Δx=-0.989796) with 50/50 successful points in 11.51 s
+Saved row 41/50 (Δx=-0.683673) with 50/50 successful points in 12.05 s
+Saved row 49/50 (Δx=-0.520408) with 49/50 successful points in 11.10 s
+Saved row 34/50 (Δx=-0.826531) with 50/50 successful points in 9.13 s
+Saved row 42/50 (Δx=-0.663265) with 50/50 successful points in 8.59 s
+Saved row 50/50 (Δx=-0.500000) with 49/50 successful points in 8.16 s
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+Successful points: 2442 / 2500
+Unique T encodings: 515
+Unique gamma encodings: 785
+Saved merged results to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/wide50x50_seq4_reuse_rowthreads_results.tsv
+Saved T legend to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/wide50x50_seq4_reuse_rowthreads_T_legend.tsv
+Saved gamma legend to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/wide50x50_seq4_reuse_rowthreads_gamma_legend.tsv
+Saved contour plot to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/wide50x50_seq4_reuse_rowthreads_contours.png
+real 163.13
+user 466.39
+sys 13.66

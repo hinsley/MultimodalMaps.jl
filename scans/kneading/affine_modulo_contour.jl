@@ -9,147 +9,128 @@ end
 
 using Plots
 
-include(joinpath(REPO_ROOT, "kneading", "encodings.jl"))
 include(joinpath(REPO_ROOT, "scans", "contours.jl"))
 include(joinpath(REPO_ROOT, "maps", "kneading", "affine_modulo.jl"))
 
-const OUTPUT_TAG = "ExactMatrix"
+const OUTPUT_TAG = "CriticalOrbit"
 
-function affine_modulo_plot_color(iterate, max_iterates, color_exp)
-  shade = ((iterate - 2) / max_iterates)^(1 / color_exp)
-  return RGB(shade, shade, shade)
+function env_int(name::String, default::Int)::Int
+  return parse(Int, get(ENV, name, string(default)))
 end
 
-function affine_modulo_validate_prefix_coding(max_iterates)
-  code_type = affine_modulo_code_type(max_iterates)
-  sample_parameters = (
-    (nextfloat(1.0), nextfloat(0.0)),
-    (1.10, 0.10),
-    (1.25, 0.20),
-    (1.40, 0.35),
-  )
+function contour_alpha(iterate::Int)::Float64
+  return Float64(iterate - 1)^(-1.2)
+end
 
-  for p in sample_parameters
-    discontinuities = affine_modulo_discontinuities(p)
-    @assert length(discontinuities) == 1
+function affine_modulo_orbit_offsets(
+  beta::Float64,
+  alpha::Float64,
+  iterate::Int,
+)::Tuple{Float64, Float64}
+  p = (beta, alpha)
+  discontinuities = affine_modulo_discontinuities(p)
+  @assert length(discontinuities) == 1
+  discontinuity = discontinuities[1]
 
-    matrix = allocate_affine_modulo_kneading_matrix(discontinuities, max_iterates)
-    affine_modulo_kneading_matrix!(matrix, discontinuities, p)
-    codes = affine_modulo_exact_prefix_codes(p, max_iterates, code_type)
+  zero_side_germ = AffineModuloGerm(discontinuity, AFFINE_MODULO_RIGHT_GERM)
+  one_side_germ = AffineModuloGerm(discontinuity, AFFINE_MODULO_LEFT_GERM)
 
-    code = code_type(0)
-    for iterate in 1:max_iterates
-      slice = vec(matrix[1, :, iterate + 1])
-      if slice[1] == 0 && slice[2] == 0
-        digit = code_type(0)
-      elseif slice[1] == -1 && slice[2] == 1
-        digit = code_type(1)
-      elseif slice[1] == 1 && slice[2] == -1
-        digit = code_type(2)
-      else
-        error("unexpected affine modulo matrix slice $(Tuple(slice))")
-      end
-
-      code = code_type(3) * code + digit
-      @assert code == codes[iterate]
-    end
+  for _ in 2:iterate
+    zero_side_germ = affine_modulo_iterate_germ(zero_side_germ, p)
+    one_side_germ = affine_modulo_iterate_germ(one_side_germ, p)
   end
+
+  return zero_side_germ.x - discontinuity, one_side_germ.x - discontinuity
 end
 
 rectangle = affine_modulo_recommended_scan_rectangle()
 alpha_min, alpha_max = rectangle.alpha
 beta_min, beta_max = rectangle.beta
 
-grid_size = parse(Int, get(ENV, "AFFINE_MODULO_GRID_SIZE", "1000"))
-iterates = parse(Int, get(ENV, "AFFINE_MODULO_ITERATES", "20"))
-color_exp = parse(Float64, get(ENV, "AFFINE_MODULO_COLOR_EXP", "2.0"))
+grid_size = env_int("AFFINE_MODULO_GRID_SIZE", 1000)
+iterates = env_int("AFFINE_MODULO_ITERATES", 20)
 frameless = lowercase(get(ENV, "AFFINE_MODULO_FRAMELESS", "false")) == "true"
+contour_linewidth = 2.0
 
-# Nudge sampling off the strip boundaries so the entire sampled grid stays in the
-# intended one-discontinuity regime, while the plot still shows the natural
-# rectangle [0, 0.5] x [1, 1.5].
+# Nudge sampling off the strip boundaries so the sampled grid stays in the
+# one-discontinuity regime while the axes still show the natural rectangle.
 alpha_vals = range(nextfloat(alpha_min), stop=prevfloat(alpha_max), length=grid_size)
 beta_vals = range(nextfloat(beta_min), stop=prevfloat(beta_max), length=grid_size)
 
 xticks = frameless ? nothing : collect(alpha_min:0.5:alpha_max)
 yticks = frameless ? nothing : collect(beta_min:0.5:beta_max)
+orbit_grids = [zeros(Float64, length(beta_vals), length(alpha_vals)) for _ in 1:2]
 
-affine_modulo_validate_prefix_coding(iterates)
+fig = plot(
+  aspect_ratio=:equal,
+  colorbar=false,
+  xlims=(alpha_min, alpha_max),
+  ylims=(beta_min, beta_max),
+  xlabel=frameless ? "" : raw"$\alpha$",
+  ylabel=frameless ? "" : raw"$\beta$",
+  legend=false,
+  size=(1000, 1000),
+  xguidefontsize=30,
+  yguidefontsize=30,
+  xtickfontsize=16,
+  ytickfontsize=16,
+  left_margin=frameless ? -5Plots.mm : 5Plots.mm,
+  bottom_margin=frameless ? -2.5Plots.mm : 5Plots.mm,
+  right_margin=frameless ? -2Plots.mm : 3Plots.mm,
+  top_margin=frameless ? -5Plots.mm : 3Plots.mm,
+  framestyle=frameless ? :none : :auto,
+  grid=frameless ? false : :auto,
+  xticks=xticks,
+  yticks=yticks,
+  ticks=frameless ? nothing : :auto,
+  background_color=:white,
+)
 
-label_grids = [zeros(UInt32, length(beta_vals), length(alpha_vals)) for _ in 2:iterates]
-label_lookups = [Dict{NTuple{6, UInt64}, UInt32}() for _ in 2:iterates]
-next_labels = [Ref(UInt32(1)) for _ in 2:iterates]
-contours = Vector{Tuple{Vector{Float64}, Vector{Float64}}}(undef, iterates - 1)
+compute_seconds = 0.0
 contour_seconds = 0.0
 
-compute_seconds = @elapsed begin
-  for (i, alpha) in enumerate(alpha_vals)
-    for (j, beta) in enumerate(beta_vals)
-      p = (beta, alpha)
-      discontinuities = affine_modulo_discontinuities(p)
-      @assert length(discontinuities) == 1
-
-      matrix = allocate_affine_modulo_kneading_matrix(discontinuities, iterates)
-      affine_modulo_kneading_matrix!(matrix, discontinuities, p)
-
-      for (grid_idx, iterate) in enumerate(2:iterates)
-        label_grids[grid_idx][j, i] = exact_matrix_label!(
-          label_lookups[grid_idx],
-          next_labels[grid_idx],
-          view(matrix, :, :, 1:iterate + 1),
-        )
+for iterate in iterates:-1:2
+  global compute_seconds += @elapsed begin
+    for i in eachindex(alpha_vals)
+      alpha = Float64(alpha_vals[i])
+      for j in eachindex(beta_vals)
+        beta = Float64(beta_vals[j])
+        zero_side_offset, one_side_offset = affine_modulo_orbit_offsets(beta, alpha, iterate)
+        orbit_grids[1][j, i] = zero_side_offset
+        orbit_grids[2][j, i] = one_side_offset
       end
+    end
+  end
+
+  alpha_value = contour_alpha(iterate)
+  contour_specs = (
+    (1, RGBA(0.85, 0.15, 0.12, alpha_value)),
+    (2, RGBA(0.10, 0.30, 0.90, alpha_value)),
+  )
+
+  global contour_seconds += @elapsed begin
+    for (grid_idx, contour_color) in contour_specs
+      contour_segments = march_squares_zero_segments(
+        orbit_grids[grid_idx],
+        alpha_vals,
+        beta_vals;
+        level=0.0,
+      )
+      contour_xs, contour_ys = segments_to_nan_polyline(contour_segments)
+      isempty(contour_xs) && continue
+      plot!(
+        fig,
+        contour_xs,
+        contour_ys,
+        color=contour_color,
+        linewidth=contour_linewidth,
+        label=false,
+      )
     end
   end
 end
 
-contour_seconds = @elapsed begin
-  for iterate in 2:iterates
-    contours[iterate - 1] = march_squares_simple(
-      label_grids[iterate - 1],
-      alpha_vals,
-      beta_vals,
-    )
-  end
-end
-
 render_seconds = @elapsed begin
-  fig = plot(
-    aspect_ratio=:equal,
-    colorbar=false,
-    xlims=(alpha_min, alpha_max),
-    ylims=(beta_min, beta_max),
-    xlabel=frameless ? "" : raw"$\alpha$",
-    ylabel=frameless ? "" : raw"$\beta$",
-    legend=false,
-    size=(1000, 1000),
-    xguidefontsize=30,
-    yguidefontsize=30,
-    xtickfontsize=16,
-    ytickfontsize=16,
-    left_margin=frameless ? -5Plots.mm : 5Plots.mm,
-    bottom_margin=frameless ? -2.5Plots.mm : 5Plots.mm,
-    right_margin=frameless ? -2Plots.mm : 3Plots.mm,
-    top_margin=frameless ? -5Plots.mm : 3Plots.mm,
-    framestyle=frameless ? :none : :auto,
-    grid=frameless ? false : :auto,
-    xticks=xticks,
-    yticks=yticks,
-    ticks=frameless ? nothing : :auto,
-  )
-
-  for iterate in iterates:-1:2
-    contour_xs, contour_ys = contours[iterate - 1]
-    plot!(
-      fig,
-      contour_xs,
-      contour_ys,
-      color=affine_modulo_plot_color(iterate, iterates, color_exp),
-      linewidth=1,
-      label="Iterate $iterate",
-    )
-  end
-
   if get(ENV, "GKSwstype", "") != "100"
     display(fig)
   end
@@ -180,6 +161,6 @@ open(runtime_path, "w") do io
   println(io, "regime\t$(rectangle.regime)")
 end
 
-println("Affine modulo compute-only runtime: $(round(compute_seconds; digits=6)) seconds")
+println("Affine modulo compute runtime: $(round(compute_seconds; digits=6)) seconds")
 println("Affine modulo contour extraction runtime: $(round(contour_seconds; digits=6)) seconds")
 println("Affine modulo render/save runtime: $(round(render_seconds; digits=6)) seconds")

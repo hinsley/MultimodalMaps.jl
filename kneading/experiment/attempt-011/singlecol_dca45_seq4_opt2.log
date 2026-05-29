@@ -1,0 +1,25 @@
+Running attempt-011 contour scan.
+Grid: 1 ΔCa points × 50 Δx points
+Julia threads: 6, output tag: singlecol_dca45_seq4_opt2, max sequence length: 4
+T0 continuation refinement steps: 5, Ca-window: 0.003
+Column checkpoint directory: /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/singlecol_dca45_seq4_opt2_columns
+Saved column 1/1 (ΔCa=-45.000000) with 0/50 successful points in 0.55 s
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+ERROR: LoadError: Missing or incomplete column file: /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/singlecol_dca45_seq4_opt2_columns/column_0001.tsv
+Stacktrace:
+ [1] error(s::String)
+   @ Base ./error.jl:35
+ [2] scan_column_files(pass_fn::var"#69#70"{Dict{BigInt, Vector{Int64}}, Dict{BigInt, Vector{Int64}}, Dict{BigInt, Int64}, Dict{BigInt, Int64}})
+   @ Main ~/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/contours.jl:207
+ [3] collect_legends
+   @ ~/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/contours.jl:226 [inlined]
+ [4] main()
+   @ Main ~/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/contours.jl:500
+ [5] top-level scope
+   @ ~/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/contours.jl:522
+in expression starting at /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-011/contours.jl:521
+real 17.64
+user 29.28
+sys 1.21

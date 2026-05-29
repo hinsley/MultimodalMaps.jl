@@ -1,0 +1,14 @@
+attempt-010 benchmark summary
+threads	10
+benchmark_points	20
+serial_seconds	11.034135
+serial_seconds_per_point	0.551707
+serial_estimated_minutes_for_2000x2000	36780.45
+threaded_seconds	1.936269
+threaded_seconds_per_point	0.096813
+threaded_estimated_minutes_for_2000x2000	6454.23
+threaded_speedup	5.6987
+gamma_sd_seconds	0.000688
+init_T0_seconds	0.330701
+T_sscs_seconds	0.077480
+gamma_sscs_seconds	0.150552

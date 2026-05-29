@@ -1,0 +1,51 @@
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+Running attempt-016 segment repair.
+Input tag: grid500_seq7_prefixes_remap40
+Output tag: grid500_seq7_prefixes_remap40_segmentrepair60
+Dense remap resolution: 60
+Input columns: /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-016/grid500_seq7_prefixes_remap40_columns
+Output columns: /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-016/grid500_seq7_prefixes_remap40_segmentrepair60_columns
+Repaired column 119/500 (ΔCa=-39.088176): 1 points across 1 failed runs, residual errors=1, remap restarts=1
+Repaired column 127/500 (ΔCa=-38.687375): 1 points across 1 failed runs, residual errors=0, remap restarts=1
+Repaired column 1/500 (ΔCa=-45.000000): 157 points across 2 failed runs, residual errors=157, remap restarts=157
+Repaired column 2/500 (ΔCa=-44.949900): 150 points across 2 failed runs, residual errors=150, remap restarts=150
+Repaired column 3/500 (ΔCa=-44.899800): 143 points across 2 failed runs, residual errors=143, remap restarts=143
+Repaired column 4/500 (ΔCa=-44.849699): 137 points across 2 failed runs, residual errors=137, remap restarts=137
+Repaired column 5/500 (ΔCa=-44.799599): 135 points across 1 failed runs, residual errors=135, remap restarts=135
+Repaired column 6/500 (ΔCa=-44.749499): 128 points across 1 failed runs, residual errors=128, remap restarts=128
+Repaired column 7/500 (ΔCa=-44.699399): 121 points across 1 failed runs, residual errors=121, remap restarts=121
+Repaired column 8/500 (ΔCa=-44.649299): 113 points across 1 failed runs, residual errors=113, remap restarts=113
+Repaired column 9/500 (ΔCa=-44.599198): 99 points across 2 failed runs, residual errors=99, remap restarts=99
+Repaired column 10/500 (ΔCa=-44.549098): 91 points across 2 failed runs, residual errors=91, remap restarts=91
+Repaired column 11/500 (ΔCa=-44.498998): 84 points across 2 failed runs, residual errors=84, remap restarts=84
+Repaired column 12/500 (ΔCa=-44.448898): 77 points across 2 failed runs, residual errors=77, remap restarts=77
+Repaired column 13/500 (ΔCa=-44.398798): 69 points across 2 failed runs, residual errors=69, remap restarts=69
+Repaired column 14/500 (ΔCa=-44.348697): 67 points across 1 failed runs, residual errors=67, remap restarts=67
+Repaired column 15/500 (ΔCa=-44.298597): 59 points across 1 failed runs, residual errors=59, remap restarts=59
+Repaired column 16/500 (ΔCa=-44.248497): 51 points across 1 failed runs, residual errors=51, remap restarts=51
+Repaired column 17/500 (ΔCa=-44.198397): 42 points across 1 failed runs, residual errors=42, remap restarts=42
+Repaired column 18/500 (ΔCa=-44.148297): 34 points across 1 failed runs, residual errors=34, remap restarts=34
+Repaired column 19/500 (ΔCa=-44.098196): 18 points across 3 failed runs, residual errors=18, remap restarts=18
+Repaired column 20/500 (ΔCa=-44.048096): 11 points across 1 failed runs, residual errors=11, remap restarts=11
+Repaired column 21/500 (ΔCa=-43.997996): 8 points across 1 failed runs, residual errors=8, remap restarts=8
+Original errored points: 1796
+Reprocessed points: 1796
+Failed runs repaired: 34
+Dense remap restarts used: 1796
+Residual errors after repair: 1795
+Saved repaired results to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-016/grid500_seq7_prefixes_remap40_segmentrepair60_results.tsv
+Saved repaired contour plot to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-016/grid500_seq7_prefixes_remap40_segmentrepair60_contours.png
+Saved prefix 1 plot to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-016/grid500_seq7_prefixes_remap40_segmentrepair60_prefix01_contours.png (unique T=2, unique gamma=22)
+Saved prefix 2 plot to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-016/grid500_seq7_prefixes_remap40_segmentrepair60_prefix02_contours.png (unique T=37, unique gamma=437)
+Saved prefix 3 plot to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-016/grid500_seq7_prefixes_remap40_segmentrepair60_prefix03_contours.png (unique T=549, unique gamma=5244)
+Saved prefix 4 plot to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-016/grid500_seq7_prefixes_remap40_segmentrepair60_prefix04_contours.png (unique T=5275, unique gamma=18878)
+Saved prefix 5 plot to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-016/grid500_seq7_prefixes_remap40_segmentrepair60_prefix05_contours.png (unique T=16499, unique gamma=26524)
+Saved prefix 6 plot to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-016/grid500_seq7_prefixes_remap40_segmentrepair60_prefix06_contours.png (unique T=22269, unique gamma=27702)
+Saved prefix 7 plot to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-016/grid500_seq7_prefixes_remap40_segmentrepair60_prefix07_contours.png (unique T=24144, unique gamma=27760)
+real 103.34
+user 115.78
+sys 4.65

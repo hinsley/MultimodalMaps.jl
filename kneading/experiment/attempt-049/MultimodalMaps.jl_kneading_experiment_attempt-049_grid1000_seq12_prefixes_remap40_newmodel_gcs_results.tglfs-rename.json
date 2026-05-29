@@ -1,0 +1,31 @@
+{
+  "ok": true,
+  "before": {
+    "msgId": 236270,
+    "date": 1777441664,
+    "data": {
+      "name": "attempt-049-gcs-results.tar.gz",
+      "ufid": "0fc24d9c3741c4febcfd1a623b66ad45e0a4c23eb51f24cb2e1ffa759a8be2f0",
+      "size": 175242525,
+      "uploadComplete": true,
+      "chunks": [
+        236271
+      ],
+      "IV": "XABvFdF6vYnrwKxm1WU3DkPcWu/QNF3oI62+E/1AcmM="
+    }
+  },
+  "after": {
+    "msgId": 236270,
+    "date": 1777441664,
+    "data": {
+      "name": "MultimodalMaps.jl_kneading_experiment_attempt-049_grid1000_seq12_prefixes_remap40_newmodel_gcs_results.tar.gz",
+      "ufid": "0fc24d9c3741c4febcfd1a623b66ad45e0a4c23eb51f24cb2e1ffa759a8be2f0",
+      "size": 175242525,
+      "uploadComplete": true,
+      "chunks": [
+        236271
+      ],
+      "IV": "XABvFdF6vYnrwKxm1WU3DkPcWu/QNF3oI62+E/1AcmM="
+    }
+  }
+}

@@ -1,0 +1,19 @@
+results_path	/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-050/gcs_results/grid1000_seq12_tmax1e5_prefixes_remap40_newmodel_results.tsv
+source_fig	/Users/carterhinsley/Downloads/jack_red_hil_overlap1.fig
+curves_path	/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-050/gcs_results/jack_red_hil_overlap1_matcont_overlay_curves.tsv
+plot_path	/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-050/gcs_results/grid1000_seq12_tmax1e5_gamma_scs_lz76_div1e5_matcont_overlay_thermal.png
+xlim	-45.0	-20.0
+ylim	-1.5	-0.5
+ok_count	892658
+error_count	107342
+finite_lz_count	892658
+gamma_full_length_count	157368
+finite_lz_min	0.0
+finite_lz_max	0.00017924812503605778
+colorrange_min	0.0
+colorrange_max	0.00017924812503605778
+colormap	thermal
+transient_symbols_omitted	0
+normalization_length	100000.0
+overlay_part	homSF	1	62,63,64,67,66	23524	-53.4599300181853	-34.3088208406264	-1.2466767379207866	0.5752097668442877
+overlay_part	orange_unlabeled	1	55	47	-40.4718322753906	25.0	-2.65461719036102	-1.2128483057022

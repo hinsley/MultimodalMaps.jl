@@ -1,0 +1,1532 @@
+arXiv:1407.5313v1  [math.DS]  20 Jul 2014
+Kneading with weights
+H.H. Rugh and Tan Lei
+April 25, 2018
+Abstract
+We generalise Milnor-Thurston’s kneading theory to the set ting of piecewise con-
+tinuous and monotone interval maps with weights. We deﬁne a w eighted kneading
+determinant D(t) and establish combinatorially two kneading identities, o ne with
+the cutting invariant and one with the dynamical zeta functi on. For the pressure
+log ρ1 of the weighted system, playing the role of entropy, we prove that D(t) is
+non-zero when |t| < 1/ρ1 and has a zero at 1 /ρ1. Furthermore, our map is semi-
+conjugate to an analytic family ht, 0 < t < 1/ρ1 of Cantor PL maps converging to
+an interval PL map h1/ρ 1 with equal pressure 1.
+1 Introduction
+Let I = [ a, b ]. Let a = c0 < c 1 < · · ·< c ℓ+1 = b. Set S = {0, 1, · · ·, ℓ }. For each i ∈ S,
+set Ii =]ci, c i+1[ and let fi : Ii → I be a strictly monotone continuous map extending
+continuously to the closure, and ﬁnally assign a constant weight gi ∈ C.
+We say that ( Ii, f i, g i)i∈ S is a weighted system . In the particular case that each gi
+equals 1, we say also that the system is unweighted.
+Milnor-Thurston [MT] developed a widely used kneading theory on unw eighted sys-
+tems so that the maps fi glue together to a single continuous map f . Let us recall a list
+of their results (see also [Ha] for an enlightening introduction to the subject).
+Milnor-Thurston introduce a power series matrix N (t), called the kneading matrix ,
+which records combinatorially the forward orbits of the cutting poin ts. They establish
+two identities:
+1. The Main Kneading Identity , relating N (t) to the growth of the cutting points
+of f n on any subinterval J, and taking the form
+γJ(t) · N(t) = terms involving boundaries of J; (1)
+12010 MSC 37E05, 37E15, 37C30
+Key words: Milnor-Thurston kneading theory, maps of the interva l, dynamical zeta functions, kneading
+determinant, pressure, entropy, semi-conjugacies.
+1
+2. The zeta-function identity , relating N (t) to a dynamical Artin-Mazur zeta
+function that counts the global growth of the f n-ﬁxed points, taking the form
+ζ(t) ·det N (t) = 1 . (2)
+Using these identities, Milnor-Thurston derive the following importan t consequences:
+3. For log s the topological entropy of the map, the matrix N (t) is invertible when
+|t| < 1/s . If s > 1 the matrix N (t) is singular at t = 1 /s and the growth rate of the
+periodic points is precisely s.
+4. If s > 1, the map is semi-conjugate to a simple model dynamical system whic h is
+a continuous PL (i.e. piecewise-linear) map of slope s.
+Most of this theory has been extended by Preston [Pr] to the gene ral unweighted setting
+without the assumption of global continuity. An advantage to allow d iscontinuity at the
+cutting points is that one can treat tree and graph maps as interva l unweighted systems
+after edge concatenation. See for example Tiozzo [Ti]. There exist also works that treat
+tree maps as they are. See for example Alves-SousaRamos, Baillif an d Baillif-deCarvalho
+[AS, Ba, BC].
+An essential diﬀerence in Preston’s approach as compared to Milnor -Thurston’s lies in
+the proof of the zeta-function identity. Preston’s method is pure ly combinatorial whereas
+the original proof tests on a concrete example and then studies be haviours under pertur-
+bations.
+In this work we will generalise all four results above to weighted syst ems, where the
+pressure log ρ1 will play the role of entropy. Points 1-4 will become Theorems 2.1, 2.2,
+2.3, 2.5 below.
+Our setting is identical to that of Baladi-Ruelle [BR]. In their work they deﬁne a
+weighted kneading matrix B and a weighted zeta function, and establish a version the
+zeta-function identity using a perturbative method similar to that o f Milnor-Thurston.
+For our purpose we will deﬁne a somewhat diﬀerent kneading matrix R.
+We will not rely on previous established results but instead provide se lf-contained
+proofs. In a way our results recover partially results in [BR, MT, Pr].
+Our proofs will be fairly elementary, with, as the only background, s ome basic knowl-
+edge of complex analysis. The rest is to play carefully with the combina torics of iterations,
+following mostly Milnor-Thurston.
+There is however a notable exception, which is about the proof of th e zeta-function
+identity. For this we choose to follow the combinatorial method of Pr eston, along with
+several signiﬁcant diﬀerences. Preston cuts oﬀ the graph above the diagonal in order
+to count the intersections, instead we keep the graph intact but c hange signs across the
+diagonal. Preston’s kneading matrix is similar to that of Milnor-Thurst on, by recording
+the sequence of visited intervals of a critical orbit. Instead we tak e the kneading matrix B
+of Baladi-Ruelle, which records the orbit’s position relative to every g iven critical point.
+We then add one more dimension to B to obtain our kneading matrix R, by incorporating
+2
+the inﬂuence of the boundary cutting points (with a somewhat diﬀer ent choice of sign).
+These modiﬁcations are designed to simplify, even in the unweighted c ase, Preston’s proof
+of the zeta-function identity. Preston’s idea is to express −
+(
+log ζ(t)
+) ′
+t
+as the trace of a
+certain matrix F , and then use repeatedly the Main Kneading Identity to connect F with
+the derivative of the kneading matrix. Here, many choices are poss ible but most give rise
+to additional correcting terms. Having tested various possibilities w e came up with the
+current choice of the kneading matrix R and a matrix F for which we have the simplest
+relation possible, i.e. F R = R′ (see Theorem 4.1). Once this relation established, the
+zeta-function identity is a one-line computation:
+− d
+dt log ζ(t) = T rF = T rR′R− 1 = d
+dt log det R.
+The kneading matrix and its smallest positive zero cost relatively little t o evaluate.
+This enables a fast and accurate computation of the pressure/en tropy as well as the
+semi-conjugacy and the PL model map.
+While experimenting these ideas we noticed that the system is also sem i-conjugate
+to a PL map for every 0 < t < ρ 1, although the conjugated system acts on a Cantor
+set instead of an interval. This numerical observation can easily be p roved and has now
+become our Theorem 2.4. To the best of our knowledge this stateme nt is new, also in the
+unweighted setting, even though its proof does not require any ne w ideas.
+A further justiﬁcation of our choice of the kneading determinant d et R as compared
+to det B, is that the latter may have a spurious small zero unrelated to the p ressure (in
+Appendix C we give an example).
+Another originality of this work is the systematic treatment of point -germs relative
+to points. Each point x in the interior of the interval generates two point-germs: x+ and
+x-. They have often distinct dynamical behaviour and it is convenient t o treat the two
+germs independently. The idea is certainly present to all the papers in the theory. But
+highlighting the notion transforms our computations in more concise forms.
+Why adding weights to piecewise continuous and monotone maps? One motivation
+is that one can prescribe slope ratios for the PL model maps, the ot her is that one can
+choose to ignore some parts of a dynamical system by assigning zer o weights, so to reveal
+deeper entropies hidden for example in renormalisation pieces.
+A further application, not pursued in the current work, is to const ruct various invari-
+ant measures by playing with weights and following Preston’s constru ction of measures
+maximizing the entropy.
+Acknowledgement. This note originates from the second author’s lecture notes for
+the ANR LAMBDA meeting in April 2014. organised by R. Dujardin. We w ould also like
+to thank G. Tiozzo for enlightening discussions.
+3
+2 Notation and results
+Let I = [ a, b ]. Let a = c0 < c 1 < · · ·< c ℓ+1 = b. Set Ii =]ci, c i+1[ and let fi : Ii → I be
+strictly monotone continuous maps for i = 0 , · · ·, ℓ . We write f = ( f0|I0, · · ·, f ℓ|Iℓ) and
+let si = sign( fi(c−
+i+1) − fi(c+
+u )) = ± 1 denote the sign of monotonicity. We consider f as
+undeﬁned at the cutting points. On the other hand, each fi extends to a continuous map
+from the closed interval [ ci, c i+1] to [ a, b ].
+We call C(f ) = {ci : 1 ≤ i ≤ ℓ} the interior cutting points of the interval. The set of
+cutting points, C∗(f ), includes c0 and cℓ+1.
+In order to treat monotonicity and discontinuities in a consistent ma nner it is conve-
+nient to extend our base interval I to its unit-tangent bundle, also denoted the space of
+point-germs ˆI: each point x ∈ I ∖ {a, b } generates two point-germs denoted x+ = (x, +1)
+and x- = (x, − 1) while the boundary points a, b each has only one point-germ a+ and b-.
+We write
+ε(x
++
+) := 1 and ε(x-) := − 1
+for the direction of the germ. In order to make some formulae in Sec tion 4 more concise,
+we set (artiﬁcially) c-
+0 = b- so that {c
++
+0 , c -
+0} = {a+, b -}. For x ∈ I we denote by ˆx = (x, σ )
+the point-germ based at x and in the direction σ ∈ {± 1}.
+It is notationally convenient to deﬁne an order < on the collection of point-germs
+together with base points, I ∪ ˆI, by declaring that for two base points x < y we have
+x < x + < y - < y < y +. Given two point-germs ˆu, ˆv ∈ ˆI with ˆu < ˆv, we deﬁne
+⟨ˆu, ˆv⟩ :=
+{
+x ∈ I |ˆu < x < ˆv
+}
+as a sub interval of I. It is then consistent to write e.g. [ u, v [= ⟨u-, v -⟩ and ]u, v [= ⟨u+, v -⟩.
+Note that the boundary points a, b never belong to an interval of the form ⟨ˆu, ˆv⟩. When
+J =]u, v [ is an open interval we set ˆJ = {ˆx : u < x < v } ∪ { u+} ∪ { v− }. In particular,
+ˆIi = {ˆx : ci < x < c i+1} ∪ { c+
+i } ∪ { c−
+i+1}, 0 ≤ i ≤ ℓ. We observe that the ˆIi’s are disjoint
+and their union is ˆI.
+Our original map f induces a well-deﬁned map ˆf : ˆI → ˆI. When ˆx = ( x, σ ) ∈ ˆIi
+then f (ˆx) = ( y, σ ′) is simply the germ based at y = lim t→ 0+ fi(x + σt) whose direction is
+σ ′ = siσ. Note that on each ˆIi, ˆf is monotone because f is strictly monotone. We will
+usually write f also for the extended map ˆf .
+For each 0 ≤ i ≤ ℓ we let gi ∈ C be a weight associated with the interval Ii. Both gi
+and si gives rise to functions on ˆIi by declaring s(ˆx) = si and g(ˆx) = gi whenever ˆx ∈ ˆIi.
+We may deﬁne products along orbits, sn, g n, [sg]n by setting s0 = g0 = 1, and
+∀ n ≥ 1, s n(ˆx) :=
+n− 1∏
+k=0
+s(f k(ˆx)), g n(ˆx) :=
+n− 1∏
+k=0
+g(f k(ˆx)), [sg]n := sngn.
+Note that sn(ˆx) is the sense of monotonicity of f n at ˆx.
+4
+We deﬁne a half-sign function:
+∀ ˆx ∈ ˆI, y ∈ I, σ (ˆx, y ) := 1
+2 sgn(ˆx − y) =
+{
++1/ 2 if ˆx > y
+− 1/ 2 if ˆx < y .
+Concerning forward orbits of point-germs we set for j, k = 0, · · ·, ℓ :
+θ(ˆx, t ; ck) =
+∑
+m≥ 0
+tm[sg]m(ˆx) ·σ(f mˆx, c k), so in particular (3)
+θ(ˆx, t ; c0) =
+∑
+m≥ 0
+tm[sg]m(ˆx) ·σ(f mˆx, c 0) = 1
+2
+∑
+m≥ 0
+tm[sg]m(ˆx) (4)
+ε∗(ˆc) = ε(ˆc) if ˆc ̸= c±
+0 and ε∗(ˆc) = +1 if ˆc = c±
+0 (5)
+Rjk(t) =
+∑
+ˆcj=c+
+j ,c −
+j
+ε∗(ˆcj) ·θ(ˆcj, t ; ck), (6)
+R(t) = ( Rjk (t))0≤ j,k ≤ ℓ (the kneading matrix ) (7)
+B(t) = ( Rjk (t))1≤ j,k ≤ ℓ (the reduced kneading matrix ) (8)
+In particular, one has (note the signs):
+Rjk(t) = θ(c
++
+j , t ; ck)− θ(c-
+j, t ; ck) =: ∆ cj θ(·, t ; ck) ( j > 0) while (9)
+R0k(t) = θ(a
++
+, t ; ck)+θ(b-, t ; ck) (10)
+(this choice of signs is designed to absorb boundary correcting ter ms in later calculations).
+Regarding ’backward’-orbits we deﬁne Z1 as the set of level-1 cylinders ( j) := Ij =
+]cj, c j+1[, j = 0 , 1, · · ·, ℓ . Deﬁne then recursively Zn as the set of non-empty level- n
+cylinders of the form : ( i0i1 · · ·in− 1) := Ii0 ∩ f − 1
+i0 (i1 · · ·in− 1). Each α = (i0i1 · · ·in− 1) is an
+open interval ] u, v [= ⟨u+, v -⟩. We set ˆ∂α = {u+, v -}. For 0 ≤ j < n , f j(α ) ⊂ Iij . So f n
+maps α homeomorphically onto its image, in particular each of the functions sj and gj,
+0 ≤ j < n , is constant on α .
+Deﬁnition 2.1. We call (Ii, f i)0≤ i≤ ℓ expansive if lim
+n→∞
+sup
+α ∈ Zn
+diam (α ) = 0 .
+For any y ∈ I, set Γ 0,y = {y}, and for p > 0,
+Γp,y =
+{
+x ∈
+⋃
+α ∈ Zp
+α
+⏐
+⏐ f p(x) = y
+}
+.
+Note that x ∈ Γp,y implies that gp(x-) = gp(x+), for which we simply write gp(x). This is
+because g0(x) ≡ 1 and every j-iterate (0 ≤ j < p ) of a p-cylinder α ∈ Zp belongs to some
+level-1 cylinder. Deﬁne
+γy(t) =
+∑
+p≥ 0
+∑
+x∈ Γp,y
+tpgp(x) and, for J ⊂ ]a, b [, γ y,J (t) =
+∑
+p≥ 0
+∑
+x∈ Γp,y
+tpgp(x)χ J (x).
+5
+This function counts the (weighted) number 2 of preimages of y.
+Clearly when J and J ′ are disjoint subsets we have
+γy,J (t) + γy,J ′(t) = γy,J ∪ J ′(t).
+Theorem 2.1. (Main Kneading Identity, or MKI in short) For any interval J = ⟨ˆu, ˆv⟩
+in I,
+∀ k ∈ { 0, · · ·, ℓ },
+ℓ∑
+j=1
+γcj,J (t)Rjk(t) = θ(ˆv, t ; ck) − θ(ˆu, t ; ck) =: ∆ J θ(·, t ; ck) (11)
+(the term j = 0 is not included in the sum, but we do allow k = 0).
+We also need a particular way to count the ﬁxed points of f n. Fix n ≥ 1 and an
+n-cylinder α . The value of gn(x) is a constant on α , denoted by gn
+|α . We deﬁne the (ﬁxed
+point counting) weight ω (α ) by
+ω (α ) = − gn
+|α
+∑
+ˆx∈ ˆ∂α
+σ(f nˆx, x ) ·ε(f nˆx).
+We refer to Appendix A for an account of the geometric meaning of t his weight. We then
+introduce the following weighted counting of ﬁxed points of f n:
+Nn :=
+∑
+α ∈ Zn
+ω (α ).
+Set Z(t) := exp
+( ∑
+n≥ 1
+1
+nNntn
+)
+, N f (t) :=
+∑
+n≥ 1
+Nntn− 1 = (log Z)′.
+Theorem 2.2. (zeta-function identity) Let D(t) = det R(t). We then have Z(t)·D(t) = 1 ,
+or equivalently
+Nf (t) + D′(t)
+D(t) = 0.
+Deﬁnition 2.2. For every n ≥ 0 we write
+
+gn
+
+∞ = sup
+α ∈ Zn
+⏐
+⏐gn
+|α
+⏐
+⏐ and
+
+gn
+
+1 =
+∑
+α ∈ Zn
+⏐
+⏐gn
+|α
+⏐
+⏐.
+We then set
+ρ∞ := lim sup
+n→∞
+
+gn
+1/n
+∞ ≤ ρ1 := lim sup
+n→∞
+
+gn
+1/n
+1 . (12)
+We also call log ρ1 the pressure3 of the weighted system (Ii, f i, g i)i∈ S. This is consistent
+with usual ”thermodynamic formalism” for dynamical system s.
+2 In the case gi ≡ 1, we have γy,J (t) =
+∑
+p≥0
+#(Γp,y ∩ J) tp.
+3In the case gi ≡ 1, we have ρ∞ = 1 and ρ1 is the growth rate of the n-cylinders. By Misiurewicz-Szlenk
+([MS]) log ρ1 is equal to the topological entropy of the unweighted system.
+6
+Theorem 2.3. We have
+1. The power series for θ(ˆx, t ; ck), Rjk(t) deﬁne analytic functions of t on the disc
+{|t|< 1/ρ ∞ }.
+2. The kneading matrix R(t) is invertible when |t|< 1/ρ 1.
+3. Suppose that ρ1 > ρ ∞ and all gi ≥ 0. Then R(t) is non-invertible at t = 1 /ρ 1 and
+1/ρ 1 coincides with the radius of convergence of Z(t).
+Theorem 2.4. Assume ρ1 > ρ ∞ and all gi > 0. For each 0 < t < 1/ρ 1 there is a
+monotone (non-continuous) map φ t : ˆI → [0, 1] with the following properties
+A. For 0 ≤ i ≤ ℓ, let ˜It,i = [ φ t(c+
+i ), φ t(c−
+i+1)] (this is an interval or a point). The
+collection ˜It,i , 0 ≤ i ≤ ℓ is pairwise disjoint.
+B. For each i there is an aﬃne map ˜ft,i : ˜It,i → [0, 1] of slope si/ (tgi) such that
+φ t ◦ f | ˆIi
+= ˜ft,i ◦ φ t | ˆIi
+(13)
+C. The partially deﬁned dynamical system (˜It,i , ˜ft,i )0≤ i≤ ℓ is uniformly expanding and its
+maximal invariant domain is precisely Ωt = φ t(ˆI).
+Remark. Thus, φ t is semi-conjugating the dynamical system ( ˆI, f ) to a uniformly ex-
+panding dynamical system (Ω t,i , ˜ft,i )0≤ i≤ ℓ. In general, Ω t is a Cantor set. The subset
+Ωt,i = φ t(ˆIi) is trivial, i.e. reduced to a point, precisely when the forward orbit of Ii never
+encounters a cutting point. This can not happen if the original syst em is expansive.
+The proof will show that the semi-conjugacy φ t can be explicitly expressed as
+h(ˆx) − h(a+)
+h(b-) − h(a+) with h(ˆx) =
+(
+θ(ˆx, t ; ck)
+)
+k=0, ···ℓ
+· R− 1 ·
+
+
+
+
+
+0
+G(c1, t )
+.
+.
+.
+G(cℓ, t )
+
+
+
+
+ ,
+where G(x, t ) is the average of the generating functions for gn(x-) and gn(x+) (see (15) ,
+(21) and (25) ). If ℓ = 1, one can replace h(ˆx) by θ(ˆx, t ; c1), which is particularly simple
+to implement numerically.
+When taking the limit as t ր 1/ρ 1 we obtain a diﬀerent type of semi-conjugacy:
+Theorem 2.5. Assume ρ1 > ρ ∞ and all gi ≥ 0. There is a monotone continuous surjec-
+tive map φ : I → [0, 1] with the following properties: Denote by ˜S ⊂ S := {0, · · ·, ℓ } the
+subset of i’s for which ˜Ii = Int φ(Ii) is non-empty. Then
+7
+A. For every i ∈ ˜S, there is an aﬃne map ˜fi of slope siρ1/g i such that
+˜fi(φ(x)) = φ(fi(x)), x ∈ Ii.
+B. The two weighted systems (Ii, f i, g i)i∈ S and (˜Ii, ˜fi, g i)i∈ ˜S have equal pressures.
+C. If the sytem f = ( Ii, f i)i∈ S extends continuously to a map on [a, b ] then so does
+˜f = ( ˜Ii, ˜fi)i∈ ˜S on [0, 1] and φ gives a genuine topological semi-conjugacy. We have
+in this case for every x ∈ [a, b ]:
+˜f (φ(x)) = φ(f (x)).
+For the last theorem, some intervals may disappear under the semi- conjugacy, i.e. the
+set ˜S becomes a strict subset of S. This happens in particular, when the original system
+is not transitive and contains sub-systems of a smaller pressure. T he set ˜S may even
+depend on the choice of the weights gi. In particular, intervals for which gi = 0 disappear
+under the conjugacy.
+3 The Main Kneading Identity
+Lemma 3.1. We have R(0) = id.
+Proof. Note that
+Rjk (t) =
+∑
+ˆcj=c+
+j ,c -
+j
+ε∗(ˆcj) ·θ(ˆcj, t ; ck) =
+∑
+n≥ 0
+tn ∑
+ˆcj=c+
+j ,c -
+j
+ε∗(ˆcj)[sg]n(ˆcj) ·σ(f nˆcj, c k)
+By convention f 0 = id. Recall that ε∗(ˆcj) = ε(ˆcj) if j ̸= 0 and ε∗(ˆc0) = 1.
+Assume ﬁrst j > 0. Then, for all k = 0, · · ·, ℓ ,
+Rjk (0) =
+∑
+ˆcj =c+
+j ,c -
+j
+ε∗(ˆcj) ·[sg]0(ˆcj) ·σ(f 0ˆcj, c k) =
+∑
+ˆcj=c+
+j ,c -
+j
+ε(ˆcj) ·σ(ˆcj, c k) = δjk.
+Also, R0k(0) = θ(a
++
+, 0; ck) + θ(b-, 0; ck) = σ(a
++
+, c k) + σ(b-, c k) = δ0k.
+3.1 Proof of Theorem 2.1.
+Consider ﬁrst an open interval J =]u, v [⊂ ]a, b [, and a ck for some k ∈ { 0, · · ·, ℓ }. For
+each n ≥ 0 and each ( n + 1)-cylinder α ∈ Zn+1, the functions [ sg]n(ˆx) =
+n− 1∏
+j=0
+s(f j ˆx)g(f jˆx)
+8
+and σ(f nˆx, c k), ˆx ∈ ˆα are constants. When α ∈ Zn+1 and α ∩ J ̸= ∅, then obviously
+∑
+ˆx∈ ˆ∂ (J∩ α )
+ε(ˆx) = 1 + ( − 1) = 0 .
+So the following power series vanishes identically:
+∑
+n≥ 0
+tn ∑
+α ∈ Zn+1, ˆx∈ ˆ∂ (J∩ α )
+ε(ˆx) ·[sg]n(ˆx) ·σ(f nˆx, c k) = 0 .
+In this sum, ˆx = u+, v - appears for every n ≥ 0. Extracting their contributions we write:
+∑
+ˆx∈ ˆ∂J
+θ(ˆx, t ; ck) ·ε(ˆx) +
+∑
+n≥ 0
+tn ∑
+α ∈ Zn+1, ˆx∈ ˆ∂α
+χ J (x) ·ε(ˆx) ·[sg]n(ˆx) ·σ(f nˆx, c k) = 0 . (14)
+Now when α ∈ Zn+1, ˆx ∈ ˆ∂(J ∩ α ), there is a unique minimal integer 0 ≤ p ≤ n for which
+f p(ˆx) = ˆc for some c ∈ { c1, · · ·, c ℓ} =: C(f ) and ˆc = c+ or c- (note that the boundary
+points a, b are excluded here, since for an interior point to be mapped to them, it has to
+pass an interior cutting point just before). Recall that Γ p,c = {x ∈ ⋃
+α ∈ Zp α | f px = c}
+and Γ 0,c = {c}. When x ∈ Γp,c and f pˆx = ˆc, then gp(ˆx) = gp(x), σ(f pˆx, c k) = σ(f n− pˆc, c k)
+and also (the essential point here is that the sign sp(ˆx) is absorbed in ε(ˆc))
+ε(ˆx) ·[sg]n(ˆx) = gp(x)
+(
+ε(ˆx)sp(ˆx)
+)
+[sg]n− p(ˆc) = gp(x) ·ε(ˆc) ·[sg]n− p(ˆc).
+So we obtain, for the second term in (14) (writing tn = tptq),
+∑
+c∈C (f )
+[( ∑
+p≥ 0
+tp
+∑
+x∈ Γp,c
+gp(x)χ J (x)
+)
+·
+∑
+ˆc=c± ,q ≥ 0
+tq ·ε(ˆc) ·[sg]q(ˆc)σ(f qˆc, c k)
+]
+=
+∑
+c∈C (f )
+γJ,c (t) ·∆cθ(·, t ; ck).
+Combining with (14) we get the Main kneading Identity when J is an open interval.
+It remains to prove the case that J is half closed or closed. Consider for example
+J = ⟨u-, v -⟩ with a < u < v ≤ b. We have ⟨a+, v -⟩ = ⟨a+, u -⟩ ⊔ J and the additivity
+γc, ⟨a+,v -⟩ = γc, ⟨a+,u -⟩ + γc,J . The result then follows by applying the identity to the two
+intervals ⟨a+, u -⟩ and ⟨a+, v -⟩ and subtracting.
+4 Zeta functions and kneading determinants
+In this section we prove Theorems 2.2 and 2.3.
+9
+4.1 Relating Nf (t) to R′(t)
+Set ˆC(f ) := {a+ = c+
+0 , c -
+1, c
++
+1 , · · ·, c -
+ℓ, c
++
+ℓ , b - = c−
+0 }. For all ˆc ∈ ˆC(f ), set Γ 0, ˆc = {ˆc} and, for
+p ≥ 1,
+Γp, ˆc = {ˆx ∈ ˆI |f pˆx = ˆc, , f j ˆx /∈ ˆC(f ) for 0 ≤ j < p }.
+If ˆc ̸= c±
+0 , then for any ˆx ∈ Γp, ˆc we have x ∈ Γp,c . Conversely for any x ∈ Γp,c exactly
+one of x± belongs to Γ p, ˆc.
+Notice that if ˆc = c±
+0 then Γ p, ˆc = ∅ when p ≥ 1: due to the forward invariance of I
+we have f − 1({a, b }) ⊂ { a, b, c 1, · · ·, c ℓ}, so every orbit passing though {a, b } must pass
+through {c1, · · ·, c ℓ} just before.
+Fix n ≥ 1 and an n-cylinder α . Note that for each ˆx ∈ ˆ∂α , we have gn
+|α ·ε(f nˆx) =
+[sg]n(ˆx) ·ε(ˆx), so
+− ω (α ) := gn
+|α
+∑
+ˆx∈ ˆ∂α
+σ(f nˆx, x ) ·ε(f nˆx) =
+∑
+ˆx∈ ˆ∂α
+σ(f nˆx, x )[sg]n(ˆx) ·ε(ˆx).
+To each ˆx ∈ ˆ∂α , there is a unique ˆc ∈ ˆC(f ) and 0 ≤ p < n such that x ∈ Γp. ˆc. Schemati-
+cally,
+ˆx
+f p
+− − − − − →
+p minimal
+ˆc
+f q+1
+− − → f nˆx = f q+1ˆc
+Setting q such that p + q = n − 1, we have the “co-cycle” properties:
+sn(ˆx)ε(ˆx) = sq+1(ˆc)ε(ˆc), g 0(ˆx) = 1 , g n(ˆx) = gq+1(ˆc)gp(ˆx).
+Now
+−
+∑
+n≥ 1
+tn− 1Nn = −
+∑
+n≥ 1
+tn− 1
+∑
+α ∈ Zn
+ω (α )
+=
+∑
+n≥ 1
+tn− 1 ∑
+α ∈ Zn, ˆx∈ ˆ∂α
+σ(f nˆx, x )[sg]n(ˆx) ·ε(ˆx)
+=
+∑
+ˆc∈ ˆC(f )
+∑
+q≥ 0
+tq[sg]q+1(ˆc) ·ε(ˆc)
+∑
+p≥ 0, ˆx∈ Γp,ˆc
+tpgp(ˆx)σ(f q+1ˆc, x )
+=
+∑
+ˆc∈ ˆC(f )∖{c±
+0 }
+∑
+q≥ 0
+tq[sg]q+1(ˆc) ·ε(ˆc)
+( ∑
+p≥ 0, ˆx∈ Γp,ˆc
+tpgp(ˆx)σ(f q+1ˆc, x )
+)
++
+∑
+ˆc=c±
+0
+∑
+q≥ 0
+tq[sg]q+1(ˆc) ·
+(
+ε(ˆc)
+∑
+p≥ 0, ˆx∈ Γp,ˆc
+tpgp(ˆx)σ(f q+1ˆc, x )
+)
+Note that the ε(ˆc) factor in the last expression is treated diﬀerently for ˆc = c±
+1 , · · ·, c ±
+ℓ
+and ˆc = c±
+0 . The reason for this is that we want the two expressions in the pare nthesis to
+be independent of the direction of ˆc. Indeed, for any ˆu ∈ ˆI,
+for ˆc = c±
+1 , · · ·, c ±
+ℓ , m ˆc(ˆu, t ) :=
+∑
+p≥ 0, ˆx∈ Γp,ˆc
+tpgp(ˆx)σ(ˆu, x ) =
+∑
+p≥ 0, x ∈ Γp,c
+tpgp(x)σ(ˆu, x )
+10
+and for ˆc = c±
+0 , m ˆc(ˆu, t ) := ε(ˆc)
+∑
+p≥ 0, ˆx∈ Γp,ˆc
+tpgp(ˆx)σ(ˆu, x ) = ε(ˆc)σ(ˆu, c ) ≡ 1
+2
+where we have used the facts that Γ p,c ±
+0
+= ∅ for p > 0, g0(ˆx) ≡ 1 and gp(x+) = gp(x-) =:
+gp(x) for x ∈ Γp,c j, j > 0.
+In both cases mˆc(ˆu, t ) is independent of ε(ˆc) = + or − , so we may safely write mc(ˆu, t )
+for this quantity. To compactify the two cases we set C∗(f ) = {c0, c 1, · · ·, c ℓ}. Recall that
+c
++
+0 = a+, c-
+0 = b- and ε∗(ˆc) := ε(ˆc) if ˆc ̸= c±
+0 and ε∗(ˆc) = 1 otherwise. Then
+−
+∑
+n≥ 1
+tn− 1Nn =
+∑
+c∈C ∗ (f )
+∑
+ˆc=c± , q ≥ 0
+tq[sg]q+1(ˆc) ·ε∗(ˆc) ·mc(f q+1ˆc, t )
+A central idea (due to Preston) is to consider the right hand side as the trace of
+an ( ℓ + 1) × (ℓ + 1) matrix F , and to deﬁne F in a way so that F R becomes related
+to R′. There are many choices suitable for this purpose with most choices giving rise
+to additional correcting terms. There is, however, a choice for wh ich the relationship
+becomes particularly simple (note the ∗ in the epsilon factor):
+For i, j ∈ { 0, 1, · · ·, ℓ }, deﬁne
+Fij(t) =
+∑
+q≥ 0, ˆci=c±
+i
+tq[sg]q+1(ˆci) ·ε∗(ˆci) ·mcj (f q+1ˆci, t ).
+We then have:
+Theorem 4.1. F R = R′.
+Proof. We establish at ﬁrst a consequence of the Main Kneading Identity:
+Claim. For every ˆw ∈ ˆI, k = 0, 1, · · ·, ℓ ,
+ℓ∑
+j=0
+mcj ( ˆw, t )Rjk(t) = θ( ˆw, t ; ck).
+Proof. By the Main Kneading Identity, we sum ﬁrst over interior cutting poin ts:
+ℓ∑
+j=1
+mcj ( ˆw, t )Rjk(t) =
+ℓ∑
+j=1
+∑
+p≥ 0, x ∈ Γp,cj
+tpgp(x)σ( ˆw, x ) ·Rjk(t)
+=
+ℓ∑
+j=1
+∑
+p≥ 0, x ∈ Γp,cj
+tpgp(x) 1
+2
+(
+χ (a+, ˆw)(x) − χ ( ˆw,b -)(x)
+)
+Rjk(t)
+= 1
+2
+(
+2θ( ˆw, t ; ck) − θ(a
++
+, t ; ck) − θ(b-, t ; ck)
+)
+Adding the boundary term mc0( ˆw, t )R0k(t) = 1
+2
+(
+θ(a
++
+, t ; ck) + θ(b-, t ; ck)
+)
+we get the de-
+sired result and end the proof of the claim.
+11
+Now, for i, k ∈ { 0, · · ·, ℓ },
+ℓ∑
+j=0
+FijRjk =
+∑
+q≥ 0, ˆci=c±
+i
+tq[sg]q+1(ˆci) ·ε∗(ˆci) ·
+ℓ∑
+j=0
+(
+mcj (f q+1ˆci, t )Rjk
+)
+=
+∑
+q≥ 0, ˆci=c±
+i
+tq[sg]q+1(ˆci) ·ε∗(ˆci) ·θ(f q+1(ˆci), t ; ck)
+=
+∑
+q≥ 0, ˆci=c±
+i
+tq[sg]q+1(ˆci) ·ε∗(ˆci)
+∑
+p≥ 0
+tp[sg]p(f q+1ˆci)σ(f p(f q+1ˆci), c k)
+=
+∑
+ˆci=c±
+i
+∑
+p,q ≥ 0
+tp+q[sg]p+q+1(ˆci) ·σ(f p+q+1ˆci, c k) ·ε∗(ˆci)
+=
+∑
+ˆci=c±
+i
+( ∑
+n≥ 1
+n ·tn− 1[sg]n(ˆci) ·σ(f nˆci, c k)
+)
+ε∗(ˆci)
+=
+∑
+ˆci=c±
+i
+( d
+dt θ(ˆcj, t ; ck)
+)
+ε∗(ˆci) = d
+dt Rik(t)
+in which we recall that Rjk(t) =
+∑
+ˆcj=c±
+j
+θ(ˆcj, t ; ck) ·ε∗(ˆcj).Proof of Theorem 2.2 . We have
+0 = Nf (t) + T rF = Nf (t) + T rR′R− 1 = Nf (t) + D′
+D .
+4.2 Weighted lap function and proof of Theorem 2.3
+Let us consider the generating function of gn(ˆx):
+G(ˆx, t ) =
+∑
+n≥ 0
+tngn(ˆx) for ˆx ∈ ˆI and then
+G(x, t ) = 1
+2
+(
+G(x-, t ) + G(x+, t )
+)
+when a < x < b.
+(15)
+Let J = ⟨ˆu, ˆv⟩ ⊂ ]a, b [ be an (open, closed or half-closed) interval or a point. We deﬁne
+the weighted lap function 4
+L(J, t ) := 1
+2
+∑
+n≥ 0
+tn
+∑
+α ∈ Zn+1
+∑
+ˆx∈ ˆ∂α
+gn(ˆx)χ J (x). (16)
+4If gi ≡ 1 the G-functions are 1
+1 − t and the function L(J, t) is the generating function for the numbers
+of ( n + 1)-cylinders in J, and L(]a, b[, t) has radius of convergence equal to 1 /ρ1.
+12
+Repeating the calculation in our proof of the Main Kneading Identity w ithout the sign
+factors s, ε and σ, it follows easily that
+L(J, t ) =
+ℓ∑
+j=1
+( ∑
+p≥ 0, x ∈ Γp,cj
+tpgp(x)χ J (x)
+)( ∑
+ˆc=c±
+j
+1
+2
+∑
+q≥ 0
+tq ·gq(ˆc)
+)
+(17)
+=
+ℓ∑
+j=1
+γcj,J (t) ·G(cj, t ) (18)
+In particular, for a one-point set J = {x} we have simply
+L({x}, t ) =
+{
+tpgp(x) ·G(ci, t ) for x ∈ Γp,c i, p ≥ 0, 1 ≤ i ≤ ℓ
+0 otherwise.
+(19)
+Lemma 4.2. Fix any subinterval J = ⟨ˆu, ˆv⟩. The functions G, θ, ∆J θ, Rjk are all
+analytic functions of t on the disc {|t|< 1/ρ ∞ }. The kneading matrix is invertible when
+|t|< 1/ρ 1. The function L(J, t ) is meromorphic on {|t|< 1/ρ ∞ } and analytic on {|t| <
+1/ρ 1}.
+Proof. The ﬁrst claim follows from the deﬁnition of ρ∞ and the following estimates:
+∀ ˆx ∈ ˆI, |G(ˆx, t )| ≤
+∑
+n≥ 0
+|t|n∥gn∥∞ < ∞ for |t|< 1/ρ ∞
+Similarly ∀ k,
+|∆J θ(·, t ; ck)| ≤
+∑
+n≥ 0
+|t|n∥gn∥∞ < ∞ for |t|< 1/ρ ∞ .
+To see that the kneading matrix is invertible when |t|< 1/ρ 1 we use the relationship
+to the zeta function. By Theorem 2.2 we have Z(t) ·det R(t) = 1, where
+Z(t) = exp
+( ∑
+n≥ 1
+Nn
+n tn
+)
+and each |Nn| ≤
+
+gn
+
+1. So Z(t) is analytic and non-zero for |t| < 1/ρ 1 whence R(t) is
+invertible for |t|< 1/ρ 1.
+We have
+|L(J, t )| ≤
+∑
+n≥ 0
+|t|n
+∑
+α ∈ Zn+1
+⏐
+⏐gn
+|α
+⏐
+⏐ ≤
+∑
+n≥ 0
+|t|n
+∑
+α ∈ Zn
+⏐
+⏐gn
+|α
+⏐
+⏐(ℓ + 1) = ( ℓ + 1)
+∑
+n≥ 0
+|t|n∥gn∥1 (20)
+which shows that L(J, t ) has radius of convergence at least 1 /ρ 1.
+13
+Using the MKI itself for the γ factor in (18) we get:
+L(J, t ) =
+ℓ∑
+k=0
+∆J θ(·, t ; ck)
+( ℓ∑
+j=1
+R− 1(t)kj ·G(cj, t )
+)
+(21)
+The above identities are valid as formal power series but also when th e functions involved
+are analytic and R(t) is invertible. As 1 /ρ 1 ≤ 1/ρ ∞ , so when |t|< 1/ρ 1, the identity (21)
+is valid.
+Proof of Theorem 2.3
+The ﬁrst two claims have already been proved in Lemma 4.2.
+We proceed to prove the last claim. When all gi’s are positive and t ≥ 0 we have
+L(]a, b [, t ) + G(a+, t ) + G(b− , t ) =
+∑
+n≥ 0
+tn ∑
+α ∈ Zn+1
+gn
+|α ≥
+∑
+n≥ 0
+tn∥gn∥1.
+By deﬁnition the RHS has radius of convergence equal to 1 /ρ 1. Being a power-series with
+positive coeﬃcients it follows that the RHS diverges as t ր 1/ρ 1.
+Under the further assumption 1 /ρ 1 < 1/ρ ∞ , the functions t ↦→ G(ˆx, t ), in particular
+G(a+, t ) and G(b− , t ), remain bounded at t = 1 /ρ 1. So L(]a, b [, t ) must diverge as t ր
+1/ρ 1. Combining with (20) we know that the radius of convergence of L(]a, b [, t ) is equal
+to 1 /ρ 1. Now, the functions ∆ J θ and G involved in (21) remain bounded on |t| ≤ 1/ρ 1.
+Letting t ր 1/ρ 1 in (21) we conclude that R(t) must be non-invertible at t = 1/ρ 1.
+5 Semi-conjugacies to piecewise linear models
+In this section we prove Theorems 2.4 and 2.5.
+Lemma 5.1. Fix J = ⟨ˆu, ˆv⟩ ⊂ Ij =]c
++
+j , c -
+j+1[. We have for k = 0, · · ·, ℓ and |t|< 1/ρ ∞ :
+θ(ˆv, t ; ck) − θ(ˆu, t ; ck) = t ·sjgj
+(
+θ(f ˆv, t ; ck) − θ(f ˆu, t ; ck)
+)
+(22)
+When also |t|< 1/ρ 1 we have for the weighted lap function :
+L(J, t ) = t gj ·L(fjJ, t ) (23)
+Proof. Let us ﬁx k ∈ { 0, · · ·, ℓ }. By deﬁnition, we have the following relation for θ(·, t ; ck)
+when applied to ˆx and f ˆx:
+∀ ˆx ∈ ˆI, θ (ˆx, t ; ck) =
+∑
+m≥ 0
+tm[sg]m(ˆx) ·σ(f mˆx, c k) = σ(ˆx, c k) + t ·[sg](ˆx) ·θ(f ˆx, t ; ck).
+14
+Figure 1: Left: Example of a discontinuous map f and the graph restricted to Ω t of its
+conjugated map ˜ft. Right: The graph of φ t. Here, t = 0. 2 < 1/ρ 1 = 0. 2684. The ratio of
+slopes of the two branches is 3 : 2 (coming from the choice of weights ).
+This implies (22) when restricting to ˆIj. Now, ∆ J θ(·, t ; ck) = θ(ˆv, t ; ck) − θ(ˆu, t ; ck) and
+(as f may reverse the orientation) ∆ fj Jθ(·, t ; ck), = sj
+(
+θ(f ˆv, t ; ck) − θ(f ˆu, t ; ck)
+)
+, so
+∆J θ(·, t ; ck) = tgj∆fj J θ(·, t ; ck). (24)
+The result for L(J, t ) now follows by linearity in equation (21) which is valid when
+|t|< 1/ρ 1.
+Proof of Theorem 2.4 .
+We assume here that all gi > 0 and that ρ1 > ρ ∞ . Fix 0 < t < 1/ρ 1 < 1/ρ ∞ . Noting
+that 0 < L(]a, b [, t ) < +∞ we deﬁne our conjugating map φ t : ˆI → R by setting
+φ t(ˆx) = L(⟨a+, ˆx⟩, t )
+L(]a, b [, t ) , ˆx ∈ ˆI. ‘ (25)
+Notice that φ t maps point-germs to genuine real numbers.
+Part A: Using (23) we get for any ˆx1, ˆx2 ∈ ˆIj (the sign enters again) :
+φ t(ˆx2) − φ t(ˆx1) = tsjgj
+(
+φ t(f ˆx2) − φ t(f ˆx1)
+)
+. (26)
+Similarly, we get by iterating this argument for ˆx1, ˆx2 ∈ ˆα with α ∈ Zn :
+φ t(ˆx2) − φ t(ˆx1) = tn sn
+|α gn
+|α
+(
+φ t(f nˆx2) − φ t(f nˆx1)
+)
+. (27)
+15
+When the gi’s are non-negative, we clearly have L(J, t ) ≥ 0 for any interval J so by
+set-additivity with respect to J it follows that φ t is monotone increasing and takes values
+in [0 , 1]. Let Ω t = φ t(ˆI) ⊂ [0, 1] and set Ω t,i = φ t(ˆIi). By monotonicity of φ t the convex
+hull of Ω t,i is precisely ˜It,i = [φ t(c+
+i ), φ t(c−
+i+1)]
+Let now a < x < b . As all gi > 0, by (19)
+φ t(x+) − φ t(x− ) = L({x}, t )
+L(]a, b [, t ) > 0 (28)
+precisely when x is an interior cutting point or a pre-image of such. We have in particula r
+L({ci}, t ) ≥ 1 so that sup Ω t,i < inf Ωt,i +1 and also sup ˜It,i < inf ˜It,i +1, proving claim A.
+Part B: Given y ∈ Ωt suppose that y = φ t(ˆx1) = φ t(ˆx2) with ˆx1 < ˆx2. By the previous
+paragraph ˆx1 and ˆx2 must belong to the same ˆIj. (In fact they even belong to the same
+n-cylinder for all n). So by the identity (26) we must have φ t(f ˆx2) − φ t(f ˆx1) = 0. This
+implies that there is a well-deﬁned map ˜ft : Ω t → Ωt given by:
+˜ft(y) := φ t(f ˆx), y = φ t(ˆx) ∈ Ωt (29)
+(since the value is independent of the choice of ˆx in the pre-image of y).
+Equation (26) shows that the conjugated map has (ﬁnite) slope ( tsjgj)− 1 = sj/tg j on
+each Ω t,j = φ(Ij) (if it is not reduced to a point). The map ˜ft,i is deﬁned to be this aﬃne
+map extended to ˜It,i = [φ t(c+
+i ), φ t(c−
+i+1)].
+Part C: The last part of the theorem is tricky due to the fact that φ t is neither continuous
+nor injective. For an open interval J =]u, v [⊂ ]a, b [ we will in the following use the short-
+hand notation:
+Ξt(J) := [ φ t(u+), φ t(v− )] (30)
+For 0 ≤ i ≤ ℓ we deﬁne ˜It(i) = ˜It,i = Ξ t(Ii) and then recursively ˜It(i0, . . . , i n− 1) =
+˜It,i 0 ∩ ˜f − 1
+t ˜It(i1, . . . , i n− 1) which is either empty, a point or a closed interval. We write
+˜Zt,n for the collection of non-empty sets of this form. They form a part ition for the
+domain of deﬁnition of ( ˜ft)n. The maximal invariant domain for ˜ft is the compact set
+Ωt =
+⋂
+n≥ 1
+(⋃ ˜Zt,n
+)
+⊂ [0, 1]. Our ﬁrst goal is to exhibit a simple relationship between
+cylinders and the above sets.
+Lemma 5.2. There is a bijection between α ∈ Zn and ˜α ∈ ˜Zt,n given by ˜α = Ξ t(α ).
+Proof: For n = 1 this is the very deﬁnition: Z1 consists of the intervals {Ii : 0 ≤ i ≤ ℓ}
+and ˜It(i) = Ξ t(Ii) = [ φ t(c+
+i ), φ t(c−
+i+1)].
+When J =]u, v [⊂ Ii the deﬁnition of ˜ft shows that ˜ft Ξt(J) = ˜ft,i [φ t(u+), φ t(v− )] =
+[φ t(fiu+); φ t(fiv− )] = Ξ t(f J). For α ∈ Zn this implies ( ˜ft)k Ξt(α ) = Ξ t(f kα ) ⊂ Ξt(Iik ).
+It follows by recursion that Ξ t(α ) ⊂ ˜α = ˜It(i0, . . . , i n).
+16
+In order to show equality we proceed by induction in n. Let β = (i1 . . . i n) =]u1, u 2[∈
+Zn (with a ≤ u1 < u 2 ≤ b). Our induction hypothesis is that ˜It(i1, . . . , i n) = Ξ t(β ) =
+[φ t(u+
+1 ), φ t(u−
+2 )]. Here, u1 and u2 are necessarily (eventual) cutting points so by (28) we
+have when a < u 1 and u2 < b, respectively :
+φ t(u−
+1 ) < φ t(u+
+1 ) and φ t(u−
+2 ) < φ t(u+
+2 ). (31)
+Suppose that ˜ft ˜It,i 0 = Ξ t(f Ii0) intersects Ξt(β ) non-trivially and write ˜α = ˜It(i0, . . . , i n) =
+[ξ1, ξ 2]. We claim that also ] v1, v 2[≡ f Ii0 intersects β . If this were not the case, then
+e.g. v1 < v 2 ≤ u1 < u 2 in which case the ﬁrst strict inequality in (31) shows that
+φ t(v−
+2 ) ≤ φ t(u−
+1 ) < φ t(u+
+1 ) so that ˜α was empty in the ﬁrst place.
+Assume si0 = +1. We have ˜α = [ ξ1, ξ 2] = ˜It,i 0 ∩ ˜f − 1
+t Ξt(β ) (using the induction
+hypothesis) and we write α = Ii0 ∩ f − 1β =]w1, w 2[ (which is non-empty as just shown).
+We will calculate the left end points of α and ˜α . We consider the two possibilities: Either
+u1 ≤ v1(< u 2, v 2) or v1 < u 1(< u 2, v 2).
+In the ﬁrst case w+
+1 = f − 1
+i0 max{u+
+1 , f c +
+i0} = c+
+i0 and since φ t(u+
+1 ) ≤ φ t(v+
+1 ) = ˜ftφ t(c+
+i0)
+we get ξ1 = ( ˜ft,i 0)− 1 max{φ t(u+
+1 ), ˜ftφ t(c+
+i0)} = φ t(c+
+i0) = φ t(w+
+1 ). In the second case,
+continuity and strict monotonicity of fi yields a unique value w1 ∈ ]ci0, c i0+1[ for which
+f w1 = u1. We have ˜ftφ t(w+
+1 ) = φ t(u+
+1 ) ≤ φ t(f c+
+i0) ≤ ˜ftφ t(c+
+i0) so again ξ1 = φ t(w+
+1 ).
+Thus in either case ξ1 = φ t(w+
+1 ). Similarly, ξ2 = φ t(w−
+2 ) thus implying ˜α = Ξ t(α ) as
+we wanted to show. If si = − 1 some intervals change direction but the conclusion remains
+the same.
+Returning now to the proof of Part C: Clearly φ t(ˆI) ⊂ Ωt. In order to show surjectivity
+consider ξ ∈ Ωt. Assume that ˜f k
+t ∈ ˜It,i k, k ≥ 0. Then ξ ∈ ˜α k = ˜It(i0, . . . , i k− 1) = Ξ t(α k)
+for all k (a nested sequence of intervals). First, if ξ is a boundary point of such an interval
+for some k then it is in the image of φ t by the previous lemma. So assume that ξ is
+in the interior of ˜α k = Ξ t(α k) for all k. Let α k =]uk, v k[. Then uk ր u∗ and vk ց v∗
+with u∗ ≤ v∗. None of the sequences are eventually constant. Now, φ t(u+
+k ) ≤ ξ ≤ φ t(v−
+k )
+and 0 ≤ φ t(v−
+k ) − φ t(u+
+k ) ≤ tkgk
+|α k
+/L (]a, b [, t ) → 0 as k → ∞ . For any x ∈ [u∗, v ∗] we
+conclude by monotonicity of φ t that φ t(x+) = φ t(x− ) = ξ. So φ t : ˜I → Ωt is surjective.
+In order to prove Theorem 2.5 we consider the limit t ր 1/ρ 1. As the function
+L(]a, b [, t ) diverges the situation is a bit diﬀerent. By Lemma 4.2 the lap-functio n L(]a, b [, t )
+is meromorphic in the disc {|t|< 1/ρ ∞ } and has a pole of some order m ≥ 1 at t = 1/ρ 1.
+By positivity of L(]a, b [, t ) for t > 0 there is c > 0 so that
+L(]a, b [, t ) = c
+(1 − ρ1t)m + l.o.t.
+For any interval J ⊂ ]a, b [ we have 0 ≤ L(J, t ) ≤ L(]a, b [, t ). An eventual pole of L(J, t ) at
+1/ρ 1 is therefore of order at most m so L(J, t )
+L(]a, b [, t ) extends analytically to t = 1 /ρ 1 (the
+17
+Figure 2: The same example as before but at the critical value: t = 1/ρ 1 = 0. 2684. Note
+that Ω t is no longer a Cantor set and that φ t is continuous.
+singularity is removable here). We denote the limit
+Λ(J) := lim
+tր 1/ρ 1
+L(J, t )
+L(]a, b [, t ) ∈ [0, 1]. (32)
+Lemma 5.3. We have the following properties for Λ:
+1. For any x ∈ I : Λ({x}) = 0 .
+2. For all α ∈ Zn : Λ(α ) = 1
+ρn
+1
+gn
+|α Λ(f nα ) .
+3. δn = sup
+α ∈ Zn
+Λ(α ) − − − →
+n→∞
+0.
+Proof. The expression (19) shows that the function L({x}, t ) is analytic on {|t|< 1/ρ ∞ }
+in particular remains bounded on {|t| ≤ 1/ρ 1}. As t ր 1/ρ 1, the denominator L(]a, b [, t )
+diverges, the ﬁrst claim follows.
+For J ⊂ Ij for some j we divide (23) by L(]a, b [, t ) and take the limit t ր 1/ρ 1 to
+obtain:
+Λ(J) = 1
+ρ1
+gjΛ(fjJ). (33)
+In particular, for α = ( i0i1 · · ·in− 1) ∈ Zn we have α ∈ Ii0 so that Λ( α ) = 1
+ρ1
+gi0 ·Λ(f α).
+Iterating this we get the formula.
+18
+The last claim follows from
+Λ(α ) = 1
+ρn
+1
+gn
+|α Λ(f nα ) ≤ ρn
+∞
+ρn
+1
+ρ1>ρ∞
+− − − − →
+n→∞
+0.Lemma 5.4. The map φ : [a, b ] → [0, 1] deﬁned by
+φ(x) = Λ(] a, x [), x ∈ [a, b ]
+is non-decreasing, continuous and surjective. One has for x ∈ ]a, b [:
+φ(x) = lim
+tր 1/ρ 1
+φ t(x− ) = lim
+tր 1/ρ 1
+φ t(x+) (34)
+Proof. Monotonicity follows from positivity and additivity of Λ( J), J ⊂ ]a, b [. Let x ∈ [a, b ]
+and ε > 0. Choose n so that δn < ε/ 2 ( δn from the previous lemma). Either x is inside
+some n-cylinder or on the boundary of two such cylinders. In any case, we may ﬁnd at
+most two n-cylinders α 1, α 2 with α 1 ∩ α 2 = {x′} so that J = α 1 ∪ { x′} ∪ α 2 is an open
+neighborhood of x and Λ(J) < ε. For δ > 0 small enough φ(x + δ) − φ(x − δ) ≤ Λ(J) < ε.
+As φ(a) = Λ( ∅) = 0 and φ(b) = 1 the map is surjective. The ﬁrst equality in (34) is
+essentially the deﬁnition of φ and the second follows from the continuity just shown.
+We write ˜ci = φ(ci), i = 0, · · ·, ℓ + 1 and let ˜S ⊂ S := {0, · · ·, ℓ } denote the (possibly
+strict) subset of indices i for which 0 < ˜ci+1 − ˜ci = Λ(] ci, c i+1[). For i ∈ ˜S we set
+˜Ii =]˜ci, ˜ci+1[.
+Proof of Theorem 2.5.
+Part A: For ˆx1, ˆx2 ∈ Ij, taking the limit t ր 1/ρ 1 in the identity (26) yields
+φ(ˆx2) − φ(ˆx1) = tsjgj
+(
+φ(fj ˆx2) − φ(fj ˆx1)
+)
+. (35)
+Continuity of φ and fj shows that this identity is independent of the direction of the
+point-germs. The aﬃne map ˜fj(y) = ˆcj + sj
+tgj
+(y − ˆcj) then satisﬁes the required identity.
+Part B: Recall that Zn consists of the non-empty n-cylinder for ( Ii, f i)i∈ S. Let ˜Zn be the
+collection of non-empty open intervals of the form ˜α = Int φ(α ) where α = (i0 · · ·in− 1) ∈
+Zn. Here each ik ∈ ˜S, 0 ≤ k < n (or else ˜α ` a fortiori empty) and ˜f k ˜α ⊂ ˜Iik . Therefore
+˜α is contained in an n-cylinder for the dynamical system ( ˜Ii, ˜fi)i∈ ˜S. We claim that ˜α is
+actually equal to an n-cylinder for that system and ˜Zn is precisely the set of non-empty
+n-cylinders for the same system. To see this note that
+1 =
+∑
+α ∈ Zn
+Λ(α ) =
+∑
+˜α ∈ ˜Zn
+|˜α |, (36)
+19
+where | · |denotes the length of intervals. There is no room for any other or a ny larger
+open cylinder.
+Now, by Lemma 5.3 we have |˜α |= Λ(α ) =
+gn
+|α
+ρn
+1
+Λ(f nα ) ≤
+gn
+|α
+ρn
+1
+. So using (36) we get
+ρn
+1 =
+∑
+˜α ∈ ˜Zn
+|˜α |ρn
+1 =
+∑
+˜α ∈ ˜Zn
+Λ(α )ρn
+1 =
+∑
+˜α ∈ ˜Zn
+gn
+|α Λ(f nα ) ≤
+∑
+˜α ∈ ˜Zn
+gn
+|α ≤
+∑
+α ∈ Zn
+gn
+|α = ∥gn∥1.
+So ρ1 = lim sup
+n→∞
+( ∑
+˜α ∈ ˜Zn
+gn
+|α
+) 1/n
+. The pressures of ( Ii, f i, g i)i∈ S and ( ˜Ii, ˜fi, g i)i∈ ˜S are therefore
+the same.
+Part C: We assume here that f extends to a continuous map of [ a, b ]. When J ⊂ [a, b ] is
+an interval then f J \⋃
+i f (J ∩ Ii) consists of a ﬁnite number of points. By Lemma 5.3 this
+set diﬀerence has zero mass. By the same lemma we get: Λ( J) =
+ℓ∑
+i=0
+1
+ρ1
+giΛ(fi(J ∩ Ii)).
+Thus, (
+min
+i
+gi
+1
+ρ1
+)
+Λ(f J) ≤ Λ(J) ≤
+( ∑
+i
+gi
+1
+ρ1
+)
+Λ(f J).
+In particular Λ( J) = 0 ⇐ ⇒ Λ(f J) = 0. (Note, however, that Λ( J) > 0 does not imply
+Λ(f − 1J) > 0 as the latter set might be empty).
+Let us write x ∼ x′ if φ(x) = φ(x′),
+When x, x ′ ∈ I and x ∼ x′ then Λ([ x, x ′]) = 0 so also Λ( f [x, x ′]) = 0. As we
+have assumed f continuous, f ([x, x ′]) is connected and contains f (x), f (x′). Therefore,
+φ(f (x)) = φ(f (x′)), i.e. f (x) ∼ f (x′). For y ∈ [0, 1], we may thus deﬁne ˜f (y) = φ(f (x))
+with x ∈ φ − 1(y) (independent of the choice of x). Then for every x ∈ [a, b ] we have:
+˜f (φ(x)) = φ(f (x))
+The same argument also shows that for any two x, x ′ ∈ I we have
+⏐
+⏐
+⏐ ˜f (φ(x)) − ˜f (φ(x′))
+⏐
+⏐
+⏐ ≤ max
+i∈ ˜S
+ρ1
+gi
+|φ(x) − φ(x′)|
+so ˜f is a continuous endomorphism of [0 , 1].
+Remark: The set ˜S may depend upon the weights gi. If, however, f is transitive then
+˜S = S for any choice of non-zero weights and ˜Zn = Zn for all n. We leave the exercise to
+the reader.
+20
+/Bullet /Bullet
+π(α ) = +1π(α ) = − 1
+π(α ) = 0
+Figure 3: ﬁxed points counting
+A Geometry of the weight function ω (α )
+Fix n ≥ 1 and an n-cylinder α ∈ Zn. Recall that we have associated a weight
+ω (α ) = − gn
+|α
+∑
+ˆx∈ ˆ∂α
+σ(f nˆx, x ) ·ε(f nˆx).
+Set
+π(α ) := −
+∑
+ˆx∈ ˆ∂α
+σ(f nˆx, x ) ·ε(f nˆx).
+This quantity depends only on the boundary values and their position s relative to the
+diagonal. Let h be an aﬃne map on α coinciding with f n on the boundary.
+Lemma A.1. π(α ) = −
+∑
+ˆx∈ ˆ∂α
+σ(h(ˆx), x ) ·ε(h(ˆx)). And,
+• π(α ) = − 1 if 0 < slope(h) ≤ 1 and h(α ) touches the diagonal
+• π(α ) = 1 if h(α ) transverses the diagonal with slope either > 1 or < 0.
+• π(α ) = 0 in all other cases, namely
+either h(α ) does not touch the diagonal
+or h(α ) touches the diagonal at one end only, with slope > 1 or < 0.
+Proof. Since f n|α is a continuous strictly monotone map, we have σ(f nˆx, x ) = σ(h(ˆx), x )
+and ε(f nˆx) = ε(h(ˆx)) at the two ends of α . So we can replace f n by h in π(α ).
+Extend h continuously to the boundary points. For ˆx a boundary germ. We check
+case by case the value of − σ(h(ˆx), x ) ·ε(h(ˆx))
+is 1
+2 if h(x) < x and h(ˆx) > h(x), or if h(x) > x and h(ˆx) < h(x)
+is − 1
+2 if h(x) = x, or h(x) > x and h(ˆx) > h(x), or if h(x) < x and h(ˆx) < h(x).
+Adding the values at the two ends, we get the lemma.
+21
+Notice that if f is expanding then π(α ) ≥ 0 for all n and all α ∈ Zn. So in that case
+Nn ≥ 0 for all n.
+B Relation between det R, det B and Milnor-Thurston’s
+kneading determinant
+We relate here our deﬁnition of the kneading determinant to that of Milnor-Thurston,
+modiﬁed by adding weights. Set θ(ˆx, t ; cℓ+1) := − θ(ˆx, t ; c0)
+Lemma B.1. (Minor-Thurston) We have
+ℓ∑
+k=0
+(1 − tskgk)(θ(ˆx, t ; ck) − θ(ˆx, t ; ck+1)) ≡ 1.
+For k = 0, · · ·, ℓ , set Ik =]ck, c k+1[. Note that σ(ˆx, c k) − σ(ˆx, c k+1) = χ Ik(ˆx). Set
+η(ˆx, t ; Ik) := θ(ˆx, t ; ck) − θ(ˆx, t ; ck+1) =
+∑
+m≥ 0
+tm[sg]m(ˆx)χ Ik(ˆx).
+∆ciη(·, t ; Ik) := η(c
++
+i , t ; , I k) − η(c-
+i , t ; Ik), i = 1, · · ·, ℓ
+And deﬁne the Milnor-Thurston kneading matrix ℓ × (ℓ + 1) matrix
+N (t) =
+(
+∆ciη(·, t ; Ik)
+)
+i=1, ···,ℓ, k =0, 1, ···,ℓ
+.
+Denote by Dj the determinant of N (t) after deleting the j-th column.
+Lemma B.2. (Milnor-Thurston) The quantity (− 1)jDj
+1 − sjgjt =: DM T(t) is independent of j
+and is called the Milnor-Thurston kneading determinant .
+Proof. Let v =
+
+
+
+1 − s0g0t
+.
+.
+.
+1 − sℓgℓt
+
+
+ . By Lemma B.1,
+(
+η(ˆx, t ; I0), · · ·, η (ˆx, t ; Iℓ)
+)
+v = 1. So v is a
+kernel vector of N (t). Deﬁne an augmented kneading matrix A(t) by adding a line vector
+( 1
+1 − s0g0t, · · ·, 1
+1 − sℓgℓt) on top of N (t).
+Then Av =
+
+
+
+
+
+ℓ + 1
+0
+.
+.
+.
+0
+
+
+
+
+ . By Cramer’s solution form 1 − sjgjt = ( ℓ + 1) (− 1)ijDj
+det A and
+therefore det A
+ℓ + 1 = (− 1)jDj
+1 − sjgjt for all j = 0, · · ·, ℓ .
+22
+Lemma B.3. Setting H(t) := 1 − ts0g0 + sℓgℓ
+2 we have
+DM T(t) = det( R(t)) and H(t) ·det R(t) = det B(t).
+Proof. Set κi(t) = t
+2 (si− 1gi− 1 − sigi), i = 1, · · ·, ℓ . Grouping the terms about c0 and cℓ+1
+in Lemma B.1 we get
+2H(t) ·θ(ˆx, t ; c0) +
+ℓ∑
+i=1
+2κi ·θ(ˆx, t ; ci) ≡ 1
+It follows that
+
+
+
+
+
+
+
+H(t) κ1(t) κ2(t) · · ·κℓ(t)
+0
+0
+.
+.
+. Id
+0
+
+
+
+
+
+
+
+· R(t) =
+
+
+
+
+
+
+
+1 0 0 · · ·0
+1
+1
+.
+.
+. B
+1
+
+
+
+
+
+
+
+Therefore H(t) ·det R(t) = det B(t). For the matrix A deﬁned above,
+A(t) · 1
+2
+
+
+
+
+
+
+
+1 − s0g0t − 1 − 1 · · · − 1
+1 − s1g1t 1 − 1 · · · − 1
+1 − s2g2t 1 1 · · · − 1
+.
+.
+.
+1 − sℓgℓt 1 1 · · · 1
+
+
+
+
+
+
+
+=
+
+
+
+
+
+
+
+ℓ+1
+2 ∗ ∗ · · · ∗
+0
+0
+.
+.
+. B
+0
+
+
+
+
+
+
+
+In the second matrix on the left hand side add the last line to every ot her line one gets
+ℓ + 1
+2 DM T(t) ·H(t) = det A
+2 ·H(t) = ℓ + 1
+2 det B.
+Combining with Lemma B.3 we get DM T(t) ·H(t) = det B = det R ·H(t). Therefore
+det R(t) = DM T(t).
+Corollary B.4. If all the weights gi are equal to 1, all three determinants DM T, det R,
+det B have the same zeros in D.
+Proof. In this case H(t) = 1 − t
+2 (s0 + sℓ) = 1 or 1 − t so H(t) has no zeros in {|t| <
+1/ρ ∞ } = D.
+C The ﬁrst zero of det B may not correspond to the
+pressure
+We have shown in Theorem 2.3, Point 3, that the ﬁrst zero of det R corresponds to the
+pressure. And in case all the weights gi are 1, one can also use the ﬁrst zero of det B
+23
+(Corollary B.4). This need not, however, be true with more general weights. Here is a
+counter example.
+Let I = [a, b ] = [0 , 3], I0 =]0, 1[, I1 =]1, 2[, I2 =]2, 3[.
+f (x) =
+
+
+
+2x 0 ≤ x ≤ 1
+2 − 2(x − 1) 1 ≤ x ≤ 2
+2(x − 2) 2 ≤ x ≤ 3
+Let us assign weights g0 = g1 = 1 and g2 = M.
+Note that f (I2) = [0 , 2] and f : [0, 2] → [0, 2] is the full tent map. There is no periodic
+points in I2. Using Lemma A.1 and the deﬁnition one obtains
+Z(t) = exp
+( ∑
+n≥ 1
+tn
+n 2n
+)
+= (1 − 2t)− 1.
+So by Lemma B.3 and Theorem 2.2 we have DM T(t) = det R(t) = 1
+Z(t) = 1 − 2t. The ﬁrst
+zero being 1 / 2 one obtains that the pressure is log 2 (this pressure can also be co mputed
+directly). It is easily seen that the topological entropy is also log 2.
+On the other hand, H(t) = 1 − t
+2 (s0g0 + s2g2) = 1 − t
+2(1 + M). So by Lemma B.3
+again
+det B(t) = H(t) det R(t) =
+(
+1 − t
+2 (1 + M)
+)
+(1 − 2t).
+If M > 3, then det B(t) has a ’spurious’ zero at 2
+1 + M smaller than 1
+2 .
+So the ﬁrst positive zero of B(t) does not correspond to the pressure in this case. By
+increasing M, one can make this ﬁrst zero arbitrarily small without changing the p ressure.
+References
+[AS] J. Alves, & J. Sousa-Ramos, Kneading theory for tree maps, E rgodic Theory Dy-
+nam. Systems 24 (2004), no. 4, 957-985.
+[Ba] M. Baillif, Dynamical zeta functions for tree maps, Nonlinearity 1 2 (1999), no. 6,
+1511-1529.
+[BC] M. Baillif & A. de Carvalho, Piecewise linear model for tree maps, In ternat. J.
+Bifur. Chaos Appl. Sci. Engineering. 11, 3163-3169 (2001).
+[BR] V. Baladi & D. Ruelle, An extension of the theorem of Milnor and Th urston on the
+zeta functions of interval maps,” Ergod. Th. Dyn. Syst. 14 (1994 ), 621-632.
+24
+[Ha] T. Hall, Kneading theory, Scholarpedia, 5(11):3956. doi:10.4249 /scholarpedia.3956,
+2010.
+[MT] J. Milnor & W. Thurston, On iterated maps of the interval, in: Dyn amical Systems,
+J. C. Alexander ed., LNM 1342, Springer 1988, 465-563.
+[MS] M. Misiurewicz and W. Szlenk, Entropy of piecewise monotone map pings Dynam-
+ical systems, Vol. II - Warsaw, pp. 299-310. Asterisque, No. 50, Soc. Math. France,
+Paris, 1977.
+[Pr] Ch. Preston, What you need to knead, Advances in Math. 78 (1 989), 192-252.
+[Ti] G. Tiozzo, Kneading theory for Hubbard trees, preprint 2014. See also Section 16.3
+of his thesis:
+http://www.math.harvard.edu/˜ tiozzo/public
+html/Thesis Tiozzo web.pdf .
+Hans Henrik RUGH, Bˆ atiment 425, Facult´ e des Sciences d’Orsay, Universit´ e Paris-Sud,
+91405 Orsay Cedex, France
+TAN Lei, Facult´ e des sciences, LAREMA, Universit´ e d’Angers, 2 Boulevard Lavoisier,
+49045 Angers cedex, France
+25

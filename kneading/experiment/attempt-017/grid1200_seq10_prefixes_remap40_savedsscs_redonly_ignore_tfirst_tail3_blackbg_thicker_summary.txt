@@ -1,0 +1,10 @@
+input_results=/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-017/grid1200_seq10_prefixes_remap40_results.tsv
+output_plot=/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-017/grid1200_seq10_prefixes_remap40_savedsscs_redonly_ignore_tfirst_tail3_blackbg_thicker_contours.png
+total_rows=1440000
+ok_rows_preserved=903449
+usable_T_rows=1261208
+recovered_T_rows_from_error_status=357759
+rows_still_missing_T=178792
+unique_T_categories_ignore_first=7764
+T_tail_prefix_length=3
+note=Red contours only. T categories ignore the first T symbol and use only the first 3 symbols of the remaining tail. No gamma contours are drawn.

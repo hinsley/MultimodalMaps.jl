@@ -1,0 +1,464 @@
+[2026-05-01T02:42:13Z] Running attempt-053 local gh=0 Lyapunov-dimension scan
+Repo root: /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl
+Julia threads: 10
+Julia GC threads: 2
+OpenBLAS threads: 1
+Grid: 200 Delta Ca x 200 Delta x
+Delta Ca range: [-45.0, -20.0]
+Delta x range: [-1.5, -0.5]
+g_h: 0.0
+tau_y: 2.0e4
+Lyapunov Tmax: 1.0e5
+Lyapunov min-time: 3.0e4
+Precompiling packages...
+              ✗ DynamicalSystems → DynamicalSystemsVisualizations
+  0 dependencies successfully precompiled in 11 seconds. 781 already precompiled.
+
+The following 2 direct dependencies failed to precompile:
+
+DynamicalSystemsVisualizations 
+
+Failed to precompile DynamicalSystemsVisualizations [bf41aec9-21e8-5d35-8521-19f2dd369247] to "/Users/carterhinsley/.julia/compiled/v1.12/DynamicalSystemsVisualizations/jl_wGJ6iC".
+ERROR: LoadError: invalid assignment to constant DynamicalSystemsVisualizations.subscript. This redefinition may be permitted using the `const` keyword.
+Stacktrace:
+ [1] top-level scope
+   @ ~/.julia/packages/DynamicalSystems/sv3mw/ext/DynamicalSystemsVisualizations.jl:14
+ [2] include(mod::Module, _path::String)
+   @ Base ./Base.jl:306
+ [3] include_package_for_output(pkg::Base.PkgId, input::String, depot_path::Vector{String}, dl_load_path::Vector{String}, load_path::Vector{String}, concrete_deps::Vector{Pair{Base.PkgId, UInt128}}, source::Nothing)
+   @ Base ./loading.jl:3024
+ [4] top-level scope
+   @ stdin:5
+ [5] eval(m::Module, e::Any)
+   @ Core ./boot.jl:489
+ [6] include_string(mapexpr::typeof(identity), mod::Module, code::String, filename::String)
+   @ Base ./loading.jl:2870
+ [7] include_string
+   @ ./loading.jl:2880 [inlined]
+ [8] exec_options(opts::Base.JLOptions)
+   @ Base ./client.jl:315
+ [9] _start()
+   @ Base ./client.jl:550
+in expression starting at /Users/carterhinsley/.julia/packages/DynamicalSystems/sv3mw/ext/DynamicalSystemsVisualizations.jl:1
+in expression starting at stdin:5
+MultimodalMaps 
+
+Error: Missing source file for Base.PkgId(Base.UUID("44c66d49-f3d1-415d-9436-9a651fc58ffb"), "MultimodalMaps")  Activating project at `~/Documents/Dev/MultimodalMaps.jl`
+Running attempt-052 Lyapunov dimension scan.
+Grid: 200 Delta Ca x 200 Delta x
+Delta Ca range: [-45.000000, -20.000000]
+Delta x range: [-1.500000, -0.500000]
+g_h=0, tau_y=20000
+Lyapunov: Ttr=5000.000, Tmax=100000.000, dt=10.000, min_time=30000.000, check_interval=5000.000
+Threads: 10
+Saved column 41/200 (Delta Ca=-39.974874) with 200/200 ok, 93 converged
+Column 41 runtime: 143.35 s
+Saved column 61/200 (Delta Ca=-37.462312) with 200/200 ok, 51 converged
+Column 61 runtime: 171.20 s
+Saved column 21/200 (Delta Ca=-42.487437) with 200/200 ok, 65 converged
+Column 21 runtime: 175.75 s
+Saved column 81/200 (Delta Ca=-34.949749) with 200/200 ok, 45 converged
+Column 81 runtime: 194.10 s
+Saved column 1/200 (Delta Ca=-45.000000) with 200/200 ok, 54 converged
+Column 1 runtime: 200.80 s
+Saved column 101/200 (Delta Ca=-32.437186) with 200/200 ok, 31 converged
+Column 101 runtime: 227.50 s
+Saved column 121/200 (Delta Ca=-29.924623) with 200/200 ok, 32 converged
+Column 121 runtime: 255.05 s
+Saved column 141/200 (Delta Ca=-27.412060) with 200/200 ok, 28 converged
+Column 141 runtime: 285.44 s
+Saved column 161/200 (Delta Ca=-24.899497) with 200/200 ok, 20 converged
+Column 161 runtime: 296.69 s
+Saved column 42/200 (Delta Ca=-39.849246) with 200/200 ok, 88 converged
+Column 42 runtime: 157.31 s
+Saved column 181/200 (Delta Ca=-22.386935) with 200/200 ok, 19 converged
+Column 181 runtime: 339.10 s
+Saved column 62/200 (Delta Ca=-37.336683) with 200/200 ok, 53 converged
+Column 62 runtime: 184.55 s
+Saved column 22/200 (Delta Ca=-42.361809) with 200/200 ok, 75 converged
+Column 22 runtime: 189.67 s
+Saved column 82/200 (Delta Ca=-34.824121) with 200/200 ok, 45 converged
+Column 82 runtime: 209.45 s
+Saved column 2/200 (Delta Ca=-44.874372) with 200/200 ok, 57 converged
+Column 2 runtime: 209.50 s
+Saved column 43/200 (Delta Ca=-39.723618) with 200/200 ok, 94 converged
+Column 43 runtime: 163.27 s
+Saved column 102/200 (Delta Ca=-32.311558) with 200/200 ok, 39 converged
+Column 102 runtime: 241.04 s
+Saved column 122/200 (Delta Ca=-29.798995) with 200/200 ok, 29 converged
+Column 122 runtime: 273.84 s
+Saved column 63/200 (Delta Ca=-37.211055) with 200/200 ok, 42 converged
+Column 63 runtime: 196.37 s
+Saved column 23/200 (Delta Ca=-42.236181) with 200/200 ok, 75 converged
+Column 23 runtime: 199.25 s
+Saved column 142/200 (Delta Ca=-27.286432) with 200/200 ok, 28 converged
+Column 142 runtime: 318.66 s
+Saved column 162/200 (Delta Ca=-24.773869) with 200/200 ok, 30 converged
+Column 162 runtime: 321.70 s
+Saved column 83/200 (Delta Ca=-34.698492) with 200/200 ok, 44 converged
+Column 83 runtime: 229.47 s
+Saved column 3/200 (Delta Ca=-44.748744) with 200/200 ok, 57 converged
+Column 3 runtime: 224.09 s
+Saved column 44/200 (Delta Ca=-39.597990) with 200/200 ok, 85 converged
+Column 44 runtime: 175.04 s
+Saved column 182/200 (Delta Ca=-22.261307) with 200/200 ok, 23 converged
+Column 182 runtime: 378.10 s
+Saved column 103/200 (Delta Ca=-32.185930) with 200/200 ok, 33 converged
+Column 103 runtime: 275.15 s
+Saved column 64/200 (Delta Ca=-37.085427) with 200/200 ok, 46 converged
+Column 64 runtime: 225.84 s
+Saved column 24/200 (Delta Ca=-42.110553) with 200/200 ok, 71 converged
+Column 24 runtime: 225.71 s
+Saved column 45/200 (Delta Ca=-39.472362) with 200/200 ok, 80 converged
+Column 45 runtime: 196.94 s
+Saved column 123/200 (Delta Ca=-29.673367) with 200/200 ok, 34 converged
+Column 123 runtime: 322.90 s
+Saved column 4/200 (Delta Ca=-44.623116) with 200/200 ok, 55 converged
+Column 4 runtime: 253.51 s
+Saved column 84/200 (Delta Ca=-34.572864) with 200/200 ok, 39 converged
+Column 84 runtime: 259.57 s
+Saved column 143/200 (Delta Ca=-27.160804) with 200/200 ok, 32 converged
+Column 143 runtime: 367.40 s
+Saved column 163/200 (Delta Ca=-24.648241) with 200/200 ok, 32 converged
+Column 163 runtime: 374.71 s
+Saved column 65/200 (Delta Ca=-36.959799) with 200/200 ok, 49 converged
+Column 65 runtime: 234.88 s
+Saved column 25/200 (Delta Ca=-41.984925) with 200/200 ok, 74 converged
+Column 25 runtime: 234.93 s
+Saved column 46/200 (Delta Ca=-39.346734) with 200/200 ok, 76 converged
+Column 46 runtime: 198.29 s
+Saved column 104/200 (Delta Ca=-32.060302) with 200/200 ok, 40 converged
+Column 104 runtime: 296.60 s
+Saved column 5/200 (Delta Ca=-44.497487) with 200/200 ok, 62 converged
+Column 5 runtime: 248.25 s
+Saved column 183/200 (Delta Ca=-22.135678) with 200/200 ok, 21 converged
+Column 183 runtime: 422.57 s
+Saved column 85/200 (Delta Ca=-34.447236) with 200/200 ok, 36 converged
+Column 85 runtime: 262.52 s
+Saved column 124/200 (Delta Ca=-29.547739) with 200/200 ok, 38 converged
+Column 124 runtime: 326.24 s
+Saved column 47/200 (Delta Ca=-39.221106) with 200/200 ok, 73 converged
+Column 47 runtime: 193.12 s
+Saved column 66/200 (Delta Ca=-36.834171) with 200/200 ok, 58 converged
+Column 66 runtime: 232.64 s
+Saved column 26/200 (Delta Ca=-41.859296) with 200/200 ok, 89 converged
+Column 26 runtime: 228.72 s
+Saved column 144/200 (Delta Ca=-27.035176) with 200/200 ok, 30 converged
+Column 144 runtime: 371.13 s
+Saved column 105/200 (Delta Ca=-31.934673) with 200/200 ok, 39 converged
+Column 105 runtime: 306.02 s
+Saved column 164/200 (Delta Ca=-24.522613) with 200/200 ok, 35 converged
+Column 164 runtime: 384.84 s
+Saved column 6/200 (Delta Ca=-44.371859) with 200/200 ok, 62 converged
+Column 6 runtime: 259.18 s
+Saved column 86/200 (Delta Ca=-34.321608) with 200/200 ok, 42 converged
+Column 86 runtime: 287.05 s
+Saved column 48/200 (Delta Ca=-39.095477) with 200/200 ok, 68 converged
+Column 48 runtime: 224.05 s
+Saved column 27/200 (Delta Ca=-41.733668) with 200/200 ok, 89 converged
+Column 27 runtime: 258.98 s
+Saved column 67/200 (Delta Ca=-36.708543) with 200/200 ok, 65 converged
+Column 67 runtime: 274.40 s
+Saved column 125/200 (Delta Ca=-29.422111) with 200/200 ok, 29 converged
+Column 125 runtime: 375.41 s
+Saved column 184/200 (Delta Ca=-22.010050) with 200/200 ok, 22 converged
+Column 184 runtime: 468.19 s
+Saved column 49/200 (Delta Ca=-38.969849) with 200/200 ok, 67 converged
+Column 49 runtime: 218.49 s
+Saved column 7/200 (Delta Ca=-44.246231) with 200/200 ok, 58 converged
+Column 7 runtime: 279.52 s
+Saved column 106/200 (Delta Ca=-31.809045) with 200/200 ok, 35 converged
+Column 106 runtime: 329.65 s
+Saved column 87/200 (Delta Ca=-34.195980) with 200/200 ok, 40 converged
+Column 87 runtime: 277.91 s
+Saved column 28/200 (Delta Ca=-41.608040) with 200/200 ok, 91 converged
+Column 28 runtime: 214.11 s
+Saved column 145/200 (Delta Ca=-26.909548) with 200/200 ok, 20 converged
+Column 145 runtime: 394.88 s
+Saved column 68/200 (Delta Ca=-36.582915) with 200/200 ok, 59 converged
+Column 68 runtime: 231.49 s
+Saved column 165/200 (Delta Ca=-24.396985) with 200/200 ok, 23 converged
+Column 165 runtime: 419.22 s
+Saved column 50/200 (Delta Ca=-38.844221) with 200/200 ok, 59 converged
+Column 50 runtime: 264.80 s
+Saved column 126/200 (Delta Ca=-29.296482) with 200/200 ok, 32 converged
+Column 126 runtime: 388.93 s
+Saved column 8/200 (Delta Ca=-44.120603) with 200/200 ok, 56 converged
+Column 8 runtime: 311.34 s
+Saved column 29/200 (Delta Ca=-41.482412) with 200/200 ok, 84 converged
+Column 29 runtime: 277.43 s
+Saved column 107/200 (Delta Ca=-31.683417) with 200/200 ok, 35 converged
+Column 107 runtime: 355.59 s
+Saved column 88/200 (Delta Ca=-34.070352) with 200/200 ok, 45 converged
+Column 88 runtime: 323.05 s
+Saved column 69/200 (Delta Ca=-36.457286) with 200/200 ok, 55 converged
+Column 69 runtime: 300.00 s
+Saved column 185/200 (Delta Ca=-21.884422) with 200/200 ok, 18 converged
+Column 185 runtime: 470.13 s
+Saved column 51/200 (Delta Ca=-38.718593) with 200/200 ok, 60 converged
+Column 51 runtime: 178.81 s
+Saved column 146/200 (Delta Ca=-26.783920) with 200/200 ok, 20 converged
+Column 146 runtime: 419.39 s
+Saved column 30/200 (Delta Ca=-41.356784) with 200/200 ok, 96 converged
+Column 30 runtime: 179.22 s
+Saved column 166/200 (Delta Ca=-24.271357) with 200/200 ok, 29 converged
+Column 166 runtime: 406.25 s
+Saved column 9/200 (Delta Ca=-43.994975) with 200/200 ok, 56 converged
+Column 9 runtime: 223.83 s
+Saved column 127/200 (Delta Ca=-29.170854) with 200/200 ok, 34 converged
+Column 127 runtime: 292.18 s
+Saved column 70/200 (Delta Ca=-36.331658) with 200/200 ok, 56 converged
+Column 70 runtime: 209.93 s
+Saved column 89/200 (Delta Ca=-33.944724) with 200/200 ok, 48 converged
+Column 89 runtime: 235.54 s
+Saved column 52/200 (Delta Ca=-38.592965) with 200/200 ok, 65 converged
+Column 52 runtime: 171.10 s
+Saved column 108/200 (Delta Ca=-31.557789) with 200/200 ok, 30 converged
+Column 108 runtime: 264.84 s
+Saved column 31/200 (Delta Ca=-41.231156) with 200/200 ok, 103 converged
+Column 31 runtime: 173.85 s
+Saved column 10/200 (Delta Ca=-43.869347) with 200/200 ok, 54 converged
+Column 10 runtime: 218.58 s
+Saved column 186/200 (Delta Ca=-21.758794) with 200/200 ok, 21 converged
+Column 186 runtime: 365.37 s
+Saved column 53/200 (Delta Ca=-38.467337) with 200/200 ok, 70 converged
+Column 53 runtime: 170.66 s
+Saved column 71/200 (Delta Ca=-36.206030) with 200/200 ok, 53 converged
+Column 71 runtime: 207.18 s
+Saved column 147/200 (Delta Ca=-26.658291) with 200/200 ok, 27 converged
+Column 147 runtime: 318.98 s
+Saved column 90/200 (Delta Ca=-33.819095) with 200/200 ok, 44 converged
+Column 90 runtime: 233.49 s
+Saved column 128/200 (Delta Ca=-29.045226) with 200/200 ok, 35 converged
+Column 128 runtime: 284.84 s
+Saved column 32/200 (Delta Ca=-41.105528) with 200/200 ok, 109 converged
+Column 32 runtime: 172.48 s
+Saved column 167/200 (Delta Ca=-24.145729) with 200/200 ok, 26 converged
+Column 167 runtime: 334.59 s
+Saved column 109/200 (Delta Ca=-31.432161) with 200/200 ok, 45 converged
+Column 109 runtime: 261.73 s
+Saved column 54/200 (Delta Ca=-38.341709) with 200/200 ok, 65 converged
+Column 54 runtime: 174.54 s
+Saved column 11/200 (Delta Ca=-43.743719) with 200/200 ok, 57 converged
+Column 11 runtime: 224.51 s
+Saved column 72/200 (Delta Ca=-36.080402) with 200/200 ok, 49 converged
+Column 72 runtime: 213.88 s
+Saved column 33/200 (Delta Ca=-40.979899) with 200/200 ok, 106 converged
+Column 33 runtime: 182.08 s
+Saved column 91/200 (Delta Ca=-33.693467) with 200/200 ok, 37 converged
+Column 91 runtime: 252.95 s
+Saved column 148/200 (Delta Ca=-26.532663) with 200/200 ok, 26 converged
+Column 148 runtime: 349.35 s
+Saved column 55/200 (Delta Ca=-38.216080) with 200/200 ok, 68 converged
+Column 55 runtime: 198.77 s
+Saved column 129/200 (Delta Ca=-28.919598) with 200/200 ok, 34 converged
+Column 129 runtime: 316.90 s
+Saved column 187/200 (Delta Ca=-21.633166) with 200/200 ok, 17 converged
+Column 187 runtime: 394.36 s
+Saved column 110/200 (Delta Ca=-31.306533) with 200/200 ok, 39 converged
+Column 110 runtime: 294.06 s
+Saved column 12/200 (Delta Ca=-43.618090) with 200/200 ok, 53 converged
+Column 12 runtime: 254.27 s
+Saved column 34/200 (Delta Ca=-40.854271) with 200/200 ok, 112 converged
+Column 34 runtime: 199.62 s
+Saved column 168/200 (Delta Ca=-24.020101) with 200/200 ok, 32 converged
+Column 168 runtime: 375.31 s
+Saved column 73/200 (Delta Ca=-35.954774) with 200/200 ok, 45 converged
+Column 73 runtime: 245.32 s
+Saved column 56/200 (Delta Ca=-38.090452) with 200/200 ok, 66 converged
+Column 56 runtime: 192.51 s
+Saved column 92/200 (Delta Ca=-33.567839) with 200/200 ok, 37 converged
+Column 92 runtime: 272.11 s
+Saved column 35/200 (Delta Ca=-40.728643) with 200/200 ok, 113 converged
+Column 35 runtime: 174.88 s
+Saved column 13/200 (Delta Ca=-43.492462) with 200/200 ok, 54 converged
+Column 13 runtime: 230.16 s
+Saved column 111/200 (Delta Ca=-31.180905) with 200/200 ok, 34 converged
+Column 111 runtime: 288.56 s
+Saved column 130/200 (Delta Ca=-28.793970) with 200/200 ok, 40 converged
+Column 130 runtime: 310.27 s
+Saved column 74/200 (Delta Ca=-35.829146) with 200/200 ok, 45 converged
+Column 74 runtime: 222.51 s
+Saved column 149/200 (Delta Ca=-26.407035) with 200/200 ok, 29 converged
+Column 149 runtime: 345.50 s
+Saved column 57/200 (Delta Ca=-37.964824) with 200/200 ok, 67 converged
+Column 57 runtime: 181.66 s
+Saved column 188/200 (Delta Ca=-21.507538) with 200/200 ok, 12 converged
+Column 188 runtime: 393.82 s
+Saved column 36/200 (Delta Ca=-40.603015) with 200/200 ok, 129 converged
+Column 36 runtime: 174.12 s
+Saved column 169/200 (Delta Ca=-23.894472) with 200/200 ok, 30 converged
+Column 169 runtime: 355.55 s
+Saved column 93/200 (Delta Ca=-33.442211) with 200/200 ok, 37 converged
+Column 93 runtime: 253.91 s
+Saved column 75/200 (Delta Ca=-35.703518) with 200/200 ok, 44 converged
+Column 75 runtime: 220.64 s
+Saved column 14/200 (Delta Ca=-43.366834) with 200/200 ok, 49 converged
+Column 14 runtime: 234.68 s
+Saved column 58/200 (Delta Ca=-37.839196) with 200/200 ok, 60 converged
+Column 58 runtime: 190.76 s
+Saved column 112/200 (Delta Ca=-31.055276) with 200/200 ok, 32 converged
+Column 112 runtime: 291.66 s
+Saved column 37/200 (Delta Ca=-40.477387) with 200/200 ok, 129 converged
+Column 37 runtime: 174.72 s
+Saved column 131/200 (Delta Ca=-28.668342) with 200/200 ok, 37 converged
+Column 131 runtime: 306.93 s
+Saved column 150/200 (Delta Ca=-26.281407) with 200/200 ok, 22 converged
+Column 150 runtime: 343.83 s
+Saved column 94/200 (Delta Ca=-33.316583) with 200/200 ok, 38 converged
+Column 94 runtime: 262.42 s
+Saved column 59/200 (Delta Ca=-37.713568) with 200/200 ok, 62 converged
+Column 59 runtime: 200.71 s
+Saved column 76/200 (Delta Ca=-35.577889) with 200/200 ok, 44 converged
+Column 76 runtime: 227.46 s
+Saved column 15/200 (Delta Ca=-43.241206) with 200/200 ok, 55 converged
+Column 15 runtime: 231.78 s
+Saved column 38/200 (Delta Ca=-40.351759) with 200/200 ok, 111 converged
+Column 38 runtime: 175.18 s
+Saved column 189/200 (Delta Ca=-21.381910) with 200/200 ok, 14 converged
+Column 189 runtime: 389.15 s
+Saved column 170/200 (Delta Ca=-23.768844) with 200/200 ok, 23 converged
+Column 170 runtime: 363.39 s
+Saved column 113/200 (Delta Ca=-30.929648) with 200/200 ok, 29 converged
+Column 113 runtime: 284.20 s
+Saved column 132/200 (Delta Ca=-28.542714) with 200/200 ok, 42 converged
+Column 132 runtime: 301.12 s
+Saved column 39/200 (Delta Ca=-40.226131) with 200/200 ok, 104 converged
+Column 39 runtime: 157.79 s
+Saved column 60/200 (Delta Ca=-37.587940) with 200/200 ok, 54 converged
+Column 60 runtime: 184.12 s
+Saved column 95/200 (Delta Ca=-33.190955) with 200/200 ok, 40 converged
+Column 95 runtime: 241.04 s
+Saved column 77/200 (Delta Ca=-35.452261) with 200/200 ok, 39 converged
+Column 77 runtime: 203.71 s
+Saved column 16/200 (Delta Ca=-43.115578) with 200/200 ok, 50 converged
+Column 16 runtime: 206.13 s
+Saved column 151/200 (Delta Ca=-26.155779) with 200/200 ok, 27 converged
+Column 151 runtime: 319.10 s
+Saved column 40/200 (Delta Ca=-40.100503) with 200/200 ok, 94 converged
+Column 40 runtime: 140.74 s
+Saved column 171/200 (Delta Ca=-23.643216) with 200/200 ok, 23 converged
+Column 171 runtime: 304.22 s
+Saved column 190/200 (Delta Ca=-21.256281) with 200/200 ok, 14 converged
+Column 190 runtime: 318.61 s
+Saved column 114/200 (Delta Ca=-30.804020) with 200/200 ok, 44 converged
+Column 114 runtime: 230.98 s
+Saved column 17/200 (Delta Ca=-42.989950) with 200/200 ok, 56 converged
+Column 17 runtime: 164.14 s
+Saved column 78/200 (Delta Ca=-35.326633) with 200/200 ok, 41 converged
+Column 78 runtime: 173.02 s
+Saved column 96/200 (Delta Ca=-33.065327) with 200/200 ok, 30 converged
+Column 96 runtime: 200.02 s
+Saved column 133/200 (Delta Ca=-28.417085) with 200/200 ok, 32 converged
+Column 133 runtime: 243.78 s
+Saved column 152/200 (Delta Ca=-26.030151) with 200/200 ok, 25 converged
+Column 152 runtime: 250.70 s
+Saved column 18/200 (Delta Ca=-42.864322) with 200/200 ok, 65 converged
+Column 18 runtime: 159.86 s
+Saved column 79/200 (Delta Ca=-35.201005) with 200/200 ok, 47 converged
+Column 79 runtime: 167.81 s
+Saved column 115/200 (Delta Ca=-30.678392) with 200/200 ok, 34 converged
+Column 115 runtime: 212.41 s
+Saved column 97/200 (Delta Ca=-32.939698) with 200/200 ok, 30 converged
+Column 97 runtime: 191.29 s
+Saved column 172/200 (Delta Ca=-23.517588) with 200/200 ok, 28 converged
+Column 172 runtime: 260.93 s
+Saved column 191/200 (Delta Ca=-21.130653) with 200/200 ok, 16 converged
+Column 191 runtime: 274.45 s
+Saved column 134/200 (Delta Ca=-28.291457) with 200/200 ok, 39 converged
+Column 134 runtime: 226.17 s
+Saved column 19/200 (Delta Ca=-42.738693) with 200/200 ok, 64 converged
+Column 19 runtime: 152.70 s
+Saved column 80/200 (Delta Ca=-35.075377) with 200/200 ok, 44 converged
+Column 80 runtime: 160.57 s
+Saved column 153/200 (Delta Ca=-25.904523) with 200/200 ok, 25 converged
+Column 153 runtime: 239.84 s
+Saved column 116/200 (Delta Ca=-30.552764) with 200/200 ok, 34 converged
+Column 116 runtime: 195.89 s
+Saved column 98/200 (Delta Ca=-32.814070) with 200/200 ok, 30 converged
+Column 98 runtime: 175.52 s
+Saved column 20/200 (Delta Ca=-42.613065) with 200/200 ok, 70 converged
+Column 20 runtime: 128.92 s
+Saved column 135/200 (Delta Ca=-28.165829) with 200/200 ok, 38 converged
+Column 135 runtime: 197.29 s
+Saved column 173/200 (Delta Ca=-23.391960) with 200/200 ok, 23 converged
+Column 173 runtime: 230.63 s
+Saved column 192/200 (Delta Ca=-21.005025) with 200/200 ok, 15 converged
+Column 192 runtime: 230.14 s
+Saved column 99/200 (Delta Ca=-32.688442) with 200/200 ok, 31 converged
+Column 99 runtime: 133.20 s
+Saved column 154/200 (Delta Ca=-25.778894) with 200/200 ok, 25 converged
+Column 154 runtime: 180.54 s
+Saved column 117/200 (Delta Ca=-30.427136) with 200/200 ok, 39 converged
+Column 117 runtime: 150.03 s
+Saved column 136/200 (Delta Ca=-28.040201) with 200/200 ok, 33 converged
+Column 136 runtime: 149.15 s
+Saved column 174/200 (Delta Ca=-23.266332) with 200/200 ok, 26 converged
+Column 174 runtime: 170.77 s
+Saved column 100/200 (Delta Ca=-32.562814) with 200/200 ok, 32 converged
+Column 100 runtime: 119.95 s
+Saved column 193/200 (Delta Ca=-20.879397) with 200/200 ok, 15 converged
+Column 193 runtime: 171.86 s
+Saved column 118/200 (Delta Ca=-30.301508) with 200/200 ok, 41 converged
+Column 118 runtime: 124.39 s
+Saved column 155/200 (Delta Ca=-25.653266) with 200/200 ok, 18 converged
+Column 155 runtime: 142.53 s
+Saved column 137/200 (Delta Ca=-27.914573) with 200/200 ok, 34 converged
+Column 137 runtime: 122.32 s
+Saved column 175/200 (Delta Ca=-23.140704) with 200/200 ok, 26 converged
+Column 175 runtime: 138.70 s
+Saved column 119/200 (Delta Ca=-30.175879) with 200/200 ok, 31 converged
+Column 119 runtime: 108.82 s
+Saved column 194/200 (Delta Ca=-20.753769) with 200/200 ok, 16 converged
+Column 194 runtime: 137.66 s
+Saved column 156/200 (Delta Ca=-25.527638) with 200/200 ok, 25 converged
+Column 156 runtime: 132.59 s
+Saved column 138/200 (Delta Ca=-27.788945) with 200/200 ok, 34 converged
+Column 138 runtime: 127.27 s
+Saved column 120/200 (Delta Ca=-30.050251) with 200/200 ok, 39 converged
+Column 120 runtime: 112.22 s
+Saved column 176/200 (Delta Ca=-23.015075) with 200/200 ok, 23 converged
+Column 176 runtime: 133.52 s
+Saved column 195/200 (Delta Ca=-20.628141) with 200/200 ok, 13 converged
+Column 195 runtime: 125.08 s
+Saved column 157/200 (Delta Ca=-25.402010) with 200/200 ok, 21 converged
+Column 157 runtime: 110.58 s
+Saved column 139/200 (Delta Ca=-27.663317) with 200/200 ok, 30 converged
+Column 139 runtime: 94.59 s
+Saved column 177/200 (Delta Ca=-22.889447) with 200/200 ok, 20 converged
+Column 177 runtime: 97.27 s
+Saved column 196/200 (Delta Ca=-20.502513) with 200/200 ok, 12 converged
+Column 196 runtime: 94.38 s
+Saved column 158/200 (Delta Ca=-25.276382) with 200/200 ok, 28 converged
+Column 158 runtime: 88.27 s
+Saved column 140/200 (Delta Ca=-27.537688) with 200/200 ok, 31 converged
+Column 140 runtime: 90.61 s
+Saved column 159/200 (Delta Ca=-25.150754) with 200/200 ok, 18 converged
+Column 159 runtime: 76.31 s
+Saved column 178/200 (Delta Ca=-22.763819) with 200/200 ok, 23 converged
+Column 178 runtime: 86.82 s
+Saved column 197/200 (Delta Ca=-20.376884) with 200/200 ok, 9 converged
+Column 197 runtime: 83.59 s
+Saved column 160/200 (Delta Ca=-25.025126) with 200/200 ok, 23 converged
+Column 160 runtime: 54.55 s
+Saved column 198/200 (Delta Ca=-20.251256) with 200/200 ok, 11 converged
+Column 198 runtime: 56.16 s
+Saved column 179/200 (Delta Ca=-22.638191) with 200/200 ok, 21 converged
+Column 179 runtime: 58.03 s
+Saved column 199/200 (Delta Ca=-20.125628) with 200/200 ok, 12 converged
+Column 199 runtime: 36.77 s
+Saved column 180/200 (Delta Ca=-22.512563) with 200/200 ok, 20 converged
+Column 180 runtime: 37.92 s
+Saved column 200/200 (Delta Ca=-20.000000) with 200/200 ok, 12 converged
+Column 200 runtime: 23.87 s
+Saved plot to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-053/grid200_lyapdim_tmax1e5_gh0p000_dimension.png
+Saved summary to /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/kneading/experiment/attempt-053/grid200_lyapdim_tmax1e5_gh0p000_summary.txt
+ok_count=40000
+converged_count=8970
+dimension range: 0.000000 to 3.042972
+scan_runtime_seconds=5174.046
+merge_runtime_seconds=0.060
+plot_runtime_seconds=12.110
+real 5194.34
+user 9010.48
+sys 19994.75
