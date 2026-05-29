@@ -282,8 +282,8 @@ function main()
         elseif contour_format == "png"
             renderer = joinpath(@__DIR__, "rossler_y_minima_tangent_pngs.py")
             python = get(ENV, "MM_FLOW_FOLDING_PYTHON", "python3")
-            png_width = env_int("MM_FLOW_FOLDING_PNG_WIDTH", 1600)
-            png_height = env_int("MM_FLOW_FOLDING_PNG_HEIGHT", 1100)
+            png_width = env_int("MM_FLOW_FOLDING_PNG_WIDTH", 6400)
+            png_height = env_int("MM_FLOW_FOLDING_PNG_HEIGHT", 4400)
             line_width_scale = env_float("MM_FLOW_FOLDING_CONTOUR_LINE_WIDTH_SCALE", 0.25)
             contour_alpha = env_float("MM_FLOW_FOLDING_CONTOUR_ALPHA", 0.10)
             contour_step_seconds = @elapsed run(

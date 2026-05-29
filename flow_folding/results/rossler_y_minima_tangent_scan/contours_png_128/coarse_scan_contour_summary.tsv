@@ -1,8 +1,8 @@
 results_path	flow_folding/results/rossler_y_minima_tangent_scan/coarse_scan.tsv
 output_dir	flow_folding/results/rossler_y_minima_tangent_scan/contours_png_128
 image_format	png
-png_width	1600
-png_height	1100
+png_width	6400
+png_height	4400
 line_width_scale	0.25
 contour_alpha	0.1
 symbol_value_source	symbol_signs
@@ -14,7 +14,7 @@ word_length	8
 max_time	450.0
 scan_seconds	54.574760167
 write_tsv_seconds	0.4442475
-contour_generation_seconds	1.7473411560058594
+contour_generation_seconds	10.097078084945679
 symbol01_segments	10458
 symbol02_segments	10400
 symbol03_segments	10385
