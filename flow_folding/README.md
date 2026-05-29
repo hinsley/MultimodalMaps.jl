@@ -12,7 +12,7 @@ points of the induced return map.
 The Rössler examples in this folder use `y`-minima and tangent signs at those
 minima. They intentionally do not use the z-maximum threshold convention from
 the Malykh-Shilnikov paper, because the kneading scans here encode the tangent
-orientation sequence. The committed scan uses a 128x128 grid, records 8
+orientation sequence. The production scan uses a 1024x1024 grid, records 8
 accepted `y`-minima events per completed grid point, and reports `max_time` for
 points that do not finish within the configured integration horizon.
 
@@ -91,18 +91,25 @@ Finite differences are acceptable only for quick prototype checks.
   the `y`-minima problem adapter.
 - `examples/rossler_y_minima_tangent_scan.jl` runs a coarse tangent-kneading
   scan over `2 <= c <= 7`, `0.30 <= a <= 0.55`, `b=0.3`; it also generates
-  contour artifacts by default.
-- `examples/rossler_y_minima_tangent_contours.jl` regenerates symbol, prefix,
-  and full-word contour SVGs from an existing scan TSV.
+  PNG contour artifacts by default.
+- `examples/rossler_y_minima_tangent_pngs.py` regenerates symbol, prefix, and
+  full-word contour PNGs from an existing scan TSV or TSV.GZ without plotting
+  dependencies.
+- `examples/rossler_y_minima_tangent_contours.jl` is the legacy SVG contour
+  exporter.
 - `examples/rossler_seeded_continuation.jl` shows seeded critical-point
   location and continuation along `c`.
 - `docs/index.html` is a static browser-readable guide and scan viewer.
 - `results/rossler_y_minima_tangent_scan/coarse_scan.tsv` is the committed
-  128x128 Rössler scan used by the browser docs.
+  128x128 Rössler scan used by the browser heatmap docs.
 - `results/rossler_y_minima_tangent_scan/coarse_scan_runtime.tsv` logs scan,
   contour, write, and total generation timings for the committed artifacts.
-- `results/rossler_y_minima_tangent_scan/contours/` contains the generated
-  Marching-Squares SVG contours, scan summary, and word legend. The SVGs omit
+- `results/rossler_y_minima_tangent_scan/contours_png_128/` contains PNGs
+  rendered from the last 128x128 scan.
+- `results/rossler_y_minima_tangent_scan_1024/coarse_scan.tsv.gz` is the
+  compressed 1024x1024 Rössler scan.
+- `results/rossler_y_minima_tangent_scan_1024/contours/` contains the generated
+  Marching-Squares PNG contours, scan summary, and word legend. The PNGs omit
   max-time-limited gray point markers.
 
 ## Usage
@@ -111,23 +118,27 @@ Finite differences are acceptable only for quick prototype checks.
 julia --project=. flow_folding/examples/rossler_y_minima_tangent_scan.jl
 ```
 
-The scan defaults to a 128x128 grid, 8 tangent symbols after 20 transient
-`y`-minima, and `MM_FLOW_FOLDING_MAX_TIME=450`. A denser run with the same
-8-symbol convention:
+The scan defaults to a 1024x1024 grid, 8 tangent symbols after 20 transient
+`y`-minima, `MM_FLOW_FOLDING_MAX_TIME=450`, and PNG contour export. Large runs
+skip browser JS data by default to avoid writing a multi-hundred-megabyte docs
+bundle. A compact browser-data run:
 
 ```bash
-MM_FLOW_FOLDING_NC=192 \
-MM_FLOW_FOLDING_NA=192 \
+MM_FLOW_FOLDING_NC=128 \
+MM_FLOW_FOLDING_NA=128 \
 MM_FLOW_FOLDING_WORD_LENGTH=8 \
-MM_FLOW_FOLDING_TRANSIENT_EVENTS=80 \
-MM_FLOW_FOLDING_MAX_TIME=1200 \
+MM_FLOW_FOLDING_WRITE_DOCS_DATA=true \
 julia --project=. flow_folding/examples/rossler_y_minima_tangent_scan.jl
 ```
 
 To regenerate contours from the current TSV without re-running the ODE scan:
 
 ```bash
-julia --project=. flow_folding/examples/rossler_y_minima_tangent_contours.jl
+python3 flow_folding/examples/rossler_y_minima_tangent_pngs.py \
+  flow_folding/results/rossler_y_minima_tangent_scan_1024/coarse_scan.tsv.gz \
+  --output-dir flow_folding/results/rossler_y_minima_tangent_scan_1024/contours \
+  --stem coarse_scan \
+  --clean
 ```
 
 Open the local docs from the repository root with:

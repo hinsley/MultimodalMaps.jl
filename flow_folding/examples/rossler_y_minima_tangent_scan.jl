@@ -10,6 +10,11 @@ function env_int(name, default)
     return parse(Int, get(ENV, name, string(default)))
 end
 
+function env_bool(name, default)
+    value = lowercase(strip(get(ENV, name, default ? "true" : "false")))
+    return value in ("1", "true", "yes", "on")
+end
+
 function scan_point(
     a,
     c;
@@ -62,20 +67,23 @@ function run_scan(;
     c_max=7.0,
     a_min=0.30,
     a_max=0.55,
-    n_c=128,
-    n_a=128,
+    n_c=1024,
+    n_a=1024,
     b=ROSSLER_MALYKH_B,
     word_length=8,
     transient_events=20,
     dt=0.05,
     max_time=450.0,
     max_state=1e6,
+    progress_seconds=30.0,
 )
     c_values = collect(range(c_min, c_max; length=n_c))
     a_values = collect(range(a_min, a_max; length=n_a))
     rows = Vector{NamedTuple}(undef, length(c_values) * length(a_values))
     k = 0
     total = length(rows)
+    scan_started = time()
+    last_report = scan_started - progress_seconds
     for a in a_values
         for c in c_values
             k += 1
@@ -89,9 +97,25 @@ function run_scan(;
                 max_time=max_time,
                 max_state=max_state,
             )
-            if k == 1 || k == total || k % max(1, total ÷ 20) == 0
-                @printf("scanned %d/%d a=%.6f c=%.6f status=%s word=%s\n", k, total, a, c, rows[k].status, rows[k].word)
+            now = time()
+            if k == 1 || k == total || now - last_report >= progress_seconds
+                elapsed = now - scan_started
+                rate = elapsed > 0.0 ? k / elapsed : NaN
+                eta = isfinite(rate) && rate > 0.0 ? (total - k) / rate : NaN
+                @printf(
+                    "scanned %d/%d a=%.6f c=%.6f status=%s word=%s elapsed=%.1fs rate=%.2f/s eta=%.1fs\n",
+                    k,
+                    total,
+                    a,
+                    c,
+                    rows[k].status,
+                    rows[k].word,
+                    elapsed,
+                    rate,
+                    eta,
+                )
                 flush(stdout)
+                last_report = now
             end
         end
     end
@@ -170,14 +194,16 @@ function write_docs_data(path, rows; config, runtime=nothing)
     return path
 end
 
-function write_runtime_log(path, rows; config, runtime, output, docs_data, contour_dir)
+function write_runtime_log(path, rows; config, runtime, output, docs_data, docs_data_written, contour_dir, contour_format)
     mkpath(dirname(path))
     ok = count(row -> row.status == "ok", rows)
     open(path, "w") do io
         println(io, "metric\tvalue")
         println(io, "output\t$(output)")
         println(io, "docs_data\t$(docs_data)")
+        println(io, "docs_data_written\t$(docs_data_written)")
         println(io, "contour_dir\t$(contour_dir)")
+        println(io, "contour_format\t$(contour_format)")
         println(io, "total_points\t$(length(rows))")
         println(io, "ok_points\t$(ok)")
         println(io, "max_time_limited_points\t$(length(rows) - ok)")
@@ -199,19 +225,26 @@ function main()
         c_max=env_float("MM_FLOW_FOLDING_C_MAX", 7.0),
         a_min=env_float("MM_FLOW_FOLDING_A_MIN", 0.30),
         a_max=env_float("MM_FLOW_FOLDING_A_MAX", 0.55),
-        n_c=env_int("MM_FLOW_FOLDING_NC", 128),
-        n_a=env_int("MM_FLOW_FOLDING_NA", 128),
+        n_c=env_int("MM_FLOW_FOLDING_NC", 1024),
+        n_a=env_int("MM_FLOW_FOLDING_NA", 1024),
         b=env_float("MM_FLOW_FOLDING_B", ROSSLER_MALYKH_B),
         word_length=env_int("MM_FLOW_FOLDING_WORD_LENGTH", 8),
         transient_events=env_int("MM_FLOW_FOLDING_TRANSIENT_EVENTS", 20),
         dt=env_float("MM_FLOW_FOLDING_DT", 0.05),
         max_time=default_max_time,
         max_state=env_float("MM_FLOW_FOLDING_MAX_STATE", 1e6),
+        progress_seconds=env_float("MM_FLOW_FOLDING_PROGRESS_SECONDS", 30.0),
     )
+    default_results_name = get(
+        ENV,
+        "MM_FLOW_FOLDING_RESULTS_NAME",
+        config.n_c == 1024 && config.n_a == 1024 ? "rossler_y_minima_tangent_scan_1024" : "rossler_y_minima_tangent_scan",
+    )
+    default_results_dir = joinpath(@__DIR__, "..", "results", default_results_name)
     output = get(
         ENV,
         "MM_FLOW_FOLDING_OUTPUT",
-        joinpath(@__DIR__, "..", "results", "rossler_y_minima_tangent_scan", "coarse_scan.tsv"),
+        joinpath(default_results_dir, "coarse_scan.tsv"),
     )
     docs_data = get(
         ENV,
@@ -221,27 +254,42 @@ function main()
     contour_dir = get(
         ENV,
         "MM_FLOW_FOLDING_CONTOUR_DIR",
-        joinpath(@__DIR__, "..", "results", "rossler_y_minima_tangent_scan", "contours"),
+        joinpath(default_results_dir, "contours"),
     )
     runtime_log = get(
         ENV,
         "MM_FLOW_FOLDING_RUNTIME_LOG",
-        joinpath(@__DIR__, "..", "results", "rossler_y_minima_tangent_scan", "coarse_scan_runtime.tsv"),
+        joinpath(default_results_dir, "coarse_scan_runtime.tsv"),
     )
     generate_contours = lowercase(get(ENV, "MM_FLOW_FOLDING_GENERATE_CONTOURS", "true")) in ("1", "true", "yes")
+    contour_format = lowercase(get(ENV, "MM_FLOW_FOLDING_CONTOUR_FORMAT", "png"))
+    docs_data_max_points = env_int("MM_FLOW_FOLDING_DOCS_DATA_MAX_POINTS", 200000)
+    write_docs_data_enabled = env_bool("MM_FLOW_FOLDING_WRITE_DOCS_DATA", config.n_c * config.n_a <= docs_data_max_points)
 
     scan_seconds = @elapsed rows = run_scan(; config...)
     write_tsv_seconds = @elapsed write_tsv(output, rows)
     contour_step_seconds = 0.0
     if generate_contours
-        include(joinpath(@__DIR__, "rossler_y_minima_tangent_contours.jl"))
-        contour_step_seconds = @elapsed Base.invokelatest(
-            write_all_contours,
-            output;
-            output_dir=contour_dir,
-            scan_seconds=scan_seconds,
-            write_tsv_seconds=write_tsv_seconds,
-        )
+        if contour_format == "svg"
+            include(joinpath(@__DIR__, "rossler_y_minima_tangent_contours.jl"))
+            contour_step_seconds = @elapsed Base.invokelatest(
+                write_all_contours,
+                output;
+                output_dir=contour_dir,
+                scan_seconds=scan_seconds,
+                write_tsv_seconds=write_tsv_seconds,
+            )
+        elseif contour_format == "png"
+            renderer = joinpath(@__DIR__, "rossler_y_minima_tangent_pngs.py")
+            python = get(ENV, "MM_FLOW_FOLDING_PYTHON", "python3")
+            png_width = env_int("MM_FLOW_FOLDING_PNG_WIDTH", 1600)
+            png_height = env_int("MM_FLOW_FOLDING_PNG_HEIGHT", 1100)
+            contour_step_seconds = @elapsed run(
+                `$(python) $(renderer) $(output) --output-dir $(contour_dir) --stem coarse_scan --scan-seconds $(scan_seconds) --write-tsv-seconds $(write_tsv_seconds) --width $(png_width) --height $(png_height) --clean`,
+            )
+        else
+            error("Unsupported MM_FLOW_FOLDING_CONTOUR_FORMAT=$(contour_format); expected png or svg")
+        end
     end
     runtime_for_docs = (
         scan_seconds=scan_seconds,
@@ -249,7 +297,10 @@ function main()
         contour_step_seconds=contour_step_seconds,
         total_seconds=time() - started,
     )
-    write_docs_data_seconds = @elapsed write_docs_data(docs_data, rows; config=config, runtime=runtime_for_docs)
+    write_docs_data_seconds = 0.0
+    if write_docs_data_enabled
+        write_docs_data_seconds = @elapsed write_docs_data(docs_data, rows; config=config, runtime=runtime_for_docs)
+    end
     runtime = (
         scan_seconds=scan_seconds,
         write_tsv_seconds=write_tsv_seconds,
@@ -257,10 +308,20 @@ function main()
         write_docs_data_seconds=write_docs_data_seconds,
         total_seconds=time() - started,
     )
-    write_runtime_log(runtime_log, rows; config=config, runtime=runtime, output=output, docs_data=docs_data, contour_dir=contour_dir)
+    write_runtime_log(
+        runtime_log,
+        rows;
+        config=config,
+        runtime=runtime,
+        output=output,
+        docs_data=docs_data,
+        docs_data_written=write_docs_data_enabled,
+        contour_dir=contour_dir,
+        contour_format=contour_format,
+    )
     ok = count(row -> row.status == "ok", rows)
     @printf("wrote %s\n", output)
-    @printf("wrote %s\n", docs_data)
+    write_docs_data_enabled ? @printf("wrote %s\n", docs_data) : @printf("skipped docs data %s\n", docs_data)
     @printf("wrote %s\n", runtime_log)
     generate_contours && @printf("wrote contours in %s\n", contour_dir)
     @printf("ok points: %d/%d\n", ok, length(rows))
