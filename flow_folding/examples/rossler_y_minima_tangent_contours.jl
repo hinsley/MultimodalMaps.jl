@@ -205,15 +205,12 @@ function svg_plot(path; title, rows, c_values, a_values, contours, symbol_index=
                 if row.status == "ok" && length(row.word) >= symbol_index
                     fill = row.word[symbol_index] == '1' ? "#b23a2e" : "#2f66b3"
                     println(io, """<circle cx="$(xpix(row.c))" cy="$(ypix(row.a))" r="4" fill="$fill" fill-opacity="0.28" stroke="none"/>""")
-                elseif row.status != "ok"
-                    println(io, """<circle cx="$(xpix(row.c))" cy="$(ypix(row.a))" r="3.2" fill="#9ba39d" fill-opacity="0.45" stroke="none"/>""")
                 end
             end
         else
             for row in rows
-                fill = row.status == "ok" ? "#17201c" : "#9ba39d"
-                opacity = row.status == "ok" ? "0.18" : "0.45"
-                println(io, """<circle cx="$(xpix(row.c))" cy="$(ypix(row.a))" r="3" fill="$fill" fill-opacity="$opacity" stroke="none"/>""")
+                row.status == "ok" || continue
+                println(io, """<circle cx="$(xpix(row.c))" cy="$(ypix(row.a))" r="3" fill="#17201c" fill-opacity="0.18" stroke="none"/>""")
             end
         end
 
@@ -251,7 +248,17 @@ function write_word_legend(path, rows)
     end
 end
 
-function write_summary(path, rows, symbol_counts, prefix_counts; results_path, output_dir)
+function write_summary(
+    path,
+    rows,
+    symbol_counts,
+    prefix_counts;
+    results_path,
+    output_dir,
+    scan_seconds=NaN,
+    write_tsv_seconds=NaN,
+    contour_generation_seconds=NaN,
+)
     ok = count(row -> row.status == "ok", rows)
     total = length(rows)
     max_times = [row.max_time for row in rows if isfinite(row.max_time)]
@@ -264,6 +271,9 @@ function write_summary(path, rows, symbol_counts, prefix_counts; results_path, o
         println(io, "max_time_limited_points\t$(total - ok)")
         println(io, "word_length\t$(completed_word_length(rows))")
         println(io, "max_time\t$(max_time)")
+        println(io, "scan_seconds\t$(scan_seconds)")
+        println(io, "write_tsv_seconds\t$(write_tsv_seconds)")
+        println(io, "contour_generation_seconds\t$(contour_generation_seconds)")
         for (idx, count) in enumerate(symbol_counts)
             println(io, @sprintf("symbol%02d_segments\t%d", idx, count))
         end
@@ -277,7 +287,10 @@ function write_all_contours(
     results_path::AbstractString=DEFAULT_SCAN_RESULTS;
     output_dir::AbstractString=DEFAULT_CONTOUR_DIR,
     stem="coarse_scan",
+    scan_seconds=NaN,
+    write_tsv_seconds=NaN,
 )
+    contour_started = time()
     rows = read_scan_results(results_path)
     isempty(rows) && error("No scan rows found in $(results_path)")
     c_values, a_values = sorted_axes(rows)
@@ -339,6 +352,7 @@ function write_all_contours(
     )
 
     write_word_legend(joinpath(output_dir, "$(stem)_word_legend.tsv"), rows)
+    contour_generation_seconds = time() - contour_started
     write_summary(
         joinpath(output_dir, "$(stem)_contour_summary.tsv"),
         rows,
@@ -346,6 +360,9 @@ function write_all_contours(
         prefix_counts;
         results_path=results_path,
         output_dir=output_dir,
+        scan_seconds=scan_seconds,
+        write_tsv_seconds=write_tsv_seconds,
+        contour_generation_seconds=contour_generation_seconds,
     )
     return output_dir
 end

@@ -11,6 +11,7 @@
 
   const rows = data.rows || [];
   const config = data.config || {};
+  const runtime = data.runtime || {};
   const cValues = uniqueSorted(rows.map((row) => row.c));
   const aValues = uniqueSorted(rows.map((row) => row.a));
   const byKey = new Map(rows.map((row) => [`${row.a}|${row.c}`, row]));
@@ -143,6 +144,7 @@
     }
     const ok = rows.filter((row) => row.status === "ok").length;
     const maxTime = Number.isFinite(config.max_time) ? config.max_time : Math.max(...rows.map((row) => row.max_time || 0));
+    const totalSeconds = Number(runtime.total_seconds);
     const words = new Map();
     for (const row of rows) {
       if (row.status === "ok") {
@@ -152,13 +154,17 @@
     const topWords = Array.from(words.entries())
       .sort((a, b) => b[1] - a[1])
       .slice(0, 8);
-    summary.innerHTML = [
+    const metrics = [
       `<div class="metric"><strong>${rows.length}</strong><span>grid points</span></div>`,
       `<div class="metric"><strong>${ok}</strong><span>completed words</span></div>`,
-      `<div class="metric"><strong>${config.n_c} x ${config.n_a}</strong><span>coarse region grid</span></div>`,
+      `<div class="metric"><strong>${config.n_c} x ${config.n_a}</strong><span>region grid</span></div>`,
       `<div class="metric"><strong>${config.word_length}</strong><span>tangent symbols after ${config.transient_events} transient y-minima</span></div>`,
       `<div class="metric"><strong>${formatNumber(maxTime)}</strong><span>max integration time per grid point</span></div>`,
-    ].join("");
+    ];
+    if (Number.isFinite(totalSeconds)) {
+      metrics.push(`<div class="metric"><strong>${formatNumber(totalSeconds)}s</strong><span>logged generation runtime</span></div>`);
+    }
+    summary.innerHTML = metrics.join("");
     legend.innerHTML = topWords
       .map(([word, count]) => `<tr><td><code>${word}</code></td><td>${count}</td></tr>`)
       .join("");

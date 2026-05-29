@@ -41,7 +41,7 @@
             <tr><th>Path</th><th>Role</th></tr>
             <tr><td><code>FlowFolding.jl</code></td><td>Event helpers, tangent events, return-map critical estimates, seeded residuals, continuation.</td></tr>
             <tr><td><code>examples/</code></td><td>Rössler y-minima tangent scan, contour generation, and seeded critical-point continuation scripts.</td></tr>
-            <tr><td><code>results/</code></td><td>Committed coarse scan output and contour SVGs over the Malykh-Shilnikov rectangle.</td></tr>
+            <tr><td><code>results/</code></td><td>Committed 128x128 scan output, timing log, and contour SVGs over the Malykh-Shilnikov rectangle.</td></tr>
             <tr><td><code>docs/</code></td><td>This browser-readable documentation and scan viewer.</td></tr>
           </table>
         </aside>
@@ -81,7 +81,7 @@
         </table>
         <p class="small">
           Gray cells did not collect the requested number of accepted y-minima before the configured
-          max-time cutoff. The default committed scan is intentionally coarse and reproducible;
+          max-time cutoff. The default committed scan is a reproducible 128x128 grid;
           increase <code>MM_FLOW_FOLDING_NC</code>, <code>MM_FLOW_FOLDING_NA</code>, and
           <code>MM_FLOW_FOLDING_MAX_TIME</code> for denser production runs with fewer limited cells.
         </p>
@@ -114,7 +114,8 @@
         </div>
         <p class="small">
           A TSV summary and word legend live next to the SVGs in
-          <code>results/rossler_y_minima_tangent_scan/contours/</code>.
+          <code>results/rossler_y_minima_tangent_scan/contours/</code>. Overall scan timing is
+          logged in <code>results/rossler_y_minima_tangent_scan/coarse_scan_runtime.tsv</code>.
         </p>
       </section>
 
@@ -138,12 +139,12 @@ events = collect_tangent_extrema_rk4(
 )
 word = tangent_word(events)</code></pre>
 
-        <h3>Run the Coarse Rössler Region Scan</h3>
+        <h3>Run the Default 128x128 Rössler Region Scan</h3>
         <pre><code>julia --project=. flow_folding/examples/rossler_y_minima_tangent_scan.jl</code></pre>
 
-        <h3>Run a Denser Scan</h3>
-        <pre><code>MM_FLOW_FOLDING_NC=101 \
-MM_FLOW_FOLDING_NA=61 \
+        <h3>Run a Denser or Longer Scan</h3>
+        <pre><code>MM_FLOW_FOLDING_NC=192 \
+MM_FLOW_FOLDING_NA=192 \
 MM_FLOW_FOLDING_WORD_LENGTH=8 \
 MM_FLOW_FOLDING_TRANSIENT_EVENTS=80 \
 MM_FLOW_FOLDING_MAX_TIME=1200 \

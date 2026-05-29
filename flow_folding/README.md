@@ -12,9 +12,9 @@ points of the induced return map.
 The Rössler examples in this folder use `y`-minima and tangent signs at those
 minima. They intentionally do not use the z-maximum threshold convention from
 the Malykh-Shilnikov paper, because the kneading scans here encode the tangent
-orientation sequence. The committed scan records 8 accepted `y`-minima events
-per completed grid point and reports `max_time` for points that do not finish
-within the configured integration horizon.
+orientation sequence. The committed scan uses a 128x128 grid, records 8
+accepted `y`-minima events per completed grid point, and reports `max_time` for
+points that do not finish within the configured integration horizon.
 
 ## Event Convention
 
@@ -98,9 +98,12 @@ Finite differences are acceptable only for quick prototype checks.
   location and continuation along `c`.
 - `docs/index.html` is a static browser-readable guide and scan viewer.
 - `results/rossler_y_minima_tangent_scan/coarse_scan.tsv` is the committed
-  coarse Rössler scan used by the browser docs.
+  128x128 Rössler scan used by the browser docs.
+- `results/rossler_y_minima_tangent_scan/coarse_scan_runtime.tsv` logs scan,
+  contour, write, and total generation timings for the committed artifacts.
 - `results/rossler_y_minima_tangent_scan/contours/` contains the generated
-  Marching-Squares SVG contours, scan summary, and word legend.
+  Marching-Squares SVG contours, scan summary, and word legend. The SVGs omit
+  max-time-limited gray point markers.
 
 ## Usage
 
@@ -108,12 +111,13 @@ Finite differences are acceptable only for quick prototype checks.
 julia --project=. flow_folding/examples/rossler_y_minima_tangent_scan.jl
 ```
 
-The scan defaults to 8 tangent symbols after 20 transient `y`-minima and
-`MM_FLOW_FOLDING_MAX_TIME=450`. A denser run with the same 8-symbol convention:
+The scan defaults to a 128x128 grid, 8 tangent symbols after 20 transient
+`y`-minima, and `MM_FLOW_FOLDING_MAX_TIME=450`. A denser run with the same
+8-symbol convention:
 
 ```bash
-MM_FLOW_FOLDING_NC=101 \
-MM_FLOW_FOLDING_NA=61 \
+MM_FLOW_FOLDING_NC=192 \
+MM_FLOW_FOLDING_NA=192 \
 MM_FLOW_FOLDING_WORD_LENGTH=8 \
 MM_FLOW_FOLDING_TRANSIENT_EVENTS=80 \
 MM_FLOW_FOLDING_MAX_TIME=1200 \

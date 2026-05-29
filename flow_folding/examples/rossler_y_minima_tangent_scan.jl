@@ -62,8 +62,8 @@ function run_scan(;
     c_max=7.0,
     a_min=0.30,
     a_max=0.55,
-    n_c=31,
-    n_a=21,
+    n_c=128,
+    n_a=128,
     b=ROSSLER_MALYKH_B,
     word_length=8,
     transient_events=20,
@@ -131,18 +131,28 @@ function js_string(value)
     return "\"" * escaped * "\""
 end
 
-function write_docs_data(path, rows; config)
+function js_value(value)
+    return value isa AbstractString ? js_string(value) : string(value)
+end
+
+function write_js_object(io, name, data; trailing_comma=true)
+    println(io, "  $(name): {")
+    fields = collect(pairs(data))
+    for (i, pair) in enumerate(fields)
+        comma = i == length(fields) ? "" : ","
+        println(io, "    $(pair.first): $(js_value(pair.second))$(comma)")
+    end
+    println(io, "  }$(trailing_comma ? "," : "")")
+end
+
+function write_docs_data(path, rows; config, runtime=nothing)
     mkpath(dirname(path))
     open(path, "w") do io
         println(io, "window.FLOW_FOLDING_ROSSLER_SCAN = {")
-        println(io, "  config: {")
-        fields = collect(pairs(config))
-        for (i, pair) in enumerate(fields)
-            comma = i == length(fields) ? "" : ","
-            value = pair.second isa AbstractString ? js_string(pair.second) : string(pair.second)
-            println(io, "    $(pair.first): $(value)$(comma)")
+        write_js_object(io, "config", config)
+        if !isnothing(runtime)
+            write_js_object(io, "runtime", runtime)
         end
-        println(io, "  },")
         println(io, "  rows: [")
         for (i, row) in enumerate(rows)
             comma = i == length(rows) ? "" : ","
@@ -160,15 +170,37 @@ function write_docs_data(path, rows; config)
     return path
 end
 
+function write_runtime_log(path, rows; config, runtime, output, docs_data, contour_dir)
+    mkpath(dirname(path))
+    ok = count(row -> row.status == "ok", rows)
+    open(path, "w") do io
+        println(io, "metric\tvalue")
+        println(io, "output\t$(output)")
+        println(io, "docs_data\t$(docs_data)")
+        println(io, "contour_dir\t$(contour_dir)")
+        println(io, "total_points\t$(length(rows))")
+        println(io, "ok_points\t$(ok)")
+        println(io, "max_time_limited_points\t$(length(rows) - ok)")
+        for pair in pairs(config)
+            println(io, "$(pair.first)\t$(pair.second)")
+        end
+        for pair in pairs(runtime)
+            println(io, "$(pair.first)\t$(pair.second)")
+        end
+    end
+    return path
+end
+
 function main()
+    started = time()
     default_max_time = env_float("MM_FLOW_FOLDING_MAX_TIME", env_float("MM_FLOW_FOLDING_T_END", 450.0))
     config = (
         c_min=env_float("MM_FLOW_FOLDING_C_MIN", 2.0),
         c_max=env_float("MM_FLOW_FOLDING_C_MAX", 7.0),
         a_min=env_float("MM_FLOW_FOLDING_A_MIN", 0.30),
         a_max=env_float("MM_FLOW_FOLDING_A_MAX", 0.55),
-        n_c=env_int("MM_FLOW_FOLDING_NC", 31),
-        n_a=env_int("MM_FLOW_FOLDING_NA", 21),
+        n_c=env_int("MM_FLOW_FOLDING_NC", 128),
+        n_a=env_int("MM_FLOW_FOLDING_NA", 128),
         b=env_float("MM_FLOW_FOLDING_B", ROSSLER_MALYKH_B),
         word_length=env_int("MM_FLOW_FOLDING_WORD_LENGTH", 8),
         transient_events=env_int("MM_FLOW_FOLDING_TRANSIENT_EVENTS", 20),
@@ -191,20 +223,50 @@ function main()
         "MM_FLOW_FOLDING_CONTOUR_DIR",
         joinpath(@__DIR__, "..", "results", "rossler_y_minima_tangent_scan", "contours"),
     )
+    runtime_log = get(
+        ENV,
+        "MM_FLOW_FOLDING_RUNTIME_LOG",
+        joinpath(@__DIR__, "..", "results", "rossler_y_minima_tangent_scan", "coarse_scan_runtime.tsv"),
+    )
     generate_contours = lowercase(get(ENV, "MM_FLOW_FOLDING_GENERATE_CONTOURS", "true")) in ("1", "true", "yes")
 
-    rows = run_scan(; config...)
-    write_tsv(output, rows)
-    write_docs_data(docs_data, rows; config=config)
+    scan_seconds = @elapsed rows = run_scan(; config...)
+    write_tsv_seconds = @elapsed write_tsv(output, rows)
+    contour_step_seconds = 0.0
     if generate_contours
         include(joinpath(@__DIR__, "rossler_y_minima_tangent_contours.jl"))
-        Base.invokelatest(write_all_contours, output; output_dir=contour_dir)
+        contour_step_seconds = @elapsed Base.invokelatest(
+            write_all_contours,
+            output;
+            output_dir=contour_dir,
+            scan_seconds=scan_seconds,
+            write_tsv_seconds=write_tsv_seconds,
+        )
     end
+    runtime_for_docs = (
+        scan_seconds=scan_seconds,
+        write_tsv_seconds=write_tsv_seconds,
+        contour_step_seconds=contour_step_seconds,
+        total_seconds=time() - started,
+    )
+    write_docs_data_seconds = @elapsed write_docs_data(docs_data, rows; config=config, runtime=runtime_for_docs)
+    runtime = (
+        scan_seconds=scan_seconds,
+        write_tsv_seconds=write_tsv_seconds,
+        contour_step_seconds=contour_step_seconds,
+        write_docs_data_seconds=write_docs_data_seconds,
+        total_seconds=time() - started,
+    )
+    write_runtime_log(runtime_log, rows; config=config, runtime=runtime, output=output, docs_data=docs_data, contour_dir=contour_dir)
     ok = count(row -> row.status == "ok", rows)
     @printf("wrote %s\n", output)
     @printf("wrote %s\n", docs_data)
+    @printf("wrote %s\n", runtime_log)
     generate_contours && @printf("wrote contours in %s\n", contour_dir)
     @printf("ok points: %d/%d\n", ok, length(rows))
+    @printf("scan runtime: %.3f s\n", scan_seconds)
+    @printf("contour step runtime: %.3f s\n", contour_step_seconds)
+    @printf("total runtime: %.3f s\n", runtime.total_seconds)
 end
 
 if abspath(PROGRAM_FILE) == @__FILE__
