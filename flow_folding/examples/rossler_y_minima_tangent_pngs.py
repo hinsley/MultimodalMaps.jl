@@ -684,7 +684,6 @@ def render_word_heatmap(path: str, data: ScanData, width: int, height: int) -> N
             x1 = int(math.ceil(xpix(c_edges[c_idx + 1])))
             canvas.fill_rect(x0, y0, max(1, x1 - x0), max(1, y1 - y0), colors[code])
 
-    grid_color = hex_rgb("#e1e5e0")
     axis_color = hex_rgb("#17201c")
     text_color = hex_rgb("#59635d")
     title_color = hex_rgb("#17201c")
@@ -692,8 +691,8 @@ def render_word_heatmap(path: str, data: ScanData, width: int, height: int) -> N
     title_text_scale = max(1, int(round(3 * scale)))
     tick_text_scale = max(1, int(round(2 * scale)))
     axis_text_scale = max(1, int(round(3 * scale)))
-    grid_width = max(1.0, 1.0 * scale)
     axis_width = max(1.0, 2.0 * scale)
+    tick_length = sp(12)
 
     title = f"ROSSLER Y-MIN {data.n_symbols}-BIT WORD HEATMAP"
     title_width = canvas.text_width(title, scale=title_text_scale)
@@ -702,7 +701,6 @@ def render_word_heatmap(path: str, data: ScanData, width: int, height: int) -> N
     for idx in range(6):
         c_tick = c_min + (c_max - c_min) * idx / 5
         x = xpix(c_tick)
-        canvas.draw_line(x, top, x, top + plot_height, grid_color, width=grid_width)
         label = f"{c_tick:.2f}"
         canvas.draw_text(
             int(x - canvas.text_width(label, scale=tick_text_scale) / 2),
@@ -714,7 +712,6 @@ def render_word_heatmap(path: str, data: ScanData, width: int, height: int) -> N
     for idx in range(6):
         a_tick = a_min + (a_max - a_min) * idx / 5
         y = ypix(a_tick)
-        canvas.draw_line(left, y, left + plot_width, y, grid_color, width=grid_width)
         label = f"{a_tick:.3f}"
         canvas.draw_text(
             max(sp(4), left - canvas.text_width(label, scale=tick_text_scale) - sp(14)),
@@ -728,6 +725,14 @@ def render_word_heatmap(path: str, data: ScanData, width: int, height: int) -> N
     canvas.draw_line(left + plot_width, top, left + plot_width, top + plot_height, axis_color, width=axis_width)
     canvas.draw_line(left + plot_width, top + plot_height, left, top + plot_height, axis_color, width=axis_width)
     canvas.draw_line(left, top + plot_height, left, top, axis_color, width=axis_width)
+    for idx in range(6):
+        c_tick = c_min + (c_max - c_min) * idx / 5
+        x = xpix(c_tick)
+        canvas.draw_line(x, top + plot_height, x, top + plot_height + tick_length, axis_color, width=axis_width)
+    for idx in range(6):
+        a_tick = a_min + (a_max - a_min) * idx / 5
+        y = ypix(a_tick)
+        canvas.draw_line(left - tick_length, y, left, y, axis_color, width=axis_width)
 
     legend_x = left + plot_width + sp(28)
     canvas.draw_text(legend_x, top + sp(8), "8-BIT WORD", axis_color, scale=tick_text_scale)
