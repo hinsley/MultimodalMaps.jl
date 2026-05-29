@@ -106,12 +106,17 @@ class ScanData:
     def n_a(self) -> int:
         return len(self.a_values)
 
+    @property
+    def symbol_value_source(self) -> str:
+        return "symbol_signs"
+
 
 @dataclass(frozen=True)
 class PlotSpec:
     label: str
     color: RGB
-    stroke_width: int
+    stroke_width: float
+    alpha: float
     segments: Callable[[], Iterator[Segment]]
 
 
@@ -155,7 +160,21 @@ class Canvas:
                 if dx * dx + dy * dy <= r2:
                     self.blend_pixel(xx, yy, color, alpha)
 
-    def draw_line(self, x0: float, y0: float, x1: float, y1: float, color: RGB, width: int = 1, alpha: float = 1.0) -> None:
+    def draw_thin_line(self, x0: float, y0: float, x1: float, y1: float, color: RGB, width: float, alpha: float) -> None:
+        dx = x1 - x0
+        dy = y1 - y0
+        steps = max(1, int(math.ceil(max(abs(dx), abs(dy)))))
+        coverage = max(0.0, min(1.0, width)) * max(0.0, min(1.0, alpha))
+        if coverage <= 0.0:
+            return
+        for step in range(steps + 1):
+            theta = step / steps
+            self.blend_pixel(int(round(x0 + theta * dx)), int(round(y0 + theta * dy)), color, coverage)
+
+    def draw_line(self, x0: float, y0: float, x1: float, y1: float, color: RGB, width: float = 1.0, alpha: float = 1.0) -> None:
+        if width < 1.0:
+            self.draw_thin_line(x0, y0, x1, y1, color, width, alpha)
+            return
         x0i = int(round(x0))
         y0i = int(round(y0))
         x1i = int(round(x1))
@@ -165,7 +184,7 @@ class Canvas:
         dy = -abs(y1i - y0i)
         sy = 1 if y0i < y1i else -1
         err = dx + dy
-        radius = max(0, width // 2)
+        radius = max(0, int(round(width)) // 2)
         while True:
             self.draw_brush(x0i, y0i, radius, color, alpha)
             if x0i == x1i and y0i == y1i:
@@ -528,14 +547,14 @@ def render_plot(path: str, title: str, data: ScanData, specs: Sequence[PlotSpec]
     for spec in specs:
         count = 0
         for x0, y0, x1, y1 in spec.segments():
-            canvas.draw_line(xpix(x0), ypix(y0), xpix(x1), ypix(y1), spec.color, width=spec.stroke_width)
+            canvas.draw_line(xpix(x0), ypix(y0), xpix(x1), ypix(y1), spec.color, width=spec.stroke_width, alpha=spec.alpha)
             count += 1
         counts.append(count)
 
     legend_y = top + 16
     legend_x = left + plot_width + 28
     for spec in specs:
-        canvas.draw_line(legend_x, legend_y, legend_x + 34, legend_y, spec.color, width=spec.stroke_width + 1)
+        canvas.draw_line(legend_x, legend_y, legend_x + 34, legend_y, spec.color, width=max(1.0, spec.stroke_width), alpha=spec.alpha)
         canvas.draw_text(legend_x + 48, legend_y - 8, spec.label, axis_color, scale=2)
         legend_y += 28
 
@@ -566,6 +585,8 @@ def write_summary(
     contour_generation_seconds: float,
     width: int,
     height: int,
+    line_width_scale: float,
+    alpha: float,
 ) -> None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", newline="") as handle:
@@ -577,6 +598,10 @@ def write_summary(
         write("image_format", "png")
         write("png_width", width)
         write("png_height", height)
+        write("line_width_scale", line_width_scale)
+        write("contour_alpha", alpha)
+        write("symbol_value_source", data.symbol_value_source)
+        write("all_symbol_draw_order", ",".join(str(idx) for idx in range(data.n_symbols, 0, -1)))
         write("total_points", data.total_points)
         write("ok_points", data.ok_points)
         write("max_time_limited_points", data.max_time_limited_points)
@@ -604,7 +629,8 @@ def render_all(data: ScanData, args: argparse.Namespace) -> str:
             PlotSpec(
                 label=f"SYMBOL {symbol_index:02d}",
                 color=color,
-                stroke_width=3,
+                stroke_width=3.0 * args.line_width_scale,
+                alpha=args.alpha,
                 segments=lambda symbol_index=symbol_index: iter_symbol_segments(data, symbol_index),
             )
         ]
@@ -614,14 +640,16 @@ def render_all(data: ScanData, args: argparse.Namespace) -> str:
         symbol_counts.append(counts[0])
         print(f"wrote {path} segments={counts[0]} seconds={time.time() - before:.3f}", flush=True)
 
+    all_symbol_order = list(range(data.n_symbols, 0, -1))
     all_specs = [
         PlotSpec(
             label=f"SYMBOL {symbol_index:02d}",
             color=hex_rgb(PALETTE[(symbol_index - 1) % len(PALETTE)]),
-            stroke_width=2,
+            stroke_width=2.0 * args.line_width_scale,
+            alpha=args.alpha,
             segments=lambda symbol_index=symbol_index: iter_symbol_segments(data, symbol_index),
         )
-        for symbol_index in range(1, data.n_symbols + 1)
+        for symbol_index in all_symbol_order
     ]
     path = os.path.join(args.output_dir, f"{args.stem}_all_symbol_contours.png")
     before = time.time()
@@ -636,7 +664,8 @@ def render_all(data: ScanData, args: argparse.Namespace) -> str:
             PlotSpec(
                 label=f"PREFIX {prefix_length:02d}",
                 color=color,
-                stroke_width=2,
+                stroke_width=2.0 * args.line_width_scale,
+                alpha=args.alpha,
                 segments=lambda values=values: iter_category_segments(data, values),
             )
         ]
@@ -656,7 +685,8 @@ def render_all(data: ScanData, args: argparse.Namespace) -> str:
             PlotSpec(
                 label=f"{data.n_symbols}-SYMBOL WORD",
                 color=hex_rgb("#111111"),
-                stroke_width=2,
+                stroke_width=2.0 * args.line_width_scale,
+                alpha=args.alpha,
                 segments=lambda: iter_category_segments(data, data.codes),
             )
         ],
@@ -678,6 +708,8 @@ def render_all(data: ScanData, args: argparse.Namespace) -> str:
         contour_generation_seconds=time.time() - started,
         width=args.width,
         height=args.height,
+        line_width_scale=args.line_width_scale,
+        alpha=args.alpha,
     )
     return args.output_dir
 
@@ -691,6 +723,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--write-tsv-seconds", type=float, default=math.nan)
     parser.add_argument("--width", type=int, default=1600)
     parser.add_argument("--height", type=int, default=1100)
+    parser.add_argument("--line-width-scale", type=float, default=0.25)
+    parser.add_argument("--alpha", type=float, default=0.10)
     parser.add_argument("--clean", action="store_true", help="remove existing stem-matching PNG/SVG files first")
     return parser.parse_args()
 
@@ -701,7 +735,8 @@ def main() -> None:
     data = load_scan(args.results_path)
     print(
         f"loaded {args.results_path}: points={data.total_points} ok={data.ok_points} "
-        f"grid={data.n_c}x{data.n_a} word_length={data.n_symbols} seconds={time.time() - started:.3f}",
+        f"grid={data.n_c}x{data.n_a} word_length={data.n_symbols} "
+        f"symbol_values={data.symbol_value_source} seconds={time.time() - started:.3f}",
         flush=True,
     )
     written = render_all(data, args)

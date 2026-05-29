@@ -284,8 +284,10 @@ function main()
             python = get(ENV, "MM_FLOW_FOLDING_PYTHON", "python3")
             png_width = env_int("MM_FLOW_FOLDING_PNG_WIDTH", 1600)
             png_height = env_int("MM_FLOW_FOLDING_PNG_HEIGHT", 1100)
+            line_width_scale = env_float("MM_FLOW_FOLDING_CONTOUR_LINE_WIDTH_SCALE", 0.25)
+            contour_alpha = env_float("MM_FLOW_FOLDING_CONTOUR_ALPHA", 0.10)
             contour_step_seconds = @elapsed run(
-                `$(python) $(renderer) $(output) --output-dir $(contour_dir) --stem coarse_scan --scan-seconds $(scan_seconds) --write-tsv-seconds $(write_tsv_seconds) --width $(png_width) --height $(png_height) --clean`,
+                `$(python) $(renderer) $(output) --output-dir $(contour_dir) --stem coarse_scan --scan-seconds $(scan_seconds) --write-tsv-seconds $(write_tsv_seconds) --width $(png_width) --height $(png_height) --line-width-scale $(line_width_scale) --alpha $(contour_alpha) --clean`,
             )
         else
             error("Unsupported MM_FLOW_FOLDING_CONTOUR_FORMAT=$(contour_format); expected png or svg")

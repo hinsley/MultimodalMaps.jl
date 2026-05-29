@@ -3,6 +3,10 @@ output_dir	flow_folding/results/rossler_y_minima_tangent_scan/contours_png_128
 image_format	png
 png_width	1600
 png_height	1100
+line_width_scale	0.25
+contour_alpha	0.1
+symbol_value_source	symbol_signs
+all_symbol_draw_order	8,7,6,5,4,3,2,1
 total_points	16384
 ok_points	12359
 max_time_limited_points	4025
@@ -10,7 +14,7 @@ word_length	8
 max_time	450.0
 scan_seconds	54.574760167
 write_tsv_seconds	0.4442475
-contour_generation_seconds	8.386619329452515
+contour_generation_seconds	2.2781147956848145
 symbol01_segments	10458
 symbol02_segments	10400
 symbol03_segments	10385
