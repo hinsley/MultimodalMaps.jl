@@ -223,6 +223,38 @@ def style_scale(width: int, height: int) -> float:
     return min(width / BASE_PNG_WIDTH, height / BASE_PNG_HEIGHT)
 
 
+def hsv_rgb(hue: float, saturation: float, value: float) -> RGB:
+    hue = hue % 1.0
+    chroma = value * saturation
+    x = chroma * (1.0 - abs((hue * 6.0) % 2.0 - 1.0))
+    match_value = value - chroma
+    sector = int(hue * 6.0)
+    if sector == 0:
+        red, green, blue = chroma, x, 0.0
+    elif sector == 1:
+        red, green, blue = x, chroma, 0.0
+    elif sector == 2:
+        red, green, blue = 0.0, chroma, x
+    elif sector == 3:
+        red, green, blue = 0.0, x, chroma
+    elif sector == 4:
+        red, green, blue = x, 0.0, chroma
+    else:
+        red, green, blue = chroma, 0.0, x
+    return (
+        int(round((red + match_value) * 255.0)),
+        int(round((green + match_value) * 255.0)),
+        int(round((blue + match_value) * 255.0)),
+    )
+
+
+def word_heatmap_color(code: int) -> RGB:
+    hue = ((code * 137) % 256) / 256.0
+    saturation = 0.55 + 0.28 * ((code & 0x03) / 3.0)
+    value = 0.76 + 0.18 * (((code >> 2) & 0x03) / 3.0)
+    return hsv_rgb(hue, saturation, value)
+
+
 def open_scan(path: str):
     if path.endswith(".gz"):
         return gzip.open(path, "rt", newline="")
@@ -326,6 +358,10 @@ def binary_sequence_value(word: str) -> float:
         if char == "1":
             value += 1.0 / (2.0 ** (n - idx))
     return value
+
+
+def code_word(code: int, n_symbols: int) -> str:
+    return format(code, f"0{n_symbols}b")
 
 
 def cell_index(data: ScanData, a_idx: int, c_idx: int) -> int:
@@ -598,10 +634,149 @@ def render_plot(path: str, title: str, data: ScanData, specs: Sequence[PlotSpec]
     return counts
 
 
+def parameter_edges(values: Sequence[float]) -> list[float]:
+    if len(values) == 1:
+        return [values[0] - 0.5, values[0] + 0.5]
+    edges = [values[0]]
+    edges.extend(0.5 * (values[idx] + values[idx + 1]) for idx in range(len(values) - 1))
+    edges.append(values[-1])
+    return edges
+
+
+def render_word_heatmap(path: str, data: ScanData, width: int, height: int) -> None:
+    canvas = Canvas(width, height)
+    scale = style_scale(width, height)
+
+    def sp(value: float) -> int:
+        return int(round(value * scale))
+
+    left = sp(96)
+    right = sp(300)
+    top = sp(76)
+    bottom = sp(92)
+    plot_width = width - left - right
+    plot_height = height - top - bottom
+    if plot_width <= 0 or plot_height <= 0:
+        raise SystemExit(f"PNG size {width}x{height} is too small for scaled plot layout")
+
+    c_min, c_max = data.c_values[0], data.c_values[-1]
+    a_min, a_max = data.a_values[0], data.a_values[-1]
+
+    def xpix(c_value: float) -> float:
+        return left + (c_value - c_min) / (c_max - c_min) * plot_width
+
+    def ypix(a_value: float) -> float:
+        return top + (a_max - a_value) / (a_max - a_min) * plot_height
+
+    c_edges = parameter_edges(data.c_values)
+    a_edges = parameter_edges(data.a_values)
+    colors = [word_heatmap_color(code) for code in range(1 << data.n_symbols)]
+
+    for a_idx in range(data.n_a):
+        y0 = int(math.floor(ypix(a_edges[a_idx + 1])))
+        y1 = int(math.ceil(ypix(a_edges[a_idx])))
+        for c_idx in range(data.n_c):
+            idx = cell_index(data, a_idx, c_idx)
+            code = data.codes[idx]
+            if code < 0:
+                continue
+            x0 = int(math.floor(xpix(c_edges[c_idx])))
+            x1 = int(math.ceil(xpix(c_edges[c_idx + 1])))
+            canvas.fill_rect(x0, y0, max(1, x1 - x0), max(1, y1 - y0), colors[code])
+
+    grid_color = hex_rgb("#e1e5e0")
+    axis_color = hex_rgb("#17201c")
+    text_color = hex_rgb("#59635d")
+    title_color = hex_rgb("#17201c")
+
+    title_text_scale = max(1, int(round(3 * scale)))
+    tick_text_scale = max(1, int(round(2 * scale)))
+    axis_text_scale = max(1, int(round(3 * scale)))
+    grid_width = max(1.0, 1.0 * scale)
+    axis_width = max(1.0, 2.0 * scale)
+
+    title = f"ROSSLER Y-MIN {data.n_symbols}-BIT WORD HEATMAP"
+    title_width = canvas.text_width(title, scale=title_text_scale)
+    canvas.draw_text(max(sp(8), (width - title_width) // 2), sp(26), title, title_color, scale=title_text_scale)
+
+    for idx in range(6):
+        c_tick = c_min + (c_max - c_min) * idx / 5
+        x = xpix(c_tick)
+        canvas.draw_line(x, top, x, top + plot_height, grid_color, width=grid_width)
+        label = f"{c_tick:.2f}"
+        canvas.draw_text(
+            int(x - canvas.text_width(label, scale=tick_text_scale) / 2),
+            top + plot_height + sp(20),
+            label,
+            text_color,
+            scale=tick_text_scale,
+        )
+    for idx in range(6):
+        a_tick = a_min + (a_max - a_min) * idx / 5
+        y = ypix(a_tick)
+        canvas.draw_line(left, y, left + plot_width, y, grid_color, width=grid_width)
+        label = f"{a_tick:.3f}"
+        canvas.draw_text(
+            max(sp(4), left - canvas.text_width(label, scale=tick_text_scale) - sp(14)),
+            int(y - sp(7)),
+            label,
+            text_color,
+            scale=tick_text_scale,
+        )
+
+    canvas.draw_line(left, top, left + plot_width, top, axis_color, width=axis_width)
+    canvas.draw_line(left + plot_width, top, left + plot_width, top + plot_height, axis_color, width=axis_width)
+    canvas.draw_line(left + plot_width, top + plot_height, left, top + plot_height, axis_color, width=axis_width)
+    canvas.draw_line(left, top + plot_height, left, top, axis_color, width=axis_width)
+
+    legend_x = left + plot_width + sp(28)
+    canvas.draw_text(legend_x, top + sp(8), "8-BIT WORD", axis_color, scale=tick_text_scale)
+    canvas.draw_text(legend_x, top + sp(42), "COLORS", axis_color, scale=tick_text_scale)
+    canvas.draw_text(legend_x, top + sp(76), "SEE TSV", axis_color, scale=tick_text_scale)
+
+    swatch_size = max(1, sp(8))
+    swatch_gap = max(0, sp(2))
+    swatches_per_row = 16
+    swatch_start_y = top + sp(122)
+    for code, color in enumerate(colors):
+        row = code // swatches_per_row
+        col = code % swatches_per_row
+        canvas.fill_rect(
+            legend_x + col * (swatch_size + swatch_gap),
+            swatch_start_y + row * (swatch_size + swatch_gap),
+            swatch_size,
+            swatch_size,
+            color,
+        )
+
+    canvas.draw_text(int(left + plot_width / 2 - sp(5)), height - sp(30), "C", axis_color, scale=axis_text_scale)
+    canvas.draw_text(sp(34), int(top + plot_height / 2 - sp(10)), "A", axis_color, scale=axis_text_scale)
+    write_png(path, canvas)
+
+
+def write_heatmap_legend(path: str, data: ScanData) -> None:
+    counts = Counter(code for code in data.codes if code >= 0)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", newline="") as handle:
+        writer = csv.writer(handle, delimiter="\t", lineterminator="\n")
+        writer.writerow(["word", "code", "red", "green", "blue", "hex", "count"])
+        for code in range(1 << data.n_symbols):
+            red, green, blue = word_heatmap_color(code)
+            writer.writerow([
+                code_word(code, data.n_symbols),
+                code,
+                red,
+                green,
+                blue,
+                f"#{red:02x}{green:02x}{blue:02x}",
+                counts.get(code, 0),
+            ])
+
+
 def write_word_legend(path: str, data: ScanData) -> None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", newline="") as handle:
-        writer = csv.writer(handle, delimiter="\t")
+        writer = csv.writer(handle, delimiter="\t", lineterminator="\n")
         writer.writerow(["word", "count", "code", "period", "gamma"])
         for word, count in sorted(data.word_counts.items(), key=lambda item: (-item[1], item[0])):
             writer.writerow([word, count, word_code(word), least_period(word), f"{binary_sequence_value(word):.12g}"])
@@ -709,6 +884,12 @@ def render_all(data: ScanData, args: argparse.Namespace) -> str:
     )
     print(f"wrote {path} seconds={time.time() - before:.3f}", flush=True)
 
+    heatmap_path = os.path.join(args.output_dir, f"{args.stem}_8bit_word_heatmap.png")
+    before = time.time()
+    render_word_heatmap(heatmap_path, data, args.width, args.height)
+    print(f"wrote {heatmap_path} seconds={time.time() - before:.3f}", flush=True)
+    write_heatmap_legend(os.path.join(args.output_dir, f"{args.stem}_8bit_word_heatmap_legend.tsv"), data)
+
     write_word_legend(os.path.join(args.output_dir, f"{args.stem}_word_legend.tsv"), data)
     write_summary(
         os.path.join(args.output_dir, f"{args.stem}_contour_summary.tsv"),
@@ -728,6 +909,16 @@ def render_all(data: ScanData, args: argparse.Namespace) -> str:
     return args.output_dir
 
 
+def render_heatmap_only(data: ScanData, args: argparse.Namespace) -> str:
+    os.makedirs(args.output_dir, exist_ok=True)
+    path = os.path.join(args.output_dir, f"{args.stem}_8bit_word_heatmap.png")
+    started = time.time()
+    render_word_heatmap(path, data, args.width, args.height)
+    write_heatmap_legend(os.path.join(args.output_dir, f"{args.stem}_8bit_word_heatmap_legend.tsv"), data)
+    print(f"wrote {path} seconds={time.time() - started:.3f}", flush=True)
+    return args.output_dir
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("results_path", help="scan TSV or TSV.GZ to render")
@@ -740,6 +931,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--line-width-scale", type=float, default=0.25)
     parser.add_argument("--alpha", type=float, default=0.10)
     parser.add_argument("--clean", action="store_true", help="remove existing stem-matching PNG/SVG files first")
+    parser.add_argument("--only-heatmap", action="store_true", help="write only the full-word heatmap PNG and legend TSV")
     return parser.parse_args()
 
 
@@ -753,8 +945,12 @@ def main() -> None:
         f"symbol_values={data.symbol_value_source} seconds={time.time() - started:.3f}",
         flush=True,
     )
-    written = render_all(data, args)
-    print(f"wrote PNG contours in {written}", flush=True)
+    if args.only_heatmap:
+        written = render_heatmap_only(data, args)
+        print(f"wrote PNG heatmap in {written}", flush=True)
+    else:
+        written = render_all(data, args)
+        print(f"wrote PNG contours in {written}", flush=True)
 
 
 if __name__ == "__main__":
