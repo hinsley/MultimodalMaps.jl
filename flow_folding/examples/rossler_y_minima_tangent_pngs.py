@@ -15,8 +15,8 @@ import csv
 import gzip
 import math
 import os
+import string
 import struct
-import textwrap
 import time
 import zlib
 from array import array
@@ -998,7 +998,8 @@ def write_monotone_heatmap_legend(path: str, data: ScanData) -> None:
 
 
 def wrap_base64(raw: bytes, width: int = 100) -> str:
-    return "\n".join(textwrap.wrap(base64.b64encode(raw).decode("ascii"), width))
+    encoded = base64.b64encode(raw).decode("ascii")
+    return "\n".join(encoded[idx : idx + width] for idx in range(0, len(encoded), width))
 
 
 def byte_arrays_for_probe(data: ScanData) -> tuple[bytes, bytes]:
@@ -1459,9 +1460,7 @@ $valid_bits
         "sign_count": sign_count,
         "color_mode": color_mode,
     }
-    html = template
-    for key, value in values.items():
-        html = html.replace("${" + key + "}", str(value)).replace("$" + key, str(value))
+    html = string.Template(template).safe_substitute(values)
 
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", newline="\n") as handle:

@@ -1,0 +1,128 @@
+pipeline_pid=39292
+started_at=2026-05-30T05:32:18Z
+scan_grid=4096x4096
+render_size=25600x17600
+full_tsv_schema=a,c,b,status,events,word,code,period,gamma,max_time,first_time,last_time,min_y,max_y
+stream_tsv=true
+workers=8
+chunks=32
+chunk_dir=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks
+julia_project=/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl
+julia_depot_path=/Users/carterhinsley/.julia
+launching chunk=000 start_idx=1 end_idx=128 n_a=128 a_min=0.29999999999999999 a_max=0.30775335775335777
+launching chunk=004 start_idx=513 end_idx=640 n_a=128 a_min=0.33125763125763125 a_max=0.33901098901098903
+launching chunk=008 start_idx=1025 end_idx=1152 n_a=128 a_min=0.3625152625152625 a_max=0.37026862026862029
+launching chunk=012 start_idx=1537 end_idx=1664 n_a=128 a_min=0.39377289377289382 a_max=0.40152625152625154
+launching chunk=016 start_idx=2049 end_idx=2176 n_a=128 a_min=0.42503052503052507 a_max=0.4327838827838828
+launching chunk=020 start_idx=2561 end_idx=2688 n_a=128 a_min=0.45628815628815633 a_max=0.46404151404151406
+launching chunk=024 start_idx=3073 end_idx=3200 n_a=128 a_min=0.48754578754578759 a_max=0.49529914529914532
+launching chunk=028 start_idx=3585 end_idx=3712 n_a=128 a_min=0.51880341880341885 a_max=0.52655677655677657
+launching chunk=001 start_idx=129 end_idx=256 n_a=128 a_min=0.30781440781440783 a_max=0.31556776556776556
+launching chunk=005 start_idx=641 end_idx=768 n_a=128 a_min=0.33907203907203909 a_max=0.34682539682539681
+launching chunk=009 start_idx=1153 end_idx=1280 n_a=128 a_min=0.37032967032967035 a_max=0.37808302808302807
+launching chunk=013 start_idx=1665 end_idx=1792 n_a=128 a_min=0.4015873015873016 a_max=0.40934065934065933
+launching chunk=017 start_idx=2177 end_idx=2304 n_a=128 a_min=0.43284493284493286 a_max=0.44059829059829059
+launching chunk=021 start_idx=2689 end_idx=2816 n_a=128 a_min=0.46410256410256412 a_max=0.47185592185592184
+launching chunk=025 start_idx=3201 end_idx=3328 n_a=128 a_min=0.49536019536019538 a_max=0.5031135531135531
+launching chunk=029 start_idx=3713 end_idx=3840 n_a=128 a_min=0.52661782661782663 a_max=0.53437118437118447
+launching chunk=002 start_idx=257 end_idx=384 n_a=128 a_min=0.31562881562881562 a_max=0.3233821733821734
+launching chunk=006 start_idx=769 end_idx=896 n_a=128 a_min=0.34688644688644688 a_max=0.35463980463980466
+launching chunk=010 start_idx=1281 end_idx=1408 n_a=128 a_min=0.37814407814407813 a_max=0.38589743589743591
+launching chunk=014 start_idx=1793 end_idx=1920 n_a=128 a_min=0.40940170940170939 a_max=0.41715506715506717
+launching chunk=018 start_idx=2305 end_idx=2432 n_a=128 a_min=0.44065934065934065 a_max=0.44841269841269843
+launching chunk=022 start_idx=2817 end_idx=2944 n_a=128 a_min=0.47191697191697191 a_max=0.47967032967032969
+launching chunk=026 start_idx=3329 end_idx=3456 n_a=128 a_min=0.50317460317460316 a_max=0.510927960927961
+launching chunk=030 start_idx=3841 end_idx=3968 n_a=128 a_min=0.53443223443223453 a_max=0.54218559218559226
+launching chunk=003 start_idx=385 end_idx=512 n_a=128 a_min=0.32344322344322346 a_max=0.33119658119658119
+launching chunk=007 start_idx=897 end_idx=1024 n_a=128 a_min=0.35470085470085472 a_max=0.36245421245421244
+launching chunk=011 start_idx=1409 end_idx=1536 n_a=128 a_min=0.38595848595848598 a_max=0.3937118437118437
+launching chunk=015 start_idx=1921 end_idx=2048 n_a=128 a_min=0.41721611721611723 a_max=0.42496947496947501
+launching chunk=019 start_idx=2433 end_idx=2560 n_a=128 a_min=0.44847374847374849 a_max=0.45622710622710627
+launching chunk=023 start_idx=2945 end_idx=3072 n_a=128 a_min=0.47973137973137975 a_max=0.48748473748473753
+launching chunk=027 start_idx=3457 end_idx=3584 n_a=128 a_min=0.51098901098901106 a_max=0.51874236874236879
+launching chunk=031 start_idx=3969 end_idx=4096 n_a=128 a_min=0.54224664224664232 a_max=0.55000000000000004
+merge_started_at=2026-05-30T13:47:48Z
+chunk_name=chunk_000
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_000.tsv
+chunk_name=chunk_001
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_001.tsv
+chunk_name=chunk_002
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_002.tsv
+chunk_name=chunk_003
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_003.tsv
+chunk_name=chunk_004
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_004.tsv
+chunk_name=chunk_005
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_005.tsv
+chunk_name=chunk_006
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_006.tsv
+chunk_name=chunk_007
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_007.tsv
+chunk_name=chunk_008
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_008.tsv
+chunk_name=chunk_009
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_009.tsv
+chunk_name=chunk_010
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_010.tsv
+chunk_name=chunk_011
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_011.tsv
+chunk_name=chunk_012
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_012.tsv
+chunk_name=chunk_013
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_013.tsv
+chunk_name=chunk_014
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_014.tsv
+chunk_name=chunk_015
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_015.tsv
+chunk_name=chunk_016
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_016.tsv
+chunk_name=chunk_017
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_017.tsv
+chunk_name=chunk_018
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_018.tsv
+chunk_name=chunk_019
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_019.tsv
+chunk_name=chunk_020
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_020.tsv
+chunk_name=chunk_021
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_021.tsv
+chunk_name=chunk_022
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_022.tsv
+chunk_name=chunk_023
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_023.tsv
+chunk_name=chunk_024
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_024.tsv
+chunk_name=chunk_025
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_025.tsv
+chunk_name=chunk_026
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_026.tsv
+chunk_name=chunk_027
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_027.tsv
+chunk_name=chunk_028
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_028.tsv
+chunk_name=chunk_029
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_029.tsv
+chunk_name=chunk_030
+chunk_tsv=flow_folding/results/rossler_y_minima_tangent_scan_4096/chunks/chunk_030.tsv
+scan_finished_at=2026-05-30T13:48:50Z
+gzip_finished_at=2026-05-30T13:49:42Z
+render_word_heatmap_started_at=2026-05-30T13:49:42Z
+loaded flow_folding/results/rossler_y_minima_tangent_scan_4096/coarse_scan.tsv.gz: points=16777216 ok=12676972 grid=4096x4096 word_length=8 symbol_values=symbol_signs seconds=116.010
+manual_render_word_heatmap_started_at=2026-05-30T14:20:45Z
+loaded flow_folding/results/rossler_y_minima_tangent_scan_4096/coarse_scan.tsv.gz: points=16777216 ok=12676972 grid=4096x4096 word_length=8 symbol_values=symbol_signs seconds=96.447
+wrote flow_folding/results/rossler_y_minima_tangent_scan_4096/contours/coarse_scan_8bit_word_heatmap_probe.html
+wrote flow_folding/results/rossler_y_minima_tangent_scan_4096/contours/coarse_scan_8bit_word_heatmap.png seconds=47.649
+wrote PNG heatmap in flow_folding/results/rossler_y_minima_tangent_scan_4096/contours
+real 144.18
+user 136.15
+sys 4.71
+manual_render_word_heatmap_finished_at=2026-05-30T14:23:10Z
+manual_render_monotone_heatmap_started_at=2026-05-30T14:23:17Z
+loaded flow_folding/results/rossler_y_minima_tangent_scan_4096/coarse_scan.tsv.gz: points=16777216 ok=12676972 grid=4096x4096 word_length=8 symbol_values=symbol_signs seconds=96.594
+wrote flow_folding/results/rossler_y_minima_tangent_scan_4096/contours/coarse_scan_7bit_monotone_heatmap_probe.html
+wrote flow_folding/results/rossler_y_minima_tangent_scan_4096/contours/coarse_scan_7bit_monotone_heatmap.png seconds=75.973
+wrote monotone PNG heatmap in flow_folding/results/rossler_y_minima_tangent_scan_4096/contours
+real 172.69
+user 163.66
+sys 5.38
+manual_render_monotone_heatmap_finished_at=2026-05-30T14:26:10Z
