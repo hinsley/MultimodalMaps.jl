@@ -257,11 +257,12 @@ def word_heatmap_color(code: int) -> RGB:
     return hsv_rgb(hue, saturation, value)
 
 
+def monotone_palette_code(code: int) -> int:
+    return 0x80 | code
+
+
 def monotone_heatmap_color(code: int) -> RGB:
-    hue = ((code * 67) % 128) / 128.0
-    saturation = 0.55 + 0.28 * ((code & 0x03) / 3.0)
-    value = 0.76 + 0.18 * (((code >> 2) & 0x03) / 3.0)
-    return hsv_rgb(hue, saturation, value)
+    return word_heatmap_color(monotone_palette_code(code))
 
 
 def open_scan(path: str):
@@ -926,14 +927,28 @@ def write_monotone_heatmap_legend(path: str, data: ScanData) -> None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", newline="") as handle:
         writer = csv.writer(handle, delimiter="\t", lineterminator="\n")
-        writer.writerow(["monotone_signs", "monotone_bits", "monotone_code", "red", "green", "blue", "hex", "count"])
+        writer.writerow([
+            "monotone_signs",
+            "monotone_bits",
+            "monotone_code",
+            "palette_code",
+            "palette_word",
+            "red",
+            "green",
+            "blue",
+            "hex",
+            "count",
+        ])
         for code in range(1 << sign_count):
             bits = code_word(code, sign_count)
+            palette_code = monotone_palette_code(code)
             red, green, blue = monotone_heatmap_color(code)
             writer.writerow([
                 sign_text(bits),
                 bits,
                 code,
+                palette_code,
+                code_word(palette_code, data.n_symbols),
                 red,
                 green,
                 blue,
@@ -1241,11 +1256,19 @@ $valid_bits
     return [red, green, blue].map(channel => Math.round((channel + matchValue) * 255));
   }
 
-  function monotoneHeatmapColor(code) {
-    const hue = ((code * 67) % 128) / 128.0;
+  function wordHeatmapColor(code) {
+    const hue = ((code * 137) % 256) / 256.0;
     const saturation = 0.55 + 0.28 * ((code & 0x03) / 3.0);
     const value = 0.76 + 0.18 * (((code >> 2) & 0x03) / 3.0);
     return hsvRgb(hue, saturation, value);
+  }
+
+  function monotonePaletteCode(code) {
+    return 0x80 | code;
+  }
+
+  function monotoneHeatmapColor(code) {
+    return wordHeatmapColor(monotonePaletteCode(code));
   }
 
   function rgbHex(rgb) {
