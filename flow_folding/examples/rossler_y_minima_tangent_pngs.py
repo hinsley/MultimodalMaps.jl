@@ -319,6 +319,7 @@ def load_scan(path: str) -> ScanData:
     words = [""] * (n_c * n_a)
     codes = array("i", [-1]) * (n_c * n_a)
     word_counts: Counter[str] = Counter()
+    word_cache: dict[str, str] = {}
 
     with open_scan(path) as handle:
         reader = csv.DictReader(handle, delimiter="\t")
@@ -328,7 +329,7 @@ def load_scan(path: str) -> ScanData:
             idx = a_idx * n_c + c_idx
             if row["status"] != "ok":
                 continue
-            word = row["word"]
+            word = word_cache.setdefault(row["word"], row["word"])
             ok[idx] = 1
             words[idx] = word
             codes[idx] = int(row["code"]) if row.get("code") else word_code(word)
