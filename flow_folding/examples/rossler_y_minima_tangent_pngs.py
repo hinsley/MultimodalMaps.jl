@@ -971,7 +971,17 @@ def byte_arrays_for_probe(data: ScanData) -> tuple[bytes, bytes]:
     return bytes(code_bytes), bytes(valid_bits)
 
 
-def write_monotone_probe_html(path: str, data: ScanData, image_path: str, width: int, height: int) -> None:
+def write_monotone_probe_html(
+    path: str,
+    data: ScanData,
+    image_path: str,
+    width: int,
+    height: int,
+    color_mode: str = "monotone",
+) -> None:
+    if color_mode not in {"word", "monotone"}:
+        raise SystemExit(f"unsupported probe color mode {color_mode!r}")
+
     scale = style_scale(width, height)
 
     def sp(value: float) -> int:
@@ -1157,6 +1167,7 @@ $valid_bits
   const A = { min: ${a_min}, max: ${a_max}, count: ${a_count} };
   const CELL_COUNT = C.count * A.count;
   const MONOTONE_BITS = ${sign_count};
+  const COLOR_MODE = '$color_mode';
 
   const image = document.getElementById('heatmap');
   const marker = document.getElementById('marker');
@@ -1326,7 +1337,7 @@ $valid_bits
       const bits = wordBits(code);
       const monoBits = monotoneBits(bits);
       const monoCode = monotoneCode(monoBits);
-      const hex = rgbHex(monotoneHeatmapColor(monoCode));
+      const hex = rgbHex(COLOR_MODE === 'word' ? wordHeatmapColor(code) : monotoneHeatmapColor(monoCode));
       marker.style.setProperty('--marker-color', hex);
       setText(fields.code, `${code} / 0x${code.toString(16).padStart(2, '0').toUpperCase()}`);
       setText(fields.bits, bits);
@@ -1379,8 +1390,16 @@ $valid_bits
 </html>
 """
     values = {
-        "title": "Rossler Y-Min 7-Bit Monotone Heatmap Probe",
-        "image_alt": "Rossler y-minima 7-bit monotone heatmap",
+        "title": (
+            "Rossler Y-Min 8-Bit Word Heatmap Probe"
+            if color_mode == "word"
+            else "Rossler Y-Min 7-Bit Monotone Heatmap Probe"
+        ),
+        "image_alt": (
+            "Rossler y-minima 8-bit word heatmap"
+            if color_mode == "word"
+            else "Rossler y-minima 7-bit monotone heatmap"
+        ),
         "image_base64": image_base64,
         "code_bytes": wrap_base64(code_bytes),
         "valid_bits": wrap_base64(valid_bits),
@@ -1398,6 +1417,7 @@ $valid_bits
         "a_max": repr(data.a_values[-1]),
         "a_count": data.n_a,
         "sign_count": sign_count,
+        "color_mode": color_mode,
     }
     html = template
     for key, value in values.items():
@@ -1550,6 +1570,11 @@ def render_heatmap_only(data: ScanData, args: argparse.Namespace) -> str:
     started = time.time()
     render_word_heatmap(path, data, args.width, args.height)
     write_heatmap_legend(os.path.join(args.output_dir, f"{args.stem}_8bit_word_heatmap_legend.tsv"), data)
+    write_word_legend(os.path.join(args.output_dir, f"{args.stem}_word_legend.tsv"), data)
+    if args.write_heatmap_probe:
+        html_path = os.path.join(args.output_dir, f"{args.stem}_8bit_word_heatmap_probe.html")
+        write_monotone_probe_html(html_path, data, path, args.width, args.height, color_mode="word")
+        print(f"wrote {html_path}", flush=True)
     print(f"wrote {path} seconds={time.time() - started:.3f}", flush=True)
     return args.output_dir
 
@@ -1583,6 +1608,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--clean", action="store_true", help="remove existing stem-matching PNG/SVG files first")
     parser.add_argument("--only-heatmap", action="store_true", help="write only the full-word heatmap PNG and legend TSV")
     parser.add_argument("--only-monotone-heatmap", action="store_true", help="write only the 7-bit monotone-sign heatmap PNG and legend TSV")
+    parser.add_argument("--write-heatmap-probe", action="store_true", help="also write a standalone HTML probe for --only-heatmap")
     parser.add_argument("--write-monotone-probe", action="store_true", help="also write a standalone HTML probe for --only-monotone-heatmap")
     return parser.parse_args()
 
