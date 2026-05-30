@@ -49,8 +49,8 @@
   }
   #marker {
     position: absolute;
-    width: 41px;
-    height: 41px;
+    width: 25px;
+    height: 25px;
     transform: translate(-50%, -50%);
     pointer-events: none;
     display: none;
@@ -59,19 +59,19 @@
   #marker::after {
     content: "";
     position: absolute;
-    background: var(--accent);
-    box-shadow: 0 0 0 1px white;
+    background: var(--marker-color, var(--accent));
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.95), 0 0 0 2px rgba(23, 32, 28, 0.35);
   }
   #marker::before {
-    left: 20px;
+    left: 12px;
     top: 0;
     width: 1px;
-    height: 41px;
+    height: 25px;
   }
   #marker::after {
     left: 0;
-    top: 20px;
-    width: 41px;
+    top: 12px;
+    width: 25px;
     height: 1px;
   }
   aside {
@@ -15921,6 +15921,10 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
 
   const codeBytes = decodeByteChars('codeBytes', CELL_COUNT);
   const validBits = decodeByteChars('validBits', Math.ceil(CELL_COUNT / 8));
+  const sampleCanvas = document.createElement('canvas');
+  sampleCanvas.width = 1;
+  sampleCanvas.height = 1;
+  const sampleContext = sampleCanvas.getContext('2d', { willReadFrequently: true });
 
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
@@ -15971,6 +15975,22 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
     return '#' + rgb.map(value => value.toString(16).padStart(2, '0')).join('');
   }
 
+  function sampleImageColor(pixelX, pixelY) {
+    if (!sampleContext) {
+      return '#d92845';
+    }
+    const sx = clamp(Math.floor(pixelX), 0, IMAGE.width - 1);
+    const sy = clamp(Math.floor(pixelY), 0, IMAGE.height - 1);
+    try {
+      sampleContext.clearRect(0, 0, 1, 1);
+      sampleContext.drawImage(image, sx, sy, 1, 1, 0, 0, 1, 1);
+      const pixel = sampleContext.getImageData(0, 0, 1, 1).data;
+      return rgbHex([pixel[0], pixel[1], pixel[2]]);
+    } catch {
+      return '#d92845';
+    }
+  }
+
   function update(event) {
     const rect = image.getBoundingClientRect();
     const displayX = event.clientX - rect.left;
@@ -15981,6 +16001,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
     marker.style.left = `${displayX}px`;
     marker.style.top = `${displayY}px`;
     marker.style.display = 'block';
+    marker.style.setProperty('--marker-color', sampleImageColor(pixelX, pixelY));
 
     setText(fields.x, pixelX.toFixed(1));
     setText(fields.y, pixelY.toFixed(1));
@@ -16003,6 +16024,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
       const code = codeBytes[cellIndex];
       const bits = wordBits(code);
       const hex = rgbHex(wordHeatmapColor(code));
+      marker.style.setProperty('--marker-color', hex);
       setText(fields.code, `${code} / 0x${code.toString(16).padStart(2, '0').toUpperCase()}`);
       setText(fields.bits, bits);
       setText(fields.symbols, symbolText(bits));
