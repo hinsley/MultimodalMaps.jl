@@ -148,6 +148,14 @@ class Canvas:
         y0 = max(0, y)
         x1 = min(self.width, x + width)
         y1 = min(self.height, y + height)
+        if x1 <= x0 or y1 <= y0:
+            return
+        if alpha >= 1.0:
+            row = bytes(color) * (x1 - x0)
+            for py in range(y0, y1):
+                offset = 3 * (py * self.width + x0)
+                self.pixels[offset : offset + len(row)] = row
+            return
         for py in range(y0, y1):
             for px in range(x0, x1):
                 self.blend_pixel(px, py, color, alpha)
@@ -528,22 +536,27 @@ def png_chunk(chunk_type: bytes, payload: bytes) -> bytes:
 
 
 def write_png(path: str, canvas: Canvas) -> None:
-    raw = bytearray()
-    stride = canvas.width * 3
-    for y in range(canvas.height):
-        raw.append(0)
-        start = y * stride
-        raw.extend(canvas.pixels[start : start + stride])
     ihdr = struct.pack(">IIBBBBB", canvas.width, canvas.height, 8, 2, 0, 0, 0)
-    payload = (
-        b"\x89PNG\r\n\x1a\n"
-        + png_chunk(b"IHDR", ihdr)
-        + png_chunk(b"IDAT", zlib.compress(bytes(raw), level=6))
-        + png_chunk(b"IEND", b"")
-    )
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "wb") as handle:
-        handle.write(payload)
+        handle.write(b"\x89PNG\r\n\x1a\n")
+        handle.write(png_chunk(b"IHDR", ihdr))
+        compressor = zlib.compressobj(level=6)
+        pending = bytearray()
+        stride = canvas.width * 3
+        threshold = 1 << 20
+        for y in range(canvas.height):
+            start = y * stride
+            compressed = compressor.compress(b"\x00" + canvas.pixels[start : start + stride])
+            if compressed:
+                pending.extend(compressed)
+                if len(pending) >= threshold:
+                    handle.write(png_chunk(b"IDAT", bytes(pending)))
+                    pending.clear()
+        pending.extend(compressor.flush())
+        if pending:
+            handle.write(png_chunk(b"IDAT", bytes(pending)))
+        handle.write(png_chunk(b"IEND", b""))
 
 
 def clean_output_dir(output_dir: str, stem: str) -> None:
@@ -670,6 +683,46 @@ def parameter_edges(values: Sequence[float]) -> list[float]:
     return edges
 
 
+def render_heatmap_cells(
+    canvas: Canvas,
+    data: ScanData,
+    xpix: Callable[[float], float],
+    ypix: Callable[[float], float],
+    color_for_index: Callable[[int], bytes],
+) -> None:
+    c_edges = parameter_edges(data.c_values)
+    a_edges = parameter_edges(data.a_values)
+    x_bounds = [max(0, min(canvas.width, int(round(xpix(value))))) for value in c_edges]
+    y_bounds = [max(0, min(canvas.height, int(round(ypix(value))))) for value in a_edges]
+    start_x = x_bounds[0]
+    end_x = x_bounds[-1]
+    row_length = max(0, end_x - start_x) * 3
+    if row_length == 0:
+        return
+
+    background = bytes((255, 255, 255))
+    for a_idx in range(data.n_a):
+        row = bytearray()
+        for c_idx in range(data.n_c):
+            width = max(0, x_bounds[c_idx + 1] - x_bounds[c_idx])
+            if width == 0:
+                continue
+            idx = cell_index(data, a_idx, c_idx)
+            row.extend(color_for_index(idx) * width)
+        if len(row) < row_length:
+            row.extend(background * ((row_length - len(row)) // 3))
+        elif len(row) > row_length:
+            del row[row_length:]
+
+        y0 = min(y_bounds[a_idx], y_bounds[a_idx + 1])
+        y1 = max(y_bounds[a_idx], y_bounds[a_idx + 1])
+        if y1 <= y0:
+            y1 = min(canvas.height, y0 + 1)
+        for y in range(y0, y1):
+            offset = 3 * (y * canvas.width + start_x)
+            canvas.pixels[offset : offset + row_length] = row
+
+
 def render_word_heatmap(path: str, data: ScanData, width: int, height: int) -> None:
     canvas = Canvas(width, height)
     scale = style_scale(width, height)
@@ -695,21 +748,14 @@ def render_word_heatmap(path: str, data: ScanData, width: int, height: int) -> N
     def ypix(a_value: float) -> float:
         return top + (a_max - a_value) / (a_max - a_min) * plot_height
 
-    c_edges = parameter_edges(data.c_values)
-    a_edges = parameter_edges(data.a_values)
-    colors = [word_heatmap_color(code) for code in range(1 << data.n_symbols)]
+    colors = [bytes(word_heatmap_color(code)) for code in range(1 << data.n_symbols)]
+    background = bytes((255, 255, 255))
 
-    for a_idx in range(data.n_a):
-        y0 = int(math.floor(ypix(a_edges[a_idx + 1])))
-        y1 = int(math.ceil(ypix(a_edges[a_idx])))
-        for c_idx in range(data.n_c):
-            idx = cell_index(data, a_idx, c_idx)
-            code = data.codes[idx]
-            if code < 0:
-                continue
-            x0 = int(math.floor(xpix(c_edges[c_idx])))
-            x1 = int(math.ceil(xpix(c_edges[c_idx + 1])))
-            canvas.fill_rect(x0, y0, max(1, x1 - x0), max(1, y1 - y0), colors[code])
+    def color_for_index(idx: int) -> bytes:
+        code = data.codes[idx]
+        return colors[code] if code >= 0 else background
+
+    render_heatmap_cells(canvas, data, xpix, ypix, color_for_index)
 
     axis_color = hex_rgb("#17201c")
     text_color = hex_rgb("#59635d")
@@ -811,21 +857,14 @@ def render_monotone_heatmap(path: str, data: ScanData, width: int, height: int) 
     def ypix(a_value: float) -> float:
         return top + (a_max - a_value) / (a_max - a_min) * plot_height
 
-    c_edges = parameter_edges(data.c_values)
-    a_edges = parameter_edges(data.a_values)
     sign_count = data.n_symbols - 1
-    colors = [monotone_heatmap_color(code) for code in range(1 << sign_count)]
+    colors = [bytes(monotone_heatmap_color(code)) for code in range(1 << sign_count)]
+    background = bytes((255, 255, 255))
 
-    for a_idx in range(data.n_a):
-        y0 = int(math.floor(ypix(a_edges[a_idx + 1])))
-        y1 = int(math.ceil(ypix(a_edges[a_idx])))
-        for c_idx in range(data.n_c):
-            idx = cell_index(data, a_idx, c_idx)
-            if not data.ok[idx]:
-                continue
-            x0 = int(math.floor(xpix(c_edges[c_idx])))
-            x1 = int(math.ceil(xpix(c_edges[c_idx + 1])))
-            canvas.fill_rect(x0, y0, max(1, x1 - x0), max(1, y1 - y0), colors[monotone_code(data.words[idx])])
+    def color_for_index(idx: int) -> bytes:
+        return colors[monotone_code(data.words[idx])] if data.ok[idx] else background
+
+    render_heatmap_cells(canvas, data, xpix, ypix, color_for_index)
 
     axis_color = hex_rgb("#17201c")
     text_color = hex_rgb("#59635d")
