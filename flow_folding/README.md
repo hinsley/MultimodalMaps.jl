@@ -98,6 +98,8 @@ Finite differences are acceptable only for quick prototype checks.
 - `examples/verify_rossler_y_minima_tangent_outputs.py` verifies the final
   TSV, heatmap PNGs, legends, and standalone probe HTML files for production
   Rössler scan outputs.
+- `examples/monitor_rossler_y_minima_tangent_pipeline.py` reports progress and
+  optional live TSV validation for chunked production scan runs.
 - `examples/rossler_y_minima_tangent_contours.jl` is the legacy SVG contour
   exporter.
 - `examples/rossler_seeded_continuation.jl` shows seeded critical-point
@@ -158,6 +160,13 @@ viewers with:
 
 ```bash
 python3 flow_folding/examples/verify_rossler_y_minima_tangent_outputs.py
+```
+
+While the chunked pipeline is running, monitor progress and validate present
+chunk TSVs with:
+
+```bash
+python3 flow_folding/examples/monitor_rossler_y_minima_tangent_pipeline.py --validate
 ```
 
 Open the local docs from the repository root with:
