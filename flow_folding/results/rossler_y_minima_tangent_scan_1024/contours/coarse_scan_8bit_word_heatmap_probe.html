@@ -141,6 +141,7 @@
       <dt>code byte</dt><dd id="codeValue">-</dd>
       <dt>word bits</dt><dd id="wordBits">-</dd>
       <dt>symbols</dt><dd id="symbols">-</dd>
+      <dt>monotone sign</dt><dd id="monotoneSigns">-</dd>
       <dt>color</dt><dd id="colorValue"><span class="swatch" id="colorSwatch"></span>-</dd>
     </dl>
     <div class="status" id="status">No point selected.</div>
@@ -15903,6 +15904,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
     code: document.getElementById('codeValue'),
     bits: document.getElementById('wordBits'),
     symbols: document.getElementById('symbols'),
+    monotoneSigns: document.getElementById('monotoneSigns'),
     color: document.getElementById('colorValue'),
     swatch: document.getElementById('colorSwatch'),
     status: document.getElementById('status'),
@@ -15947,6 +15949,14 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
 
   function symbolText(bits) {
     return bits.replace(/1/g, '+').replace(/0/g, '-').split('').join(' ');
+  }
+
+  function monotoneSignText(bits) {
+    const signs = [];
+    for (let idx = 0; idx < bits.length - 1; idx += 1) {
+      signs.push(bits[idx] === bits[idx + 1] ? '+' : '-');
+    }
+    return signs.join(' ');
   }
 
   function hsvRgb(hue, saturation, value) {
@@ -16032,6 +16042,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
       setText(fields.code, `${code} / 0x${code.toString(16).padStart(2, '0').toUpperCase()}`);
       setText(fields.bits, bits);
       setText(fields.symbols, symbolText(bits));
+      setText(fields.monotoneSigns, monotoneSignText(bits));
       fields.swatch.style.backgroundColor = hex;
       fields.color.lastChild.textContent = hex;
       fields.status.textContent = inside ? 'Inside plot area.' : 'Outside plot area; values are clamped to the nearest plot edge.';
@@ -16039,6 +16050,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
       setText(fields.code, '-');
       setText(fields.bits, '-');
       setText(fields.symbols, '-');
+      setText(fields.monotoneSigns, '-');
       fields.swatch.style.backgroundColor = 'white';
       fields.color.lastChild.textContent = '-';
       fields.status.textContent = inside ? 'No completed 8-symbol word at the nearest grid point.' : 'Outside plot area; values are clamped to the nearest plot edge.';
