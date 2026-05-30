@@ -45,7 +45,9 @@
     width: calc(100% * 6400 / 5304);
     height: auto;
     cursor: crosshair;
+    touch-action: none;
     user-select: none;
+    -webkit-user-drag: none;
   }
   #marker {
     position: absolute;
@@ -15925,6 +15927,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
   sampleCanvas.width = 1;
   sampleCanvas.height = 1;
   const sampleContext = sampleCanvas.getContext('2d', { willReadFrequently: true });
+  let dragging = false;
 
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
@@ -15992,6 +15995,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
   }
 
   function update(event) {
+    event.preventDefault();
     const rect = image.getBoundingClientRect();
     const displayX = event.clientX - rect.left;
     const displayY = event.clientY - rect.top;
@@ -16041,7 +16045,31 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
     }
   }
 
-  image.addEventListener('click', update);
+  image.addEventListener('pointerdown', event => {
+    dragging = true;
+    image.setPointerCapture(event.pointerId);
+    update(event);
+  });
+
+  image.addEventListener('pointermove', event => {
+    if (dragging) {
+      update(event);
+    }
+  });
+
+  image.addEventListener('pointerup', event => {
+    dragging = false;
+    if (image.hasPointerCapture(event.pointerId)) {
+      image.releasePointerCapture(event.pointerId);
+    }
+  });
+
+  image.addEventListener('pointercancel', event => {
+    dragging = false;
+    if (image.hasPointerCapture(event.pointerId)) {
+      image.releasePointerCapture(event.pointerId);
+    }
+  });
 })();
 </script>
 </body>
