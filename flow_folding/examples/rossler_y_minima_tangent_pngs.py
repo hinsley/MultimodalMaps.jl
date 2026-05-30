@@ -9,12 +9,14 @@ binary backends.
 from __future__ import annotations
 
 import argparse
+import base64
 import binascii
 import csv
 import gzip
 import math
 import os
 import struct
+import textwrap
 import time
 import zlib
 from array import array
@@ -255,6 +257,13 @@ def word_heatmap_color(code: int) -> RGB:
     return hsv_rgb(hue, saturation, value)
 
 
+def monotone_heatmap_color(code: int) -> RGB:
+    hue = ((code * 67) % 128) / 128.0
+    saturation = 0.55 + 0.28 * ((code & 0x03) / 3.0)
+    value = 0.76 + 0.18 * (((code >> 2) & 0x03) / 3.0)
+    return hsv_rgb(hue, saturation, value)
+
+
 def open_scan(path: str):
     if path.endswith(".gz"):
         return gzip.open(path, "rt", newline="")
@@ -337,6 +346,23 @@ def word_code(word: str) -> int:
     for char in word:
         code = 2 * code + (1 if char == "1" else 0)
     return code
+
+
+def monotone_bits(word: str) -> str:
+    return "".join("1" if word[idx] == word[idx + 1] else "0" for idx in range(len(word) - 1))
+
+
+def monotone_code(word: str) -> int:
+    return word_code(monotone_bits(word))
+
+
+def sign_text(bits: str) -> str:
+    return " ".join("+" if char == "1" else "-" for char in bits)
+
+
+def require_eight_symbol_words(data: ScanData) -> None:
+    if data.n_symbols != 8:
+        raise SystemExit(f"7-bit monotone heatmaps require 8-symbol words; found {data.n_symbols}")
 
 
 def least_period(word: str) -> int:
@@ -759,6 +785,122 @@ def render_word_heatmap(path: str, data: ScanData, width: int, height: int) -> N
     write_png(path, canvas)
 
 
+def render_monotone_heatmap(path: str, data: ScanData, width: int, height: int) -> None:
+    canvas = Canvas(width, height)
+    scale = style_scale(width, height)
+
+    def sp(value: float) -> int:
+        return int(round(value * scale))
+
+    left = sp(96)
+    right = sp(300)
+    top = sp(76)
+    bottom = sp(92)
+    plot_width = width - left - right
+    plot_height = height - top - bottom
+    if plot_width <= 0 or plot_height <= 0:
+        raise SystemExit(f"PNG size {width}x{height} is too small for scaled plot layout")
+
+    c_min, c_max = data.c_values[0], data.c_values[-1]
+    a_min, a_max = data.a_values[0], data.a_values[-1]
+
+    def xpix(c_value: float) -> float:
+        return left + (c_value - c_min) / (c_max - c_min) * plot_width
+
+    def ypix(a_value: float) -> float:
+        return top + (a_max - a_value) / (a_max - a_min) * plot_height
+
+    c_edges = parameter_edges(data.c_values)
+    a_edges = parameter_edges(data.a_values)
+    sign_count = data.n_symbols - 1
+    colors = [monotone_heatmap_color(code) for code in range(1 << sign_count)]
+
+    for a_idx in range(data.n_a):
+        y0 = int(math.floor(ypix(a_edges[a_idx + 1])))
+        y1 = int(math.ceil(ypix(a_edges[a_idx])))
+        for c_idx in range(data.n_c):
+            idx = cell_index(data, a_idx, c_idx)
+            if not data.ok[idx]:
+                continue
+            x0 = int(math.floor(xpix(c_edges[c_idx])))
+            x1 = int(math.ceil(xpix(c_edges[c_idx + 1])))
+            canvas.fill_rect(x0, y0, max(1, x1 - x0), max(1, y1 - y0), colors[monotone_code(data.words[idx])])
+
+    axis_color = hex_rgb("#17201c")
+    text_color = hex_rgb("#59635d")
+    title_color = hex_rgb("#17201c")
+
+    title_text_scale = max(1, int(round(3 * scale)))
+    tick_text_scale = max(1, int(round(2 * scale)))
+    axis_text_scale = max(1, int(round(3 * scale)))
+    axis_width = max(1.0, 2.0 * scale)
+    tick_length = sp(12)
+
+    title = f"ROSSLER Y-MIN {sign_count}-BIT MONOTONE HEATMAP"
+    title_width = canvas.text_width(title, scale=title_text_scale)
+    canvas.draw_text(max(sp(8), (width - title_width) // 2), sp(26), title, title_color, scale=title_text_scale)
+
+    for idx in range(6):
+        c_tick = c_min + (c_max - c_min) * idx / 5
+        x = xpix(c_tick)
+        label = f"{c_tick:.2f}"
+        canvas.draw_text(
+            int(x - canvas.text_width(label, scale=tick_text_scale) / 2),
+            top + plot_height + sp(20),
+            label,
+            text_color,
+            scale=tick_text_scale,
+        )
+    for idx in range(6):
+        a_tick = a_min + (a_max - a_min) * idx / 5
+        y = ypix(a_tick)
+        label = f"{a_tick:.3f}"
+        canvas.draw_text(
+            max(sp(4), left - canvas.text_width(label, scale=tick_text_scale) - sp(14)),
+            int(y - sp(7)),
+            label,
+            text_color,
+            scale=tick_text_scale,
+        )
+
+    canvas.draw_line(left, top, left + plot_width, top, axis_color, width=axis_width)
+    canvas.draw_line(left + plot_width, top, left + plot_width, top + plot_height, axis_color, width=axis_width)
+    canvas.draw_line(left + plot_width, top + plot_height, left, top + plot_height, axis_color, width=axis_width)
+    canvas.draw_line(left, top + plot_height, left, top, axis_color, width=axis_width)
+    for idx in range(6):
+        c_tick = c_min + (c_max - c_min) * idx / 5
+        x = xpix(c_tick)
+        canvas.draw_line(x, top + plot_height, x, top + plot_height + tick_length, axis_color, width=axis_width)
+    for idx in range(6):
+        a_tick = a_min + (a_max - a_min) * idx / 5
+        y = ypix(a_tick)
+        canvas.draw_line(left - tick_length, y, left, y, axis_color, width=axis_width)
+
+    legend_x = left + plot_width + sp(28)
+    canvas.draw_text(legend_x, top + sp(8), "7-BIT", axis_color, scale=tick_text_scale)
+    canvas.draw_text(legend_x, top + sp(42), "MONOTONE", axis_color, scale=tick_text_scale)
+    canvas.draw_text(legend_x, top + sp(76), "SEE TSV", axis_color, scale=tick_text_scale)
+
+    swatch_size = max(1, sp(8))
+    swatch_gap = max(0, sp(2))
+    swatches_per_row = 16
+    swatch_start_y = top + sp(122)
+    for code, color in enumerate(colors):
+        row = code // swatches_per_row
+        col = code % swatches_per_row
+        canvas.fill_rect(
+            legend_x + col * (swatch_size + swatch_gap),
+            swatch_start_y + row * (swatch_size + swatch_gap),
+            swatch_size,
+            swatch_size,
+            color,
+        )
+
+    canvas.draw_text(int(left + plot_width / 2 - sp(5)), height - sp(30), "C", axis_color, scale=axis_text_scale)
+    canvas.draw_text(sp(34), int(top + plot_height / 2 - sp(10)), "A", axis_color, scale=axis_text_scale)
+    write_png(path, canvas)
+
+
 def write_heatmap_legend(path: str, data: ScanData) -> None:
     counts = Counter(code for code in data.codes if code >= 0)
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -776,6 +918,471 @@ def write_heatmap_legend(path: str, data: ScanData) -> None:
                 f"#{red:02x}{green:02x}{blue:02x}",
                 counts.get(code, 0),
             ])
+
+
+def write_monotone_heatmap_legend(path: str, data: ScanData) -> None:
+    sign_count = data.n_symbols - 1
+    counts = Counter(monotone_code(word) for word in data.words if word)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", newline="") as handle:
+        writer = csv.writer(handle, delimiter="\t", lineterminator="\n")
+        writer.writerow(["monotone_signs", "monotone_bits", "monotone_code", "red", "green", "blue", "hex", "count"])
+        for code in range(1 << sign_count):
+            bits = code_word(code, sign_count)
+            red, green, blue = monotone_heatmap_color(code)
+            writer.writerow([
+                sign_text(bits),
+                bits,
+                code,
+                red,
+                green,
+                blue,
+                f"#{red:02x}{green:02x}{blue:02x}",
+                counts.get(code, 0),
+            ])
+
+
+def wrap_base64(raw: bytes, width: int = 100) -> str:
+    return "\n".join(textwrap.wrap(base64.b64encode(raw).decode("ascii"), width))
+
+
+def byte_arrays_for_probe(data: ScanData) -> tuple[bytes, bytes]:
+    code_bytes = bytearray(data.n_c * data.n_a)
+    valid_bits = bytearray(math.ceil(len(code_bytes) / 8))
+    for idx, code in enumerate(data.codes):
+        if code >= 0:
+            code_bytes[idx] = code
+            valid_bits[idx >> 3] |= 1 << (idx & 7)
+    return bytes(code_bytes), bytes(valid_bits)
+
+
+def write_monotone_probe_html(path: str, data: ScanData, image_path: str, width: int, height: int) -> None:
+    scale = style_scale(width, height)
+
+    def sp(value: float) -> int:
+        return int(round(value * scale))
+
+    left = sp(96)
+    top = sp(76)
+    right = sp(300)
+    bottom = sp(92)
+    plot_width = width - left - right
+    plot_height = height - top - bottom
+    view_width = left + plot_width + sp(26)
+    sign_count = data.n_symbols - 1
+    code_bytes, valid_bits = byte_arrays_for_probe(data)
+
+    with open(image_path, "rb") as handle:
+        image_base64 = wrap_base64(handle.read())
+
+    template = r"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>$title</title>
+<style>
+  :root {
+    color-scheme: light;
+    --ink: #17201c;
+    --muted: #59635d;
+    --line: #cfd6d1;
+    --paper: #ffffff;
+    --panel: #f6f8f5;
+    --accent: #d92845;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    color: var(--ink);
+    background: var(--paper);
+  }
+  main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    min-height: 100vh;
+  }
+  .stage {
+    min-width: 0;
+    padding: 16px;
+    overflow: auto;
+  }
+  .image-wrap {
+    position: relative;
+    width: min(100%, ${view_width}px);
+    aspect-ratio: ${view_width} / ${height};
+    margin: 0 auto;
+    border: 1px solid var(--line);
+    background: white;
+    overflow: hidden;
+  }
+  #heatmap {
+    display: block;
+    width: calc(100% * ${width} / ${view_width});
+    height: auto;
+    cursor: crosshair;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+  #marker {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    display: none;
+  }
+  #marker::before,
+  #marker::after {
+    content: "";
+    position: absolute;
+    background: var(--marker-color, var(--accent));
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.95), 0 0 0 2px rgba(23, 32, 28, 0.35);
+  }
+  #marker::before {
+    left: 12px;
+    top: 0;
+    width: 1px;
+    height: 25px;
+  }
+  #marker::after {
+    left: 0;
+    top: 12px;
+    width: 25px;
+    height: 1px;
+  }
+  aside {
+    border-left: 1px solid var(--line);
+    background: var(--panel);
+    padding: 18px 16px;
+  }
+  h1 {
+    margin: 0 0 16px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+  dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px 12px;
+    margin: 0;
+    align-items: baseline;
+  }
+  dt { color: var(--muted); font-size: 12px; }
+  dd { margin: 0; font-size: 13px; text-align: right; }
+  .status {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+  .swatch {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    border: 1px solid var(--line);
+    vertical-align: -2px;
+    margin-right: 6px;
+    background: white;
+  }
+  @media (max-width: 900px) {
+    main { grid-template-columns: 1fr; }
+    aside { border-left: 0; border-top: 1px solid var(--line); }
+    dl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    dt, dd { text-align: left; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <section class="stage" aria-label="Heatmap image">
+    <div class="image-wrap">
+      <img id="heatmap" alt="$image_alt" src="data:image/png;base64,$image_base64">
+      <div id="marker"></div>
+    </div>
+  </section>
+  <aside>
+    <h1>Parameter Probe</h1>
+    <dl>
+      <dt>c</dt><dd id="cValue">-</dd>
+      <dt>a</dt><dd id="aValue">-</dd>
+      <dt>pixel x</dt><dd id="xValue">-</dd>
+      <dt>pixel y</dt><dd id="yValue">-</dd>
+      <dt>grid c</dt><dd id="cIndex">-</dd>
+      <dt>grid a</dt><dd id="aIndex">-</dd>
+      <dt>code byte</dt><dd id="codeValue">-</dd>
+      <dt>word bits</dt><dd id="wordBits">-</dd>
+      <dt>symbols</dt><dd id="symbols">-</dd>
+      <dt>monotone sign</dt><dd id="monotoneSigns">-</dd>
+      <dt>monotone code</dt><dd id="monotoneCode">-</dd>
+      <dt>color</dt><dd id="colorValue"><span class="swatch" id="colorSwatch"></span>-</dd>
+    </dl>
+    <div class="status" id="status">No point selected.</div>
+  </aside>
+</main>
+<script id="codeBytes" type="application/octet-stream">
+$code_bytes
+</script>
+<script id="validBits" type="application/octet-stream">
+$valid_bits
+</script>
+<script>
+(() => {
+  const IMAGE = { width: ${width}, height: ${height} };
+  const VIEW = { width: ${view_width}, height: ${height} };
+  const PLOT = { left: ${plot_left}, top: ${plot_top}, width: ${plot_width}, height: ${plot_height} };
+  PLOT.right = PLOT.left + PLOT.width;
+  PLOT.bottom = PLOT.top + PLOT.height;
+  const C = { min: ${c_min}, max: ${c_max}, count: ${c_count} };
+  const A = { min: ${a_min}, max: ${a_max}, count: ${a_count} };
+  const CELL_COUNT = C.count * A.count;
+  const MONOTONE_BITS = ${sign_count};
+
+  const image = document.getElementById('heatmap');
+  const marker = document.getElementById('marker');
+  const fields = {
+    c: document.getElementById('cValue'),
+    a: document.getElementById('aValue'),
+    x: document.getElementById('xValue'),
+    y: document.getElementById('yValue'),
+    ci: document.getElementById('cIndex'),
+    ai: document.getElementById('aIndex'),
+    code: document.getElementById('codeValue'),
+    bits: document.getElementById('wordBits'),
+    symbols: document.getElementById('symbols'),
+    monotoneSigns: document.getElementById('monotoneSigns'),
+    monotoneCode: document.getElementById('monotoneCode'),
+    color: document.getElementById('colorValue'),
+    swatch: document.getElementById('colorSwatch'),
+    status: document.getElementById('status'),
+  };
+
+  function decodeByteChars(id, expectedLength) {
+    const encoded = document.getElementById(id).textContent.replace(/\s+/g, '');
+    const byteChars = atob(encoded);
+    if (byteChars.length !== expectedLength) {
+      throw new Error(`${id} length ${byteChars.length} did not match expected ${expectedLength}`);
+    }
+    const bytes = new Uint8Array(byteChars.length);
+    for (let idx = 0; idx < byteChars.length; idx += 1) {
+      bytes[idx] = byteChars.charCodeAt(idx) & 0xff;
+    }
+    return bytes;
+  }
+
+  const codeBytes = decodeByteChars('codeBytes', CELL_COUNT);
+  const validBits = decodeByteChars('validBits', Math.ceil(CELL_COUNT / 8));
+  const sampleCanvas = document.createElement('canvas');
+  sampleCanvas.width = 1;
+  sampleCanvas.height = 1;
+  const sampleContext = sampleCanvas.getContext('2d', { willReadFrequently: true });
+  let dragging = false;
+
+  function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+  function setText(element, value) {
+    element.textContent = value;
+  }
+
+  function isValid(index) {
+    return (validBits[index >> 3] & (1 << (index & 7))) !== 0;
+  }
+
+  function wordBits(code) {
+    return code.toString(2).padStart(8, '0');
+  }
+
+  function symbolText(bits) {
+    return bits.replace(/1/g, '+').replace(/0/g, '-').split('').join(' ');
+  }
+
+  function monotoneBits(bits) {
+    let signs = '';
+    for (let idx = 0; idx < bits.length - 1; idx += 1) {
+      signs += bits[idx] === bits[idx + 1] ? '1' : '0';
+    }
+    return signs;
+  }
+
+  function monotoneSignText(bits) {
+    return bits.replace(/1/g, '+').replace(/0/g, '-').split('').join(' ');
+  }
+
+  function monotoneCode(bits) {
+    let code = 0;
+    for (let idx = 0; idx < bits.length; idx += 1) {
+      code = 2 * code + (bits[idx] === '1' ? 1 : 0);
+    }
+    return code;
+  }
+
+  function hsvRgb(hue, saturation, value) {
+    hue = ((hue % 1) + 1) % 1;
+    const chroma = value * saturation;
+    const x = chroma * (1 - Math.abs((hue * 6) % 2 - 1));
+    const matchValue = value - chroma;
+    const sector = Math.floor(hue * 6);
+    let red = 0;
+    let green = 0;
+    let blue = 0;
+    if (sector === 0) { [red, green, blue] = [chroma, x, 0]; }
+    else if (sector === 1) { [red, green, blue] = [x, chroma, 0]; }
+    else if (sector === 2) { [red, green, blue] = [0, chroma, x]; }
+    else if (sector === 3) { [red, green, blue] = [0, x, chroma]; }
+    else if (sector === 4) { [red, green, blue] = [x, 0, chroma]; }
+    else { [red, green, blue] = [chroma, 0, x]; }
+    return [red, green, blue].map(channel => Math.round((channel + matchValue) * 255));
+  }
+
+  function monotoneHeatmapColor(code) {
+    const hue = ((code * 67) % 128) / 128.0;
+    const saturation = 0.55 + 0.28 * ((code & 0x03) / 3.0);
+    const value = 0.76 + 0.18 * (((code >> 2) & 0x03) / 3.0);
+    return hsvRgb(hue, saturation, value);
+  }
+
+  function rgbHex(rgb) {
+    return '#' + rgb.map(value => value.toString(16).padStart(2, '0')).join('');
+  }
+
+  function sampleImageColor(pixelX, pixelY) {
+    if (!sampleContext) {
+      return '#d92845';
+    }
+    const sx = clamp(Math.floor(pixelX), 0, IMAGE.width - 1);
+    const sy = clamp(Math.floor(pixelY), 0, IMAGE.height - 1);
+    try {
+      sampleContext.clearRect(0, 0, 1, 1);
+      sampleContext.drawImage(image, sx, sy, 1, 1, 0, 0, 1, 1);
+      const pixel = sampleContext.getImageData(0, 0, 1, 1).data;
+      return rgbHex([pixel[0], pixel[1], pixel[2]]);
+    } catch {
+      return '#d92845';
+    }
+  }
+
+  function update(event) {
+    event.preventDefault();
+    const rect = image.getBoundingClientRect();
+    const displayX = event.clientX - rect.left;
+    const displayY = event.clientY - rect.top;
+    const pixelX = displayX * IMAGE.width / rect.width;
+    const pixelY = displayY * IMAGE.height / rect.height;
+
+    marker.style.left = `${displayX}px`;
+    marker.style.top = `${displayY}px`;
+    marker.style.display = 'block';
+    marker.style.setProperty('--marker-color', sampleImageColor(pixelX, pixelY));
+
+    setText(fields.x, pixelX.toFixed(1));
+    setText(fields.y, pixelY.toFixed(1));
+
+    const inside = pixelX >= PLOT.left && pixelX <= PLOT.right && pixelY >= PLOT.top && pixelY <= PLOT.bottom;
+    const plotX = clamp(pixelX, PLOT.left, PLOT.right) - PLOT.left;
+    const plotY = clamp(pixelY, PLOT.top, PLOT.bottom) - PLOT.top;
+    const c = C.min + plotX / PLOT.width * (C.max - C.min);
+    const a = A.max - plotY / PLOT.height * (A.max - A.min);
+    const cIndex = clamp(Math.round((c - C.min) / (C.max - C.min) * (C.count - 1)), 0, C.count - 1);
+    const aIndex = clamp(Math.round((a - A.min) / (A.max - A.min) * (A.count - 1)), 0, A.count - 1);
+    const cellIndex = aIndex * C.count + cIndex;
+
+    setText(fields.c, c.toFixed(10));
+    setText(fields.a, a.toFixed(10));
+    setText(fields.ci, String(cIndex + 1));
+    setText(fields.ai, String(aIndex + 1));
+
+    if (isValid(cellIndex)) {
+      const code = codeBytes[cellIndex];
+      const bits = wordBits(code);
+      const monoBits = monotoneBits(bits);
+      const monoCode = monotoneCode(monoBits);
+      const hex = rgbHex(monotoneHeatmapColor(monoCode));
+      marker.style.setProperty('--marker-color', hex);
+      setText(fields.code, `${code} / 0x${code.toString(16).padStart(2, '0').toUpperCase()}`);
+      setText(fields.bits, bits);
+      setText(fields.symbols, symbolText(bits));
+      setText(fields.monotoneSigns, monotoneSignText(monoBits));
+      setText(fields.monotoneCode, `${monoCode} / 0x${monoCode.toString(16).padStart(2, '0').toUpperCase()}`);
+      fields.swatch.style.backgroundColor = hex;
+      fields.color.lastChild.textContent = hex;
+      fields.status.textContent = inside ? 'Inside plot area.' : 'Outside plot area; values are clamped to the nearest plot edge.';
+    } else {
+      setText(fields.code, '-');
+      setText(fields.bits, '-');
+      setText(fields.symbols, '-');
+      setText(fields.monotoneSigns, '-');
+      setText(fields.monotoneCode, '-');
+      fields.swatch.style.backgroundColor = 'white';
+      fields.color.lastChild.textContent = '-';
+      fields.status.textContent = inside ? 'No completed 8-symbol word at the nearest grid point.' : 'Outside plot area; values are clamped to the nearest plot edge.';
+    }
+  }
+
+  image.addEventListener('pointerdown', event => {
+    dragging = true;
+    image.setPointerCapture(event.pointerId);
+    update(event);
+  });
+
+  image.addEventListener('pointermove', event => {
+    if (dragging) {
+      update(event);
+    }
+  });
+
+  image.addEventListener('pointerup', event => {
+    dragging = false;
+    if (image.hasPointerCapture(event.pointerId)) {
+      image.releasePointerCapture(event.pointerId);
+    }
+  });
+
+  image.addEventListener('pointercancel', event => {
+    dragging = false;
+    if (image.hasPointerCapture(event.pointerId)) {
+      image.releasePointerCapture(event.pointerId);
+    }
+  });
+})();
+</script>
+</body>
+</html>
+"""
+    values = {
+        "title": "Rossler Y-Min 7-Bit Monotone Heatmap Probe",
+        "image_alt": "Rossler y-minima 7-bit monotone heatmap",
+        "image_base64": image_base64,
+        "code_bytes": wrap_base64(code_bytes),
+        "valid_bits": wrap_base64(valid_bits),
+        "width": width,
+        "height": height,
+        "view_width": view_width,
+        "plot_left": left,
+        "plot_top": top,
+        "plot_width": plot_width,
+        "plot_height": plot_height,
+        "c_min": repr(data.c_values[0]),
+        "c_max": repr(data.c_values[-1]),
+        "c_count": data.n_c,
+        "a_min": repr(data.a_values[0]),
+        "a_max": repr(data.a_values[-1]),
+        "a_count": data.n_a,
+        "sign_count": sign_count,
+    }
+    html = template
+    for key, value in values.items():
+        html = html.replace("${" + key + "}", str(value)).replace("$" + key, str(value))
+
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", newline="\n") as handle:
+        handle.write(html)
 
 
 def write_word_legend(path: str, data: ScanData) -> None:
@@ -924,6 +1531,21 @@ def render_heatmap_only(data: ScanData, args: argparse.Namespace) -> str:
     return args.output_dir
 
 
+def render_monotone_heatmap_only(data: ScanData, args: argparse.Namespace) -> str:
+    require_eight_symbol_words(data)
+    os.makedirs(args.output_dir, exist_ok=True)
+    started = time.time()
+    path = os.path.join(args.output_dir, f"{args.stem}_7bit_monotone_heatmap.png")
+    render_monotone_heatmap(path, data, args.width, args.height)
+    write_monotone_heatmap_legend(os.path.join(args.output_dir, f"{args.stem}_7bit_monotone_heatmap_legend.tsv"), data)
+    if args.write_monotone_probe:
+        html_path = os.path.join(args.output_dir, f"{args.stem}_7bit_monotone_heatmap_probe.html")
+        write_monotone_probe_html(html_path, data, path, args.width, args.height)
+        print(f"wrote {html_path}", flush=True)
+    print(f"wrote {path} seconds={time.time() - started:.3f}", flush=True)
+    return args.output_dir
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("results_path", help="scan TSV or TSV.GZ to render")
@@ -937,6 +1559,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--alpha", type=float, default=0.10)
     parser.add_argument("--clean", action="store_true", help="remove existing stem-matching PNG/SVG files first")
     parser.add_argument("--only-heatmap", action="store_true", help="write only the full-word heatmap PNG and legend TSV")
+    parser.add_argument("--only-monotone-heatmap", action="store_true", help="write only the 7-bit monotone-sign heatmap PNG and legend TSV")
+    parser.add_argument("--write-monotone-probe", action="store_true", help="also write a standalone HTML probe for --only-monotone-heatmap")
     return parser.parse_args()
 
 
@@ -953,6 +1577,9 @@ def main() -> None:
     if args.only_heatmap:
         written = render_heatmap_only(data, args)
         print(f"wrote PNG heatmap in {written}", flush=True)
+    elif args.only_monotone_heatmap:
+        written = render_monotone_heatmap_only(data, args)
+        print(f"wrote monotone PNG heatmap in {written}", flush=True)
     else:
         written = render_all(data, args)
         print(f"wrote PNG contours in {written}", flush=True)
