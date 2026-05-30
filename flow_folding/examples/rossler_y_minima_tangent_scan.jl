@@ -122,32 +122,108 @@ function run_scan(;
     return rows
 end
 
+function write_tsv_header(io)
+    println(io, "a\tc\tb\tstatus\tevents\tword\tcode\tperiod\tgamma\tmax_time\tfirst_time\tlast_time\tmin_y\tmax_y")
+end
+
+function write_tsv_row(io, row)
+    @printf(
+        io,
+        "%.12g\t%.12g\t%.12g\t%s\t%d\t%s\t%d\t%d\t%.12g\t%.12g\t%.12g\t%.12g\t%.12g\t%.12g\n",
+        row.a,
+        row.c,
+        row.b,
+        row.status,
+        row.events,
+        row.word,
+        row.code,
+        row.period,
+        row.gamma,
+        row.max_time,
+        row.first_time,
+        row.last_time,
+        row.min_y,
+        row.max_y,
+    )
+end
+
 function write_tsv(path, rows)
     mkpath(dirname(path))
     open(path, "w") do io
-        println(io, "a\tc\tb\tstatus\tevents\tword\tcode\tperiod\tgamma\tmax_time\tfirst_time\tlast_time\tmin_y\tmax_y")
+        write_tsv_header(io)
         for row in rows
-            @printf(
-                io,
-                "%.12g\t%.12g\t%.12g\t%s\t%d\t%s\t%d\t%d\t%.12g\t%.12g\t%.12g\t%.12g\t%.12g\t%.12g\n",
-                row.a,
-                row.c,
-                row.b,
-                row.status,
-                row.events,
-                row.word,
-                row.code,
-                row.period,
-                row.gamma,
-                row.max_time,
-                row.first_time,
-                row.last_time,
-                row.min_y,
-                row.max_y,
-            )
+            write_tsv_row(io, row)
         end
     end
     return path
+end
+
+function run_scan_streaming(
+    output;
+    c_min=2.0,
+    c_max=7.0,
+    a_min=0.30,
+    a_max=0.55,
+    n_c=1024,
+    n_a=1024,
+    b=ROSSLER_MALYKH_B,
+    word_length=8,
+    transient_events=20,
+    dt=0.05,
+    max_time=450.0,
+    max_state=1e6,
+    progress_seconds=30.0,
+)
+    c_values = collect(range(c_min, c_max; length=n_c))
+    a_values = collect(range(a_min, a_max; length=n_a))
+    total = length(c_values) * length(a_values)
+    k = 0
+    ok = 0
+    scan_started = time()
+    last_report = scan_started - progress_seconds
+    mkpath(dirname(output))
+    open(output, "w") do io
+        write_tsv_header(io)
+        for a in a_values
+            for c in c_values
+                k += 1
+                row = scan_point(
+                    a,
+                    c;
+                    b=b,
+                    word_length=word_length,
+                    transient_events=transient_events,
+                    dt=dt,
+                    max_time=max_time,
+                    max_state=max_state,
+                )
+                write_tsv_row(io, row)
+                row.status == "ok" && (ok += 1)
+                now = time()
+                if k == 1 || k == total || now - last_report >= progress_seconds
+                    flush(io)
+                    elapsed = now - scan_started
+                    rate = elapsed > 0.0 ? k / elapsed : NaN
+                    eta = isfinite(rate) && rate > 0.0 ? (total - k) / rate : NaN
+                    @printf(
+                        "scanned %d/%d a=%.6f c=%.6f status=%s word=%s elapsed=%.1fs rate=%.2f/s eta=%.1fs\n",
+                        k,
+                        total,
+                        a,
+                        c,
+                        row.status,
+                        row.word,
+                        elapsed,
+                        rate,
+                        eta,
+                    )
+                    flush(stdout)
+                    last_report = now
+                end
+            end
+        end
+    end
+    return (total_points=total, ok_points=ok, max_time_limited_points=total - ok)
 end
 
 function js_string(value)
@@ -194,9 +270,11 @@ function write_docs_data(path, rows; config, runtime=nothing)
     return path
 end
 
-function write_runtime_log(path, rows; config, runtime, output, docs_data, docs_data_written, contour_dir, contour_format)
+function write_runtime_log(path, rows; config, runtime, output, docs_data, docs_data_written, contour_dir, contour_format, summary=nothing)
     mkpath(dirname(path))
-    ok = count(row -> row.status == "ok", rows)
+    total_points = isnothing(summary) ? length(rows) : summary.total_points
+    ok = isnothing(summary) ? count(row -> row.status == "ok", rows) : summary.ok_points
+    max_time_limited_points = isnothing(summary) ? length(rows) - ok : summary.max_time_limited_points
     open(path, "w") do io
         println(io, "metric\tvalue")
         println(io, "output\t$(output)")
@@ -204,9 +282,9 @@ function write_runtime_log(path, rows; config, runtime, output, docs_data, docs_
         println(io, "docs_data_written\t$(docs_data_written)")
         println(io, "contour_dir\t$(contour_dir)")
         println(io, "contour_format\t$(contour_format)")
-        println(io, "total_points\t$(length(rows))")
+        println(io, "total_points\t$(total_points)")
         println(io, "ok_points\t$(ok)")
-        println(io, "max_time_limited_points\t$(length(rows) - ok)")
+        println(io, "max_time_limited_points\t$(max_time_limited_points)")
         for pair in pairs(config)
             println(io, "$(pair.first)\t$(pair.second)")
         end
@@ -265,9 +343,25 @@ function main()
     contour_format = lowercase(get(ENV, "MM_FLOW_FOLDING_CONTOUR_FORMAT", "png"))
     docs_data_max_points = env_int("MM_FLOW_FOLDING_DOCS_DATA_MAX_POINTS", 200000)
     write_docs_data_enabled = env_bool("MM_FLOW_FOLDING_WRITE_DOCS_DATA", config.n_c * config.n_a <= docs_data_max_points)
+    stream_tsv = env_bool("MM_FLOW_FOLDING_STREAM_TSV", false)
+    if stream_tsv && write_docs_data_enabled
+        write_docs_data_enabled = false
+    end
 
-    scan_seconds = @elapsed rows = run_scan(; config...)
-    write_tsv_seconds = @elapsed write_tsv(output, rows)
+    rows = nothing
+    scan_summary = nothing
+    if stream_tsv
+        scan_seconds = @elapsed scan_summary = run_scan_streaming(output; config...)
+        write_tsv_seconds = 0.0
+    else
+        scan_seconds = @elapsed rows = run_scan(; config...)
+        scan_summary = (
+            total_points=length(rows),
+            ok_points=count(row -> row.status == "ok", rows),
+            max_time_limited_points=count(row -> row.status != "ok", rows),
+        )
+        write_tsv_seconds = @elapsed write_tsv(output, rows)
+    end
     contour_step_seconds = 0.0
     if generate_contours
         if contour_format == "svg"
@@ -320,13 +414,14 @@ function main()
         docs_data_written=write_docs_data_enabled,
         contour_dir=contour_dir,
         contour_format=contour_format,
+        summary=scan_summary,
     )
-    ok = count(row -> row.status == "ok", rows)
+    ok = scan_summary.ok_points
     @printf("wrote %s\n", output)
     write_docs_data_enabled ? @printf("wrote %s\n", docs_data) : @printf("skipped docs data %s\n", docs_data)
     @printf("wrote %s\n", runtime_log)
     generate_contours && @printf("wrote contours in %s\n", contour_dir)
-    @printf("ok points: %d/%d\n", ok, length(rows))
+    @printf("ok points: %d/%d\n", ok, scan_summary.total_points)
     @printf("scan runtime: %.3f s\n", scan_seconds)
     @printf("contour step runtime: %.3f s\n", contour_step_seconds)
     @printf("total runtime: %.3f s\n", runtime.total_seconds)

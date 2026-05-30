@@ -5,6 +5,7 @@ export PATH="/Users/carterhinsley/.juliaup/bin:/opt/homebrew/bin:/usr/local/bin:
 export HOME="/Users/carterhinsley"
 export JULIA_DEPOT_PATH="/Users/carterhinsley/.julia"
 export JULIA_PROJECT="/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl"
+export JULIA_PKG_PRECOMPILE_AUTO=0
 export PYTHONUNBUFFERED=1
 
 cd "$JULIA_PROJECT"
@@ -26,6 +27,7 @@ echo "started_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 echo "scan_grid=4096x4096"
 echo "render_size=${PNG_WIDTH}x${PNG_HEIGHT}"
 echo "full_tsv_schema=a,c,b,status,events,word,code,period,gamma,max_time,first_time,last_time,min_y,max_y"
+echo "stream_tsv=true"
 echo "julia_project=$JULIA_PROJECT"
 echo "julia_depot_path=$JULIA_DEPOT_PATH"
 
@@ -52,6 +54,7 @@ else
   MM_FLOW_FOLDING_PROGRESS_SECONDS=30.0 \
   MM_FLOW_FOLDING_GENERATE_CONTOURS=false \
   MM_FLOW_FOLDING_WRITE_DOCS_DATA=false \
+  MM_FLOW_FOLDING_STREAM_TSV=true \
   MM_FLOW_FOLDING_OUTPUT="$RESULT_DIR/coarse_scan.tsv" \
   MM_FLOW_FOLDING_RUNTIME_LOG="$RESULT_DIR/coarse_scan_runtime.tsv" \
   "$JULIA_BIN" --startup-file=no --project="$JULIA_PROJECT" flow_folding/examples/rossler_y_minima_tangent_scan.jl
