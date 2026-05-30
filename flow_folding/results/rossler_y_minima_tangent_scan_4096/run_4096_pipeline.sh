@@ -160,11 +160,17 @@ else
   fi
 
   failed_marker="$CHUNK_DIR/.failed"
+  token_pipe="$CHUNK_DIR/.tokens"
   rm -f "$failed_marker"
+  rm -f "$token_pipe"
+  mkfifo "$token_pipe"
+  exec 9<>"$token_pipe"
+  rm -f "$token_pipe"
+  for _worker in $(seq 1 "$WORKERS"); do
+    printf 'token\n' >&9
+  done
   for chunk in $(seq 0 $(( CHUNKS - 1 ))); do
-    while [ "$(jobs -rp | wc -l | tr -d ' ')" -ge "$WORKERS" ]; do
-      sleep 5
-    done
+    read -r _token <&9
     IFS=$'\t' read -r start_idx end_idx block_na start_a end_a <<< "$(chunk_bounds "$chunk")"
     echo "launching chunk=$(printf "%03d" "$chunk") start_idx=$start_idx end_idx=$end_idx n_a=$block_na a_min=$start_a a_max=$end_a"
     (
@@ -172,10 +178,12 @@ else
         echo "chunk=$(printf "%03d" "$chunk") failed"
         touch "$failed_marker"
       fi
+      printf 'token\n' >&9
     ) &
   done
 
   wait
+  exec 9>&-
   if [ -f "$failed_marker" ]; then
     echo "one or more chunks failed"
     exit 1
