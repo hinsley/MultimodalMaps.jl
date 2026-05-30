@@ -29,12 +29,16 @@ DT="${MM_FLOW_FOLDING_DT:-0.05}"
 MAX_TIME="${MM_FLOW_FOLDING_MAX_TIME:-450.0}"
 PROGRESS_SECONDS="${MM_FLOW_FOLDING_PROGRESS_SECONDS:-30.0}"
 WORKERS="${MM_FLOW_FOLDING_WORKERS:-8}"
+CHUNKS="${MM_FLOW_FOLDING_CHUNKS:-32}"
 PNG_WIDTH="${MM_FLOW_FOLDING_PNG_WIDTH:-25600}"
 PNG_HEIGHT="${MM_FLOW_FOLDING_PNG_HEIGHT:-17600}"
 JULIA_BIN="/Users/carterhinsley/.julia/juliaup/julia-1.11.8+0.aarch64.apple.darwin14/bin/julia"
 
-if [ "$WORKERS" -gt "$NA" ]; then
-  WORKERS="$NA"
+if [ "$CHUNKS" -gt "$NA" ]; then
+  CHUNKS="$NA"
+fi
+if [ "$WORKERS" -gt "$CHUNKS" ]; then
+  WORKERS="$CHUNKS"
 fi
 
 mkdir -p "$CONTOUR_DIR" "$CHUNK_DIR"
@@ -48,6 +52,7 @@ echo "render_size=${PNG_WIDTH}x${PNG_HEIGHT}"
 echo "full_tsv_schema=a,c,b,status,events,word,code,period,gamma,max_time,first_time,last_time,min_y,max_y"
 echo "stream_tsv=true"
 echo "workers=$WORKERS"
+echo "chunks=$CHUNKS"
 echo "chunk_dir=$CHUNK_DIR"
 echo "julia_project=$JULIA_PROJECT"
 echo "julia_depot_path=$JULIA_DEPOT_PATH"
@@ -55,8 +60,8 @@ echo "julia_depot_path=$JULIA_DEPOT_PATH"
 chunk_bounds() {
   local chunk="$1"
   local start_idx end_idx block_na
-  start_idx=$(( chunk * NA / WORKERS + 1 ))
-  end_idx=$(( (chunk + 1) * NA / WORKERS ))
+  start_idx=$(( chunk * NA / CHUNKS + 1 ))
+  end_idx=$(( (chunk + 1) * NA / CHUNKS ))
   block_na=$(( end_idx - start_idx + 1 ))
   awk -v amin="$A_MIN" -v amax="$A_MAX" -v na="$NA" -v s="$start_idx" -v e="$end_idx" -v block="$block_na" 'BEGIN {
     if (na <= 1) {
@@ -133,7 +138,7 @@ merge_chunks() {
   local output="$RESULT_DIR/coarse_scan.tsv"
   local tmp_output="$RESULT_DIR/coarse_scan.tsv.tmp"
   rm -f "$tmp_output"
-  for chunk in $(seq 0 $(( WORKERS - 1 ))); do
+  for chunk in $(seq 0 $(( CHUNKS - 1 ))); do
     local chunk_name chunk_tsv
     chunk_name=$(printf "chunk_%03d" "$chunk")
     chunk_tsv="$CHUNK_DIR/${chunk_name}.tsv"
@@ -154,21 +159,24 @@ else
     exit 2
   fi
 
-  pids=()
-  for chunk in $(seq 0 $(( WORKERS - 1 ))); do
+  failed_marker="$CHUNK_DIR/.failed"
+  rm -f "$failed_marker"
+  for chunk in $(seq 0 $(( CHUNKS - 1 ))); do
+    while [ "$(jobs -rp | wc -l | tr -d ' ')" -ge "$WORKERS" ]; do
+      sleep 5
+    done
     IFS=$'\t' read -r start_idx end_idx block_na start_a end_a <<< "$(chunk_bounds "$chunk")"
     echo "launching chunk=$(printf "%03d" "$chunk") start_idx=$start_idx end_idx=$end_idx n_a=$block_na a_min=$start_a a_max=$end_a"
-    run_chunk "$chunk" "$start_idx" "$end_idx" "$block_na" "$start_a" "$end_a" &
-    pids+=("$!")
+    (
+      if ! run_chunk "$chunk" "$start_idx" "$end_idx" "$block_na" "$start_a" "$end_a"; then
+        echo "chunk=$(printf "%03d" "$chunk") failed"
+        touch "$failed_marker"
+      fi
+    ) &
   done
 
-  failed=0
-  for pid in "${pids[@]}"; do
-    if ! wait "$pid"; then
-      failed=1
-    fi
-  done
-  if [ "$failed" -ne 0 ]; then
+  wait
+  if [ -f "$failed_marker" ]; then
     echo "one or more chunks failed"
     exit 1
   fi
