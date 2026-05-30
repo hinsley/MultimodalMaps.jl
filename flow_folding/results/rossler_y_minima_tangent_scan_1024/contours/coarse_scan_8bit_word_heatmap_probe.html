@@ -33,14 +33,16 @@
   }
   .image-wrap {
     position: relative;
-    width: min(100%, 1600px);
+    width: min(100%, 1326px);
+    aspect-ratio: 5304 / 4400;
     margin: 0 auto;
     border: 1px solid var(--line);
     background: white;
+    overflow: hidden;
   }
   #heatmap {
     display: block;
-    width: 100%;
+    width: calc(100% * 6400 / 5304);
     height: auto;
     cursor: crosshair;
     user-select: none;
@@ -15879,6 +15881,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
 <script>
 (() => {
   const IMAGE = { width: 6400, height: 4400 };
+  const VIEW = { width: 5304, height: 4400 };
   const PLOT = { left: 384, top: 304, width: 4816, height: 3728 };
   PLOT.right = PLOT.left + PLOT.width;
   PLOT.bottom = PLOT.top + PLOT.height;
