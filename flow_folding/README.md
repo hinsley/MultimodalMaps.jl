@@ -95,6 +95,9 @@ Finite differences are acceptable only for quick prototype checks.
 - `examples/rossler_y_minima_tangent_pngs.py` regenerates symbol, prefix, and
   full-word contour PNGs from an existing scan TSV or TSV.GZ without plotting
   dependencies.
+- `examples/verify_rossler_y_minima_tangent_outputs.py` verifies the final
+  TSV, heatmap PNGs, legends, and standalone probe HTML files for production
+  Rössler scan outputs.
 - `examples/rossler_y_minima_tangent_contours.jl` is the legacy SVG contour
   exporter.
 - `examples/rossler_seeded_continuation.jl` shows seeded critical-point
@@ -111,6 +114,9 @@ Finite differences are acceptable only for quick prototype checks.
 - `results/rossler_y_minima_tangent_scan_1024/contours/` contains the generated
   Marching-Squares PNG contours, scan summary, and word legend. The PNGs omit
   max-time-limited gray point markers.
+- `results/rossler_y_minima_tangent_scan_4096/run_4096_pipeline.sh` runs the
+  chunked 4096x4096 y-minima tangent scan, merges the full-symbol TSV, and
+  renders the 8-bit word and 7-bit monotone-sign heatmap PNG/HTML outputs.
 
 ## Usage
 
@@ -139,6 +145,19 @@ python3 flow_folding/examples/rossler_y_minima_tangent_pngs.py \
   --output-dir flow_folding/results/rossler_y_minima_tangent_scan_1024/contours \
   --stem coarse_scan \
   --clean
+```
+
+To run the chunked 4096x4096 heatmap pipeline:
+
+```bash
+./flow_folding/results/rossler_y_minima_tangent_scan_4096/run_4096_pipeline.sh
+```
+
+After it finishes, verify the full-symbol TSV and both standalone heatmap
+viewers with:
+
+```bash
+python3 flow_folding/examples/verify_rossler_y_minima_tangent_outputs.py
 ```
 
 Open the local docs from the repository root with:
