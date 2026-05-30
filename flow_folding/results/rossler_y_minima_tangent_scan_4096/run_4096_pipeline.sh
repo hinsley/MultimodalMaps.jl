@@ -85,6 +85,19 @@ chunk_is_complete() {
   [ "$actual_lines" -eq "$expected_lines" ]
 }
 
+chunk_sequence() {
+  local groups offset slot chunk
+  groups=$(( (CHUNKS + WORKERS - 1) / WORKERS ))
+  for offset in $(seq 0 $(( groups - 1 ))); do
+    for slot in $(seq 0 $(( WORKERS - 1 ))); do
+      chunk=$(( offset + slot * groups ))
+      if [ "$chunk" -lt "$CHUNKS" ]; then
+        echo "$chunk"
+      fi
+    done
+  done
+}
+
 run_chunk() {
   local chunk="$1"
   local start_idx="$2"
@@ -169,7 +182,7 @@ else
   for _worker in $(seq 1 "$WORKERS"); do
     printf 'token\n' >&9
   done
-  for chunk in $(seq 0 $(( CHUNKS - 1 ))); do
+  for chunk in $(chunk_sequence); do
     read -r _token <&9
     IFS=$'\t' read -r start_idx end_idx block_na start_a end_a <<< "$(chunk_bounds "$chunk")"
     echo "launching chunk=$(printf "%03d" "$chunk") start_idx=$start_idx end_idx=$end_idx n_a=$block_na a_min=$start_a a_max=$end_a"
