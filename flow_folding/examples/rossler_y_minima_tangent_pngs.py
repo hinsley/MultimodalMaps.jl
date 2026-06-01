@@ -129,7 +129,7 @@ class Canvas:
     def __init__(self, width: int, height: int, background: RGB = (255, 255, 255)):
         self.width = width
         self.height = height
-        self.pixels = bytearray(background * (width * height))
+        self.pixels = bytearray(bytes(background) * (width * height))
 
     def blend_pixel(self, x: int, y: int, color: RGB, alpha: float = 1.0) -> None:
         if x < 0 or x >= self.width or y < 0 or y >= self.height:

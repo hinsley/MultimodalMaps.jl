@@ -1,0 +1,215 @@
+started_at=2026-05-31T23:04:37Z
+repo_root=/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl
+result_dir=/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/results/rossler_y_minima_critical_orbit_scan_256
+n_c=256
+n_a=256
+c_range=2.0..7.0
+a_range=0.30..0.55
+b=0.3
+critical_event_index=4
+rho_range=-24.0..-1.0
+word_length=8
+orbit_transient_events=0
+initial_event_included=true
+max_time=2000.0
+dt=0.05
+scan_started_at=2026-05-31T23:04:37Z
+critical_orbit scanned 1/65536 a_idx=1 c_idx=1 a=0.300000 c=2.000000 status=ok critical=ok word=00101010 ok=1 elapsed=3.5s rate=0.29/s eta=229148.8s
+critical_orbit scanned 749/65536 a_idx=3 c_idx=237 a=0.301961 c=6.627451 status=ok critical=ok word=00000111 ok=749 elapsed=33.5s rate=22.35/s eta=2899.1s
+critical_orbit scanned 1309/65536 a_idx=6 c_idx=228 a=0.304902 c=6.450980 status=ok critical=ok word=00000110 ok=1309 elapsed=63.5s rate=20.60/s eta=3117.3s
+critical_orbit scanned 1883/65536 a_idx=8 c_idx=166 a=0.306863 c=5.235294 status=ok critical=ok word=00111010 ok=1883 elapsed=93.6s rate=20.12/s eta=3162.9s
+critical_orbit scanned 2474/65536 a_idx=10 c_idx=87 a=0.308824 c=3.686275 status=ok critical=ok word=00110011 ok=2474 elapsed=123.6s rate=20.02/s eta=3150.7s
+critical_orbit scanned 3046/65536 a_idx=12 c_idx=27 a=0.310784 c=2.509804 status=ok critical=ok word=00101010 ok=3046 elapsed=153.6s rate=19.83/s eta=3151.3s
+critical_orbit scanned 3490/65536 a_idx=14 c_idx=95 a=0.312745 c=3.843137 status=ok critical=ok word=00110100 ok=3490 elapsed=183.6s rate=19.01/s eta=3264.4s
+critical_orbit scanned 3923/65536 a_idx=16 c_idx=174 a=0.314706 c=5.392157 status=ok critical=ok word=00111100 ok=3923 elapsed=213.6s rate=18.36/s eta=3355.2s
+critical_orbit scanned 4406/65536 a_idx=18 c_idx=203 a=0.316667 c=5.960784 status=ok critical=ok word=00000110 ok=4406 elapsed=243.7s rate=18.08/s eta=3380.8s
+critical_orbit scanned 4912/65536 a_idx=20 c_idx=209 a=0.318627 c=6.078431 status=ok critical=ok word=00001110 ok=4912 elapsed=273.7s rate=17.95/s eta=3378.0s
+critical_orbit scanned 5420/65536 a_idx=22 c_idx=213 a=0.320588 c=6.156863 status=ok critical=ok word=00001001 ok=5420 elapsed=303.7s rate=17.84/s eta=3369.0s
+critical_orbit scanned 5853/65536 a_idx=23 c_idx=221 a=0.321569 c=6.313725 status=ok critical=ok word=00001000 ok=5853 elapsed=333.8s rate=17.54/s eta=3403.5s
+critical_orbit scanned 6321/65536 a_idx=25 c_idx=177 a=0.323529 c=5.450980 status=ok critical=ok word=00000111 ok=6321 elapsed=363.8s rate=17.38/s eta=3407.9s
+critical_orbit scanned 6807/65536 a_idx=27 c_idx=151 a=0.325490 c=4.941176 status=ok critical=ok word=00111101 ok=6807 elapsed=393.8s rate=17.28/s eta=3397.8s
+critical_orbit scanned 7223/65536 a_idx=29 c_idx=55 a=0.327451 c=3.058824 status=ok critical=ok word=00110011 ok=7223 elapsed=423.9s rate=17.04/s eta=3422.1s
+critical_orbit scanned 7622/65536 a_idx=30 c_idx=59 a=0.328431 c=3.137255 status=ok critical=ok word=00110011 ok=7622 elapsed=453.9s rate=16.79/s eta=3449.1s
+critical_orbit scanned 8003/65536 a_idx=32 c_idx=190 a=0.330392 c=5.705882 status=ok critical=ok word=00001001 ok=8003 elapsed=484.0s rate=16.54/s eta=3479.2s
+critical_orbit scanned 8447/65536 a_idx=33 c_idx=255 a=0.331373 c=6.980392 status=ok critical=ok word=00010001 ok=8447 elapsed=514.1s rate=16.43/s eta=3474.8s
+critical_orbit scanned 8815/65536 a_idx=35 c_idx=111 a=0.333333 c=4.156863 status=ok critical=ok word=00111001 ok=8815 elapsed=544.2s rate=16.20/s eta=3501.6s
+critical_orbit scanned 9186/65536 a_idx=36 c_idx=31 a=0.334314 c=2.588235 status=ok critical=ok word=00101010 ok=9186 elapsed=574.2s rate=16.00/s eta=3522.3s
+critical_orbit scanned 9566/65536 a_idx=38 c_idx=163 a=0.336275 c=5.176471 status=ok critical=ok word=00000000 ok=9566 elapsed=604.2s rate=15.83/s eta=3535.4s
+critical_orbit scanned 10046/65536 a_idx=40 c_idx=195 a=0.338235 c=5.803922 status=ok critical=ok word=00000010 ok=10046 elapsed=634.3s rate=15.84/s eta=3503.5s
+critical_orbit scanned 10522/65536 a_idx=42 c_idx=231 a=0.340196 c=6.509804 status=ok critical=ok word=00010100 ok=10522 elapsed=664.3s rate=15.84/s eta=3473.3s
+critical_orbit scanned 11004/65536 a_idx=43 c_idx=252 a=0.341176 c=6.921569 status=ok critical=ok word=00011000 ok=11004 elapsed=694.4s rate=15.85/s eta=3441.0s
+critical_orbit scanned 11469/65536 a_idx=45 c_idx=205 a=0.343137 c=6.000000 status=ok critical=ok word=00011100 ok=11469 elapsed=724.4s rate=15.83/s eta=3414.9s
+critical_orbit scanned 11932/65536 a_idx=47 c_idx=156 a=0.345098 c=5.039216 status=ok critical=ok word=00000101 ok=11932 elapsed=754.5s rate=15.82/s eta=3389.4s
+critical_orbit scanned 12326/65536 a_idx=49 c_idx=38 a=0.347059 c=2.725490 status=ok critical=ok word=00110011 ok=12326 elapsed=784.5s rate=15.71/s eta=3386.4s
+critical_orbit scanned 12900/65536 a_idx=51 c_idx=100 a=0.349020 c=3.941176 status=ok critical=ok word=00111010 ok=12900 elapsed=814.5s rate=15.84/s eta=3323.4s
+critical_orbit scanned 13427/65536 a_idx=53 c_idx=115 a=0.350980 c=4.235294 status=ok critical=ok word=00000011 ok=13427 elapsed=844.5s rate=15.90/s eta=3277.5s
+critical_orbit scanned 13914/65536 a_idx=55 c_idx=90 a=0.352941 c=3.745098 status=ok critical=ok word=00111001 ok=13914 elapsed=874.6s rate=15.91/s eta=3244.7s
+critical_orbit scanned 14301/65536 a_idx=56 c_idx=36 a=0.353922 c=2.686275 status=ok critical=ok word=00110011 ok=14301 elapsed=904.6s rate=15.81/s eta=3240.8s
+critical_orbit scanned 14733/65536 a_idx=58 c_idx=116 a=0.355882 c=4.254902 status=ok critical=ok word=00000100 ok=14733 elapsed=934.6s rate=15.76/s eta=3222.9s
+critical_orbit scanned 15166/65536 a_idx=60 c_idx=195 a=0.357843 c=5.803922 status=ok critical=ok word=00001101 ok=15166 elapsed=964.7s rate=15.72/s eta=3203.9s
+critical_orbit scanned 15659/65536 a_idx=62 c_idx=214 a=0.359804 c=6.176471 status=ok critical=ok word=00000000 ok=15659 elapsed=994.7s rate=15.74/s eta=3168.4s
+critical_orbit scanned 16122/65536 a_idx=63 c_idx=250 a=0.360784 c=6.882353 status=ok critical=ok word=00000000 ok=16122 elapsed=1024.8s rate=15.73/s eta=3141.0s
+critical_orbit scanned 16609/65536 a_idx=65 c_idx=225 a=0.362745 c=6.392157 status=ok critical=ok word=00000000 ok=16609 elapsed=1054.8s rate=15.75/s eta=3107.2s
+critical_orbit scanned 17115/65536 a_idx=67 c_idx=219 a=0.364706 c=6.274510 status=ok critical=ok word=00000000 ok=17115 elapsed=1084.8s rate=15.78/s eta=3069.1s
+critical_orbit scanned 17622/65536 a_idx=69 c_idx=214 a=0.366667 c=6.176471 status=ok critical=ok word=00000000 ok=17622 elapsed=1114.8s rate=15.81/s eta=3031.3s
+critical_orbit scanned 18105/65536 a_idx=71 c_idx=185 a=0.368627 c=5.607843 status=ok critical=ok word=00000000 ok=18105 elapsed=1144.9s rate=15.81/s eta=2999.4s
+critical_orbit scanned 18595/65536 a_idx=73 c_idx=163 a=0.370588 c=5.176471 status=ok critical=ok word=00001111 ok=18595 elapsed=1174.9s rate=15.83/s eta=2965.9s
+critical_orbit scanned 19072/65536 a_idx=75 c_idx=128 a=0.372549 c=4.490196 status=ok critical=ok word=00001000 ok=19072 elapsed=1204.9s rate=15.83/s eta=2935.4s
+critical_orbit scanned 19557/65536 a_idx=77 c_idx=101 a=0.374510 c=3.960784 status=ok critical=ok word=00000000 ok=19557 elapsed=1234.9s rate=15.84/s eta=2903.3s
+critical_orbit scanned 20000/65536 a_idx=79 c_idx=32 a=0.376471 c=2.607843 status=ok critical=ok word=00110011 ok=20000 elapsed=1264.9s rate=15.81/s eta=2880.0s
+critical_orbit scanned 20505/65536 a_idx=81 c_idx=25 a=0.378431 c=2.470588 status=ok critical=ok word=00110011 ok=20505 elapsed=1295.0s rate=15.83/s eta=2844.0s
+critical_orbit scanned 20989/65536 a_idx=82 c_idx=4 a=0.379412 c=2.058824 status=ok critical=ok word=00101010 ok=20989 elapsed=1325.1s rate=15.84/s eta=2812.3s
+critical_orbit scanned 21431/65536 a_idx=84 c_idx=74 a=0.381373 c=3.431373 status=ok critical=ok word=00000000 ok=21431 elapsed=1355.1s rate=15.82/s eta=2788.8s
+critical_orbit scanned 21940/65536 a_idx=86 c_idx=77 a=0.383333 c=3.490196 status=ok critical=ok word=00001110 ok=21940 elapsed=1385.2s rate=15.84/s eta=2752.4s
+critical_orbit scanned 22372/65536 a_idx=88 c_idx=157 a=0.385294 c=5.058824 status=ok critical=ok word=00000000 ok=22372 elapsed=1415.2s rate=15.81/s eta=2730.5s
+critical_orbit scanned 22780/65536 a_idx=89 c_idx=252 a=0.386275 c=6.921569 status=ok critical=ok word=00010111 ok=22780 elapsed=1445.3s rate=15.76/s eta=2712.7s
+critical_orbit scanned 23234/65536 a_idx=91 c_idx=194 a=0.388235 c=5.784314 status=ok critical=ok word=00011110 ok=23234 elapsed=1475.3s rate=15.75/s eta=2686.0s
+critical_orbit scanned 23555/65536 a_idx=93 c_idx=3 a=0.390196 c=2.039216 status=ok critical=ok word=00101010 ok=23555 elapsed=1505.3s rate=15.65/s eta=2682.8s
+critical_orbit scanned 23872/65536 a_idx=94 c_idx=193 a=0.391176 c=5.764706 status=ok critical=ok word=00011101 ok=23872 elapsed=1535.4s rate=15.55/s eta=2679.7s
+critical_orbit scanned 24257/65536 a_idx=95 c_idx=193 a=0.392157 c=5.764706 status=ok critical=ok word=00011001 ok=24257 elapsed=1565.4s rate=15.50/s eta=2663.9s
+critical_orbit scanned 24676/65536 a_idx=97 c_idx=100 a=0.394118 c=3.941176 status=ok critical=ok word=00001101 ok=24676 elapsed=1595.4s rate=15.47/s eta=2641.8s
+critical_orbit scanned 25042/65536 a_idx=98 c_idx=47 a=0.395098 c=2.901961 status=ok critical=ok word=00001010 ok=25042 elapsed=1625.5s rate=15.41/s eta=2628.5s
+critical_orbit scanned 25384/65536 a_idx=100 c_idx=217 a=0.397059 c=6.235294 status=ok critical=ok word=00010000 ok=25384 elapsed=1655.5s rate=15.33/s eta=2618.6s
+critical_orbit scanned 25777/65536 a_idx=101 c_idx=177 a=0.398039 c=5.450980 status=ok critical=ok word=00011110 ok=25777 elapsed=1685.5s rate=15.29/s eta=2599.8s
+critical_orbit scanned 26171/65536 a_idx=103 c_idx=59 a=0.400000 c=3.137255 status=ok critical=ok word=00001011 ok=26171 elapsed=1715.5s rate=15.26/s eta=2580.4s
+critical_orbit scanned 26520/65536 a_idx=104 c_idx=105 a=0.400980 c=4.039216 status=ok critical=ok word=00000011 ok=26520 elapsed=1745.5s rate=15.19/s eta=2568.0s
+critical_orbit scanned 26907/65536 a_idx=106 c_idx=230 a=0.402941 c=6.490196 status=ok critical=ok word=00011111 ok=26907 elapsed=1775.6s rate=15.15/s eta=2549.1s
+critical_orbit scanned 27279/65536 a_idx=107 c_idx=143 a=0.403922 c=4.784314 status=ok critical=ok word=00011111 ok=27279 elapsed=1805.7s rate=15.11/s eta=2532.3s
+critical_orbit scanned 27650/65536 a_idx=109 c_idx=2 a=0.405882 c=2.019608 status=ok critical=ok word=00101010 ok=27650 elapsed=1835.7s rate=15.06/s eta=2515.3s
+critical_orbit scanned 27976/65536 a_idx=110 c_idx=185 a=0.406863 c=5.607843 status=ok critical=ok word=00010011 ok=27976 elapsed=1865.7s rate=14.99/s eta=2504.9s
+critical_orbit scanned 28354/65536 a_idx=111 c_idx=194 a=0.407843 c=5.784314 status=ok critical=ok word=00011101 ok=28354 elapsed=1895.8s rate=14.96/s eta=2486.1s
+critical_orbit scanned 28656/65536 a_idx=112 c_idx=17 a=0.408824 c=2.313725 status=ok critical=ok word=00110011 ok=28656 elapsed=1925.8s rate=14.88/s eta=2478.5s
+critical_orbit scanned 28944/65536 a_idx=114 c_idx=241 a=0.410784 c=6.705882 status=ok critical=ok word=00001001 ok=28944 elapsed=1955.9s rate=14.80/s eta=2472.7s
+critical_orbit scanned 29300/65536 a_idx=115 c_idx=116 a=0.411765 c=4.254902 status=ok critical=ok word=00011111 ok=29300 elapsed=1985.9s rate=14.75/s eta=2456.0s
+critical_orbit scanned 29588/65536 a_idx=116 c_idx=109 a=0.412745 c=4.117647 status=ok critical=ok word=00011111 ok=29588 elapsed=2016.0s rate=14.68/s eta=2449.3s
+critical_orbit scanned 29924/65536 a_idx=117 c_idx=228 a=0.413725 c=6.450980 status=ok critical=ok word=00001010 ok=29924 elapsed=2046.0s rate=14.63/s eta=2434.9s
+critical_orbit scanned 30268/65536 a_idx=119 c_idx=60 a=0.415686 c=3.156863 status=ok critical=ok word=00001101 ok=30268 elapsed=2076.0s rate=14.58/s eta=2419.0s
+critical_orbit scanned 30562/65536 a_idx=120 c_idx=159 a=0.416667 c=5.098039 status=ok critical=ok word=00010010 ok=30562 elapsed=2106.1s rate=14.51/s eta=2410.1s
+critical_orbit scanned 30985/65536 a_idx=122 c_idx=248 a=0.418627 c=6.843137 status=ok critical=ok word=00000001 ok=30985 elapsed=2136.1s rate=14.51/s eta=2381.9s
+critical_orbit scanned 31357/65536 a_idx=123 c_idx=125 a=0.419608 c=4.431373 status=ok critical=ok word=00010000 ok=31357 elapsed=2166.2s rate=14.48/s eta=2361.1s
+critical_orbit scanned 31763/65536 a_idx=125 c_idx=19 a=0.421569 c=2.352941 status=ok critical=ok word=00110011 ok=31763 elapsed=2196.2s rate=14.46/s eta=2335.2s
+critical_orbit scanned 32264/65536 a_idx=127 c_idx=8 a=0.423529 c=2.137255 status=ok critical=ok word=00110011 ok=32264 elapsed=2226.3s rate=14.49/s eta=2295.8s
+critical_orbit scanned 32559/65536 a_idx=128 c_idx=210 a=0.424510 c=6.098039 status=ok critical=ok word=00000111 ok=32559 elapsed=2256.3s rate=14.43/s eta=2285.3s
+critical_orbit scanned 33001/65536 a_idx=129 c_idx=233 a=0.425490 c=6.549020 status=ok critical=ok word=00001110 ok=33001 elapsed=2286.3s rate=14.43/s eta=2254.1s
+critical_orbit scanned 33428/65536 a_idx=131 c_idx=148 a=0.427451 c=4.882353 status=ok critical=ok word=00011001 ok=33428 elapsed=2316.4s rate=14.43/s eta=2224.9s
+critical_orbit scanned 33792/65536 a_idx=132 c_idx=1 a=0.428431 c=2.000000 status=ok critical=ok word=00101100 ok=33792 elapsed=2346.4s rate=14.40/s eta=2204.2s
+critical_orbit scanned 34158/65536 a_idx=134 c_idx=147 a=0.430392 c=4.862745 status=ok critical=ok word=00000001 ok=34158 elapsed=2376.5s rate=14.37/s eta=2183.1s
+critical_orbit scanned 34539/65536 a_idx=135 c_idx=235 a=0.431373 c=6.588235 status=ok critical=ok word=00001011 ok=34539 elapsed=2406.5s rate=14.35/s eta=2159.7s
+critical_orbit scanned 34964/65536 a_idx=137 c_idx=148 a=0.433333 c=4.882353 status=ok critical=ok word=00000000 ok=34964 elapsed=2436.6s rate=14.35/s eta=2130.5s
+critical_orbit scanned 35369/65536 a_idx=139 c_idx=41 a=0.435294 c=2.784314 status=ok critical=ok word=00000000 ok=35369 elapsed=2466.6s rate=14.34/s eta=2103.8s
+critical_orbit scanned 35664/65536 a_idx=140 c_idx=177 a=0.436275 c=5.450980 status=ok critical=ok word=00000000 ok=35664 elapsed=2496.7s rate=14.28/s eta=2091.2s
+critical_orbit scanned 36071/65536 a_idx=141 c_idx=231 a=0.437255 c=6.509804 status=ok critical=ok word=00000111 ok=36071 elapsed=2526.7s rate=14.28/s eta=2064.0s
+critical_orbit scanned 36340/65536 a_idx=142 c_idx=13 a=0.438235 c=2.235294 status=ok critical=ok word=00111111 ok=36340 elapsed=2556.8s rate=14.21/s eta=2054.1s
+critical_orbit scanned 36594/65536 a_idx=143 c_idx=242 a=0.439216 c=6.725490 status=ok critical=ok word=00000010 ok=36594 elapsed=2587.0s rate=14.15/s eta=2046.0s
+critical_orbit scanned 36885/65536 a_idx=145 c_idx=21 a=0.441176 c=2.392157 status=ok critical=ok word=00000000 ok=36885 elapsed=2617.0s rate=14.09/s eta=2032.8s
+critical_orbit scanned 37175/65536 a_idx=146 c_idx=202 a=0.442157 c=5.941176 status=ok critical=ok word=00001111 ok=37175 elapsed=2647.1s rate=14.04/s eta=2019.5s
+critical_orbit scanned 37484/65536 a_idx=147 c_idx=108 a=0.443137 c=4.098039 status=ok critical=ok word=00011110 ok=37484 elapsed=2677.1s rate=14.00/s eta=2003.5s
+critical_orbit scanned 37768/65536 a_idx=148 c_idx=121 a=0.444118 c=4.352941 status=ok critical=ok word=00000010 ok=37768 elapsed=2707.1s rate=13.95/s eta=1990.4s
+critical_orbit scanned 38078/65536 a_idx=149 c_idx=190 a=0.445098 c=5.705882 status=ok critical=ok word=00001111 ok=38078 elapsed=2737.2s rate=13.91/s eta=1973.8s
+critical_orbit scanned 38386/65536 a_idx=150 c_idx=15 a=0.446078 c=2.274510 status=ok critical=ok word=00011111 ok=38386 elapsed=2767.3s rate=13.87/s eta=1957.2s
+critical_orbit scanned 38689/65536 a_idx=152 c_idx=224 a=0.448039 c=6.372549 status=ok critical=ok word=00000111 ok=38689 elapsed=2797.3s rate=13.83/s eta=1941.1s
+critical_orbit scanned 39068/65536 a_idx=153 c_idx=156 a=0.449020 c=5.039216 status=ok critical=ok word=00001111 ok=39068 elapsed=2827.3s rate=13.82/s eta=1915.5s
+critical_orbit scanned 39408/65536 a_idx=154 c_idx=17 a=0.450000 c=2.313725 status=ok critical=ok word=00011001 ok=39408 elapsed=2857.3s rate=13.79/s eta=1894.5s
+critical_orbit scanned 39728/65536 a_idx=156 c_idx=209 a=0.451961 c=6.078431 status=ok critical=ok word=00000100 ok=39728 elapsed=2887.4s rate=13.76/s eta=1875.7s
+critical_orbit scanned 39986/65536 a_idx=157 c_idx=50 a=0.452941 c=2.960784 status=ok critical=ok word=00010011 ok=39986 elapsed=2917.4s rate=13.71/s eta=1864.2s
+critical_orbit scanned 40263/65536 a_idx=158 c_idx=186 a=0.453922 c=5.627451 status=ok critical=ok word=00000111 ok=40263 elapsed=2947.5s rate=13.66/s eta=1850.1s
+critical_orbit scanned 40602/65536 a_idx=159 c_idx=154 a=0.454902 c=5.000000 status=ok critical=ok word=00001111 ok=40602 elapsed=2977.5s rate=13.64/s eta=1828.5s
+critical_orbit scanned 40868/65536 a_idx=160 c_idx=93 a=0.455882 c=3.803922 status=ok critical=ok word=00000000 ok=40868 elapsed=3007.6s rate=13.59/s eta=1815.4s
+critical_orbit scanned 41192/65536 a_idx=161 c_idx=232 a=0.456863 c=6.529412 status=ok critical=ok word=00000000 ok=41192 elapsed=3037.7s rate=13.56/s eta=1795.2s
+critical_orbit scanned 41446/65536 a_idx=162 c_idx=27 a=0.457843 c=2.509804 status=ok critical=ok word=00011110 ok=41442 elapsed=3067.7s rate=13.51/s eta=1783.1s
+critical_orbit scanned 41716/65536 a_idx=163 c_idx=244 a=0.458824 c=6.764706 status=ok critical=ok word=00000000 ok=41712 elapsed=3097.8s rate=13.47/s eta=1768.9s
+critical_orbit scanned 41961/65536 a_idx=164 c_idx=24 a=0.459804 c=2.450980 status=ok critical=ok word=00011110 ok=41926 elapsed=3127.9s rate=13.42/s eta=1757.3s
+critical_orbit scanned 42233/65536 a_idx=165 c_idx=249 a=0.460784 c=6.862745 status=orbit_max_time critical=ok word=0000000 ok=42179 elapsed=3158.0s rate=13.37/s eta=1742.5s
+critical_orbit scanned 42503/65536 a_idx=167 c_idx=7 a=0.462745 c=2.117647 status=ok critical=ok word=00011001 ok=42409 elapsed=3188.0s rate=13.33/s eta=1727.6s
+critical_orbit scanned 42767/65536 a_idx=168 c_idx=242 a=0.463725 c=6.725490 status=orbit_max_time critical=ok word=000000 ok=42618 elapsed=3218.2s rate=13.29/s eta=1713.3s
+critical_orbit scanned 43055/65536 a_idx=169 c_idx=47 a=0.464706 c=2.901961 status=ok critical=ok word=00010010 ok=42875 elapsed=3248.2s rate=13.26/s eta=1696.0s
+critical_orbit scanned 43306/65536 a_idx=170 c_idx=215 a=0.465686 c=6.196078 status=orbit_max_time critical=ok word=000000 ok=43032 elapsed=3278.2s rate=13.21/s eta=1682.8s
+critical_orbit scanned 43569/65536 a_idx=171 c_idx=49 a=0.466667 c=2.941176 status=ok critical=ok word=00011101 ok=43279 elapsed=3308.3s rate=13.17/s eta=1668.0s
+critical_orbit scanned 43788/65536 a_idx=172 c_idx=245 a=0.467647 c=6.784314 status=orbit_max_time critical=ok word=00000 ok=43422 elapsed=3338.5s rate=13.12/s eta=1658.1s
+critical_orbit scanned 44120/65536 a_idx=173 c_idx=88 a=0.468627 c=3.705882 status=ok critical=ok word=00001111 ok=43697 elapsed=3368.6s rate=13.10/s eta=1635.1s
+critical_orbit scanned 44444/65536 a_idx=174 c_idx=101 a=0.469608 c=3.960784 status=ok critical=ok word=00001000 ok=43866 elapsed=3398.6s rate=13.08/s eta=1612.9s
+critical_orbit scanned 44726/65536 a_idx=175 c_idx=182 a=0.470588 c=5.549020 status=orbit_max_time critical=ok word=000000 ok=44137 elapsed=3428.7s rate=13.04/s eta=1595.3s
+critical_orbit scanned 45013/65536 a_idx=176 c_idx=44 a=0.471569 c=2.843137 status=ok critical=ok word=00011111 ok=44260 elapsed=3458.7s rate=13.01/s eta=1577.0s
+critical_orbit scanned 45340/65536 a_idx=178 c_idx=229 a=0.473529 c=6.470588 status=orbit_max_time critical=ok word=00000 ok=44464 elapsed=3488.8s rate=13.00/s eta=1554.0s
+critical_orbit scanned 45724/65536 a_idx=179 c_idx=156 a=0.474510 c=5.039216 status=orbit_max_time critical=ok word=0000000 ok=44773 elapsed=3518.8s rate=12.99/s eta=1524.7s
+critical_orbit scanned 46058/65536 a_idx=180 c_idx=23 a=0.475490 c=2.431373 status=ok critical=ok word=00010000 ok=44899 elapsed=3548.9s rate=12.98/s eta=1500.8s
+critical_orbit scanned 46410/65536 a_idx=182 c_idx=183 a=0.477451 c=5.568627 status=orbit_max_time critical=ok word=00000 ok=45064 elapsed=3578.9s rate=12.97/s eta=1474.9s
+critical_orbit scanned 46821/65536 a_idx=183 c_idx=229 a=0.478431 c=6.470588 status=orbit_max_time critical=ok word=00000 ok=45338 elapsed=3609.0s rate=12.97/s eta=1442.6s
+critical_orbit scanned 47194/65536 a_idx=185 c_idx=90 a=0.480392 c=3.745098 status=ok critical=ok word=00000000 ok=45559 elapsed=3639.0s rate=12.97/s eta=1414.3s
+critical_orbit scanned 47478/65536 a_idx=186 c_idx=139 a=0.481373 c=4.705882 status=orbit_max_time critical=ok word=000000 ok=45596 elapsed=3669.1s rate=12.94/s eta=1395.5s
+critical_orbit scanned 47802/65536 a_idx=187 c_idx=186 a=0.482353 c=5.627451 status=orbit_max_time critical=ok word=00000 ok=45840 elapsed=3699.1s rate=12.92/s eta=1372.3s
+critical_orbit scanned 48076/65536 a_idx=188 c_idx=53 a=0.483333 c=3.019608 status=ok critical=ok word=00000000 ok=45904 elapsed=3729.1s rate=12.89/s eta=1354.3s
+critical_orbit scanned 48374/65536 a_idx=189 c_idx=246 a=0.484314 c=6.803922 status=orbit_max_time critical=ok word=0000 ok=46069 elapsed=3759.2s rate=12.87/s eta=1333.7s
+critical_orbit scanned 48680/65536 a_idx=191 c_idx=40 a=0.486275 c=2.764706 status=ok critical=ok word=00000011 ok=46219 elapsed=3789.2s rate=12.85/s eta=1312.0s
+critical_orbit scanned 48922/65536 a_idx=192 c_idx=231 a=0.487255 c=6.509804 status=orbit_max_time critical=ok word=0000 ok=46285 elapsed=3819.3s rate=12.81/s eta=1297.0s
+critical_orbit scanned 49228/65536 a_idx=193 c_idx=76 a=0.488235 c=3.470588 status=ok critical=ok word=00000111 ok=46464 elapsed=3849.3s rate=12.79/s eta=1275.2s
+critical_orbit scanned 49580/65536 a_idx=194 c_idx=85 a=0.489216 c=3.647059 status=ok critical=ok word=00000000 ok=46501 elapsed=3879.3s rate=12.78/s eta=1248.5s
+critical_orbit scanned 49970/65536 a_idx=196 c_idx=207 a=0.491176 c=6.039216 status=orbit_max_time critical=ok word=0000 ok=46679 elapsed=3909.3s rate=12.78/s eta=1217.8s
+critical_orbit scanned 50494/65536 a_idx=198 c_idx=195 a=0.493137 c=5.803922 status=orbit_max_time critical=ok word=0000 ok=46858 elapsed=3939.4s rate=12.82/s eta=1173.5s
+critical_orbit scanned 50943/65536 a_idx=199 c_idx=255 a=0.494118 c=6.980392 status=orbit_max_time critical=ok word=0000 ok=47025 elapsed=3969.4s rate=12.83/s eta=1137.1s
+critical_orbit scanned 51400/65536 a_idx=201 c_idx=200 a=0.496078 c=5.901961 status=orbit_max_time critical=ok word=0000 ok=47180 elapsed=3999.4s rate=12.85/s eta=1099.9s
+critical_orbit scanned 51839/65536 a_idx=203 c_idx=127 a=0.498039 c=4.470588 status=orbit_max_time critical=ok word=0000 ok=47325 elapsed=4029.5s rate=12.86/s eta=1064.7s
+critical_orbit scanned 52300/65536 a_idx=205 c_idx=76 a=0.500000 c=3.470588 status=orbit_max_time critical=ok word=000000 ok=47460 elapsed=4059.5s rate=12.88/s eta=1027.4s
+critical_orbit scanned 52730/65536 a_idx=206 c_idx=7 a=0.500980 c=2.117647 status=ok critical=ok word=00001100 ok=47518 elapsed=4089.6s rate=12.89/s eta=993.2s
+critical_orbit scanned 53158/65536 a_idx=208 c_idx=91 a=0.502941 c=3.764706 status=orbit_max_time critical=ok word=00000 ok=47585 elapsed=4119.6s rate=12.90/s eta=959.3s
+critical_orbit scanned 53601/65536 a_idx=210 c_idx=160 a=0.504902 c=5.117647 status=orbit_max_time critical=ok word=0000 ok=47700 elapsed=4149.7s rate=12.92/s eta=924.0s
+critical_orbit scanned 54031/65536 a_idx=212 c_idx=242 a=0.506863 c=6.725490 status=orbit_max_time critical=ok word=000 ok=47806 elapsed=4179.7s rate=12.93/s eta=890.0s
+critical_orbit scanned 54507/65536 a_idx=213 c_idx=235 a=0.507843 c=6.588235 status=orbit_max_time critical=ok word=000 ok=47902 elapsed=4209.8s rate=12.95/s eta=851.8s
+critical_orbit scanned 55030/65536 a_idx=215 c_idx=246 a=0.509804 c=6.803922 status=orbit_max_time critical=ok word=000 ok=47990 elapsed=4239.8s rate=12.98/s eta=809.4s
+critical_orbit scanned 55541/65536 a_idx=217 c_idx=245 a=0.511765 c=6.784314 status=orbit_max_time critical=ok word=000 ok=48070 elapsed=4270.2s rate=13.01/s eta=768.4s
+critical_orbit scanned 56019/65536 a_idx=219 c_idx=211 a=0.513725 c=6.117647 status=orbit_max_time critical=ok word=000 ok=48140 elapsed=4300.2s rate=13.03/s eta=730.6s
+critical_orbit scanned 56553/65536 a_idx=221 c_idx=233 a=0.515686 c=6.549020 status=orbit_max_time critical=ok word=000 ok=48202 elapsed=4330.2s rate=13.06/s eta=687.8s
+critical_orbit scanned 57105/65536 a_idx=224 c_idx=240 a=0.518627 c=6.686275 status=orbit_max_time critical=ok word=000 ok=48256 elapsed=4360.3s rate=13.10/s eta=643.8s
+critical_orbit scanned 57639/65536 a_idx=226 c_idx=218 a=0.520588 c=6.254902 status=orbit_max_time critical=ok word=000 ok=48302 elapsed=4390.3s rate=13.13/s eta=601.5s
+critical_orbit scanned 58163/65536 a_idx=228 c_idx=206 a=0.522549 c=6.019608 status=orbit_max_time critical=ok word=000 ok=48340 elapsed=4420.4s rate=13.16/s eta=560.3s
+critical_orbit scanned 58598/65536 a_idx=229 c_idx=230 a=0.523529 c=6.490196 status=orbit_max_time critical=ok word=000 ok=48372 elapsed=4450.5s rate=13.17/s eta=526.9s
+critical_orbit scanned 58988/65536 a_idx=231 c_idx=108 a=0.525490 c=4.098039 status=orbit_max_time critical=ok word=000 ok=48396 elapsed=4480.5s rate=13.17/s eta=497.4s
+critical_orbit scanned 59385/65536 a_idx=232 c_idx=8 a=0.526471 c=2.137255 status=ok critical=ok word=00000000 ok=48398 elapsed=4510.6s rate=13.17/s eta=467.2s
+critical_orbit scanned 59682/65536 a_idx=234 c_idx=223 a=0.528431 c=6.352941 status=orbit_max_time critical=ok word=000 ok=48412 elapsed=4540.6s rate=13.14/s eta=445.4s
+critical_orbit scanned 60081/65536 a_idx=235 c_idx=177 a=0.529412 c=5.450980 status=orbit_max_time critical=ok word=000 ok=48420 elapsed=4570.6s rate=13.15/s eta=415.0s
+critical_orbit scanned 60366/65536 a_idx=236 c_idx=51 a=0.530392 c=2.980392 status=orbit_max_time critical=ok word=0000 ok=48420 elapsed=4600.7s rate=13.12/s eta=394.0s
+critical_orbit scanned 60785/65536 a_idx=238 c_idx=144 a=0.532353 c=4.803922 status=orbit_max_time critical=ok word=000 ok=48420 elapsed=4630.7s rate=13.13/s eta=361.9s
+critical_orbit scanned 61285/65536 a_idx=240 c_idx=156 a=0.534314 c=5.039216 status=orbit_max_time critical=ok word=000 ok=48420 elapsed=4660.7s rate=13.15/s eta=323.3s
+critical_orbit scanned 61761/65536 a_idx=242 c_idx=192 a=0.536275 c=5.745098 status=orbit_max_time critical=ok word=000 ok=48420 elapsed=4690.8s rate=13.17/s eta=286.7s
+critical_orbit scanned 62277/65536 a_idx=244 c_idx=188 a=0.538235 c=5.666667 status=orbit_max_time critical=ok word=000 ok=48420 elapsed=4720.8s rate=13.19/s eta=247.0s
+critical_orbit scanned 62783/65536 a_idx=246 c_idx=194 a=0.540196 c=5.784314 status=orbit_max_time critical=ok word=000 ok=48420 elapsed=4750.8s rate=13.22/s eta=208.3s
+critical_orbit scanned 63241/65536 a_idx=248 c_idx=248 a=0.542157 c=6.843137 status=orbit_max_time critical=ok word=000 ok=48420 elapsed=4780.9s rate=13.23/s eta=173.5s
+critical_orbit scanned 63669/65536 a_idx=249 c_idx=181 a=0.543137 c=5.529412 status=orbit_max_time critical=ok word=000 ok=48420 elapsed=4810.9s rate=13.23/s eta=141.1s
+critical_orbit scanned 64073/65536 a_idx=251 c_idx=73 a=0.545098 c=3.411765 status=orbit_max_time critical=ok word=000 ok=48420 elapsed=4841.0s rate=13.24/s eta=110.5s
+critical_orbit scanned 64546/65536 a_idx=253 c_idx=34 a=0.547059 c=2.647059 status=orbit_max_time critical=ok word=0000 ok=48420 elapsed=4871.1s rate=13.25/s eta=74.7s
+critical_orbit scanned 65070/65536 a_idx=255 c_idx=46 a=0.549020 c=2.882353 status=orbit_max_time critical=ok word=000 ok=48420 elapsed=4901.1s rate=13.28/s eta=35.1s
+critical_orbit scanned 65536/65536 a_idx=256 c_idx=1 a=0.550000 c=2.000000 status=orbit_max_time critical=ok word=0000 ok=48420 elapsed=4928.0s rate=13.30/s eta=0.0s
+wrote /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/results/rossler_y_minima_critical_orbit_scan_256/coarse_scan.tsv
+real 4935.41
+user 4509.10
+sys 98.09
+scan_finished_at=2026-06-01T00:26:52Z
+rows=65536 expected=65536
+status={'ok': 48420, 'orbit_max_time': 17116}
+critical_status={'ok': 65536}
+ok_fraction=0.738831
+max_adjacent_critical_y_jump=0.00421347633
+verification_ok
+render_word_heatmap_started_at=2026-06-01T00:26:53Z
+loaded /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/results/rossler_y_minima_critical_orbit_scan_256/coarse_scan.tsv: points=65536 ok=48420 grid=256x256 word_length=8 symbol_values=symbol_signs seconds=0.770
+wrote /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/results/rossler_y_minima_critical_orbit_scan_256/heatmaps/coarse_scan_8bit_word_heatmap_probe.html
+wrote /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/results/rossler_y_minima_critical_orbit_scan_256/heatmaps/coarse_scan_8bit_word_heatmap.png seconds=0.985
+wrote PNG heatmap in /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/results/rossler_y_minima_critical_orbit_scan_256/heatmaps
+real 1.81
+user 1.61
+sys 0.07
+render_monotone_heatmap_started_at=2026-06-01T00:26:55Z
+loaded /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/results/rossler_y_minima_critical_orbit_scan_256/coarse_scan.tsv: points=65536 ok=48420 grid=256x256 word_length=8 symbol_values=symbol_signs seconds=1.058
+wrote /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/results/rossler_y_minima_critical_orbit_scan_256/heatmaps/coarse_scan_7bit_monotone_heatmap_probe.html
+wrote /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/results/rossler_y_minima_critical_orbit_scan_256/heatmaps/coarse_scan_7bit_monotone_heatmap.png seconds=1.399
+wrote monotone PNG heatmap in /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/results/rossler_y_minima_critical_orbit_scan_256/heatmaps
+real 2.54
+user 2.23
+sys 0.11
+rows=65536 expected=65536
+status={'ok': 48420, 'orbit_max_time': 17116}
+critical_status={'ok': 65536}
+ok_fraction=0.738831
+max_adjacent_critical_y_jump=0.00421347633
+verification_ok
+finished_at=2026-06-01T00:26:58Z

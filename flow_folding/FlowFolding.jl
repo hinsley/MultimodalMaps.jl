@@ -18,6 +18,7 @@ export ExtremumKind,
        CriticalPointEstimate,
        SaddleFocusSeedRay,
        SeededEvent,
+       SeededTangentEvent,
        SeededCriticalResult,
        ContinuationPoint,
        out_of_place,
@@ -36,6 +37,7 @@ export ExtremumKind,
        seed_state,
        seed_tangent,
        collect_seeded_extrema,
+       collect_seeded_tangent_extrema,
        criticality_residual,
        find_seeded_critical_points,
        continue_seeded_critical_point,
@@ -523,11 +525,13 @@ function collect_tangent_extrema_rk4(
     max_state=Inf,
     reorthonormalize=true,
     basis=nothing,
+    min_event_time=0.0,
 )
     dt > 0 || throw(ArgumentError("dt must be positive"))
     t_end > 0 || throw(ArgumentError("t_end must be positive"))
     transient_events >= 0 || throw(ArgumentError("transient_events cannot be negative"))
     max_events > 0 || throw(ArgumentError("max_events must be positive"))
+    min_event_time >= 0 || throw(ArgumentError("min_event_time cannot be negative"))
     n = length(u0)
     1 <= observable_index <= n || throw(ArgumentError("observable_index out of range"))
 
@@ -566,7 +570,7 @@ function collect_tangent_extrema_rk4(
             end
             second_derivative = extremum_second_derivative(problem, u_event, t_event)
 
-            if _accepts_second_derivative(problem, second_derivative)
+            if t_event >= min_event_time && _accepts_second_derivative(problem, second_derivative)
                 accepted_seen += 1
                 if accepted_seen > transient_events
                     component = Float64(v_event[observable_index])
@@ -710,6 +714,15 @@ struct SeededEvent
     event_denominator::Float64
 end
 
+struct SeededTangentEvent
+    t::Float64
+    u::Vector{Float64}
+    value::Float64
+    derivative::Float64
+    event_denominator::Float64
+    tangent::Vector{Float64}
+end
+
 struct SeededCriticalResult
     rho::Float64
     residual::Float64
@@ -724,14 +737,19 @@ struct SeededCriticalResult
     message::String
 end
 
-function _event_corrected_derivative(problem::FlowFoldingProblem, u, v, t; denom_atol=0.0)
+function _event_corrected_tangent(problem::FlowFoldingProblem, u, v, t; denom_atol=0.0)
     fvec = _rhs_vector(problem, u, t)
     Dh = ForwardDiff.gradient(z -> problem.f(z, problem.p, t)[problem.variable_index], u)
     denom = dot(Dh, fvec)
     if !isfinite(denom) || abs(denom) <= denom_atol
-        return NaN, denom
+        return fill(NaN, length(v)), denom
     end
     v_event = v .- (dot(Dh, v) / denom) .* fvec
+    return v_event, denom
+end
+
+function _event_corrected_derivative(problem::FlowFoldingProblem, u, v, t; denom_atol=0.0)
+    v_event, denom = _event_corrected_tangent(problem, u, v, t; denom_atol=denom_atol)
     return v_event[problem.variable_index], denom
 end
 
@@ -788,6 +806,90 @@ function collect_seeded_extrema(
                 Float64(u[problem.variable_index]),
                 Float64(derivative),
                 Float64(denom),
+            ),
+        )
+        if length(events) >= max_events
+            terminate!(integrator)
+        end
+    end
+
+    event_cb = _directional_extremum_callback(problem, condition, affect!)
+    callbacks = Any[event_cb]
+    blowup_cb = _blowup_callback(max_state)
+    if !isnothing(blowup_cb)
+        push!(callbacks, blowup_cb)
+    end
+
+    prob = ODEProblem(augmented!, y0, tspan)
+    solve(
+        prob,
+        alg;
+        callback=CallbackSet(callbacks...),
+        save_everystep=false,
+        save_start=false,
+        save_end=false,
+        abstol=abstol,
+        reltol=reltol,
+        maxiters=maxiters,
+    )
+    return events
+end
+
+function collect_seeded_tangent_extrema(
+    problem::FlowFoldingProblem,
+    ray::SaddleFocusSeedRay,
+    rho;
+    max_events::Integer,
+    tspan=(0.0, 500.0),
+    launch_guard_time=nothing,
+    denom_atol=1e-10,
+    alg=Tsit5(),
+    abstol=1e-9,
+    reltol=1e-9,
+    maxiters=10_000_000,
+    max_state=Inf,
+)
+    max_events > 0 || throw(ArgumentError("max_events must be positive"))
+
+    u0 = seed_state(ray, rho)
+    v0 = seed_tangent(ray, rho)
+    n = length(u0)
+    y0 = vcat(u0, v0)
+    guard = isnothing(launch_guard_time) ? (pi / max(abs(imag(ray.eigenvalue)), eps(Float64))) : Float64(launch_guard_time)
+    events = SeededTangentEvent[]
+
+    function augmented!(dy, y, p, t)
+        u = collect(@view y[1:n])
+        v = collect(@view y[(n + 1):(2n)])
+        fvec = _rhs_vector(problem, u, t)
+        J = _jacobian(problem, u, t)
+        dy[1:n] .= fvec
+        dy[(n + 1):(2n)] .= J * v
+        return nothing
+    end
+
+    condition(y, t, integrator) = extremum_event_value(problem, @view(y[1:n]), t)
+
+    function affect!(integrator)
+        integrator.t >= guard || return
+        y = integrator.u
+        u = collect(Float64, @view y[1:n])
+        v = collect(Float64, @view y[(n + 1):(2n)])
+        second_derivative = extremum_second_derivative(problem, u, integrator.t)
+        _accepts_second_derivative(problem, second_derivative) || return
+
+        v_event, denom = _event_corrected_tangent(problem, u, v, integrator.t; denom_atol=denom_atol)
+        isfinite(denom) && abs(denom) > denom_atol || return
+        derivative = Float64(v_event[problem.variable_index])
+        push!(
+            events,
+            SeededTangentEvent(
+                Float64(integrator.t),
+                u,
+                Float64(u[problem.variable_index]),
+                derivative,
+                Float64(denom),
+                collect(Float64, v_event),
             ),
         )
         if length(events) >= max_events
