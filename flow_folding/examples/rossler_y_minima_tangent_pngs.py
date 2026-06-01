@@ -96,6 +96,9 @@ class ScanData:
     ok: bytearray
     words: list[str]
     codes: array
+    critical_x: array
+    critical_y: array
+    critical_z: array
     n_symbols: int
     total_points: int
     ok_points: int
@@ -318,6 +321,9 @@ def load_scan(path: str) -> ScanData:
     ok = bytearray(n_c * n_a)
     words = [""] * (n_c * n_a)
     codes = array("i", [-1]) * (n_c * n_a)
+    critical_x = array("d", [math.nan]) * (n_c * n_a)
+    critical_y = array("d", [math.nan]) * (n_c * n_a)
+    critical_z = array("d", [math.nan]) * (n_c * n_a)
     word_counts: Counter[str] = Counter()
     word_cache: dict[str, str] = {}
 
@@ -327,6 +333,12 @@ def load_scan(path: str) -> ScanData:
             c_idx = c_lookup[float(row["c"])]
             a_idx = a_lookup[float(row["a"])]
             idx = a_idx * n_c + c_idx
+            if "critical_x" in row:
+                critical_x[idx] = safe_float(row["critical_x"])
+            if "critical_y" in row:
+                critical_y[idx] = safe_float(row["critical_y"])
+            if "critical_z" in row:
+                critical_z[idx] = safe_float(row["critical_z"])
             if row["status"] != "ok":
                 continue
             word = word_cache.setdefault(row["word"], row["word"])
@@ -342,6 +354,9 @@ def load_scan(path: str) -> ScanData:
         ok=ok,
         words=words,
         codes=codes,
+        critical_x=critical_x,
+        critical_y=critical_y,
+        critical_z=critical_z,
         n_symbols=n_symbols,
         total_points=total,
         ok_points=ok_points,
@@ -1012,6 +1027,10 @@ def byte_arrays_for_probe(data: ScanData) -> tuple[bytes, bytes]:
     return bytes(code_bytes), bytes(valid_bits)
 
 
+def float_array_bytes_for_probe(values: array) -> bytes:
+    return b"".join(struct.pack("<d", value) for value in values)
+
+
 def write_monotone_probe_html(
     path: str,
     data: ScanData,
@@ -1037,6 +1056,9 @@ def write_monotone_probe_html(
     view_width = left + plot_width + sp(26)
     sign_count = data.n_symbols - 1
     code_bytes, valid_bits = byte_arrays_for_probe(data)
+    critical_x_bytes = float_array_bytes_for_probe(data.critical_x)
+    critical_y_bytes = float_array_bytes_for_probe(data.critical_y)
+    critical_z_bytes = float_array_bytes_for_probe(data.critical_z)
 
     with open(image_path, "rb") as handle:
         image_base64 = wrap_base64(handle.read())
@@ -1181,6 +1203,9 @@ def write_monotone_probe_html(
       <dt>pixel y</dt><dd id="yValue">-</dd>
       <dt>grid c</dt><dd id="cIndex">-</dd>
       <dt>grid a</dt><dd id="aIndex">-</dd>
+      <dt>initial x</dt><dd id="initialX">-</dd>
+      <dt>initial y</dt><dd id="initialY">-</dd>
+      <dt>initial z</dt><dd id="initialZ">-</dd>
       <dt>code byte</dt><dd id="codeValue">-</dd>
       <dt>word bits</dt><dd id="wordBits">-</dd>
       <dt>symbols</dt><dd id="symbols">-</dd>
@@ -1196,6 +1221,15 @@ $code_bytes
 </script>
 <script id="validBits" type="application/octet-stream">
 $valid_bits
+</script>
+<script id="criticalXBytes" type="application/octet-stream">
+$critical_x_bytes
+</script>
+<script id="criticalYBytes" type="application/octet-stream">
+$critical_y_bytes
+</script>
+<script id="criticalZBytes" type="application/octet-stream">
+$critical_z_bytes
 </script>
 <script>
 (() => {
@@ -1219,6 +1253,9 @@ $valid_bits
     y: document.getElementById('yValue'),
     ci: document.getElementById('cIndex'),
     ai: document.getElementById('aIndex'),
+    initialX: document.getElementById('initialX'),
+    initialY: document.getElementById('initialY'),
+    initialZ: document.getElementById('initialZ'),
     code: document.getElementById('codeValue'),
     bits: document.getElementById('wordBits'),
     symbols: document.getElementById('symbols'),
@@ -1242,8 +1279,21 @@ $valid_bits
     return bytes;
   }
 
+  function decodeFloat64Bytes(id, expectedLength) {
+    const bytes = decodeByteChars(id, expectedLength * 8);
+    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    const values = new Float64Array(expectedLength);
+    for (let idx = 0; idx < expectedLength; idx += 1) {
+      values[idx] = view.getFloat64(idx * 8, true);
+    }
+    return values;
+  }
+
   const codeBytes = decodeByteChars('codeBytes', CELL_COUNT);
   const validBits = decodeByteChars('validBits', Math.ceil(CELL_COUNT / 8));
+  const criticalX = decodeFloat64Bytes('criticalXBytes', CELL_COUNT);
+  const criticalY = decodeFloat64Bytes('criticalYBytes', CELL_COUNT);
+  const criticalZ = decodeFloat64Bytes('criticalZBytes', CELL_COUNT);
   const sampleCanvas = document.createElement('canvas');
   sampleCanvas.width = 1;
   sampleCanvas.height = 1;
@@ -1256,6 +1306,10 @@ $valid_bits
 
   function setText(element, value) {
     element.textContent = value;
+  }
+
+  function formatFloat(value) {
+    return Number.isFinite(value) ? value.toPrecision(12) : '-';
   }
 
   function isValid(index) {
@@ -1372,6 +1426,9 @@ $valid_bits
     setText(fields.a, a.toFixed(10));
     setText(fields.ci, String(cIndex + 1));
     setText(fields.ai, String(aIndex + 1));
+    setText(fields.initialX, formatFloat(criticalX[cellIndex]));
+    setText(fields.initialY, formatFloat(criticalY[cellIndex]));
+    setText(fields.initialZ, formatFloat(criticalZ[cellIndex]));
 
     if (isValid(cellIndex)) {
       const code = codeBytes[cellIndex];
@@ -1444,6 +1501,9 @@ $valid_bits
         "image_base64": image_base64,
         "code_bytes": wrap_base64(code_bytes),
         "valid_bits": wrap_base64(valid_bits),
+        "critical_x_bytes": wrap_base64(critical_x_bytes),
+        "critical_y_bytes": wrap_base64(critical_y_bytes),
+        "critical_z_bytes": wrap_base64(critical_z_bytes),
         "width": width,
         "height": height,
         "view_width": view_width,
@@ -1633,6 +1693,12 @@ def render_monotone_heatmap_only(data: ScanData, args: argparse.Namespace) -> st
     return args.output_dir
 
 
+def render_heatmaps_only(data: ScanData, args: argparse.Namespace) -> str:
+    render_heatmap_only(data, args)
+    render_monotone_heatmap_only(data, args)
+    return args.output_dir
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("results_path", help="scan TSV or TSV.GZ to render")
@@ -1647,8 +1713,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--clean", action="store_true", help="remove existing stem-matching PNG/SVG files first")
     parser.add_argument("--only-heatmap", action="store_true", help="write only the full-word heatmap PNG and legend TSV")
     parser.add_argument("--only-monotone-heatmap", action="store_true", help="write only the 7-bit monotone-sign heatmap PNG and legend TSV")
+    parser.add_argument("--only-heatmaps", action="store_true", help="write both full-word and monotone heatmap PNGs and legends")
     parser.add_argument("--write-heatmap-probe", action="store_true", help="also write a standalone HTML probe for --only-heatmap")
     parser.add_argument("--write-monotone-probe", action="store_true", help="also write a standalone HTML probe for --only-monotone-heatmap")
+    parser.add_argument("--delete-input-after-load", action="store_true", help="delete the input TSV after loading it into memory")
     return parser.parse_args()
 
 
@@ -1662,7 +1730,13 @@ def main() -> None:
         f"symbol_values={data.symbol_value_source} seconds={time.time() - started:.3f}",
         flush=True,
     )
-    if args.only_heatmap:
+    if args.delete_input_after_load:
+        os.remove(args.results_path)
+        print(f"deleted input after load: {args.results_path}", flush=True)
+    if args.only_heatmaps:
+        written = render_heatmaps_only(data, args)
+        print(f"wrote PNG heatmaps in {written}", flush=True)
+    elif args.only_heatmap:
         written = render_heatmap_only(data, args)
         print(f"wrote PNG heatmap in {written}", flush=True)
     elif args.only_monotone_heatmap:

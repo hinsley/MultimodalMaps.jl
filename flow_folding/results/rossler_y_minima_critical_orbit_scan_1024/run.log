@@ -1,0 +1,204 @@
+started_at=2026-06-01T02:03:47Z
+repo_root=/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl
+result_dir=/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/results/rossler_y_minima_critical_orbit_scan_1024
+julia_num_threads=10
+parallel_axis=columns
+column_continuation=a_forward
+column_anchor=a_min_serial
+n_c=1024
+n_a=1024
+c_range=2.0..7.0
+a_range=0.30..0.55
+b=0.3
+critical_event_index=4
+rho_range=-24.0..-1.0
+word_length=8
+orbit_transient_events=0
+initial_event_included=true
+max_time=2000.0
+dt=0.05
+png_width=6400
+png_height=4400
+scan_started_at=2026-06-01T02:03:47Z
+critical_orbit column anchors started columns=1024 a_start=0.300000 elapsed=0.0s
+critical_orbit column anchors 1/1024 c_idx=1 c=2.000000 status=ok critical=ok elapsed=4.4s
+critical_orbit column anchors 64/1024 c_idx=64 c=2.307918 status=ok critical=ok elapsed=6.0s
+critical_orbit column anchors 128/1024 c_idx=128 c=2.620723 status=ok critical=ok elapsed=6.9s
+critical_orbit column anchors 192/1024 c_idx=192 c=2.933529 status=ok critical=ok elapsed=7.7s
+critical_orbit column anchors 256/1024 c_idx=256 c=3.246334 status=ok critical=ok elapsed=8.5s
+critical_orbit column anchors 320/1024 c_idx=320 c=3.559140 status=ok critical=ok elapsed=9.3s
+critical_orbit column anchors 384/1024 c_idx=384 c=3.871945 status=ok critical=ok elapsed=10.2s
+critical_orbit column anchors 448/1024 c_idx=448 c=4.184751 status=ok critical=ok elapsed=11.1s
+critical_orbit column anchors 512/1024 c_idx=512 c=4.497556 status=ok critical=ok elapsed=12.1s
+critical_orbit column anchors 576/1024 c_idx=576 c=4.810362 status=ok critical=ok elapsed=13.0s
+critical_orbit column anchors 640/1024 c_idx=640 c=5.123167 status=ok critical=ok elapsed=13.9s
+critical_orbit column anchors 704/1024 c_idx=704 c=5.435973 status=ok critical=ok elapsed=14.9s
+critical_orbit column anchors 768/1024 c_idx=768 c=5.748778 status=ok critical=ok elapsed=15.8s
+critical_orbit column anchors 832/1024 c_idx=832 c=6.061584 status=ok critical=ok elapsed=16.8s
+critical_orbit column anchors 896/1024 c_idx=896 c=6.374389 status=ok critical=ok elapsed=17.8s
+critical_orbit column anchors 960/1024 c_idx=960 c=6.687195 status=ok critical=ok elapsed=18.8s
+critical_orbit column anchors 1024/1024 c_idx=1024 c=7.000000 status=ok critical=ok elapsed=19.9s
+critical_orbit parallel columns started columns=1024 a_points=1024 threads=10 output=/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/results/rossler_y_minima_critical_orbit_scan_1024/coarse_scan.tsv
+critical_orbit threaded scanned 1/1048576 a_idx=1 c_idx=617 a=0.300000 c=5.010753 status=ok critical=ok word=00110110 ok=1 elapsed=20.5s rate=0.05/s eta=21480550.8s threads=10 axis=columns
+critical_orbit threaded scanned 9064/1048576 a_idx=1001 c_idx=104 a=0.544379 c=2.503421 status=orbit_max_time critical=ok word=0000 ok=7740 elapsed=80.5s rate=112.60/s eta=9231.7s threads=10 axis=columns
+critical_orbit threaded scanned 18060/1048576 a_idx=811 c_idx=414 a=0.497947 c=4.018573 status=orbit_max_time critical=ok word=00000 ok=15165 elapsed=140.5s rate=128.54/s eta=8017.4s threads=10 axis=columns
+critical_orbit threaded scanned 27581/1048576 a_idx=1016 c_idx=106 a=0.548045 c=2.513196 status=orbit_max_time critical=ok word=0000 ok=22217 elapsed=200.5s rate=137.55/s eta=7422.9s threads=10 axis=columns
+critical_orbit threaded scanned 37680/1048576 a_idx=855 c_idx=313 a=0.508700 c=3.524927 status=orbit_max_time critical=ok word=00000 ok=29683 elapsed=260.5s rate=144.63/s eta=6989.5s threads=10 axis=columns
+critical_orbit threaded scanned 47005/1048576 a_idx=395 c_idx=621 a=0.396285 c=5.030303 status=ok critical=ok word=00011111 ok=36554 elapsed=320.5s rate=146.65/s eta=6829.7s threads=10 axis=columns
+critical_orbit threaded scanned 56867/1048576 a_idx=137 c_idx=110 a=0.333236 c=2.532747 status=ok critical=ok word=00101010 ok=44008 elapsed=380.5s rate=149.44/s eta=6636.2s threads=10 axis=columns
+critical_orbit threaded scanned 64995/1048576 a_idx=672 c_idx=826 a=0.463978 c=6.032258 status=ok critical=ok word=00000000 ok=50414 elapsed=440.5s rate=147.53/s eta=6666.8s threads=10 axis=columns
+critical_orbit threaded scanned 70912/1048576 a_idx=632 c_idx=111 a=0.454203 c=2.537634 status=ok critical=ok word=00011110 ok=54723 elapsed=500.6s rate=141.65/s eta=6901.9s threads=10 axis=columns
+critical_orbit threaded scanned 77467/1048576 a_idx=23 c_idx=726 a=0.305376 c=5.543500 status=ok critical=ok word=00111011 ok=59881 elapsed=560.6s rate=138.18/s eta=7027.8s threads=10 axis=columns
+critical_orbit threaded scanned 85091/1048576 a_idx=158 c_idx=113 a=0.338368 c=2.547410 status=ok critical=ok word=00101010 ok=65499 elapsed=620.6s rate=137.11/s eta=7027.3s threads=10 axis=columns
+critical_orbit threaded scanned 93434/1048576 a_idx=21 c_idx=524 a=0.304888 c=4.556207 status=ok critical=ok word=00110110 ok=71695 elapsed=680.6s rate=137.27/s eta=6957.9s threads=10 axis=columns
+critical_orbit threaded scanned 102038/1048576 a_idx=362 c_idx=320 a=0.388221 c=3.559140 status=ok critical=ok word=00001111 ok=78418 elapsed=740.6s rate=137.77/s eta=6870.4s threads=10 axis=columns
+critical_orbit threaded scanned 111476/1048576 a_idx=786 c_idx=218 a=0.491838 c=3.060606 status=ok critical=ok word=00001111 ok=85645 elapsed=800.6s rate=139.23/s eta=6730.4s threads=10 axis=columns
+critical_orbit threaded scanned 121484/1048576 a_idx=847 c_idx=219 a=0.506745 c=3.065494 status=orbit_max_time critical=ok word=000000 ok=93169 elapsed=860.7s rate=141.15/s eta=6568.0s threads=10 axis=columns
+critical_orbit threaded scanned 132215/1048576 a_idx=187 c_idx=118 a=0.345455 c=2.571848 status=ok critical=ok word=00101010 ok=101186 elapsed=920.7s rate=143.61/s eta=6381.0s threads=10 axis=columns
+critical_orbit threaded scanned 143232/1048576 a_idx=738 c_idx=16 a=0.480108 c=2.073314 status=ok critical=ok word=00010101 ok=109549 elapsed=980.7s rate=146.05/s eta=6198.7s threads=10 axis=columns
+critical_orbit threaded scanned 153425/1048576 a_idx=346 c_idx=631 a=0.384311 c=5.079179 status=ok critical=ok word=00000000 ok=117273 elapsed=1040.7s rate=147.43/s eta=6071.8s threads=10 axis=columns
+critical_orbit threaded scanned 163994/1048576 a_idx=864 c_idx=733 a=0.510899 c=5.577713 status=orbit_max_time critical=ok word=000 ok=125208 elapsed=1100.7s rate=148.99/s eta=5937.2s threads=10 axis=columns
+critical_orbit threaded scanned 174521/1048576 a_idx=740 c_idx=327 a=0.480596 c=3.593353 status=ok critical=ok word=00001110 ok=133312 elapsed=1160.7s rate=150.36/s eta=5813.2s threads=10 axis=columns
+critical_orbit threaded scanned 186258/1048576 a_idx=1004 c_idx=123 a=0.545112 c=2.596285 status=orbit_max_time critical=ok word=0000 ok=141993 elapsed=1220.7s rate=152.58/s eta=5651.5s threads=10 axis=columns
+critical_orbit threaded scanned 197850/1048576 a_idx=628 c_idx=432 a=0.453226 c=4.106549 status=ok critical=ok word=00000110 ok=150779 elapsed=1280.7s rate=154.48/s eta=5507.0s threads=10 axis=columns
+critical_orbit threaded scanned 209292/1048576 a_idx=271 c_idx=331 a=0.365982 c=3.612903 status=ok critical=ok word=00111001 ok=159452 elapsed=1340.7s rate=156.10/s eta=5376.5s threads=10 axis=columns
+critical_orbit threaded scanned 220805/1048576 a_idx=851 c_idx=941 a=0.507722 c=6.594330 status=orbit_max_time critical=ok word=000 ok=168141 elapsed=1400.7s rate=157.64/s eta=5251.2s threads=10 axis=columns
+critical_orbit threaded scanned 232166/1048576 a_idx=379 c_idx=537 a=0.392375 c=4.619746 status=ok critical=ok word=00000011 ok=176822 elapsed=1460.7s rate=158.94/s eta=5136.6s threads=10 axis=columns
+critical_orbit threaded scanned 243606/1048576 a_idx=60 c_idx=741 a=0.314418 c=5.616813 status=ok critical=ok word=00111100 ok=185476 elapsed=1520.7s rate=160.19/s eta=5025.1s threads=10 axis=columns
+critical_orbit threaded scanned 254757/1048576 a_idx=868 c_idx=640 a=0.511877 c=5.123167 status=orbit_max_time critical=ok word=0000 ok=193750 elapsed=1580.7s rate=161.16/s eta=4925.5s threads=10 axis=columns
+critical_orbit threaded scanned 261980/1048576 a_idx=777 c_idx=29 a=0.489638 c=2.136852 status=ok critical=ok word=00010010 ok=199251 elapsed=1640.7s rate=159.67/s eta=4926.3s threads=10 axis=columns
+critical_orbit threaded scanned 270704/1048576 a_idx=588 c_idx=235 a=0.443451 c=3.143695 status=ok critical=ok word=00011100 ok=205859 elapsed=1700.8s rate=159.17/s eta=4887.1s threads=10 axis=columns
+critical_orbit threaded scanned 280279/1048576 a_idx=770 c_idx=31 a=0.487928 c=2.146628 status=ok critical=ok word=00010010 ok=213021 elapsed=1760.8s rate=159.18/s eta=4826.6s threads=10 axis=columns
+critical_orbit threaded scanned 290267/1048576 a_idx=641 c_idx=237 a=0.456403 c=3.153470 status=ok critical=ok word=00010011 ok=220543 elapsed=1820.8s rate=159.42/s eta=4756.7s threads=10 axis=columns
+critical_orbit threaded scanned 300640/1048576 a_idx=649 c_idx=948 a=0.458358 c=6.628543 status=ok critical=ok word=00000000 ok=228282 elapsed=1880.8s rate=159.85/s eta=4679.1s threads=10 axis=columns
+critical_orbit threaded scanned 310984/1048576 a_idx=123 c_idx=646 a=0.329814 c=5.152493 status=ok critical=ok word=00000011 ok=235977 elapsed=1940.8s rate=160.23/s eta=4603.2s threads=10 axis=columns
+critical_orbit threaded scanned 320700/1048576 a_idx=361 c_idx=950 a=0.387977 c=6.638319 status=ok critical=ok word=00010110 ok=243166 elapsed=2000.8s rate=160.29/s eta=4541.1s threads=10 axis=columns
+critical_orbit threaded scanned 330080/1048576 a_idx=842 c_idx=546 a=0.505523 c=4.663734 status=orbit_max_time critical=ok word=0000 ok=250381 elapsed=2060.8s rate=160.17/s eta=4485.8s threads=10 axis=columns
+critical_orbit threaded scanned 339393/1048576 a_idx=684 c_idx=446 a=0.466911 c=4.174976 status=ok critical=ok word=00001111 ok=257712 elapsed=2120.8s rate=160.03/s eta=4431.6s threads=10 axis=columns
+critical_orbit threaded scanned 348890/1048576 a_idx=669 c_idx=649 a=0.463245 c=5.167155 status=ok critical=ok word=00000111 ok=265024 elapsed=2180.8s rate=159.98/s eta=4373.6s threads=10 axis=columns
+critical_orbit threaded scanned 358874/1048576 a_idx=554 c_idx=751 a=0.435142 c=5.665689 status=ok critical=ok word=00001111 ok=272460 elapsed=2240.8s rate=160.15/s eta=4306.6s threads=10 axis=columns
+critical_orbit threaded scanned 368602/1048576 a_idx=434 c_idx=752 a=0.405816 c=5.670577 status=ok critical=ok word=00010011 ok=279526 elapsed=2300.9s rate=160.20/s eta=4244.5s threads=10 axis=columns
+critical_orbit threaded scanned 378540/1048576 a_idx=312 c_idx=955 a=0.376002 c=6.662757 status=ok critical=ok word=00011110 ok=286792 elapsed=2360.9s rate=160.34/s eta=4178.9s threads=10 axis=columns
+critical_orbit threaded scanned 388734/1048576 a_idx=479 c_idx=145 a=0.416813 c=2.703812 status=ok critical=ok word=00001100 ok=294352 elapsed=2420.9s rate=160.58/s eta=4109.2s threads=10 axis=columns
+critical_orbit threaded scanned 398697/1048576 a_idx=797 c_idx=44 a=0.494526 c=2.210166 status=ok critical=ok word=00011101 ok=301747 elapsed=2480.9s rate=160.71/s eta=4043.9s threads=10 axis=columns
+critical_orbit threaded scanned 406284/1048576 a_idx=10 c_idx=655 a=0.302199 c=5.196481 status=ok critical=ok word=00111001 ok=307507 elapsed=2540.9s rate=159.90/s eta=4016.9s threads=10 axis=columns
+critical_orbit threaded scanned 416520/1048576 a_idx=305 c_idx=352 a=0.374291 c=3.715543 status=ok critical=ok word=00000111 ok=315195 elapsed=2600.9s rate=160.14/s eta=3946.8s threads=10 axis=columns
+critical_orbit threaded scanned 426438/1048576 a_idx=77 c_idx=252 a=0.318573 c=3.226784 status=ok critical=ok word=00110011 ok=322653 elapsed=2660.9s rate=160.26/s eta=3882.1s threads=10 axis=columns
+critical_orbit threaded scanned 436715/1048576 a_idx=322 c_idx=456 a=0.378446 c=4.223851 status=ok critical=ok word=00001000 ok=330267 elapsed=2720.9s rate=160.50/s eta=3812.2s threads=10 axis=columns
+critical_orbit threaded scanned 446640/1048576 a_idx=103 c_idx=558 a=0.324927 c=4.722385 status=ok critical=ok word=00111100 ok=337591 elapsed=2780.9s rate=160.61/s eta=3747.9s threads=10 axis=columns
+critical_orbit threaded scanned 456009/1048576 a_idx=648 c_idx=152 a=0.458113 c=2.738025 status=ok critical=ok word=00010000 ok=344488 elapsed=2840.9s rate=160.51/s eta=3691.7s threads=10 axis=columns
+critical_orbit threaded scanned 465209/1048576 a_idx=919 c_idx=559 a=0.524340 c=4.727273 status=orbit_max_time critical=ok word=000 ok=351580 elapsed=2901.0s rate=160.36/s eta=3637.8s threads=10 axis=columns
+critical_orbit threaded scanned 474949/1048576 a_idx=161 c_idx=53 a=0.339101 c=2.254154 status=ok critical=ok word=00101010 ok=358898 elapsed=2961.0s rate=160.40/s eta=3576.1s threads=10 axis=columns
+critical_orbit threaded scanned 485127/1048576 a_idx=263 c_idx=54 a=0.364027 c=2.259042 status=ok critical=ok word=00101010 ok=366428 elapsed=3021.0s rate=160.59/s eta=3508.7s threads=10 axis=columns
+critical_orbit threaded scanned 495196/1048576 a_idx=303 c_idx=965 a=0.373803 c=6.711632 status=ok critical=ok word=00011111 ok=373930 elapsed=3081.0s rate=160.73/s eta=3443.0s threads=10 axis=columns
+critical_orbit threaded scanned 505119/1048576 a_idx=410 c_idx=260 a=0.399951 c=3.265885 status=ok critical=ok word=00001010 ok=381335 elapsed=3141.0s rate=160.81/s eta=3379.4s threads=10 axis=columns
+critical_orbit threaded scanned 515096/1048576 a_idx=919 c_idx=158 a=0.524340 c=2.767351 status=orbit_max_time critical=ok word=0000 ok=388728 elapsed=3201.0s rate=160.92/s eta=3315.2s threads=10 axis=columns
+critical_orbit threaded scanned 524729/1048576 a_idx=1018 c_idx=866 a=0.548534 c=6.227761 status=orbit_max_time critical=ok word=000 ok=395892 elapsed=3261.0s rate=160.91/s eta=3255.5s threads=10 axis=columns
+critical_orbit threaded scanned 534690/1048576 a_idx=281 c_idx=364 a=0.368426 c=3.774194 status=ok critical=ok word=00000110 ok=403419 elapsed=3321.0s rate=161.00/s eta=3191.8s threads=10 axis=columns
+critical_orbit threaded scanned 544755/1048576 a_idx=310 c_idx=365 a=0.375513 c=3.779081 status=ok critical=ok word=00000000 ok=410986 elapsed=3381.0s rate=161.12/s eta=3126.9s threads=10 axis=columns
+critical_orbit threaded scanned 554899/1048576 a_idx=578 c_idx=568 a=0.441007 c=4.771261 status=ok critical=ok word=00000111 ok=418601 elapsed=3441.0s rate=161.26/s eta=3061.4s threads=10 axis=columns
+critical_orbit threaded scanned 564925/1048576 a_idx=841 c_idx=669 a=0.505279 c=5.264907 status=orbit_max_time critical=ok word=0000 ok=425937 elapsed=3501.0s rate=161.36/s eta=2997.4s threads=10 axis=columns
+critical_orbit threaded scanned 574822/1048576 a_idx=381 c_idx=871 a=0.392864 c=6.252199 status=ok critical=ok word=00010110 ok=433160 elapsed=3561.0s rate=161.42/s eta=2934.9s threads=10 axis=columns
+critical_orbit threaded scanned 584571/1048576 a_idx=12 c_idx=471 a=0.302688 c=4.297165 status=ok critical=ok word=00110101 ok=440256 elapsed=3621.0s rate=161.44/s eta=2874.2s threads=10 axis=columns
+critical_orbit threaded scanned 594323/1048576 a_idx=295 c_idx=167 a=0.371848 c=2.811339 status=ok critical=ok word=00110100 ok=447575 elapsed=3681.1s rate=161.45/s eta=2813.5s threads=10 axis=columns
+critical_orbit threaded scanned 603782/1048576 a_idx=951 c_idx=873 a=0.532160 c=6.261975 status=orbit_max_time critical=ok word=000 ok=454787 elapsed=3741.1s rate=161.39/s eta=2756.0s threads=10 axis=columns
+critical_orbit threaded scanned 613422/1048576 a_idx=943 c_idx=271 a=0.530205 c=3.319648 status=orbit_max_time critical=ok word=0000 ok=462011 elapsed=3801.1s rate=161.38/s eta=2696.4s threads=10 axis=columns
+critical_orbit threaded scanned 623273/1048576 a_idx=851 c_idx=474 a=0.507722 c=4.311828 status=orbit_max_time critical=ok word=0000 ok=469257 elapsed=3861.1s rate=161.42/s eta=2634.7s threads=10 axis=columns
+critical_orbit threaded scanned 632991/1048576 a_idx=428 c_idx=776 a=0.404350 c=5.787879 status=ok critical=ok word=00010011 ok=476286 elapsed=3921.1s rate=161.43/s eta=2574.4s threads=10 axis=columns
+critical_orbit threaded scanned 642883/1048576 a_idx=1012 c_idx=977 a=0.547067 c=6.770283 status=orbit_max_time critical=ok word=000 ok=483509 elapsed=3981.1s rate=161.48/s eta=2512.3s threads=10 axis=columns
+critical_orbit threaded scanned 652746/1048576 a_idx=492 c_idx=173 a=0.419990 c=2.840665 status=ok critical=ok word=00001100 ok=490852 elapsed=4041.1s rate=161.53/s eta=2450.6s threads=10 axis=columns
+critical_orbit threaded scanned 662497/1048576 a_idx=121 c_idx=779 a=0.329326 c=5.802542 status=ok critical=ok word=00001010 ok=498184 elapsed=4101.1s rate=161.54/s eta=2390.0s threads=10 axis=columns
+critical_orbit threaded scanned 672421/1048576 a_idx=283 c_idx=378 a=0.368915 c=3.842620 status=ok critical=ok word=00000110 ok=505551 elapsed=4161.1s rate=161.60/s eta=2327.8s threads=10 axis=columns
+critical_orbit threaded scanned 682676/1048576 a_idx=659 c_idx=176 a=0.460802 c=2.855327 status=ok critical=ok word=00010101 ok=513256 elapsed=4221.1s rate=161.73/s eta=2262.4s threads=10 axis=columns
+critical_orbit threaded scanned 692847/1048576 a_idx=744 c_idx=177 a=0.481574 c=2.860215 status=ok critical=ok word=00000000 ok=520941 elapsed=4281.2s rate=161.84/s eta=2198.1s threads=10 axis=columns
+critical_orbit threaded scanned 702643/1048576 a_idx=99 c_idx=983 a=0.323949 c=6.799609 status=ok critical=ok word=00000000 ok=528324 elapsed=4341.2s rate=161.86/s eta=2137.3s threads=10 axis=columns
+critical_orbit threaded scanned 712852/1048576 a_idx=120 c_idx=79 a=0.329081 c=2.381232 status=ok critical=ok word=00101010 ok=535929 elapsed=4401.2s rate=161.97/s eta=2072.8s threads=10 axis=columns
+critical_orbit threaded scanned 722715/1048576 a_idx=928 c_idx=180 a=0.526540 c=2.874878 status=orbit_max_time critical=ok word=0000 ok=543270 elapsed=4461.2s rate=162.00/s eta=2011.5s threads=10 axis=columns
+critical_orbit threaded scanned 732571/1048576 a_idx=973 c_idx=181 a=0.537537 c=2.879765 status=orbit_max_time critical=ok word=0000 ok=550528 elapsed=4521.2s rate=162.03/s eta=1950.3s threads=10 axis=columns
+critical_orbit threaded scanned 742759/1048576 a_idx=660 c_idx=285 a=0.461046 c=3.388074 status=ok critical=ok word=00011110 ok=557941 elapsed=4581.2s rate=162.13/s eta=1886.2s threads=10 axis=columns
+critical_orbit threaded scanned 752738/1048576 a_idx=378 c_idx=987 a=0.392131 c=6.819159 status=ok critical=ok word=00010010 ok=565178 elapsed=4641.2s rate=162.19/s eta=1824.1s threads=10 axis=columns
+critical_orbit threaded scanned 762612/1048576 a_idx=575 c_idx=588 a=0.440274 c=4.869013 status=ok critical=ok word=00000001 ok=572397 elapsed=4701.2s rate=162.22/s eta=1762.9s threads=10 axis=columns
+critical_orbit threaded scanned 772293/1048576 a_idx=60 c_idx=989 a=0.314418 c=6.828935 status=ok critical=ok word=00001100 ok=579506 elapsed=4761.2s rate=162.20/s eta=1703.3s threads=10 axis=columns
+critical_orbit threaded scanned 781970/1048576 a_idx=684 c_idx=86 a=0.466911 c=2.415445 status=ok critical=ok word=00010001 ok=586622 elapsed=4821.2s rate=162.19/s eta=1643.8s threads=10 axis=columns
+critical_orbit threaded scanned 791643/1048576 a_idx=722 c_idx=990 a=0.476197 c=6.833822 status=orbit_max_time critical=ok word=00000 ok=593821 elapsed=4881.2s rate=162.18/s eta=1584.2s threads=10 axis=columns
+critical_orbit threaded scanned 801395/1048576 a_idx=297 c_idx=891 a=0.372336 c=6.349951 status=ok critical=ok word=00011111 ok=601010 elapsed=4941.3s rate=162.18/s eta=1524.1s threads=10 axis=columns
+critical_orbit threaded scanned 810993/1048576 a_idx=230 c_idx=190 a=0.355963 c=2.923754 status=ok critical=ok word=00110100 ok=608021 elapsed=5001.3s rate=162.16/s eta=1465.1s threads=10 axis=columns
+critical_orbit threaded scanned 820527/1048576 a_idx=745 c_idx=693 a=0.481818 c=5.382209 status=orbit_max_time critical=ok word=00000 ok=614916 elapsed=5061.3s rate=162.12/s eta=1406.7s threads=10 axis=columns
+critical_orbit threaded scanned 830162/1048576 a_idx=78 c_idx=595 a=0.318817 c=4.903226 status=ok critical=ok word=00111011 ok=621938 elapsed=5121.3s rate=162.10/s eta=1347.4s threads=10 axis=columns
+critical_orbit threaded scanned 839694/1048576 a_idx=968 c_idx=92 a=0.536315 c=2.444770 status=orbit_max_time critical=ok word=0000 ok=628989 elapsed=5181.3s rate=162.06/s eta=1288.9s threads=10 axis=columns
+critical_orbit threaded scanned 848148/1048576 a_idx=134 c_idx=497 a=0.332502 c=4.424242 status=ok critical=ok word=00111011 ok=635283 elapsed=5241.3s rate=161.82/s eta=1238.6s threads=10 axis=columns
+critical_orbit threaded scanned 858282/1048576 a_idx=991 c_idx=94 a=0.541935 c=2.454545 status=orbit_max_time critical=ok word=0000 ok=642529 elapsed=5301.3s rate=161.90/s eta=1175.4s threads=10 axis=columns
+critical_orbit threaded scanned 869078/1048576 a_idx=190 c_idx=499 a=0.346188 c=4.434018 status=ok critical=ok word=00000010 ok=650450 elapsed=5361.4s rate=162.10/s eta=1107.3s threads=10 axis=columns
+critical_orbit threaded scanned 878951/1048576 a_idx=847 c_idx=798 a=0.506745 c=5.895406 status=orbit_max_time critical=ok word=0000 ok=657705 elapsed=5421.4s rate=162.13/s eta=1046.2s threads=10 axis=columns
+critical_orbit threaded scanned 888815/1048576 a_idx=293 c_idx=400 a=0.371359 c=3.950147 status=ok critical=ok word=00000111 ok=664953 elapsed=5481.4s rate=162.15/s eta=985.3s threads=10 axis=columns
+critical_orbit threaded scanned 899819/1048576 a_idx=747 c_idx=800 a=0.482307 c=5.905181 status=orbit_max_time critical=ok word=00000 ok=673107 elapsed=5541.4s rate=162.38/s eta=916.1s threads=10 axis=columns
+critical_orbit threaded scanned 909949/1048576 a_idx=773 c_idx=602 a=0.488661 c=4.937439 status=orbit_max_time critical=ok word=00000 ok=680754 elapsed=5601.4s rate=162.45/s eta=853.3s threads=10 axis=columns
+critical_orbit threaded scanned 919645/1048576 a_idx=632 c_idx=101 a=0.454203 c=2.488759 status=ok critical=ok word=00011110 ok=688051 elapsed=5661.4s rate=162.44/s eta=793.7s threads=10 axis=columns
+critical_orbit threaded scanned 929255/1048576 a_idx=772 c_idx=202 a=0.488416 c=2.982405 status=ok critical=ok word=00001100 ok=695148 elapsed=5721.4s rate=162.42/s eta=734.7s threads=10 axis=columns
+critical_orbit threaded scanned 938216/1048576 a_idx=328 c_idx=1003 a=0.379912 c=6.897361 status=ok critical=ok word=00011111 ok=701506 elapsed=5781.4s rate=162.28/s eta=680.1s threads=10 axis=columns
+critical_orbit threaded scanned 947665/1048576 a_idx=704 c_idx=705 a=0.471799 c=5.440860 status=orbit_max_time critical=ok word=000000 ok=708211 elapsed=5841.4s rate=162.23/s eta=622.0s threads=10 axis=columns
+critical_orbit threaded scanned 956201/1048576 a_idx=599 c_idx=308 a=0.446139 c=3.500489 status=ok critical=ok word=00010001 ok=714156 elapsed=5901.4s rate=162.03/s eta=570.1s threads=10 axis=columns
+critical_orbit threaded scanned 964975/1048576 a_idx=859 c_idx=206 a=0.509677 c=3.001955 status=orbit_max_time critical=ok word=000000 ok=720459 elapsed=5961.5s rate=161.87/s eta=516.5s threads=10 axis=columns
+critical_orbit threaded scanned 972657/1048576 a_idx=415 c_idx=409 a=0.401173 c=3.994135 status=ok critical=ok word=00000011 ok=725580 elapsed=6021.5s rate=161.53/s eta=470.0s threads=10 axis=columns
+critical_orbit threaded scanned 979647/1048576 a_idx=365 c_idx=610 a=0.388954 c=4.976540 status=ok critical=ok word=00000000 ok=730512 elapsed=6081.5s rate=161.09/s eta=427.9s threads=10 axis=columns
+critical_orbit threaded scanned 986808/1048576 a_idx=385 c_idx=611 a=0.393842 c=4.981427 status=ok critical=ok word=00011111 ok=735494 elapsed=6141.5s rate=160.68/s eta=384.4s threads=10 axis=columns
+critical_orbit threaded scanned 994501/1048576 a_idx=699 c_idx=412 a=0.470577 c=4.008798 status=ok critical=ok word=00001110 ok=740817 elapsed=6201.5s rate=160.36/s eta=337.2s threads=10 axis=columns
+critical_orbit threaded scanned 1001515/1048576 a_idx=625 c_idx=712 a=0.452493 c=5.475073 status=ok critical=ok word=00000011 ok=745461 elapsed=6261.5s rate=159.95/s eta=294.2s threads=10 axis=columns
+critical_orbit threaded scanned 1008196/1048576 a_idx=751 c_idx=1011 a=0.483284 c=6.936461 status=orbit_max_time critical=ok word=0000 ok=749663 elapsed=6321.6s rate=159.49/s eta=253.2s threads=10 axis=columns
+critical_orbit threaded scanned 1014303/1048576 a_idx=19 c_idx=715 a=0.304399 c=5.489736 status=ok critical=ok word=00111010 ok=753489 elapsed=6381.6s rate=158.94/s eta=215.6s threads=10 axis=columns
+critical_orbit threaded scanned 1019965/1048576 a_idx=999 c_idx=1013 a=0.543891 c=6.946237 status=orbit_max_time critical=ok word=000 ok=757308 elapsed=6441.6s rate=158.34/s eta=180.7s threads=10 axis=columns
+critical_orbit threaded scanned 1025152/1048576 a_idx=1022 c_idx=816 a=0.549511 c=5.983382 status=orbit_max_time critical=ok word=000 ok=760700 elapsed=6501.6s rate=157.68/s eta=148.6s threads=10 axis=columns
+critical_orbit threaded scanned 1030352/1048576 a_idx=391 c_idx=1016 a=0.395308 c=6.960899 status=ok critical=ok word=00011100 ok=764264 elapsed=6561.6s rate=157.03/s eta=116.1s threads=10 axis=columns
+critical_orbit threaded scanned 1034898/1048576 a_idx=766 c_idx=1017 a=0.486950 c=6.965787 status=orbit_max_time critical=ok word=0000 ok=766985 elapsed=6621.6s rate=156.29/s eta=87.5s threads=10 axis=columns
+critical_orbit threaded scanned 1039713/1048576 a_idx=898 c_idx=919 a=0.519208 c=6.486804 status=orbit_max_time critical=ok word=000 ok=769982 elapsed=6681.6s rate=155.61/s eta=57.0s threads=10 axis=columns
+critical_orbit threaded scanned 1044132/1048576 a_idx=55 c_idx=922 a=0.313196 c=6.501466 status=ok critical=ok word=00001000 ok=772786 elapsed=6741.7s rate=154.88/s eta=28.7s threads=10 axis=columns
+critical_orbit threaded scanned 1047798/1048576 a_idx=246 c_idx=1024 a=0.359873 c=7.000000 status=ok critical=ok word=00000000 ok=774949 elapsed=6801.7s rate=154.05/s eta=5.1s threads=10 axis=columns
+critical_orbit threaded scanned 1048576/1048576 a_idx=1024 c_idx=1024 a=0.550000 c=7.000000 status=orbit_max_time critical=ok word=00 ok=775347 elapsed=6816.2s rate=153.84/s eta=0.0s threads=10 axis=columns
+wrote /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/results/rossler_y_minima_critical_orbit_scan_1024/coarse_scan.tsv
+real 6827.17
+user 37171.54
+sys 1243.15
+scan_finished_at=2026-06-01T03:57:34Z
+rows=1048576 expected=1048576
+status={'ok': 775347, 'orbit_max_time': 273229}
+critical_status={'ok': 1048576}
+finite_critical_initial_conditions=1048576
+ok_fraction=0.739429
+max_adjacent_critical_y_jump=0.0010512984
+verification_ok
+render_word_heatmap_started_at=2026-06-01T03:57:44Z
+loaded /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/results/rossler_y_minima_critical_orbit_scan_1024/coarse_scan.tsv: points=1048576 ok=775347 grid=1024x1024 word_length=8 symbol_values=symbol_signs seconds=12.314
+wrote /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/results/rossler_y_minima_critical_orbit_scan_1024/heatmaps/coarse_scan_8bit_word_heatmap_probe.html
+wrote /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/results/rossler_y_minima_critical_orbit_scan_1024/heatmaps/coarse_scan_8bit_word_heatmap.png seconds=2.360
+wrote PNG heatmap in /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/results/rossler_y_minima_critical_orbit_scan_1024/heatmaps
+real 14.75
+user 14.24
+sys 0.29
+render_monotone_heatmap_started_at=2026-06-01T03:57:59Z
+loaded /Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/results/rossler_y_minima_critical_orbit_scan_1024/coarse_scan.tsv: points=1048576 ok=775347 grid=1024x1024 word_length=8 symbol_values=symbol_signs seconds=12.050
+Traceback (most recent call last):
+  File "/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/examples/rossler_y_minima_tangent_pngs.py", line 1737, in <module>
+    main()
+  File "/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/examples/rossler_y_minima_tangent_pngs.py", line 1729, in main
+    written = render_monotone_heatmap_only(data, args)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/examples/rossler_y_minima_tangent_pngs.py", line 1690, in render_monotone_heatmap_only
+    write_monotone_probe_html(html_path, data, path, args.width, args.height)
+  File "/Users/carterhinsley/Documents/Dev/MultimodalMaps.jl/flow_folding/examples/rossler_y_minima_tangent_pngs.py", line 1527, in write_monotone_probe_html
+    handle.write(html)
+OSError: [Errno 28] No space left on device
+real 14.79
+user 14.31
+sys 0.27
+manual_recovery_started_at=2026-06-01T04:00:00Z
+tglfs_inspect_ok=true
+tglfs_ufid=af14044569ff1161546983808cfd0c7c5bb0cde92cc682ecbd939efd99c7e22b
+tglfs_size=382081526
+download_from_tglfs_real_seconds=21.58
+manual_heatmap_render_loaded_points=1048576
+manual_heatmap_render_ok_points=775347
+manual_heatmap_render_deleted_local_tsv=true
+manual_heatmap_render_real_seconds=12.99
+artifact_check_png_size=6400x4400
+artifact_check_html_initial_xyz=true
+manual_recovery_finished_at=2026-06-01T04:07:14Z

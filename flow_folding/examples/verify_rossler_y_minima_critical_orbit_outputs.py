@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import csv
+import gzip
 import math
 import os
 import struct
@@ -33,6 +34,12 @@ def finite_float(row: dict[str, str], key: str) -> float:
     return value
 
 
+def open_tsv(path: str):
+    if path.endswith(".gz"):
+        return gzip.open(path, "rt", newline="")
+    return open(path, newline="")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Verify corrected Rössler y-minima critical-orbit scan artifacts."
@@ -57,12 +64,6 @@ def main() -> None:
     args = parser.parse_args()
 
     failures: list[str] = []
-    rows: list[dict[str, str]] = []
-    with open(args.tsv, newline="") as handle:
-        reader = csv.DictReader(handle, delimiter="\t")
-        rows = list(reader)
-        fieldnames = reader.fieldnames or []
-
     required_columns = {
         "a",
         "c",
@@ -90,16 +91,87 @@ def main() -> None:
         "first_event_is_return",
         "initial_event_included",
     }
-    missing = sorted(required_columns - set(fieldnames))
-    if missing:
-        failures.append(f"missing TSV columns: {', '.join(missing)}")
 
     expected_rows = args.n_c * args.n_a
-    if len(rows) != expected_rows:
-        failures.append(f"row count {len(rows)} != expected {expected_rows}")
+    total_rows = 0
+    c_seen: set[float] = set()
+    a_seen: set[float] = set()
+    status_counts: Counter[str] = Counter()
+    critical_counts: Counter[str] = Counter()
+    ok_count = 0
+    finite_critical_initial_conditions = 0
+    critical_y_by_c: defaultdict[str, list[tuple[float, float]]] = defaultdict(list)
 
-    c_values = sorted({float(row["c"]) for row in rows}) if rows else []
-    a_values = sorted({float(row["a"]) for row in rows}) if rows else []
+    with open_tsv(args.tsv) as handle:
+        reader = csv.DictReader(handle, delimiter="\t")
+        fieldnames = reader.fieldnames or []
+        missing = sorted(required_columns - set(fieldnames))
+        if missing:
+            failures.append(f"missing TSV columns: {', '.join(missing)}")
+        else:
+            for line_number, row in enumerate(reader, start=2):
+                prefix = f"line {line_number}"
+                total_rows += 1
+                status_counts[row["status"]] += 1
+                critical_counts[row["critical_status"]] += 1
+                try:
+                    c_seen.add(float(row["c"]))
+                    a_seen.add(float(row["a"]))
+                    if abs(float(row["b"]) - args.b) > 1e-12:
+                        failures.append(f"{prefix}: b={row['b']} != {args.b}")
+                    events = int(row["events"])
+                    word = row["word"]
+                    if int(row["orbit_transient_events"]) != 0:
+                        failures.append(f"{prefix}: orbit_transient_events is not zero")
+                    finite_float(row, "critical_x")
+                    finite_float(row, "critical_y")
+                    finite_float(row, "critical_z")
+                    finite_critical_initial_conditions += 1
+                    if row["critical_status"] == "ok":
+                        if parse_bool(row["first_event_is_return"]):
+                            failures.append(f"{prefix}: first_event_is_return should be false")
+                        if not parse_bool(row["initial_event_included"]):
+                            failures.append(f"{prefix}: initial_event_included should be true")
+                        if events > 0 and abs(float(row["first_time"])) > 1e-12:
+                            failures.append(f"{prefix}: first_time is not the initial critical event")
+                        residual = abs(finite_float(row, "critical_residual"))
+                        if residual > args.max_residual:
+                            failures.append(f"{prefix}: critical residual {residual:g} exceeds {args.max_residual:g}")
+                        event_value = abs(finite_float(row, "critical_event_value"))
+                        if event_value > args.max_event_value:
+                            failures.append(f"{prefix}: critical event value {event_value:g} exceeds {args.max_event_value:g}")
+                        second_derivative = finite_float(row, "critical_second_derivative")
+                        if second_derivative <= 0:
+                            failures.append(f"{prefix}: critical point is not a y-minimum")
+                        critical_y = finite_float(row, "critical_y")
+                        critical_y_by_c[row["c"]].append((float(row["a"]), critical_y))
+                    if row["status"] == "ok":
+                        ok_count += 1
+                        if events != args.word_length:
+                            failures.append(f"{prefix}: ok row has {events} events")
+                        if len(word) != args.word_length:
+                            failures.append(f"{prefix}: ok row word length {len(word)}")
+                        if any(char not in "01" for char in word):
+                            failures.append(f"{prefix}: word contains non-binary symbols")
+                        if int(row["code"]) != word_code(word):
+                            failures.append(f"{prefix}: code does not match word")
+                    else:
+                        if int(row["code"]) != -1:
+                            failures.append(f"{prefix}: incomplete row code should be -1")
+                        if len(word) != events:
+                            failures.append(f"{prefix}: incomplete word length does not match events")
+                except Exception as exc:
+                    failures.append(f"{prefix}: {exc}")
+
+    if total_rows != expected_rows:
+        failures.append(f"row count {total_rows} != expected {expected_rows}")
+    if finite_critical_initial_conditions != total_rows:
+        failures.append(
+            f"finite critical initial conditions {finite_critical_initial_conditions} != rows {total_rows}"
+        )
+
+    c_values = sorted(c_seen)
+    a_values = sorted(a_seen)
     if len(c_values) != args.n_c:
         failures.append(f"unique c count {len(c_values)} != {args.n_c}")
     if len(a_values) != args.n_a:
@@ -109,59 +181,7 @@ def main() -> None:
     if a_values and (abs(a_values[0] - args.a_min) > 1e-10 or abs(a_values[-1] - args.a_max) > 1e-10):
         failures.append(f"a range {a_values[0]}..{a_values[-1]} != {args.a_min}..{args.a_max}")
 
-    status_counts: Counter[str] = Counter()
-    critical_counts: Counter[str] = Counter()
-    ok_count = 0
-    critical_y_by_c: defaultdict[str, list[tuple[float, float]]] = defaultdict(list)
-
-    for line_number, row in enumerate(rows, start=2):
-        prefix = f"line {line_number}"
-        status_counts[row["status"]] += 1
-        critical_counts[row["critical_status"]] += 1
-        try:
-            if abs(float(row["b"]) - args.b) > 1e-12:
-                failures.append(f"{prefix}: b={row['b']} != {args.b}")
-            events = int(row["events"])
-            word = row["word"]
-            if int(row["orbit_transient_events"]) != 0:
-                failures.append(f"{prefix}: orbit_transient_events is not zero")
-            if row["critical_status"] == "ok":
-                if parse_bool(row["first_event_is_return"]):
-                    failures.append(f"{prefix}: first_event_is_return should be false")
-                if not parse_bool(row["initial_event_included"]):
-                    failures.append(f"{prefix}: initial_event_included should be true")
-                if events > 0 and abs(float(row["first_time"])) > 1e-12:
-                    failures.append(f"{prefix}: first_time is not the initial critical event")
-                residual = abs(finite_float(row, "critical_residual"))
-                if residual > args.max_residual:
-                    failures.append(f"{prefix}: critical residual {residual:g} exceeds {args.max_residual:g}")
-                event_value = abs(finite_float(row, "critical_event_value"))
-                if event_value > args.max_event_value:
-                    failures.append(f"{prefix}: critical event value {event_value:g} exceeds {args.max_event_value:g}")
-                second_derivative = finite_float(row, "critical_second_derivative")
-                if second_derivative <= 0:
-                    failures.append(f"{prefix}: critical point is not a y-minimum")
-                critical_y = finite_float(row, "critical_y")
-                critical_y_by_c[row["c"]].append((float(row["a"]), critical_y))
-            if row["status"] == "ok":
-                ok_count += 1
-                if events != args.word_length:
-                    failures.append(f"{prefix}: ok row has {events} events")
-                if len(word) != args.word_length:
-                    failures.append(f"{prefix}: ok row word length {len(word)}")
-                if any(char not in "01" for char in word):
-                    failures.append(f"{prefix}: word contains non-binary symbols")
-                if int(row["code"]) != word_code(word):
-                    failures.append(f"{prefix}: code does not match word")
-            else:
-                if int(row["code"]) != -1:
-                    failures.append(f"{prefix}: incomplete row code should be -1")
-                if len(word) != events:
-                    failures.append(f"{prefix}: incomplete word length does not match events")
-        except Exception as exc:
-            failures.append(f"{prefix}: {exc}")
-
-    ok_fraction = ok_count / len(rows) if rows else 0.0
+    ok_fraction = ok_count / total_rows if total_rows else 0.0
     if ok_fraction < args.min_ok_fraction:
         failures.append(f"ok fraction {ok_fraction:.3f} below {args.min_ok_fraction:.3f}")
 
@@ -190,13 +210,25 @@ def main() -> None:
             failures.append(f"missing HTML: {path}")
             continue
         text = open(path, encoding="utf-8").read()
-        for needle in ("codeBytes", "validBits", "Parameter Probe", "pointermove"):
+        for needle in (
+            "codeBytes",
+            "validBits",
+            "criticalXBytes",
+            "criticalYBytes",
+            "criticalZBytes",
+            "initialX",
+            "initialY",
+            "initialZ",
+            "Parameter Probe",
+            "pointermove",
+        ):
             if needle not in text:
                 failures.append(f"{path} does not contain {needle}")
 
-    print(f"rows={len(rows)} expected={expected_rows}")
+    print(f"rows={total_rows} expected={expected_rows}")
     print(f"status={dict(status_counts)}")
     print(f"critical_status={dict(critical_counts)}")
+    print(f"finite_critical_initial_conditions={finite_critical_initial_conditions}")
     print(f"ok_fraction={ok_fraction:.6f}")
     print(f"max_adjacent_critical_y_jump={max_jump:.12g}")
     if failures:

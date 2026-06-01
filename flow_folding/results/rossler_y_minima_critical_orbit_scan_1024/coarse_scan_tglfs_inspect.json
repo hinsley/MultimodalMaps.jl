@@ -1,0 +1,29 @@
+{
+  "ok": true,
+  "peer": "me",
+  "msgId": 243189,
+  "date": 1780286382,
+  "data": {
+    "type": "tglfs:file",
+    "version": 3,
+    "name": "coarse_scan.tsv",
+    "ufid": "af14044569ff1161546983808cfd0c7c5bb0cde92cc682ecbd939efd99c7e22b",
+    "size": 382081526,
+    "uploadComplete": true,
+    "chunks": [
+      243190
+    ],
+    "IV": "gzisI7FUsGvxflowm+wpfVWu3x3Ue8vJ1y57o2GpqcQ=",
+    "parentFolderId": "tglfs-root"
+  },
+  "chunks": [
+    {
+      "msgId": 243190,
+      "status": "ok",
+      "size": 125372492,
+      "className": "Message"
+    }
+  ],
+  "format": "unknown",
+  "probeError": "Format probe skipped. Re-run with --probe to verify current vs legacy format."
+}
