@@ -9,11 +9,21 @@ LOG="${RESULT_DIR}/run.log"
 
 cd "${REPO_ROOT}"
 mkdir -p "${RESULT_DIR}" "${HEATMAP_DIR}"
+THREADS="${JULIA_NUM_THREADS:-$(sysctl -n hw.logicalcpu 2>/dev/null || python3 - <<'PY'
+import os
+print(os.cpu_count() or 1)
+PY
+)}"
+export JULIA_NUM_THREADS="${THREADS}"
 
 {
   echo "started_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
   echo "repo_root=${REPO_ROOT}"
   echo "result_dir=${RESULT_DIR}"
+  echo "julia_num_threads=${JULIA_NUM_THREADS}"
+  echo "parallel_axis=columns"
+  echo "column_continuation=a_forward"
+  echo "column_anchor=a_min_serial"
   echo "n_c=256"
   echo "n_a=256"
   echo "c_range=2.0..7.0"
@@ -28,6 +38,8 @@ mkdir -p "${RESULT_DIR}" "${HEATMAP_DIR}"
   echo "dt=0.05"
   echo "scan_started_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
   /usr/bin/time -p env \
+    JULIA_NUM_THREADS="${JULIA_NUM_THREADS}" \
+    MM_FLOW_FOLDING_PARALLEL_AXIS=columns \
     MM_FLOW_FOLDING_NC=256 \
     MM_FLOW_FOLDING_NA=256 \
     MM_FLOW_FOLDING_C_MIN=2.0 \

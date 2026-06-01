@@ -27,3 +27,9 @@ Artifacts:
 - `heatmaps/coarse_scan_7bit_monotone_heatmap.png`: 7-bit monotone-sign heatmap for complete rows.
 - `heatmaps/coarse_scan_7bit_monotone_heatmap_probe.html`: standalone interactive monotone-sign probe.
 - `run_256_pipeline.sh`: exact scan, verify, render pipeline.
+
+Note: the committed TSV and images above were produced before column-level
+threading was added. The pipeline now sets `JULIA_NUM_THREADS` from the Mac
+logical CPU count and uses column-parallel scanning by default for future
+reruns: each fixed-`c` column continues along `a` on one Julia thread, after a
+serial first-row anchor pass.

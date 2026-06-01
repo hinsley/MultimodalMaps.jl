@@ -77,6 +77,12 @@ function write_tsv_row(io, row)
     println(io, join((tsv_value(getproperty(row, Symbol(name))) for name in CRITICAL_ORBIT_HEADER), '\t'))
 end
 
+function tsv_row_string(row)
+    io = IOBuffer()
+    write_tsv_row(io, row)
+    return String(take!(io))
+end
+
 function finite_values(values)
     out = Float64[]
     for value in values
@@ -363,10 +369,10 @@ function scan_point(
     target_y=nothing,
     word_length=8,
     dt=0.05,
-    max_time=450.0,
+    max_time=2000.0,
     critical_tspan=650.0,
     max_state=1e6,
-    rho_range=(-24.0, -2.0),
+    rho_range=(-24.0, -1.0),
     rho_samples=45,
     tolerance=1e-6,
     max_iterations=8,
@@ -486,6 +492,221 @@ function scan_point(
         first_event_is_return=false,
         initial_event_included=true,
     )
+end
+
+function compute_column_anchors(
+    c_values,
+    a_start;
+    b,
+    event_index,
+    word_length,
+    dt,
+    max_time,
+    critical_tspan,
+    max_state,
+    rho_range,
+    rho_samples,
+    tolerance,
+)
+    anchors = Vector{Any}(undef, length(c_values))
+    fill!(anchors, nothing)
+    last_rho = nothing
+    last_y = nothing
+    started = time()
+
+    @printf(
+        "critical_orbit column anchors started columns=%d a_start=%.6f elapsed=%.1fs\n",
+        length(c_values),
+        a_start,
+        0.0,
+    )
+    flush(stdout)
+
+    for c_idx in eachindex(c_values)
+        c = c_values[c_idx]
+        row = scan_point(
+            a_start,
+            c;
+            b=b,
+            event_index=event_index,
+            rho_guesses=finite_values(Union{Nothing,Float64}[last_rho]),
+            target_y=last_y,
+            word_length=word_length,
+            dt=dt,
+            max_time=max_time,
+            critical_tspan=critical_tspan,
+            max_state=max_state,
+            rho_range=rho_range,
+            rho_samples=rho_samples,
+            tolerance=tolerance,
+        )
+        if row.critical_status == "ok"
+            anchors[c_idx] = (rho=row.critical_rho, y=row.critical_y)
+            last_rho = row.critical_rho
+            last_y = row.critical_y
+        end
+        if c_idx == 1 || c_idx == length(c_values) || c_idx % 64 == 0
+            elapsed = time() - started
+            @printf(
+                "critical_orbit column anchors %d/%d c_idx=%d c=%.6f status=%s critical=%s elapsed=%.1fs\n",
+                c_idx,
+                length(c_values),
+                c_idx,
+                c,
+                row.status,
+                row.critical_status,
+                elapsed,
+            )
+            flush(stdout)
+        end
+    end
+
+    return anchors
+end
+
+function run_scan_parallel_columns(;
+    c_min=2.0,
+    c_max=7.0,
+    a_min=0.30,
+    a_max=0.55,
+    n_c=256,
+    n_a=256,
+    a_start_index=1,
+    a_end_index=n_a,
+    b=ROSSLER_MALYKH_B,
+    event_index=4,
+    word_length=8,
+    dt=0.05,
+    max_time=2000.0,
+    critical_tspan=650.0,
+    max_state=1e6,
+    rho_range=(-24.0, -1.0),
+    rho_samples=45,
+    tolerance=1e-6,
+    progress_seconds=30.0,
+    output=joinpath(@__DIR__, "..", "results", "rossler_y_minima_critical_orbit_scan_256", "coarse_scan.tsv"),
+)
+    event_index > 0 || throw(ArgumentError("event_index must be positive"))
+    word_length > 0 || throw(ArgumentError("word_length must be positive"))
+    a_start_index = max(1, Int(a_start_index))
+    a_end_index = min(Int(n_a), Int(a_end_index))
+    a_start_index <= a_end_index || throw(ArgumentError("empty a-index range"))
+
+    c_values = collect(range(c_min, c_max; length=n_c))
+    a_values = collect(range(a_min, a_max; length=n_a))
+    a_indices = collect(a_start_index:a_end_index)
+    mkpath(dirname(output))
+
+    total = length(a_indices) * n_c
+    started = time()
+    last_report = started - progress_seconds
+    scanned = 0
+    ok = 0
+    progress_lock = ReentrantLock()
+    columns = Vector{Vector{String}}(undef, n_c)
+
+    anchors = compute_column_anchors(
+        c_values,
+        a_values[a_start_index];
+        b=b,
+        event_index=event_index,
+        word_length=word_length,
+        dt=dt,
+        max_time=max_time,
+        critical_tspan=critical_tspan,
+        max_state=max_state,
+        rho_range=rho_range,
+        rho_samples=rho_samples,
+        tolerance=tolerance,
+    )
+
+    @printf(
+        "critical_orbit parallel columns started columns=%d a_points=%d threads=%d output=%s\n",
+        length(c_values),
+        length(a_indices),
+        Threads.nthreads(),
+        output,
+    )
+    flush(stdout)
+
+    function report_progress(row, a_idx, c_idx, a, c)
+        lock(progress_lock)
+        try
+            scanned += 1
+            ok += row.status == "ok" ? 1 : 0
+            now = time()
+            if scanned == 1 || scanned == total || now - last_report >= progress_seconds
+                elapsed = now - started
+                rate = elapsed > 0 ? scanned / elapsed : NaN
+                eta = isfinite(rate) && rate > 0 ? (total - scanned) / rate : NaN
+                @printf(
+                    "critical_orbit threaded scanned %d/%d a_idx=%d c_idx=%d a=%.6f c=%.6f status=%s critical=%s word=%s ok=%d elapsed=%.1fs rate=%.2f/s eta=%.1fs threads=%d axis=columns\n",
+                    scanned,
+                    total,
+                    a_idx,
+                    c_idx,
+                    a,
+                    c,
+                    row.status,
+                    row.critical_status,
+                    row.word,
+                    ok,
+                    elapsed,
+                    rate,
+                    eta,
+                    Threads.nthreads(),
+                )
+                flush(stdout)
+                last_report = now
+            end
+        finally
+            unlock(progress_lock)
+        end
+    end
+
+    Threads.@threads for c_idx in eachindex(c_values)
+        c = c_values[c_idx]
+        lines = Vector{String}(undef, length(a_indices))
+        last_rho = isnothing(anchors[c_idx]) ? nothing : anchors[c_idx].rho
+        last_y = isnothing(anchors[c_idx]) ? nothing : anchors[c_idx].y
+        for (a_pos, a_idx) in enumerate(a_indices)
+            a = a_values[a_idx]
+            row = scan_point(
+                a,
+                c;
+                b=b,
+                event_index=event_index,
+                rho_guesses=finite_values(Union{Nothing,Float64}[last_rho]),
+                target_y=last_y,
+                word_length=word_length,
+                dt=dt,
+                max_time=max_time,
+                critical_tspan=critical_tspan,
+                max_state=max_state,
+                rho_range=rho_range,
+                rho_samples=rho_samples,
+                tolerance=tolerance,
+            )
+            lines[a_pos] = tsv_row_string(row)
+            if row.critical_status == "ok"
+                last_rho = row.critical_rho
+                last_y = row.critical_y
+            end
+            report_progress(row, a_idx, c_idx, a, c)
+        end
+        columns[c_idx] = lines
+    end
+
+    open(output, "w") do io
+        write_tsv_header(io)
+        for a_pos in eachindex(a_indices)
+            for c_idx in eachindex(c_values)
+                print(io, columns[c_idx][a_pos])
+            end
+        end
+    end
+
+    return output
 end
 
 function run_scan(;
@@ -612,7 +833,8 @@ function main()
     results_name = get(ENV, "MM_FLOW_FOLDING_RESULTS_NAME", "rossler_y_minima_critical_orbit_scan_256")
     result_dir = get(ENV, "MM_FLOW_FOLDING_RESULT_DIR", joinpath(@__DIR__, "..", "results", results_name))
     output = get(ENV, "MM_FLOW_FOLDING_OUTPUT", joinpath(result_dir, "coarse_scan.tsv"))
-    path = run_scan(
+    parallel_axis = lowercase(strip(get(ENV, "MM_FLOW_FOLDING_PARALLEL_AXIS", Threads.nthreads() > 1 ? "columns" : "sequential")))
+    common_kwargs = (
         c_min=env_float("MM_FLOW_FOLDING_C_MIN", 2.0),
         c_max=env_float("MM_FLOW_FOLDING_C_MAX", 7.0),
         a_min=env_float("MM_FLOW_FOLDING_A_MIN", 0.30),
@@ -632,9 +854,18 @@ function main()
         rho_samples=env_int("MM_FLOW_FOLDING_RHO_SAMPLES", 45),
         tolerance=env_float("MM_FLOW_FOLDING_CRITICAL_TOL", 1e-6),
         progress_seconds=env_float("MM_FLOW_FOLDING_PROGRESS_SECONDS", 30.0),
-        serpentine=env_bool("MM_FLOW_FOLDING_SERPENTINE", true),
         output=output,
     )
+    path = if parallel_axis in ("columns", "column", "c")
+        run_scan_parallel_columns(; common_kwargs...)
+    elseif parallel_axis in ("sequential", "serial", "none", "false", "0")
+        run_scan(;
+            common_kwargs...,
+            serpentine=env_bool("MM_FLOW_FOLDING_SERPENTINE", true),
+        )
+    else
+        throw(ArgumentError("unsupported MM_FLOW_FOLDING_PARALLEL_AXIS=$(parallel_axis); use columns or sequential"))
+    end
     @printf("wrote %s\n", path)
 end
 
